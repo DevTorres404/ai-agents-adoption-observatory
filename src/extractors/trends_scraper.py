@@ -49,10 +49,10 @@ def extract_trends():
             log_source_execution("google_trends", "empty", 0, 200, url, notes="Sin columnas de keywords")
             return
 
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
+        date_stamp = datetime.datetime.now().strftime("%Y-%m-%d")
         out_dir = RAW_DIR / "scraping" / "google_trends"
         out_dir.mkdir(parents=True, exist_ok=True)
-        out_path = out_dir / f"google_trends_{timestamp}.json"
+        out_path = out_dir / f"google_trends_{date_stamp}.json"
 
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(records, f, ensure_ascii=False, indent=2)

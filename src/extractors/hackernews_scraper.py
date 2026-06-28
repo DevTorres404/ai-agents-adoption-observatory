@@ -62,10 +62,10 @@ def extract_hackernews():
         log_source_execution("hackernews", "empty", 0, client.last_status_code, url, notes="Sin registros parseables")
         return
 
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
+    date_stamp = datetime.datetime.now().strftime("%Y-%m-%d")
     out_dir = RAW_DIR / "scraping" / "hackernews"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"hackernews_{timestamp}.json"
+    out_path = out_dir / f"hackernews_{date_stamp}.json"
 
     payload = {
         "metadata": {

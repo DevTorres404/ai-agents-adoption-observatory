@@ -161,10 +161,10 @@ def extract_aidedev_catalog():
         global_logger.error(f"Fallo en extractor AIDev: {exc}")
         return
 
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
+    date_stamp = datetime.datetime.now().strftime("%Y-%m-%d")
     out_dir = RAW_DIR / "archivos" / "catalogo"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"aidedev_ai_coding_catalog_{timestamp}.json"
+    out_path = out_dir / f"aidedev_{date_stamp}.json"
 
     payload = {
         "metadata": {

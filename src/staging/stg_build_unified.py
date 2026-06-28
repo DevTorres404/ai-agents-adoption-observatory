@@ -52,25 +52,29 @@ def run_staging_pipeline():
             df_crudo = pd.DataFrame(records)
             meta = {'fuente': fuente, 'tipo_fuente': tipo_fuente, 'id': file_id}
             
-            # Normalizar columnas
+            # Motivo: cada fuente tiene estructura propia; se homologa a un contrato comun antes de integrar.
             df_norm = normalize_dataframe(df_crudo, meta)
             df_consolidado = pd.concat([df_consolidado, df_norm], ignore_index=True)
             
         global_logger.info("Paso 1: Normalización de columnas completada.")
         
         # Paso 2: Fechas
+        # Motivo: Staging trabaja a granularidad diaria para soportar analisis historico y deduplicacion.
         df_consolidado = parse_dates(df_consolidado)
         global_logger.info("Paso 2: Fechas estandarizadas a YYYY-MM-DD.")
         
         # Paso 3: Agentes
+        # Motivo: la homologacion por regex agrupa alias de una misma herramienta bajo un nombre analitico.
         df_consolidado = extract_agent(df_consolidado)
         global_logger.info("Paso 3: Identidad de Agentes procesada.")
         
-        # Paso 4: Categorías
+        # Paso 4: Categorias
+        # Motivo: las categorias conectan cada fuente con la dimension estrategica definida en la arquitectura.
         df_consolidado = assign_categories(df_consolidado)
         global_logger.info("Paso 4: Categorías asignadas.")
         
-        # Paso 5: Deduplicación
+        # Paso 5: Deduplicacion
+        # Motivo: se eliminan repeticiones analiticas sin alterar la capa Raw, que permanece como evidencia original.
         df_consolidado, descartados = deduplicate_staging(df_consolidado)
         global_logger.info(f"Paso 5: Deduplicación completada. Se descartaron {descartados} registros.")
         
@@ -93,7 +97,7 @@ def run_staging_pipeline():
             'indice_adopcion', 'indice_innovacion', 'sentimiento_promedio', 'raw_file_id'
         ]
         
-        # Limpiar Dataframe para asegurar inserción (NaT, NaN a None)
+        # Motivo: se ajustan nulos y caracteres no validos para que PostgreSQL reciba un dataset tabular consistente.
         df_final = df_consolidado[contrato_columnas].copy()
         text_cols = ['id_origen_registro', 'fuente', 'tipo_fuente', 'plataforma', 'fecha_evento', 'nombre_agente', 'categoria', 'titulo', 'texto', 'url']
         for col in text_cols:
@@ -107,8 +111,7 @@ def run_staging_pipeline():
             conn.execute(text("TRUNCATE TABLE staging.stg_actividad_agente_ia RESTART IDENTITY"))
             global_logger.info("Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.")
 
-            # Para evitar crash en insercion masiva con Unique Constraint, iteramos con try-except a nivel fila
-            # o usamos dicts directos
+            # Motivo: la insercion fila a fila permite registrar conflictos sin abortar toda la reconstruccion Staging.
             exitos = 0
             fallos = 0
             

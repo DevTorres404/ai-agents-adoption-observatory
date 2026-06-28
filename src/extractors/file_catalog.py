@@ -44,10 +44,10 @@ def extract_and_validate_catalog():
 
         global_logger.info(f"Catalogo validado: {len(valid_records)}/{len(data)} registros correctos.")
 
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
+        date_stamp = datetime.datetime.now().strftime("%Y-%m-%d")
         out_dir = RAW_DIR / "archivos" / "catalogo"
         out_dir.mkdir(parents=True, exist_ok=True)
-        out_path = out_dir / f"maestro_agentes_{timestamp}.json"
+        out_path = out_dir / f"catalogo_{date_stamp}.json"
 
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(valid_records, f, ensure_ascii=False, indent=2)
