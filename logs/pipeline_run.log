@@ -1,0 +1,627 @@
+2026-06-27 08:54:05,690 - pipeline_logger - ERROR - Fallo al inicializar el engine de base de datos: No module named 'psycopg'
+2026-06-27 08:54:05,691 - pipeline_logger - INFO - >>> Verificando conexión a PostgreSQL...
+2026-06-27 08:54:05,691 - pipeline_logger - ERROR - ❌ No se pudo conectar a la base de datos.
+2026-06-27 08:54:47,373 - pipeline_logger - INFO - >>> Verificando conexión a PostgreSQL...
+2026-06-27 08:54:47,441 - pipeline_logger - INFO - Conexión a PostgreSQL establecida exitosamente.
+2026-06-27 08:54:47,442 - pipeline_logger - INFO - ✅ PostgreSQL local corriendo en Docker está listo para recibir datos.
+2026-06-27 08:54:47,452 - pipeline_logger - INFO - ✅ Se encontraron 2 tablas en el esquema 'audit'.
+2026-06-27 08:56:33,272 - pipeline_logger - INFO - >>> PRUEBA INDEPENDIENTE DE EXTRACTOR GITHUB <<<
+2026-06-27 08:56:33,273 - pipeline_logger - INFO - Usando autenticación GITHUB_TOKEN (Rate limit ampliado)
+2026-06-27 08:56:33,273 - pipeline_logger - INFO - Buscando repositorios para: 'AI agent'
+2026-06-27 08:56:36,745 - pipeline_logger - INFO -   -> Página 1 obtenida (10 repositorios)
+2026-06-27 08:56:36,751 - pipeline_logger - INFO - Extracción completada: 10 registros guardados en Raw/API/github (github_repos_2026-06-27_085636.json)
+2026-06-27 09:02:12,044 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-06-27 09:02:12,208 - pipeline_logger - ERROR - Fallo al procesar github_repos_2026-06-27_005248.json: Object of type Timestamp is not JSON serializable
+2026-06-27 09:02:12,268 - pipeline_logger - ERROR - Fallo al procesar github_repos_2026-06-27_084543.json: Object of type Timestamp is not JSON serializable
+2026-06-27 09:02:12,292 - pipeline_logger - INFO - Cargado exitosamente: dataset_agentes_maestro_2026-06-27_005227.json (2 registros)
+2026-06-27 09:02:12,296 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_084517.json
+2026-06-27 09:02:12,320 - pipeline_logger - ERROR - Fallo al procesar encuesta_upse_2026-06-27_005227.json: (psycopg.errors.InvalidTextRepresentation) invalid input syntax for type json
+DETAIL:  Token "NaN" is invalid.
+CONTEXT:  JSON data, line 1: ...": 2, "usa_ia": "No", "herramienta_favorita": NaN...
+unnamed portal parameter $2 = '...'
+[SQL: 
+                            INSERT INTO raw.raw_records (file_id, raw_data)
+                            VALUES (%(file_id)s, %(raw_data)s)
+                        ]
+[parameters: {'file_id': 4, 'raw_data': '{"id_estudiante": 2, "usa_ia": "No", "herramienta_favorita": NaN}'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2026-06-27 09:02:12,323 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_084517.json
+2026-06-27 09:02:12,343 - pipeline_logger - ERROR - Fallo al procesar google_trends_2026-06-27_005232.json: Object of type Timestamp is not JSON serializable
+2026-06-27 09:02:12,359 - pipeline_logger - ERROR - Fallo al procesar google_trends_2026-06-27_084524.json: Object of type Timestamp is not JSON serializable
+2026-06-27 09:02:12,460 - pipeline_logger - INFO - Cargado exitosamente: hackernews_2026-06-27_005241.json (60 registros)
+2026-06-27 09:02:12,552 - pipeline_logger - INFO - Cargado exitosamente: hackernews_2026-06-27_082634.json (60 registros)
+2026-06-27 09:02:12,649 - pipeline_logger - INFO - Cargado exitosamente: hackernews_2026-06-27_084534.json (60 registros)
+2026-06-27 09:02:12,657 - pipeline_logger - WARNING - No se pudo procesar estructuralmente github_repos_2026-06-27_085636.json: Mixing dicts with non-Series may lead to ambiguous ordering.
+2026-06-27 09:02:12,663 - pipeline_logger - INFO - Cargado exitosamente: github_repos_2026-06-27_085636.json (0 registros)
+2026-06-27 09:02:12,663 - pipeline_logger - INFO - Carga completada. Nuevos: 5. Ignorados: 2
+2026-06-27 09:02:12,670 - pipeline_logger - INFO - Inventario CSV exportado a docs\evidencias\inventario_raw.csv
+2026-06-27 09:02:53,168 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-06-27 09:02:53,241 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_005248.json
+2026-06-27 09:02:53,257 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_084543.json
+2026-06-27 09:02:53,261 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_005227.json
+2026-06-27 09:02:53,265 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_084517.json
+2026-06-27 09:02:53,268 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_005227.json
+2026-06-27 09:02:53,274 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_084517.json
+2026-06-27 09:02:53,280 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_005232.json
+2026-06-27 09:02:53,286 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_084524.json
+2026-06-27 09:02:53,291 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_005241.json
+2026-06-27 09:02:53,298 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_082634.json
+2026-06-27 09:02:53,334 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_084534.json
+2026-06-27 09:02:53,342 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_085636.json
+2026-06-27 09:02:53,344 - pipeline_logger - INFO - Carga completada. Nuevos: 0. Ignorados: 12
+2026-06-27 09:03:06,022 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-06-27 09:03:06,318 - pipeline_logger - INFO - Cargado exitosamente: github_repos_2026-06-27_005248.json (100 registros)
+2026-06-27 09:03:06,535 - pipeline_logger - INFO - Cargado exitosamente: github_repos_2026-06-27_084543.json (100 registros)
+2026-06-27 09:03:06,557 - pipeline_logger - INFO - Cargado exitosamente: dataset_agentes_maestro_2026-06-27_005227.json (2 registros)
+2026-06-27 09:03:06,561 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_084517.json
+2026-06-27 09:03:06,580 - pipeline_logger - INFO - Cargado exitosamente: encuesta_upse_2026-06-27_005227.json (2 registros)
+2026-06-27 09:03:06,584 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_084517.json
+2026-06-27 09:03:06,648 - pipeline_logger - INFO - Cargado exitosamente: google_trends_2026-06-27_005232.json (32 registros)
+2026-06-27 09:03:06,691 - pipeline_logger - INFO - Cargado exitosamente: google_trends_2026-06-27_084524.json (32 registros)
+2026-06-27 09:03:06,770 - pipeline_logger - INFO - Cargado exitosamente: hackernews_2026-06-27_005241.json (60 registros)
+2026-06-27 09:03:06,853 - pipeline_logger - INFO - Cargado exitosamente: hackernews_2026-06-27_082634.json (60 registros)
+2026-06-27 09:03:06,939 - pipeline_logger - INFO - Cargado exitosamente: hackernews_2026-06-27_084534.json (60 registros)
+2026-06-27 09:03:06,972 - pipeline_logger - INFO - Cargado exitosamente: github_repos_2026-06-27_085636.json (10 registros)
+2026-06-27 09:03:06,973 - pipeline_logger - INFO - Carga completada. Nuevos: 10. Ignorados: 2
+2026-06-27 09:03:06,985 - pipeline_logger - INFO - Inventario CSV exportado a docs\evidencias\inventario_raw.csv
+2026-06-27 09:05:52,420 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-06-27 09:05:52,521 - pipeline_logger - INFO - Leídos 458 registros crudos desde BD.
+2026-06-27 09:05:52,658 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-06-27 09:05:52,671 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-06-27 09:05:52,702 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-06-27 09:05:52,705 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-06-27 09:05:52,712 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 34 registros.
+2026-06-27 09:05:53,269 - pipeline_logger - INFO - Carga a BD completada. Insertados: 424. Ignorados por BD Unique: 0
+2026-06-27 09:05:53,282 - pipeline_logger - INFO - Data final exportada para evidencia en C:\Users\Damian\Documents\Intelegicia de Negocios\Proyecto\docs\evidencias\staging_stats.csv
+2026-06-27 09:09:00,227 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-06-27 09:09:00,406 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias
+2026-06-27 09:10:59,195 - pipeline_logger - INFO - >>> INICIANDO PIPELINE UNIFICADO (Fecha Objetivo: 2026-06-30) <<<
+2026-06-27 09:10:59,304 - pipeline_logger - INFO - === FASE 1: EXTRACCIÓN ===
+2026-06-27 09:10:59,304 - pipeline_logger - INFO - Usando autenticación GITHUB_TOKEN (Rate limit ampliado)
+2026-06-27 09:10:59,304 - pipeline_logger - INFO - Buscando repositorios para: 'AI agent'
+2026-06-27 09:11:03,218 - pipeline_logger - INFO -   -> Página 1 obtenida (20 repositorios)
+2026-06-27 09:11:03,218 - pipeline_logger - INFO - Buscando repositorios para: 'coding copilot'
+2026-06-27 09:11:06,121 - pipeline_logger - INFO -   -> Página 1 obtenida (20 repositorios)
+2026-06-27 09:11:06,122 - pipeline_logger - INFO - Buscando repositorios para: 'autoGPT'
+2026-06-27 09:11:09,032 - pipeline_logger - INFO -   -> Página 1 obtenida (20 repositorios)
+2026-06-27 09:11:09,033 - pipeline_logger - INFO - Buscando repositorios para: 'autonomous AI'
+2026-06-27 09:11:11,959 - pipeline_logger - INFO -   -> Página 1 obtenida (20 repositorios)
+2026-06-27 09:11:11,983 - pipeline_logger - INFO - Extracción completada: 80 registros guardados en Raw/API/github (github_repos_2026-06-27_091111.json)
+2026-06-27 09:11:11,985 - pipeline_logger - INFO - === FASE 2: CARGA RAW A BD ===
+2026-06-27 09:11:11,985 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-06-27 09:11:11,994 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_005248.json
+2026-06-27 09:11:12,001 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_084543.json
+2026-06-27 09:11:12,006 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_005227.json
+2026-06-27 09:11:12,010 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_084517.json
+2026-06-27 09:11:12,015 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_005227.json
+2026-06-27 09:11:12,018 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_084517.json
+2026-06-27 09:11:12,024 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_005232.json
+2026-06-27 09:11:12,028 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_084524.json
+2026-06-27 09:11:12,032 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_005241.json
+2026-06-27 09:11:12,036 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_082634.json
+2026-06-27 09:11:12,040 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_084534.json
+2026-06-27 09:11:12,046 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_085636.json
+2026-06-27 09:11:12,336 - pipeline_logger - INFO - Cargado exitosamente: github_repos_2026-06-27_091111.json (80 registros)
+2026-06-27 09:11:12,337 - pipeline_logger - INFO - Carga completada. Nuevos: 1. Ignorados: 12
+2026-06-27 09:11:12,348 - pipeline_logger - INFO - Inventario CSV exportado a docs\evidencias\inventario_raw.csv
+2026-06-27 09:11:12,349 - pipeline_logger - INFO - === FASE 3: STAGING ===
+2026-06-27 09:11:12,349 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-06-27 09:11:12,404 - pipeline_logger - INFO - Leídos 538 registros crudos desde BD.
+2026-06-27 09:11:12,546 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-06-27 09:11:12,560 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-06-27 09:11:12,627 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-06-27 09:11:12,636 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-06-27 09:11:12,642 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 48 registros.
+2026-06-27 09:11:13,324 - pipeline_logger - INFO - Carga a BD completada. Insertados: 66. Ignorados por BD Unique: 0
+2026-06-27 09:11:13,335 - pipeline_logger - INFO - Data final exportada para evidencia en C:\Users\Damian\Documents\Intelegicia de Negocios\Proyecto\docs\evidencias\staging_stats.csv
+2026-06-27 09:11:13,338 - pipeline_logger - INFO - === FASE 4: CALIDAD DE DATOS ===
+2026-06-27 09:11:13,338 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-06-27 09:11:13,414 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias
+2026-06-27 09:11:13,426 - pipeline_logger - INFO - >>> PIPELINE UNIFICADO COMPLETADO EXITOSAMENTE (Run ID: 1) <<<
+2026-06-27 09:18:12,173 - pipeline_logger - INFO - >>> INICIANDO PIPELINE UNIFICADO (Fecha Objetivo: 2026-06-27) <<<
+2026-06-27 09:18:12,230 - pipeline_logger - INFO - === FASE 1: EXTRACCIÓN MÚLTIPLE ===
+2026-06-27 09:18:12,230 - pipeline_logger - INFO - Usando autenticación GITHUB_TOKEN (Rate limit ampliado)
+2026-06-27 09:18:12,231 - pipeline_logger - INFO - Buscando repositorios para: 'AI agent'
+2026-06-27 09:18:16,339 - pipeline_logger - INFO -   -> Página 1 obtenida (20 repositorios)
+2026-06-27 09:18:16,339 - pipeline_logger - INFO - Buscando repositorios para: 'coding copilot'
+2026-06-27 09:18:19,283 - pipeline_logger - INFO -   -> Página 1 obtenida (20 repositorios)
+2026-06-27 09:18:19,283 - pipeline_logger - INFO - Buscando repositorios para: 'autoGPT'
+2026-06-27 09:18:22,147 - pipeline_logger - INFO -   -> Página 1 obtenida (20 repositorios)
+2026-06-27 09:18:22,147 - pipeline_logger - INFO - Buscando repositorios para: 'autonomous AI'
+2026-06-27 09:18:25,013 - pipeline_logger - INFO -   -> Página 1 obtenida (20 repositorios)
+2026-06-27 09:18:25,067 - pipeline_logger - INFO - Extracción completada: 80 registros guardados en Raw/API/github (github_repos_2026-06-27_091825.json)
+2026-06-27 09:18:25,071 - pipeline_logger - INFO - Iniciando Scraping Estático en HackerNews...
+2026-06-27 09:18:25,086 - pipeline_logger - INFO - Iniciando Scraping Estático en Dev.to...
+2026-06-27 09:18:25,093 - pipeline_logger - INFO - Iniciando Scraping Dinámico en Reddit (Playwright)...
+2026-06-27 09:18:33,730 - pipeline_logger - INFO - Reddit Scraping completado. 6 registros guardados.
+2026-06-27 09:18:33,730 - pipeline_logger - INFO - Iniciando extracción de Google Trends (pytrends)...
+2026-06-27 09:18:36,901 - pipeline_logger - ERROR - Fallo en Pytrends: The request failed: Google returned a response with code 429
+2026-06-27 09:18:36,903 - pipeline_logger - INFO - Iniciando validación Pydantic del Catálogo Maestro...
+2026-06-27 09:18:36,904 - pipeline_logger - INFO - Catálogo validado: 5/5 registros correctos.
+2026-06-27 09:18:36,938 - pipeline_logger - INFO - Guardado en Raw: maestro_agentes_2026-06-27_091836.json
+2026-06-27 09:18:36,938 - pipeline_logger - INFO - === FASE 2: CARGA RAW A BD ===
+2026-06-27 09:18:36,938 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-06-27 09:18:36,946 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_005248.json
+2026-06-27 09:18:36,953 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_084543.json
+2026-06-27 09:18:36,958 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_005227.json
+2026-06-27 09:18:36,963 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_084517.json
+2026-06-27 09:18:36,968 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_005227.json
+2026-06-27 09:18:36,972 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_084517.json
+2026-06-27 09:18:36,978 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_005232.json
+2026-06-27 09:18:36,982 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_084524.json
+2026-06-27 09:18:36,986 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_005241.json
+2026-06-27 09:18:36,991 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_082634.json
+2026-06-27 09:18:36,995 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_084534.json
+2026-06-27 09:18:37,018 - pipeline_logger - INFO - Cargado exitosamente: reddit_2026-06-27_091833.json (6 registros)
+2026-06-27 09:18:37,058 - pipeline_logger - INFO - Cargado exitosamente: maestro_agentes_2026-06-27_091836.json (5 registros)
+2026-06-27 09:18:37,062 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_085636.json
+2026-06-27 09:18:37,068 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_091111.json
+2026-06-27 09:18:37,270 - pipeline_logger - INFO - Cargado exitosamente: github_repos_2026-06-27_091825.json (80 registros)
+2026-06-27 09:18:37,271 - pipeline_logger - INFO - Carga completada. Nuevos: 3. Ignorados: 13
+2026-06-27 09:18:37,279 - pipeline_logger - INFO - Inventario CSV exportado a docs\evidencias\inventario_raw.csv
+2026-06-27 09:18:37,280 - pipeline_logger - INFO - === FASE 3: STAGING ===
+2026-06-27 09:18:37,280 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-06-27 09:18:37,336 - pipeline_logger - INFO - Leídos 629 registros crudos desde BD.
+2026-06-27 09:18:37,455 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-06-27 09:18:37,465 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-06-27 09:18:37,491 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-06-27 09:18:37,499 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-06-27 09:18:37,504 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 128 registros.
+2026-06-27 09:18:38,044 - pipeline_logger - INFO - Carga a BD completada. Insertados: 11. Ignorados por BD Unique: 0
+2026-06-27 09:18:38,055 - pipeline_logger - INFO - Data final exportada para evidencia en C:\Users\Damian\Documents\Intelegicia de Negocios\Proyecto\docs\evidencias\staging_stats.csv
+2026-06-27 09:18:38,058 - pipeline_logger - INFO - === FASE 4: CALIDAD DE DATOS ===
+2026-06-27 09:18:38,058 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-06-27 09:18:38,132 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias
+2026-06-27 09:18:38,141 - pipeline_logger - INFO - >>> PIPELINE UNIFICADO COMPLETADO EXITOSAMENTE (Run ID: 2) <<<
+2026-06-27 09:43:12,525 - pipeline_logger - INFO - Iniciando scraping estatico en Dev.to...
+2026-06-27 09:43:14,025 - pipeline_logger - INFO - Iniciando scraping estatico en HackerNews...
+2026-06-27 09:43:15,691 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/search?q=AI%20agent
+2026-06-27 09:43:15,714 - pipeline_logger - WARNING - Dev.to: articulo omitido por parseo: 'NoneType' object has no attribute 'find'
+2026-06-27 09:43:15,714 - pipeline_logger - WARNING - Dev.to no arrojo articulos parseables.
+2026-06-27 09:43:15,715 - pipeline_logger - INFO - Evidencia fuente devto: status=empty, records=0, http=200
+2026-06-27 09:43:16,831 - pipeline_logger - INFO - hackernews: HTTP 200 GET https://news.ycombinator.com/front
+2026-06-27 09:43:16,864 - pipeline_logger - INFO - HackerNews scraping completado. 10 registros guardados en hackernews_2026-06-27_094316.json
+2026-06-27 09:43:16,866 - pipeline_logger - INFO - Evidencia fuente hackernews: status=success, records=10, http=200
+2026-06-27 09:44:30,560 - pipeline_logger - INFO - Iniciando scraping estatico en Dev.to...
+2026-06-27 09:44:34,022 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/search?q=AI%20agent
+2026-06-27 09:44:34,063 - pipeline_logger - WARNING - Dev.to: articulo omitido por parseo: 'NoneType' object has no attribute 'find'
+2026-06-27 09:44:34,063 - pipeline_logger - WARNING - Dev.to no arrojo articulos parseables desde HTML. Intentando fallback API publica.
+2026-06-27 09:44:36,461 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=10
+2026-06-27 09:44:36,464 - pipeline_logger - INFO - Dev.to scraping completado. 10 registros guardados en devto_2026-06-27_094436.json
+2026-06-27 09:44:36,497 - pipeline_logger - INFO - Evidencia fuente devto: status=success, records=10, http=200
+2026-06-27 09:45:43,518 - pipeline_logger - INFO - Iniciando extraccion de Google Trends (pytrends)...
+2026-06-27 09:45:44,869 - pipeline_logger - INFO - Evidencia fuente google_trends: status=failed, records=0, http=None
+2026-06-27 09:45:44,870 - pipeline_logger - ERROR - Fallo en Pytrends: Retry.__init__() got an unexpected keyword argument 'method_whitelist'
+2026-06-27 09:46:02,464 - pipeline_logger - INFO - Iniciando extraccion de Google Trends (pytrends)...
+2026-06-27 09:46:07,018 - pipeline_logger - INFO - Google Trends extraido: 279 data points guardados.
+2026-06-27 09:46:07,019 - pipeline_logger - INFO - Evidencia fuente google_trends: status=success, records=279, http=200
+2026-06-27 09:46:14,872 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-06-27 09:46:14,982 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_005248.json
+2026-06-27 09:46:15,005 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_084543.json
+2026-06-27 09:46:15,016 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_005227.json
+2026-06-27 09:46:15,020 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_084517.json
+2026-06-27 09:46:15,034 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_005227.json
+2026-06-27 09:46:15,039 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_084517.json
+2026-06-27 09:46:15,068 - pipeline_logger - INFO - Cargado exitosamente: devto_2026-06-27_094436.json (10 registros)
+2026-06-27 09:46:15,079 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_005232.json
+2026-06-27 09:46:15,092 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_084524.json
+2026-06-27 09:46:15,304 - pipeline_logger - INFO - Cargado exitosamente: google_trends_2026-06-27_094607.json (279 registros)
+2026-06-27 09:46:15,321 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_005241.json
+2026-06-27 09:46:15,337 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_082634.json
+2026-06-27 09:46:15,351 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_084534.json
+2026-06-27 09:46:15,379 - pipeline_logger - INFO - Cargado exitosamente: hackernews_2026-06-27_094316.json (10 registros)
+2026-06-27 09:46:15,391 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-27_091833.json
+2026-06-27 09:46:15,403 - pipeline_logger - INFO - Omitido (Duplicado): maestro_agentes_2026-06-27_091836.json
+2026-06-27 09:46:15,426 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_085636.json
+2026-06-27 09:46:15,455 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_091111.json
+2026-06-27 09:46:15,478 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_091825.json
+2026-06-27 09:46:15,479 - pipeline_logger - INFO - Carga completada. Nuevos: 3. Ignorados: 16
+2026-06-27 09:46:15,485 - pipeline_logger - INFO - Inventario CSV exportado a docs\evidencias\inventario_raw.csv
+2026-06-27 09:46:15,492 - pipeline_logger - INFO - Inventario Raw completo exportado a docs\evidencias\inventario_raw_completo.csv
+2026-06-27 09:46:47,287 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-06-27 09:46:47,418 - pipeline_logger - INFO - Leídos 928 registros crudos desde BD.
+2026-06-27 09:46:47,629 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-06-27 09:46:47,646 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-06-27 09:46:47,694 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-06-27 09:46:47,705 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-06-27 09:46:47,710 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 128 registros.
+2026-06-27 09:46:47,749 - pipeline_logger - INFO - Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.
+2026-06-27 09:46:48,780 - pipeline_logger - INFO - Carga a BD completada. Insertados: 800. Conflictos o fallos de inserción: 0
+2026-06-27 09:46:48,796 - pipeline_logger - INFO - Data final exportada para evidencia en C:\Users\Damian\Documents\Intelegicia de Negocios\Proyecto\docs\evidencias\staging_stats.csv
+2026-06-27 09:46:55,886 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-06-27 09:47:27,345 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-06-27 09:47:29,351 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias
+2026-06-27 09:48:18,513 - pipeline_logger - INFO - Iniciando scraping dinamico en Reddit (Playwright)...
+2026-06-27 09:48:18,696 - pipeline_logger - INFO - >>> PRUEBA INDEPENDIENTE DE EXTRACTOR GITHUB <<<
+2026-06-27 09:48:18,697 - pipeline_logger - INFO - Usando autenticacion GITHUB_TOKEN.
+2026-06-27 09:48:18,697 - pipeline_logger - INFO - Buscando repositorios para: 'AI agent'
+2026-06-27 09:48:18,755 - pipeline_logger - INFO - Iniciando validacion Pydantic del catalogo maestro...
+2026-06-27 09:48:18,768 - pipeline_logger - INFO - Catalogo validado: 5/5 registros correctos.
+2026-06-27 09:48:18,773 - pipeline_logger - INFO - Evidencia fuente catalogo: status=success, records=5, http=None
+2026-06-27 09:48:18,773 - pipeline_logger - INFO - Catalogo guardado en Raw: maestro_agentes_2026-06-27_094818.json
+2026-06-27 09:48:22,357 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=AI+agent&sort=stars&order=desc&per_page=10&page=1
+2026-06-27 09:48:22,358 - pipeline_logger - INFO - Pagina 1 obtenida (10 repositorios)
+2026-06-27 09:48:22,365 - pipeline_logger - INFO - Evidencia fuente github: status=success, records=10, http=200
+2026-06-27 09:48:22,365 - pipeline_logger - INFO - Extraccion GitHub completada: 10 registros guardados en github_repos_2026-06-27_094822.json
+2026-06-27 09:48:29,732 - pipeline_logger - INFO - Evidencia fuente reddit: status=success, records=7, http=200
+2026-06-27 09:48:29,732 - pipeline_logger - INFO - Reddit scraping completado. 7 registros guardados.
+2026-06-27 09:48:39,379 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-06-27 09:48:39,436 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_005248.json
+2026-06-27 09:48:39,441 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_084543.json
+2026-06-27 09:48:39,445 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_005227.json
+2026-06-27 09:48:39,449 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_084517.json
+2026-06-27 09:48:39,453 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_005227.json
+2026-06-27 09:48:39,456 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_084517.json
+2026-06-27 09:48:39,460 - pipeline_logger - INFO - Omitido (Duplicado): devto_2026-06-27_094436.json
+2026-06-27 09:48:39,463 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_005232.json
+2026-06-27 09:48:39,466 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_084524.json
+2026-06-27 09:48:39,469 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_094607.json
+2026-06-27 09:48:39,473 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_005241.json
+2026-06-27 09:48:39,476 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_082634.json
+2026-06-27 09:48:39,480 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_084534.json
+2026-06-27 09:48:39,484 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_094316.json
+2026-06-27 09:48:39,488 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-27_091833.json
+2026-06-27 09:48:39,518 - pipeline_logger - INFO - Cargado exitosamente: reddit_2026-06-27_094829.json (7 registros)
+2026-06-27 09:48:39,523 - pipeline_logger - INFO - Omitido (Duplicado): maestro_agentes_2026-06-27_091836.json
+2026-06-27 09:48:39,528 - pipeline_logger - INFO - Omitido (Duplicado): maestro_agentes_2026-06-27_094818.json
+2026-06-27 09:48:39,533 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_085636.json
+2026-06-27 09:48:39,538 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_091111.json
+2026-06-27 09:48:39,544 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_091825.json
+2026-06-27 09:48:39,577 - pipeline_logger - INFO - Cargado exitosamente: github_repos_2026-06-27_094822.json (10 registros)
+2026-06-27 09:48:39,577 - pipeline_logger - INFO - Carga completada. Nuevos: 2. Ignorados: 20
+2026-06-27 09:48:39,584 - pipeline_logger - INFO - Inventario CSV exportado a docs\evidencias\inventario_raw.csv
+2026-06-27 09:48:39,597 - pipeline_logger - INFO - Inventario Raw completo exportado a docs\evidencias\inventario_raw_completo.csv
+2026-06-27 09:48:46,840 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-06-27 09:48:46,970 - pipeline_logger - INFO - Leídos 945 registros crudos desde BD.
+2026-06-27 09:48:47,198 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-06-27 09:48:47,214 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-06-27 09:48:47,259 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-06-27 09:48:47,271 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-06-27 09:48:47,276 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 138 registros.
+2026-06-27 09:48:47,306 - pipeline_logger - INFO - Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.
+2026-06-27 09:48:48,357 - pipeline_logger - INFO - Carga a BD completada. Insertados: 807. Conflictos o fallos de inserción: 0
+2026-06-27 09:48:48,376 - pipeline_logger - INFO - Data final exportada para evidencia en C:\Users\Damian\Documents\Intelegicia de Negocios\Proyecto\docs\evidencias\staging_stats.csv
+2026-06-27 09:48:55,139 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-06-27 09:48:56,917 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias
+2026-06-27 10:03:56,530 - pipeline_logger - INFO - >>> INICIANDO PIPELINE UNIFICADO (Fecha Objetivo: 2026-06-27) <<<
+2026-06-27 10:03:56,590 - pipeline_logger - INFO - === FASE 1: EXTRACCIÓN MÚLTIPLE ===
+2026-06-27 10:03:56,591 - pipeline_logger - INFO - Usando autenticacion GITHUB_TOKEN.
+2026-06-27 10:03:56,591 - pipeline_logger - INFO - Buscando repositorios para: 'AI agent'
+2026-06-27 10:04:00,537 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=AI+agent+created%3A%3E2023-01-01&sort=stars&order=desc&per_page=20&page=1
+2026-06-27 10:04:00,539 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-27 10:04:00,539 - pipeline_logger - INFO - Buscando repositorios para: 'coding copilot'
+2026-06-27 10:04:03,264 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=coding+copilot+created%3A%3E2023-01-01&sort=stars&order=desc&per_page=20&page=1
+2026-06-27 10:04:03,266 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-27 10:04:03,266 - pipeline_logger - INFO - Buscando repositorios para: 'autoGPT'
+2026-06-27 10:04:06,258 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=autoGPT+created%3A%3E2023-01-01&sort=stars&order=desc&per_page=20&page=1
+2026-06-27 10:04:06,261 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-27 10:04:06,261 - pipeline_logger - INFO - Buscando repositorios para: 'autonomous AI'
+2026-06-27 10:04:09,261 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=autonomous+AI+created%3A%3E2023-01-01&sort=stars&order=desc&per_page=20&page=1
+2026-06-27 10:04:09,263 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-27 10:04:09,294 - pipeline_logger - INFO - Evidencia fuente github: status=success, records=80, http=200
+2026-06-27 10:04:09,294 - pipeline_logger - INFO - Extraccion GitHub completada: 80 registros guardados en github_repos_2026-06-27_100409.json
+2026-06-27 10:04:09,297 - pipeline_logger - INFO - Iniciando scraping estatico en HackerNews...
+2026-06-27 10:04:12,849 - pipeline_logger - INFO - hackernews: HTTP 200 GET https://news.ycombinator.com/front
+2026-06-27 10:04:12,901 - pipeline_logger - INFO - HackerNews scraping completado. 10 registros guardados en hackernews_2026-06-27_100412.json
+2026-06-27 10:04:12,902 - pipeline_logger - INFO - Evidencia fuente hackernews: status=success, records=10, http=200
+2026-06-27 10:04:12,904 - pipeline_logger - INFO - Iniciando scraping estatico en Dev.to...
+2026-06-27 10:04:16,020 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/search?q=AI%20agent
+2026-06-27 10:04:16,040 - pipeline_logger - WARNING - Dev.to: articulo omitido por parseo: 'NoneType' object has no attribute 'find'
+2026-06-27 10:04:16,040 - pipeline_logger - WARNING - Dev.to no arrojo articulos parseables desde HTML. Intentando fallback API publica.
+2026-06-27 10:04:18,170 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=10
+2026-06-27 10:04:18,172 - pipeline_logger - INFO - Dev.to scraping completado. 10 registros guardados en devto_2026-06-27_100418.json
+2026-06-27 10:04:18,173 - pipeline_logger - INFO - Evidencia fuente devto: status=success, records=10, http=200
+2026-06-27 10:04:18,174 - pipeline_logger - INFO - Iniciando scraping dinamico en Reddit (Playwright)...
+2026-06-27 10:04:26,197 - pipeline_logger - INFO - Evidencia fuente reddit: status=success, records=7, http=200
+2026-06-27 10:04:26,197 - pipeline_logger - INFO - Reddit scraping completado. 7 registros guardados.
+2026-06-27 10:04:26,197 - pipeline_logger - INFO - Iniciando extraccion de Google Trends (pytrends)...
+2026-06-27 10:04:30,627 - pipeline_logger - INFO - Google Trends extraido: 279 data points guardados.
+2026-06-27 10:04:30,629 - pipeline_logger - INFO - Evidencia fuente google_trends: status=success, records=279, http=200
+2026-06-27 10:04:30,629 - pipeline_logger - INFO - Iniciando validacion Pydantic del catalogo maestro...
+2026-06-27 10:04:30,630 - pipeline_logger - INFO - Catalogo validado: 5/5 registros correctos.
+2026-06-27 10:04:30,665 - pipeline_logger - INFO - Evidencia fuente catalogo: status=success, records=5, http=None
+2026-06-27 10:04:30,665 - pipeline_logger - INFO - Catalogo guardado en Raw: maestro_agentes_2026-06-27_100430.json
+2026-06-27 10:04:30,665 - pipeline_logger - INFO - === FASE 2: CARGA RAW A BD ===
+2026-06-27 10:04:30,665 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-06-27 10:04:30,674 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_005248.json
+2026-06-27 10:04:30,680 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_084543.json
+2026-06-27 10:04:30,685 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_005227.json
+2026-06-27 10:04:30,689 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_084517.json
+2026-06-27 10:04:30,693 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_005227.json
+2026-06-27 10:04:30,697 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_084517.json
+2026-06-27 10:04:30,702 - pipeline_logger - INFO - Omitido (Duplicado): devto_2026-06-27_094436.json
+2026-06-27 10:04:30,734 - pipeline_logger - INFO - Cargado exitosamente: devto_2026-06-27_100418.json (10 registros)
+2026-06-27 10:04:30,737 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_005232.json
+2026-06-27 10:04:30,743 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_084524.json
+2026-06-27 10:04:30,747 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_094607.json
+2026-06-27 10:04:31,100 - pipeline_logger - INFO - Cargado exitosamente: google_trends_2026-06-27_100430.json (279 registros)
+2026-06-27 10:04:31,104 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_005241.json
+2026-06-27 10:04:31,109 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_082634.json
+2026-06-27 10:04:31,113 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_084534.json
+2026-06-27 10:04:31,118 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_094316.json
+2026-06-27 10:04:31,145 - pipeline_logger - INFO - Cargado exitosamente: hackernews_2026-06-27_100412.json (10 registros)
+2026-06-27 10:04:31,149 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-27_091833.json
+2026-06-27 10:04:31,154 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-27_094829.json
+2026-06-27 10:04:31,175 - pipeline_logger - INFO - Cargado exitosamente: reddit_2026-06-27_100426.json (7 registros)
+2026-06-27 10:04:31,179 - pipeline_logger - INFO - Omitido (Duplicado): maestro_agentes_2026-06-27_091836.json
+2026-06-27 10:04:31,184 - pipeline_logger - INFO - Omitido (Duplicado): maestro_agentes_2026-06-27_094818.json
+2026-06-27 10:04:31,191 - pipeline_logger - INFO - Omitido (Duplicado): maestro_agentes_2026-06-27_100430.json
+2026-06-27 10:04:31,197 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_085636.json
+2026-06-27 10:04:31,202 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_091111.json
+2026-06-27 10:04:31,208 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_091825.json
+2026-06-27 10:04:31,212 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_094822.json
+2026-06-27 10:04:31,358 - pipeline_logger - INFO - Cargado exitosamente: github_repos_2026-06-27_100409.json (80 registros)
+2026-06-27 10:04:31,358 - pipeline_logger - INFO - Carga completada. Nuevos: 5. Ignorados: 23
+2026-06-27 10:04:31,366 - pipeline_logger - INFO - Inventario CSV exportado a docs\evidencias\inventario_raw.csv
+2026-06-27 10:04:31,379 - pipeline_logger - INFO - Inventario Raw completo exportado a docs\evidencias\inventario_raw_completo.csv
+2026-06-27 10:04:31,379 - pipeline_logger - INFO - === FASE 3: STAGING ===
+2026-06-27 10:04:31,380 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-06-27 10:04:31,457 - pipeline_logger - INFO - Leídos 1331 registros crudos desde BD.
+2026-06-27 10:04:31,705 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-06-27 10:04:31,728 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-06-27 10:04:31,781 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-06-27 10:04:31,796 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-06-27 10:04:31,801 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 210 registros.
+2026-06-27 10:04:31,859 - pipeline_logger - INFO - Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.
+2026-06-27 10:04:33,086 - pipeline_logger - INFO - Carga a BD completada. Insertados: 1065. Conflictos o fallos de inserción: 0
+2026-06-27 10:04:33,100 - pipeline_logger - INFO - Data final exportada para evidencia en C:\Users\Damian\Documents\Intelegicia de Negocios\Proyecto\docs\evidencias\staging_stats.csv
+2026-06-27 10:04:33,104 - pipeline_logger - INFO - === FASE 4: CALIDAD DE DATOS ===
+2026-06-27 10:04:33,105 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-06-27 10:04:35,450 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias
+2026-06-27 10:04:35,462 - pipeline_logger - INFO - >>> PIPELINE UNIFICADO COMPLETADO EXITOSAMENTE (Run ID: 3) <<<
+2026-06-27 15:58:53,641 - pipeline_logger - INFO - Iniciando extraccion relevante en Dev.to...
+2026-06-27 15:58:57,021 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/search?q=AI%20coding%20agent
+2026-06-27 15:58:57,063 - pipeline_logger - WARNING - Dev.to: articulo HTML omitido por parseo: 'NoneType' object has no attribute 'find'
+2026-06-27 15:58:59,634 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=1
+2026-06-27 15:59:02,196 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=2
+2026-06-27 15:59:04,713 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=3
+2026-06-27 15:59:07,318 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=1
+2026-06-27 15:59:09,629 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=2
+2026-06-27 15:59:11,967 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=3
+2026-06-27 15:59:12,008 - pipeline_logger - INFO - Dev.to extraccion completada. 80 registros relevantes guardados en devto_2026-06-27_155911.json
+2026-06-27 15:59:12,010 - pipeline_logger - INFO - Evidencia fuente devto: status=success, records=80, http=200
+2026-06-27 15:59:22,313 - pipeline_logger - INFO - Iniciando scraping dinamico relevante en Reddit (Playwright)...
+2026-06-27 15:59:57,422 - pipeline_logger - INFO - Evidencia fuente reddit: status=success, records=60, http=200
+2026-06-27 15:59:57,422 - pipeline_logger - INFO - Reddit scraping completado. 60 registros relevantes guardados.
+2026-06-27 16:00:16,281 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-06-27 16:00:16,508 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_005248.json
+2026-06-27 16:00:16,538 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_084543.json
+2026-06-27 16:00:16,554 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_005227.json
+2026-06-27 16:00:16,560 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_084517.json
+2026-06-27 16:00:16,575 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_005227.json
+2026-06-27 16:00:16,581 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_084517.json
+2026-06-27 16:00:16,606 - pipeline_logger - INFO - Omitido (Duplicado): devto_2026-06-27_094436.json
+2026-06-27 16:00:16,627 - pipeline_logger - INFO - Omitido (Duplicado): devto_2026-06-27_100418.json
+2026-06-27 16:00:16,787 - pipeline_logger - INFO - Cargado exitosamente: devto_2026-06-27_155911.json (80 registros)
+2026-06-27 16:00:16,807 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_005232.json
+2026-06-27 16:00:16,824 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_084524.json
+2026-06-27 16:00:16,840 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_094607.json
+2026-06-27 16:00:16,857 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_100430.json
+2026-06-27 16:00:16,883 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_005241.json
+2026-06-27 16:00:16,913 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_082634.json
+2026-06-27 16:00:16,941 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_084534.json
+2026-06-27 16:00:16,971 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_094316.json
+2026-06-27 16:00:16,991 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_100412.json
+2026-06-27 16:00:17,009 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-27_091833.json
+2026-06-27 16:00:17,030 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-27_094829.json
+2026-06-27 16:00:17,057 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-27_100426.json
+2026-06-27 16:00:17,185 - pipeline_logger - INFO - Cargado exitosamente: reddit_2026-06-27_155957.json (60 registros)
+2026-06-27 16:00:17,203 - pipeline_logger - INFO - Omitido (Duplicado): maestro_agentes_2026-06-27_091836.json
+2026-06-27 16:00:17,210 - pipeline_logger - INFO - Omitido (Duplicado): maestro_agentes_2026-06-27_094818.json
+2026-06-27 16:00:17,216 - pipeline_logger - INFO - Omitido (Duplicado): maestro_agentes_2026-06-27_100430.json
+2026-06-27 16:00:17,252 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_085636.json
+2026-06-27 16:00:17,291 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_091111.json
+2026-06-27 16:00:17,363 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_091825.json
+2026-06-27 16:00:17,399 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_094822.json
+2026-06-27 16:00:17,434 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_100409.json
+2026-06-27 16:00:17,437 - pipeline_logger - INFO - Carga completada. Nuevos: 2. Ignorados: 28
+2026-06-27 16:00:17,450 - pipeline_logger - INFO - Inventario CSV exportado a docs\evidencias\inventario_raw.csv
+2026-06-27 16:00:17,471 - pipeline_logger - INFO - Inventario Raw completo exportado a docs\evidencias\inventario_raw_completo.csv
+2026-06-27 16:00:26,839 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-06-27 16:00:26,956 - pipeline_logger - INFO - Leídos 1471 registros crudos desde BD.
+2026-06-27 16:00:27,227 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-06-27 16:00:27,254 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-06-27 16:00:27,316 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-06-27 16:00:27,329 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-06-27 16:00:27,339 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 210 registros.
+2026-06-27 16:00:27,372 - pipeline_logger - INFO - Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.
+2026-06-27 16:00:28,639 - pipeline_logger - INFO - Carga a BD completada. Insertados: 1205. Conflictos o fallos de inserción: 0
+2026-06-27 16:00:28,660 - pipeline_logger - INFO - Data final exportada para evidencia en C:\Users\Damian\Documents\Intelegicia de Negocios\Proyecto\docs\evidencias\staging_stats.csv
+2026-06-27 16:00:39,331 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-06-27 16:00:42,048 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias
+2026-06-27 16:13:13,411 - pipeline_logger - INFO - Iniciando extraccion estructurada AIDev Dataset: AI Coding...
+2026-06-27 16:13:13,412 - pipeline_logger - INFO - Leyendo AIDev Dataset: AI Coding desde Parquet...
+2026-06-27 16:13:41,226 - pipeline_logger - INFO - AIDev catalog generado: 118557 registros en aidedev_ai_coding_catalog_2026-06-27_161336.json
+2026-06-27 16:13:41,228 - pipeline_logger - INFO - Evidencia fuente catalogo: status=success, records=118557, http=None
+2026-06-27 16:14:38,586 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-06-27 16:14:38,662 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_005248.json
+2026-06-27 16:14:38,668 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_084543.json
+2026-06-27 16:14:38,672 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_005227.json
+2026-06-27 16:14:38,676 - pipeline_logger - INFO - Omitido (Duplicado): dataset_agentes_maestro_2026-06-27_084517.json
+2026-06-27 16:14:38,680 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_005227.json
+2026-06-27 16:14:38,684 - pipeline_logger - INFO - Omitido (Duplicado): encuesta_upse_2026-06-27_084517.json
+2026-06-27 16:14:38,689 - pipeline_logger - INFO - Omitido (Duplicado): devto_2026-06-27_094436.json
+2026-06-27 16:14:38,693 - pipeline_logger - INFO - Omitido (Duplicado): devto_2026-06-27_100418.json
+2026-06-27 16:14:38,698 - pipeline_logger - INFO - Omitido (Duplicado): devto_2026-06-27_155911.json
+2026-06-27 16:14:38,702 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_005232.json
+2026-06-27 16:14:38,706 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_084524.json
+2026-06-27 16:14:38,709 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_094607.json
+2026-06-27 16:14:38,713 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_100430.json
+2026-06-27 16:14:38,716 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_005241.json
+2026-06-27 16:14:38,720 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_082634.json
+2026-06-27 16:14:38,724 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_084534.json
+2026-06-27 16:14:38,728 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_094316.json
+2026-06-27 16:14:38,732 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_100412.json
+2026-06-27 16:14:38,736 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-27_091833.json
+2026-06-27 16:14:38,740 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-27_094829.json
+2026-06-27 16:14:38,744 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-27_100426.json
+2026-06-27 16:14:38,748 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-27_155957.json
+2026-06-27 16:16:26,945 - pipeline_logger - INFO - Cargado exitosamente: aidedev_ai_coding_catalog_2026-06-27_161336.json (118557 registros)
+2026-06-27 16:16:26,949 - pipeline_logger - INFO - Omitido (Duplicado): maestro_agentes_2026-06-27_091836.json
+2026-06-27 16:16:26,954 - pipeline_logger - INFO - Omitido (Duplicado): maestro_agentes_2026-06-27_094818.json
+2026-06-27 16:16:26,958 - pipeline_logger - INFO - Omitido (Duplicado): maestro_agentes_2026-06-27_100430.json
+2026-06-27 16:16:26,962 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_085636.json
+2026-06-27 16:16:26,967 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_091111.json
+2026-06-27 16:16:26,972 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_091825.json
+2026-06-27 16:16:26,976 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_094822.json
+2026-06-27 16:16:26,981 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_100409.json
+2026-06-27 16:16:26,982 - pipeline_logger - INFO - Carga completada. Nuevos: 1. Ignorados: 30
+2026-06-27 16:16:27,000 - pipeline_logger - INFO - Inventario CSV exportado a docs\evidencias\inventario_raw.csv
+2026-06-27 16:16:27,051 - pipeline_logger - INFO - Inventario Raw completo exportado a docs\evidencias\inventario_raw_completo.csv
+2026-06-27 16:16:35,697 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-06-27 16:16:37,146 - pipeline_logger - INFO - Leídos 120028 registros crudos desde BD.
+2026-06-27 16:16:39,152 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-06-27 16:16:40,768 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-06-27 16:16:50,714 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-06-27 16:16:52,002 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-06-27 16:16:52,096 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 348 registros.
+2026-06-27 16:16:52,188 - pipeline_logger - INFO - Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.
+2026-06-27 16:19:02,354 - pipeline_logger - INFO - Carga a BD completada. Insertados: 1205. Conflictos o fallos de inserción: 118419
+2026-06-27 16:19:03,929 - pipeline_logger - INFO - Data final exportada para evidencia en C:\Users\Damian\Documents\Intelegicia de Negocios\Proyecto\docs\evidencias\staging_stats.csv
+2026-06-27 16:19:27,311 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-06-27 16:19:29,892 - pipeline_logger - INFO - Leídos 120028 registros crudos desde BD.
+2026-06-27 16:19:39,540 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-06-27 16:19:40,484 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-06-27 16:19:49,596 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-06-27 16:19:50,779 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-06-27 16:19:50,880 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 210 registros.
+2026-06-27 16:19:50,959 - pipeline_logger - INFO - Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.
+2026-06-27 16:22:09,237 - pipeline_logger - INFO - Carga a BD completada. Insertados: 1205. Conflictos o fallos de inserción: 118557
+2026-06-27 16:22:10,910 - pipeline_logger - INFO - Data final exportada para evidencia en C:\Users\Damian\Documents\Intelegicia de Negocios\Proyecto\docs\evidencias\staging_stats.csv
+2026-06-27 16:22:41,325 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-06-27 16:22:43,980 - pipeline_logger - INFO - Leídos 120028 registros crudos desde BD.
+2026-06-27 16:22:54,813 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-06-27 16:22:56,321 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-06-27 16:23:02,874 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-06-27 16:23:03,400 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-06-27 16:23:03,453 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 210 registros.
+2026-06-27 16:23:03,536 - pipeline_logger - INFO - Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.
+2026-06-27 16:24:25,527 - pipeline_logger - INFO - Carga a BD completada. Insertados: 119762. Conflictos o fallos de inserción: 0
+2026-06-27 16:24:25,530 - pipeline_logger - ERROR - Fallo crítico en Staging: [Errno 22] Invalid argument: 'C:\\Users\\Damian\\Documents\\Intelegicia de Negocios\\Proyecto\\docs\\evidencias\\staging_stats.csv'
+2026-06-27 16:25:15,248 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-06-27 16:25:16,408 - pipeline_logger - INFO - Leídos 120028 registros crudos desde BD.
+2026-06-27 16:25:21,321 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-06-27 16:25:21,996 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-06-27 16:25:26,570 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-06-27 16:25:27,026 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-06-27 16:25:27,089 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 210 registros.
+2026-06-27 16:25:27,332 - pipeline_logger - INFO - Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.
+2026-06-27 16:26:27,148 - pipeline_logger - INFO - Carga a BD completada. Insertados: 119762. Conflictos o fallos de inserción: 0
+2026-06-27 16:26:27,759 - pipeline_logger - INFO - Data final exportada para evidencia en C:\Users\Damian\Documents\Intelegicia de Negocios\Proyecto\docs\evidencias\staging_stats.csv
+2026-06-27 16:26:37,492 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-06-27 16:27:35,044 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias
+2026-06-27 16:30:38,850 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-06-27 16:30:39,798 - pipeline_logger - INFO - Leídos 120028 registros crudos desde BD.
+2026-06-27 16:30:44,885 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-06-27 16:30:45,574 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-06-27 16:30:47,504 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-06-27 16:30:48,150 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-06-27 16:30:48,233 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 210 registros.
+2026-06-27 16:30:48,727 - pipeline_logger - INFO - Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.
+2026-06-27 16:31:42,737 - pipeline_logger - INFO - Carga a BD completada. Insertados: 119762. Conflictos o fallos de inserción: 0
+2026-06-27 16:31:43,498 - pipeline_logger - INFO - Data final exportada para evidencia en C:\Users\Damian\Documents\Intelegicia de Negocios\Proyecto\docs\evidencias\staging_stats.csv
+2026-06-27 16:31:50,389 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-06-27 16:32:38,878 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias
+2026-06-27 18:04:08,623 - pipeline_logger - INFO - Iniciando extraccion estructurada AIDev Dataset: AI Coding...
+2026-06-27 18:04:08,623 - pipeline_logger - WARNING - ⚠️ Archivo faltante: all_pull_request.parquet. Iniciando descarga automática...
+2026-06-27 18:04:08,624 - pipeline_logger - INFO - Descargando all_pull_request.parquet desde Zenodo (puede tardar por el tamaño)...
+2026-06-27 18:08:03,199 - pipeline_logger - INFO - ✅ all_pull_request.parquet descargado exitosamente.
+2026-06-27 18:08:03,206 - pipeline_logger - WARNING - ⚠️ Archivo faltante: all_repository.parquet. Iniciando descarga automática...
+2026-06-27 18:08:03,207 - pipeline_logger - INFO - Descargando all_repository.parquet desde Zenodo (puede tardar por el tamaño)...
+2026-06-27 18:08:09,541 - pipeline_logger - INFO - ✅ all_repository.parquet descargado exitosamente.
+2026-06-27 18:08:09,543 - pipeline_logger - WARNING - ⚠️ Archivo faltante: all_user.parquet. Iniciando descarga automática...
+2026-06-27 18:08:09,543 - pipeline_logger - INFO - Descargando all_user.parquet desde Zenodo (puede tardar por el tamaño)...
+2026-06-27 18:08:14,885 - pipeline_logger - INFO - ✅ all_user.parquet descargado exitosamente.
+2026-06-27 18:08:14,887 - pipeline_logger - INFO - Leyendo AIDev Dataset: AI Coding desde Parquet...
+2026-06-27 18:08:43,683 - pipeline_logger - INFO - AIDev catalog generado: 118557 registros en aidedev_ai_coding_catalog_2026-06-27_180838.json
+2026-06-27 18:08:43,685 - pipeline_logger - INFO - Evidencia fuente catalogo: status=success, records=118557, http=None
+2026-06-27 18:10:23,652 - pipeline_logger - INFO - Iniciando extraccion estructurada AIDev Dataset: AI Coding...
+2026-06-27 18:10:23,653 - pipeline_logger - WARNING - ⚠️ Archivo faltante: data_table.md. Iniciando descarga automática...
+2026-06-27 18:10:23,653 - pipeline_logger - INFO - Descargando data_table.md desde Zenodo (puede tardar por el tamaño)...
+2026-06-27 18:10:25,241 - pipeline_logger - INFO - ✅ data_table.md descargado exitosamente.
+2026-06-27 18:10:25,243 - pipeline_logger - INFO - Leyendo AIDev Dataset: AI Coding desde Parquet...
+2026-06-27 18:10:38,207 - pipeline_logger - INFO - AIDev catalog generado: 118557 registros en aidedev_ai_coding_catalog_2026-06-27_181035.json
+2026-06-27 18:10:38,208 - pipeline_logger - INFO - Evidencia fuente catalogo: status=success, records=118557, http=None
+2026-06-27 18:12:10,441 - pipeline_logger - INFO - Iniciando extraccion estructurada AIDev Dataset: AI Coding...
+2026-06-27 18:12:10,442 - pipeline_logger - INFO - Leyendo AIDev Dataset: AI Coding desde Parquet...
+2026-06-27 18:12:36,536 - pipeline_logger - INFO - AIDev catalog generado: 118557 registros en aidedev_ai_coding_catalog_2026-06-27_181231.json
+2026-06-27 18:12:36,538 - pipeline_logger - INFO - Evidencia fuente catalogo: status=success, records=118557, http=None
+2026-06-27 18:22:21,930 - pipeline_logger - INFO - >>> INICIANDO PIPELINE UNIFICADO (Fecha Objetivo: 2026-06-27) <<<
+2026-06-27 18:22:22,048 - pipeline_logger - INFO - === FASE 1: EXTRACCIÓN MÚLTIPLE ===
+2026-06-27 18:22:22,048 - pipeline_logger - INFO - Usando autenticacion GITHUB_TOKEN.
+2026-06-27 18:22:22,049 - pipeline_logger - INFO - Buscando repositorios para: 'AI agent'
+2026-06-27 18:22:25,601 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=AI+agent+created%3A%3E2023-01-01&sort=stars&order=desc&per_page=20&page=1
+2026-06-27 18:22:25,602 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-27 18:22:25,602 - pipeline_logger - INFO - Buscando repositorios para: 'coding copilot'
+2026-06-27 18:22:28,340 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=coding+copilot+created%3A%3E2023-01-01&sort=stars&order=desc&per_page=20&page=1
+2026-06-27 18:22:28,342 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-27 18:22:28,342 - pipeline_logger - INFO - Buscando repositorios para: 'autoGPT'
+2026-06-27 18:22:31,169 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=autoGPT+created%3A%3E2023-01-01&sort=stars&order=desc&per_page=20&page=1
+2026-06-27 18:22:31,171 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-27 18:22:31,171 - pipeline_logger - INFO - Buscando repositorios para: 'autonomous AI'
+2026-06-27 18:22:34,027 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=autonomous+AI+created%3A%3E2023-01-01&sort=stars&order=desc&per_page=20&page=1
+2026-06-27 18:22:34,029 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-27 18:22:34,045 - pipeline_logger - INFO - Evidencia fuente github: status=success, records=80, http=200
+2026-06-27 18:22:34,045 - pipeline_logger - INFO - Extraccion GitHub completada: 80 registros guardados en github_repos_2026-06-27_182234.json
+2026-06-27 18:22:34,047 - pipeline_logger - INFO - Iniciando scraping estatico en HackerNews...
+2026-06-27 18:22:36,959 - pipeline_logger - INFO - hackernews: HTTP 200 GET https://news.ycombinator.com/front
+2026-06-27 18:22:36,988 - pipeline_logger - INFO - HackerNews scraping completado. 10 registros guardados en hackernews_2026-06-27_182236.json
+2026-06-27 18:22:36,989 - pipeline_logger - INFO - Evidencia fuente hackernews: status=success, records=10, http=200
+2026-06-27 18:22:36,990 - pipeline_logger - INFO - Iniciando extraccion relevante en Dev.to...
+2026-06-27 18:22:40,004 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/search?q=AI%20coding%20agent
+2026-06-27 18:22:40,018 - pipeline_logger - WARNING - Dev.to: articulo HTML omitido por parseo: 'NoneType' object has no attribute 'find'
+2026-06-27 18:22:42,411 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=1
+2026-06-27 18:22:44,697 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=2
+2026-06-27 18:22:47,082 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=3
+2026-06-27 18:22:49,552 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=1
+2026-06-27 18:22:52,132 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=2
+2026-06-27 18:22:52,140 - pipeline_logger - INFO - Dev.to extraccion completada. 80 registros relevantes guardados en devto_2026-06-27_182252.json
+2026-06-27 18:22:52,142 - pipeline_logger - INFO - Evidencia fuente devto: status=success, records=80, http=200
+2026-06-27 18:22:52,144 - pipeline_logger - INFO - Iniciando scraping dinamico relevante en Reddit (Playwright)...
+2026-06-27 18:23:25,557 - pipeline_logger - INFO - Evidencia fuente reddit: status=success, records=60, http=200
+2026-06-27 18:23:25,558 - pipeline_logger - INFO - Reddit scraping completado. 60 registros relevantes guardados.
+2026-06-27 18:23:25,558 - pipeline_logger - INFO - Iniciando extraccion de Google Trends (pytrends)...
+2026-06-27 18:23:28,754 - pipeline_logger - INFO - Google Trends extraido: 279 data points guardados.
+2026-06-27 18:23:28,756 - pipeline_logger - INFO - Evidencia fuente google_trends: status=success, records=279, http=200
+2026-06-27 18:23:28,756 - pipeline_logger - INFO - Iniciando extraccion estructurada AIDev Dataset: AI Coding...
+2026-06-27 18:23:28,757 - pipeline_logger - WARNING - ⚠️ Archivo faltante: all_pull_request.parquet. Iniciando descarga automática...
+2026-06-27 18:23:28,757 - pipeline_logger - INFO - Descargando all_pull_request.parquet desde Zenodo (puede tardar por el tamaño)...
+2026-06-27 18:27:17,471 - pipeline_logger - INFO - ✅ all_pull_request.parquet descargado exitosamente.
+2026-06-27 18:27:17,473 - pipeline_logger - WARNING - ⚠️ Archivo faltante: all_repository.parquet. Iniciando descarga automática...
+2026-06-27 18:27:17,473 - pipeline_logger - INFO - Descargando all_repository.parquet desde Zenodo (puede tardar por el tamaño)...
+2026-06-27 18:27:23,848 - pipeline_logger - INFO - ✅ all_repository.parquet descargado exitosamente.
+2026-06-27 18:27:23,850 - pipeline_logger - WARNING - ⚠️ Archivo faltante: all_user.parquet. Iniciando descarga automática...
+2026-06-27 18:27:23,851 - pipeline_logger - INFO - Descargando all_user.parquet desde Zenodo (puede tardar por el tamaño)...
+2026-06-27 18:27:33,348 - pipeline_logger - INFO - ✅ all_user.parquet descargado exitosamente.
+2026-06-27 18:27:33,350 - pipeline_logger - WARNING - ⚠️ Archivo faltante: data_table.md. Iniciando descarga automática...
+2026-06-27 18:27:33,351 - pipeline_logger - INFO - Descargando data_table.md desde Zenodo (puede tardar por el tamaño)...
+2026-06-27 18:27:34,883 - pipeline_logger - INFO - ✅ data_table.md descargado exitosamente.
+2026-06-27 18:27:34,885 - pipeline_logger - INFO - Leyendo AIDev Dataset: AI Coding desde Parquet...
+2026-06-27 18:28:02,147 - pipeline_logger - INFO - AIDev catalog generado: 118557 registros en aidedev_ai_coding_catalog_2026-06-27_182757.json
+2026-06-27 18:28:02,149 - pipeline_logger - INFO - Evidencia fuente catalogo: status=success, records=118557, http=None
+2026-06-27 18:28:02,284 - pipeline_logger - INFO - === FASE 2: CARGA RAW A BD ===
+2026-06-27 18:28:02,284 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-06-27 18:28:02,439 - pipeline_logger - INFO - Cargado exitosamente: devto_2026-06-27_182252.json (80 registros)
+2026-06-27 18:28:02,770 - pipeline_logger - INFO - Cargado exitosamente: google_trends_2026-06-27_182328.json (279 registros)
+2026-06-27 18:28:02,817 - pipeline_logger - INFO - Cargado exitosamente: hackernews_2026-06-27_182236.json (10 registros)
+2026-06-27 18:28:02,916 - pipeline_logger - INFO - Cargado exitosamente: reddit_2026-06-27_182325.json (60 registros)
+2026-06-27 18:29:53,191 - pipeline_logger - INFO - Cargado exitosamente: aidedev_ai_coding_catalog_2026-06-27_182757.json (118557 registros)
+2026-06-27 18:29:53,402 - pipeline_logger - INFO - Cargado exitosamente: github_repos_2026-06-27_182234.json (80 registros)
+2026-06-27 18:29:53,403 - pipeline_logger - INFO - Carga completada. Nuevos: 6. Ignorados: 0
+2026-06-27 18:29:53,413 - pipeline_logger - INFO - Inventario CSV exportado a docs\evidencias\inventario_raw.csv
+2026-06-27 18:29:53,835 - pipeline_logger - INFO - Inventario Raw completo exportado a docs\evidencias\inventario_raw_completo.csv
+2026-06-27 18:29:53,837 - pipeline_logger - INFO - === FASE 3: STAGING ===
+2026-06-27 18:29:53,838 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-06-27 18:29:58,058 - pipeline_logger - INFO - Leídos 239094 registros crudos desde BD.
+2026-06-27 18:30:09,341 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-06-27 18:30:10,702 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-06-27 18:30:14,019 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-06-27 18:30:15,248 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-06-27 18:30:15,327 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 118895 registros.
+2026-06-27 18:30:15,652 - pipeline_logger - INFO - Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.
+2026-06-27 18:31:39,590 - pipeline_logger - INFO - Carga a BD completada. Insertados: 120143. Conflictos o fallos de inserción: 0
+2026-06-27 18:31:40,280 - pipeline_logger - INFO - Data final exportada para evidencia en C:\Users\Damian\Documents\Intelegicia de Negocios\Proyecto\docs\evidencias\staging_stats.csv
+2026-06-27 18:31:40,664 - pipeline_logger - INFO - === FASE 4: CALIDAD DE DATOS ===
+2026-06-27 18:31:40,664 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-06-27 18:33:35,055 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias
+2026-06-27 18:33:35,062 - pipeline_logger - INFO - >>> PIPELINE UNIFICADO COMPLETADO EXITOSAMENTE (Run ID: 36) <<<
