@@ -9,6 +9,10 @@ from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
 
 
+SOURCE_START_DATE = "2023-01-01"
+SOURCE_END_DATE = "2026-12-31"
+
+
 def extract_trends():
     """Extrae interes en el tiempo desde Google Trends con manejo explicito de rate limit."""
     global_logger.info("Iniciando extraccion de Google Trends (pytrends)...")
@@ -17,7 +21,7 @@ def extract_trends():
 
     try:
         pytrend = TrendReq(hl="en-US", tz=360)
-        pytrend.build_payload(kw_list, cat=0, timeframe="today 3-m", geo="")
+        pytrend.build_payload(kw_list, cat=0, timeframe=f"{SOURCE_START_DATE} {SOURCE_END_DATE}", geo="")
         df = pytrend.interest_over_time()
 
         if df.empty:
@@ -55,7 +59,18 @@ def extract_trends():
         out_path = out_dir / f"google_trends_{date_stamp}.json"
 
         with open(out_path, "w", encoding="utf-8") as f:
-            json.dump(records, f, ensure_ascii=False, indent=2)
+            payload = {
+                "metadata": {
+                    "source": "google_trends",
+                    "keywords": kw_list,
+                    "date_range_start": SOURCE_START_DATE,
+                    "date_range_end": SOURCE_END_DATE,
+                    "records_extracted": len(records),
+                    "extracted_at": extracted_at,
+                },
+                "items": records,
+            }
+            json.dump(payload, f, ensure_ascii=False, indent=2)
 
         global_logger.info(f"Google Trends extraido: {len(records)} data points guardados.")
         log_source_execution("google_trends", "success", len(records), 200, url, out_path)

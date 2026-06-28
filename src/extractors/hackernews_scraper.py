@@ -10,6 +10,10 @@ from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
 
 
+SOURCE_START_DATE = "2023-01-01"
+SOURCE_END_DATE = "2026-12-31"
+
+
 def extract_hackernews():
     """Scrapea HTML de HackerNews y guarda evidencia Raw verificable."""
     global_logger.info("Iniciando scraping estatico en HackerNews...")
@@ -53,6 +57,8 @@ def extract_hackernews():
                 "created_at": datetime.datetime.now().isoformat(),
                 "source": "hackernews",
                 "http_status": client.last_status_code,
+                "date_range_start": SOURCE_START_DATE,
+                "date_range_end": SOURCE_END_DATE,
             })
         except Exception as exc:
             global_logger.warning(f"HackerNews: fila omitida por parseo: {exc}")
@@ -72,6 +78,8 @@ def extract_hackernews():
             "source": "hackernews",
             "url": url,
             "http_status": client.last_status_code,
+            "date_range_start": SOURCE_START_DATE,
+            "date_range_end": SOURCE_END_DATE,
             "records_extracted": len(records),
             "extracted_at": datetime.datetime.now().isoformat(),
         },

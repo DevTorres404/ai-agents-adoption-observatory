@@ -9,6 +9,10 @@ from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
 
 
+SOURCE_START_DATE = "2023-01-01"
+SOURCE_END_DATE = "2026-12-31"
+
+
 def extract_github_repos(queries=None, pages=2, per_page=50):
     """
     Consume la API REST de GitHub Search Repositories y guarda payload Raw con metadata.
@@ -33,7 +37,7 @@ def extract_github_repos(queries=None, pages=2, per_page=50):
         global_logger.info(f"Buscando repositorios para: '{query}'")
         for page in range(1, pages + 1):
             params = {
-                "q": f"{query} created:>2023-01-01",
+                "q": f"{query} created:{SOURCE_START_DATE}..{SOURCE_END_DATE}",
                 "sort": "stars",
                 "order": "desc",
                 "per_page": per_page,
@@ -76,6 +80,8 @@ def extract_github_repos(queries=None, pages=2, per_page=50):
             "url": endpoint,
             "http_status": last_status,
             "queries": queries,
+            "date_range_start": SOURCE_START_DATE,
+            "date_range_end": SOURCE_END_DATE,
             "pages_requested_per_query": pages,
             "per_page_limit": per_page,
             "total_count_extracted": len(all_items),

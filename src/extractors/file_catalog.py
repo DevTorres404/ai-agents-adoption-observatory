@@ -10,6 +10,10 @@ from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR, ROOT_DIR
 
 
+SOURCE_START_DATE = "2023-01-01"
+SOURCE_END_DATE = "2026-12-31"
+
+
 class AgenteIA(BaseModel):
     id: str = Field(..., min_length=1)
     nombre_oficial: str = Field(..., min_length=2)
@@ -50,7 +54,17 @@ def extract_and_validate_catalog():
         out_path = out_dir / f"catalogo_{date_stamp}.json"
 
         with open(out_path, "w", encoding="utf-8") as f:
-            json.dump(valid_records, f, ensure_ascii=False, indent=2)
+            payload = {
+                "metadata": {
+                    "source": "catalogo",
+                    "date_range_start": SOURCE_START_DATE,
+                    "date_range_end": SOURCE_END_DATE,
+                    "records_extracted": len(valid_records),
+                    "extracted_at": datetime.datetime.now().isoformat(),
+                },
+                "items": valid_records,
+            }
+            json.dump(payload, f, ensure_ascii=False, indent=2)
 
         log_source_execution("catalogo", "success", len(valid_records), None, str(source_path), out_path)
         global_logger.info(f"Catalogo guardado en Raw: {out_path.name}")

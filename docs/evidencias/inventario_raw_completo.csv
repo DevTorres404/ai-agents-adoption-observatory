@@ -32,3 +32,9 @@ raw_file_id,fuente,tipo_fuente,ruta_relativa,nombre_archivo,declared_records,loa
 69,reddit,scraping,scraping/reddit/reddit_2026-06-27_182325.json,reddit_2026-06-27_182325.json,60,60,8,30591,d682e2ab7419ee986c383b1d4ed2300a887164b87e1f46f814b0cb2f0a50e2fb,2026-06-27 23:28:02.859538
 70,catalogo,archivos,archivos/catalogo/aidedev_ai_coding_catalog_2026-06-27_182757.json,aidedev_ai_coding_catalog_2026-06-27_182757.json,118557,118557,20,103385991,fcf750c0a2311838a4ccd617ba459d61cb6af8538b94bc5f85c8d246a9187ff0,2026-06-27 23:28:03.177491
 71,github,api,api/github/github_repos_2026-06-27_182234.json,github_repos_2026-06-27_182234.json,80,80,83,553574,1d0ffa0b7c70ba6abda4f5427f60c0516add065b77f812d22e11aa98953f565d,2026-06-27 23:29:53.199359
+72,devto,scraping,scraping/devto/devto_2026-06-28.json,devto_2026-06-28.json,80,80,11,53572,2b743b2fe9c3910993c015c5deb0bf98b21c1deafaeb7cd1b05142554c8fe5a6,2026-06-28 16:11:55.211627
+73,google_trends,scraping,scraping/google_trends/google_trends_2026-06-28.json,google_trends_2026-06-28.json,549,549,6,123706,9cee1af16e9cb2a5196fd86a16307304c8f1962e407eaa35b3ec0d22d6da79b7,2026-06-28 16:11:55.338763
+74,hackernews,scraping,scraping/hackernews/hackernews_2026-06-28.json,hackernews_2026-06-28.json,10,10,10,4480,5996b7bbf3a335ce0126410a2e5a67e45f2fde818deda331f615aafc5e8c5d1b,2026-06-28 16:11:55.680657
+75,reddit,scraping,scraping/reddit/reddit_2026-06-28.json,reddit_2026-06-28.json,60,60,10,36475,48d6563d997b4fc9be22146b0ac3edc99f758cd337549a7b161b39ced2c2c92e,2026-06-28 16:11:55.719474
+76,catalogo,archivos,archivos/catalogo/aidedev_2026-06-28.json,aidedev_2026-06-28.json,118557,118557,20,103386067,dd9ab9ece9d933adaa542ce79cff201c6e4e91409cac8aa0fa32a15217208b6e,2026-06-28 16:11:55.956006
+77,github,api,api/github/github_2026-06-28.json,github_2026-06-28.json,80,80,83,553652,931960061d6e4ed12e1a1e47e4a333697fe20ccdc89a553f522fb0558896d87d,2026-06-28 16:13:07.637192
