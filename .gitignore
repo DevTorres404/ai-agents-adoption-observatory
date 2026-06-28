@@ -1,0 +1,40 @@
+# Entornos virtuales
+.venv/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Variables de entorno y credenciales
+.env
+.env.local
+.env.*
+!.env.example
+
+# Archivos compilados Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs
+logs/*.csv
+logs/*.log
+!logs/.gitkeep
+
+# Datos locales (Archivos pesados generados)
+data/raw/**/*.json
+data/raw/**/*.parquet
+data/staging/*.csv
+!data/raw/.gitkeep
+!data/staging/.gitkeep
+data/manual/
+# IDEs
+.vscode/
+.idea/
+.gemini/
+.spyderproject
+.ropeproject
+
+# SO
+.DS_Store
+Thumbs.db

@@ -1,0 +1,11 @@
+pandas
+requests
+beautifulsoup4
+playwright
+SQLAlchemy
+psycopg[binary]
+python-dotenv
+pydantic
+pytrends
+tqdm
+pyarrow
