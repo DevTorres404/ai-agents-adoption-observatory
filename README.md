@@ -45,7 +45,7 @@ El extractor está diseñado para ser 100% autónomo. Al ejecutarse, verifica la
 data/manual/aidedev_ai_coding/
 ```
 
-**Si los archivos no se encuentran, el extractor se conecta automáticamente a la API de Zenodo (Record 16919272), los descarga en su totalidad y los ubica en la carpeta correspondiente** antes de comenzar a procesarlos. No se requiere intervención manual ni instalar herramientas adicionales como Git LFS.
+**Si los archivos no se encuentran, el extractor se conecta automáticamente a la API de Zenodo (Record 16919272), los descarga en su totalidad y los ubica en la carpeta correspondiente** antes de comenzar a procesarlos. No se requiere intervención manual para preparar el dataset.
 
 El extractor que depende de estos archivos es:
 

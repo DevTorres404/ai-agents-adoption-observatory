@@ -1,0 +1,24 @@
+ordinal_position,column_name,data_type,is_nullable,contract_role
+1,id,integer,NO,technical_surrogate_key
+2,id_origen_registro,character varying,NO,analytical_contract_column
+3,fuente,character varying,NO,analytical_contract_column
+4,tipo_fuente,character varying,NO,analytical_contract_column
+5,plataforma,character varying,NO,analytical_contract_column
+6,fecha_evento,date,NO,analytical_contract_column
+7,nombre_agente,character varying,NO,analytical_contract_column
+8,categoria,character varying,NO,analytical_contract_column
+9,titulo,text,YES,analytical_contract_column
+10,texto,text,YES,analytical_contract_column
+11,url,character varying,YES,analytical_contract_column
+12,cantidad_menciones,integer,YES,analytical_contract_column
+13,cantidad_interacciones,integer,YES,analytical_contract_column
+14,score_popularidad,numeric,YES,analytical_contract_column
+15,stars_github,integer,YES,analytical_contract_column
+16,forks_github,integer,YES,analytical_contract_column
+17,issues_abiertos,integer,YES,analytical_contract_column
+18,releases,integer,YES,analytical_contract_column
+19,indice_adopcion,numeric,YES,analytical_contract_column
+20,indice_innovacion,numeric,YES,analytical_contract_column
+21,sentimiento_promedio,numeric,YES,analytical_contract_column
+22,fecha_carga,timestamp without time zone,YES,technical_audit_column
+23,raw_file_id,integer,YES,analytical_contract_column
