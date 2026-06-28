@@ -1,0 +1,9 @@
+source,source_field,staging_field,transformation_rule
+github,stargazers_count,stars_github,Mapeo directo Integer
+github,created_at,fecha_evento,Parse ISO Date a YYYY-MM-DD
+hackernews,points,cantidad_interacciones,Mapeo directo Integer
+hackernews,num_comments,cantidad_menciones,Mapeo directo Integer
+devto,title/url/created_at,titulo/url/fecha_evento,Parse HTML con BeautifulSoup y normalizacion generica
+reddit,title/url/created_at,titulo/url/fecha_evento,Scraping Playwright y normalizacion generica
+google_trends,valor,score_popularidad,Mapeo numerico Float
+fuente_propia,encuesta_upse,pendiente,Fuente provisionada; no tabulada como fuente academica final
