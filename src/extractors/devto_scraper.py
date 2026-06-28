@@ -149,10 +149,10 @@ def extract_devto(max_records=80):
         log_source_execution("devto", "empty", 0, client.last_status_code, url, notes="Sin articulos relevantes")
         return
 
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
+    date_stamp = datetime.datetime.now().strftime("%Y-%m-%d")
     out_dir = RAW_DIR / "scraping" / "devto"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"devto_{timestamp}.json"
+    out_path = out_dir / f"devto_{date_stamp}.json"
 
     payload = {
         "metadata": {

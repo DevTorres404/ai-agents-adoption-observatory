@@ -122,10 +122,10 @@ def extract_reddit(max_records=60):
         log_source_execution("reddit", "empty", 0, status_codes[-1] if status_codes else None, ";".join(visited_urls))
         return
 
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
+    date_stamp = datetime.datetime.now().strftime("%Y-%m-%d")
     out_dir = RAW_DIR / "scraping" / "reddit"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"reddit_{timestamp}.json"
+    out_path = out_dir / f"reddit_{date_stamp}.json"
 
     payload = {
         "metadata": {

@@ -65,8 +65,8 @@ def extract_github_repos(queries=None, pages=2, per_page=50):
     target_dir = RAW_DIR / "api" / "github"
     target_dir.mkdir(parents=True, exist_ok=True)
 
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
-    filename = f"github_repos_{timestamp}.json"
+    date_stamp = datetime.datetime.now().strftime("%Y-%m-%d")
+    filename = f"github_{date_stamp}.json"
     filepath = target_dir / filename
 
     payload = {

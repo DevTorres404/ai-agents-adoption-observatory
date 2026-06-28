@@ -12,6 +12,7 @@ def normalize_dataframe(df, file_meta):
     stg_df = pd.DataFrame()
 
     if fuente == "github":
+        # Motivo: GitHub mide adopcion tecnica por repositorios; stars y forks son senales publicas de uso/reutilizacion.
         stg_df["id_origen_registro"] = df["id"].astype(str) if "id" in df.columns else df.apply(hash_fallback, axis=1)
         stg_df["plataforma"] = "github"
         stg_df["titulo"] = df.get("name", "")
@@ -24,6 +25,7 @@ def normalize_dataframe(df, file_meta):
         stg_df["cantidad_interacciones"] = stg_df["stars_github"] + stg_df["forks_github"]
 
     elif fuente == "hackernews":
+        # Motivo: HackerNews representa discusion comunitaria; puntos y comentarios aproximan aceptacion e intensidad del debate.
         stg_df["id_origen_registro"] = df["objectID"].astype(str) if "objectID" in df.columns else df.apply(hash_fallback, axis=1)
         stg_df["plataforma"] = "hackernews"
         stg_df["titulo"] = df.get("title", "")
@@ -34,6 +36,7 @@ def normalize_dataframe(df, file_meta):
         stg_df["cantidad_menciones"] = df.get("num_comments", 0)
 
     elif fuente == "google_trends":
+        # Motivo: Trends aporta interes relativo de busqueda; por eso se conserva como score de popularidad.
         stg_df["id_origen_registro"] = df.apply(hash_fallback, axis=1)
         stg_df["plataforma"] = "google_trends"
         stg_df["titulo"] = df.get("agente", "") + " Trend"
@@ -44,6 +47,7 @@ def normalize_dataframe(df, file_meta):
 
     elif fuente == "catalogo":
         if "pull_requests_count" in df.columns:
+            # Motivo: AIDev resume actividad real en repositorios; PRs, merges y contribuidores aproximan adopcion productiva.
             agent = first_existing(df, ["agent"], "Agente IA")
             repo = first_existing(df, ["full_name"], "")
             language = first_existing(df, ["language"], "")
@@ -69,9 +73,11 @@ def normalize_dataframe(df, file_meta):
             stg_df["forks_github"] = pd.to_numeric(first_existing(df, ["forks"], 0), errors="coerce").fillna(0).astype(int)
             max_pr = pr_count.max() if pr_count.max() else 1
             max_contributors = contributors.max() if contributors.max() else 1
+            # Motivo: se normaliza a 0-100 para comparar repositorios de tamanos distintos sin perder escala relativa.
             stg_df["indice_adopcion"] = ((pr_count / max_pr) * 100).round(2)
             stg_df["indice_innovacion"] = ((contributors / max_contributors) * 100).round(2)
         else:
+            # Motivo: el catalogo manual funciona como maestro descriptivo; no genera metricas de actividad por si solo.
             official_name = first_existing(df, ["nombre_oficial", "name", "title"], "Agente IA")
             stg_df["id_origen_registro"] = first_existing(df, ["id"], "").astype(str)
             stg_df["plataforma"] = "catalogo_manual"
@@ -85,6 +91,7 @@ def normalize_dataframe(df, file_meta):
             stg_df["fecha_evento_raw"] = None
 
     elif fuente == "fuente_propia":
+        # Motivo: la encuesta UPSE se modela como percepcion declarada; cada respuesta cuenta como mencion individual.
         herramienta = first_existing(df, ["herramienta_principal", "herramienta_favorita"], "Ninguna")
         usa_ia = first_existing(df, ["usa_agentes_ia", "usa_ia"], "No especificado")
         perfil = first_existing(df, ["perfil_participante"], "No especificado")
@@ -101,6 +108,7 @@ def normalize_dataframe(df, file_meta):
         stg_df["url"] = ""
         stg_df["fecha_evento_raw"] = first_existing(df, ["timestamp_respuesta", "Marca temporal", "created_at"], None)
         stg_df["cantidad_menciones"] = 1
+        # Motivo: 1.0/0.5/0.0 separa adopcion activa, prueba exploratoria y no adopcion.
         stg_df["indice_adopcion"] = usa_ia.astype(str).str.lower().map({
             "si": 1.0,
             "sí": 1.0,
@@ -114,6 +122,7 @@ def normalize_dataframe(df, file_meta):
         )
 
     else:
+        # Motivo: el fallback evita perder fuentes nuevas; conserva campos genericos hasta crear una regla especifica.
         stg_df["id_origen_registro"] = df.apply(hash_fallback, axis=1)
         stg_df["plataforma"] = fuente
         stg_df["titulo"] = df.get("title", df.get("name", "Sin titulo"))
@@ -149,6 +158,7 @@ def normalize_dataframe(df, file_meta):
 
     for col in numeric_cols:
         if col not in stg_df.columns:
+            # Motivo: las columnas numericas obligatorias deben existir aunque una fuente no aporte esa metrica.
             stg_df[col] = 0 if col in zero_default_cols else None
 
     return stg_df
