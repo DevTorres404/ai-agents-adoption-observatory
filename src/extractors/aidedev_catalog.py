@@ -17,6 +17,8 @@ REPO_FILE = SOURCE_DIR / "all_repository.parquet"
 USER_FILE = SOURCE_DIR / "all_user.parquet"
 DATA_TABLE_FILE = SOURCE_DIR / "data_table.md"
 
+SOURCE_START_DATE = "2023-01-01"
+SOURCE_END_DATE = "2026-12-31"
 
 ZENODO_BASE_URL = "https://zenodo.org/api/records/16919272/files/{}/content"
 
@@ -90,6 +92,12 @@ def build_aidedev_catalog(max_pr_rows=None):
 
     pull_requests["created_at"] = pd.to_datetime(pull_requests["created_at"], errors="coerce", utc=True)
     pull_requests["merged_at"] = pd.to_datetime(pull_requests["merged_at"], errors="coerce", utc=True)
+    start_date = pd.Timestamp(SOURCE_START_DATE, tz="UTC")
+    end_date = pd.Timestamp(SOURCE_END_DATE, tz="UTC")
+    pull_requests = pull_requests[
+        (pull_requests["created_at"] >= start_date)
+        & (pull_requests["created_at"] <= end_date)
+    ]
     pull_requests["is_merged"] = pull_requests["merged_at"].notna().astype(int)
 
     grouped = (
@@ -176,6 +184,8 @@ def extract_aidedev_catalog():
                 str(USER_FILE.relative_to(ROOT_DIR)).replace("\\", "/"),
             ],
             "stats": stats,
+            "date_range_start": SOURCE_START_DATE,
+            "date_range_end": SOURCE_END_DATE,
             "extracted_at": datetime.datetime.now().isoformat(),
         },
         "items": records,

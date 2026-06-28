@@ -32,3 +32,10 @@ unnamed portal parameter $2 = '...'
 2026-06-27 16:25:27,,staging_pipeline,DuplicateWarning,Se descartaron 210 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
 2026-06-27 16:30:48,,staging_pipeline,DuplicateWarning,Se descartaron 210 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
 2026-06-27 18:30:15,,staging_pipeline,DuplicateWarning,Se descartaron 118895 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-06-28 10:58:06,,hackernews_scraper,HTTPError,429 Client Error: Too Many Requests for url: https://news.ycombinator.com/front,Scraping abortado
+2026-06-28 11:08:43,,load_raw_to_db,OperationalError,"(psycopg.errors.ConnectionTimeout) connection timeout expired
+Multiple connection attempts failed. All failures were:
+- host: 'localhost', port: 5432, hostaddr: '::1': connection timeout expired
+- host: 'localhost', port: 5432, hostaddr: '127.0.0.1': connection timeout expired
+(Background on this error at: https://sqlalche.me/e/20/e3q8)",Fallo al procesar devto_2026-06-27_182252.json
+2026-06-28 11:14:02,,staging_pipeline,DuplicateWarning,Se descartaron 237538 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.

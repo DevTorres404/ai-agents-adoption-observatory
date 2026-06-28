@@ -37,6 +37,9 @@ SEARCH_QUERIES = [
     "Codeium Tabnine coding assistant",
 ]
 
+SOURCE_START_DATE = "2023-01-01"
+SOURCE_END_DATE = "2026-12-31"
+
 
 def is_relevant(title):
     text = title.lower()
@@ -47,7 +50,7 @@ def is_relevant(title):
 
 
 def collect_posts_for_query(page, query, max_per_query=15):
-    url = f"https://www.reddit.com/search/?q={quote_plus(query)}&sort=relevance&t=year"
+    url = f"https://www.reddit.com/search/?q={quote_plus(query)}&sort=relevance&t=all"
     response = page.goto(url, wait_until="domcontentloaded", timeout=30000)
     http_status = response.status if response else None
 
@@ -78,6 +81,8 @@ def collect_posts_for_query(page, query, max_per_query=15):
             "source": "reddit",
             "http_status": http_status,
             "search_query": query,
+            "date_range_start": SOURCE_START_DATE,
+            "date_range_end": SOURCE_END_DATE,
             "created_at": datetime.datetime.now().isoformat(),
         })
 
@@ -135,6 +140,9 @@ def extract_reddit(max_records=60):
             "records_extracted": len(records),
             "search_queries": SEARCH_QUERIES,
             "relevance_rule": "agent term OR (AI term AND software-development term)",
+            "date_range_start": SOURCE_START_DATE,
+            "date_range_end": SOURCE_END_DATE,
+            "date_note": "Reddit UI no expone fecha historica estable en este scraper; Staging aplica filtro 2023-2026.",
             "max_records": max_records,
             "extracted_at": datetime.datetime.now().isoformat(),
         },

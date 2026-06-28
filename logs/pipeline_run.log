@@ -625,3 +625,158 @@ unnamed portal parameter $2 = '...'
 2026-06-27 18:31:40,664 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
 2026-06-27 18:33:35,055 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias
 2026-06-27 18:33:35,062 - pipeline_logger - INFO - >>> PIPELINE UNIFICADO COMPLETADO EXITOSAMENTE (Run ID: 36) <<<
+2026-06-28 10:53:30,677 - pipeline_logger - INFO - >>> INICIANDO PIPELINE UNIFICADO (Fecha Objetivo: 2026-06-28) <<<
+2026-06-28 10:57:50,800 - pipeline_logger - ERROR - Fallo al registrar inicio de auditoría: (psycopg.errors.ConnectionTimeout) connection timeout expired
+Multiple connection attempts failed. All failures were:
+- host: 'localhost', port: 5432, hostaddr: '::1': connection timeout expired
+- host: 'localhost', port: 5432, hostaddr: '127.0.0.1': connection timeout expired
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-28 10:57:50,801 - pipeline_logger - INFO - === FASE 1: EXTRACCIÓN MÚLTIPLE ===
+2026-06-28 10:57:50,801 - pipeline_logger - INFO - Usando autenticacion GITHUB_TOKEN.
+2026-06-28 10:57:50,802 - pipeline_logger - INFO - Buscando repositorios para: 'AI agent'
+2026-06-28 10:57:54,873 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=AI+agent+created%3A%3E2023-01-01&sort=stars&order=desc&per_page=20&page=1
+2026-06-28 10:57:54,875 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-28 10:57:54,875 - pipeline_logger - INFO - Buscando repositorios para: 'coding copilot'
+2026-06-28 10:57:57,612 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=coding+copilot+created%3A%3E2023-01-01&sort=stars&order=desc&per_page=20&page=1
+2026-06-28 10:57:57,614 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-28 10:57:57,614 - pipeline_logger - INFO - Buscando repositorios para: 'autoGPT'
+2026-06-28 10:58:00,475 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=autoGPT+created%3A%3E2023-01-01&sort=stars&order=desc&per_page=20&page=1
+2026-06-28 10:58:00,477 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-28 10:58:00,477 - pipeline_logger - INFO - Buscando repositorios para: 'autonomous AI'
+2026-06-28 10:58:03,292 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=autonomous+AI+created%3A%3E2023-01-01&sort=stars&order=desc&per_page=20&page=1
+2026-06-28 10:58:03,294 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-28 10:58:03,325 - pipeline_logger - INFO - Evidencia fuente github: status=success, records=80, http=200
+2026-06-28 10:58:03,326 - pipeline_logger - INFO - Extraccion GitHub completada: 80 registros guardados en github_2026-06-28.json
+2026-06-28 10:58:03,360 - pipeline_logger - INFO - Iniciando scraping estatico en HackerNews...
+2026-06-28 10:58:06,492 - pipeline_logger - ERROR - Error 429 Too Many Requests en https://news.ycombinator.com/front. Se necesita mayor delay.
+2026-06-28 10:58:06,497 - pipeline_logger - INFO - Evidencia fuente hackernews: status=failed, records=0, http=429
+2026-06-28 10:58:06,499 - pipeline_logger - INFO - Iniciando extraccion relevante en Dev.to...
+2026-06-28 10:58:10,033 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/search?q=AI%20coding%20agent
+2026-06-28 10:58:10,072 - pipeline_logger - WARNING - Dev.to: articulo HTML omitido por parseo: 'NoneType' object has no attribute 'find'
+2026-06-28 10:58:12,593 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=1
+2026-06-28 10:58:40,539 - pipeline_logger - INFO - >>> INICIANDO PIPELINE UNIFICADO (Fecha Objetivo: 2026-06-28) <<<
+2026-06-28 11:03:00,637 - pipeline_logger - ERROR - Fallo al registrar inicio de auditoría: (psycopg.errors.ConnectionTimeout) connection timeout expired
+Multiple connection attempts failed. All failures were:
+- host: 'localhost', port: 5432, hostaddr: '::1': connection timeout expired
+- host: 'localhost', port: 5432, hostaddr: '127.0.0.1': connection timeout expired
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-28 11:03:00,637 - pipeline_logger - INFO - === FASE 1: EXTRACCIÓN MÚLTIPLE ===
+2026-06-28 11:03:00,637 - pipeline_logger - INFO - Usando autenticacion GITHUB_TOKEN.
+2026-06-28 11:03:00,638 - pipeline_logger - INFO - Buscando repositorios para: 'AI agent'
+2026-06-28 11:03:04,169 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=AI+agent+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=20&page=1
+2026-06-28 11:03:04,171 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-28 11:03:04,171 - pipeline_logger - INFO - Buscando repositorios para: 'coding copilot'
+2026-06-28 11:03:06,975 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=coding+copilot+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=20&page=1
+2026-06-28 11:03:06,978 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-28 11:03:06,978 - pipeline_logger - INFO - Buscando repositorios para: 'autoGPT'
+2026-06-28 11:03:09,885 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=autoGPT+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=20&page=1
+2026-06-28 11:03:09,887 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-28 11:03:09,887 - pipeline_logger - INFO - Buscando repositorios para: 'autonomous AI'
+2026-06-28 11:03:12,760 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=autonomous+AI+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=20&page=1
+2026-06-28 11:03:12,762 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-28 11:03:12,781 - pipeline_logger - INFO - Evidencia fuente github: status=success, records=80, http=200
+2026-06-28 11:03:12,782 - pipeline_logger - INFO - Extraccion GitHub completada: 80 registros guardados en github_2026-06-28.json
+2026-06-28 11:03:12,784 - pipeline_logger - INFO - Iniciando scraping estatico en HackerNews...
+2026-06-28 11:03:15,583 - pipeline_logger - INFO - hackernews: HTTP 200 GET https://news.ycombinator.com/front
+2026-06-28 11:03:15,618 - pipeline_logger - INFO - HackerNews scraping completado. 10 registros guardados en hackernews_2026-06-28.json
+2026-06-28 11:03:15,619 - pipeline_logger - INFO - Evidencia fuente hackernews: status=success, records=10, http=200
+2026-06-28 11:03:15,620 - pipeline_logger - INFO - Iniciando extraccion relevante en Dev.to...
+2026-06-28 11:03:18,333 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/search?q=AI%20coding%20agent
+2026-06-28 11:03:18,348 - pipeline_logger - WARNING - Dev.to: articulo HTML omitido por parseo: 'NoneType' object has no attribute 'find'
+2026-06-28 11:03:20,671 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=1
+2026-06-28 11:03:23,080 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=2
+2026-06-28 11:03:25,499 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=3
+2026-06-28 11:03:27,793 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=1
+2026-06-28 11:03:30,203 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=2
+2026-06-28 11:03:30,207 - pipeline_logger - INFO - Dev.to extraccion completada. 80 registros relevantes guardados en devto_2026-06-28.json
+2026-06-28 11:03:30,208 - pipeline_logger - INFO - Evidencia fuente devto: status=success, records=80, http=200
+2026-06-28 11:03:30,209 - pipeline_logger - INFO - Iniciando scraping dinamico relevante en Reddit (Playwright)...
+2026-06-28 11:04:03,832 - pipeline_logger - INFO - Evidencia fuente reddit: status=success, records=60, http=200
+2026-06-28 11:04:03,832 - pipeline_logger - INFO - Reddit scraping completado. 60 registros relevantes guardados.
+2026-06-28 11:04:03,832 - pipeline_logger - INFO - Iniciando extraccion de Google Trends (pytrends)...
+2026-06-28 11:04:08,245 - pipeline_logger - INFO - Google Trends extraido: 549 data points guardados.
+2026-06-28 11:04:08,247 - pipeline_logger - INFO - Evidencia fuente google_trends: status=success, records=549, http=200
+2026-06-28 11:04:08,247 - pipeline_logger - INFO - Iniciando extraccion estructurada AIDev Dataset: AI Coding...
+2026-06-28 11:04:08,249 - pipeline_logger - INFO - Leyendo AIDev Dataset: AI Coding desde Parquet...
+2026-06-28 11:04:23,045 - pipeline_logger - INFO - AIDev catalog generado: 118557 registros en aidedev_2026-06-28.json
+2026-06-28 11:04:23,046 - pipeline_logger - INFO - Evidencia fuente catalogo: status=success, records=118557, http=None
+2026-06-28 11:04:23,157 - pipeline_logger - INFO - === FASE 2: CARGA RAW A BD ===
+2026-06-28 11:04:23,158 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-06-28 11:08:43,359 - pipeline_logger - ERROR - Fallo al procesar devto_2026-06-27_182252.json: (psycopg.errors.ConnectionTimeout) connection timeout expired
+Multiple connection attempts failed. All failures were:
+- host: 'localhost', port: 5432, hostaddr: '::1': connection timeout expired
+- host: 'localhost', port: 5432, hostaddr: '127.0.0.1': connection timeout expired
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-06-28 11:10:40,610 - pipeline_logger - INFO - >>> INICIANDO PIPELINE UNIFICADO (Fecha Objetivo: 2026-06-28) <<<
+2026-06-28 11:10:40,669 - pipeline_logger - INFO - === FASE 1: EXTRACCIÓN MÚLTIPLE ===
+2026-06-28 11:10:40,670 - pipeline_logger - INFO - Usando autenticacion GITHUB_TOKEN.
+2026-06-28 11:10:40,670 - pipeline_logger - INFO - Buscando repositorios para: 'AI agent'
+2026-06-28 11:10:44,224 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=AI+agent+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=20&page=1
+2026-06-28 11:10:44,226 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-28 11:10:44,226 - pipeline_logger - INFO - Buscando repositorios para: 'coding copilot'
+2026-06-28 11:10:46,957 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=coding+copilot+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=20&page=1
+2026-06-28 11:10:46,958 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-28 11:10:46,958 - pipeline_logger - INFO - Buscando repositorios para: 'autoGPT'
+2026-06-28 11:10:49,804 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=autoGPT+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=20&page=1
+2026-06-28 11:10:49,805 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-28 11:10:49,805 - pipeline_logger - INFO - Buscando repositorios para: 'autonomous AI'
+2026-06-28 11:10:52,663 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=autonomous+AI+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=20&page=1
+2026-06-28 11:10:52,664 - pipeline_logger - INFO - Pagina 1 obtenida (20 repositorios)
+2026-06-28 11:10:52,671 - pipeline_logger - INFO - Evidencia fuente github: status=success, records=80, http=200
+2026-06-28 11:10:52,671 - pipeline_logger - INFO - Extraccion GitHub completada: 80 registros guardados en github_2026-06-28.json
+2026-06-28 11:10:52,672 - pipeline_logger - INFO - Iniciando scraping estatico en HackerNews...
+2026-06-28 11:10:55,383 - pipeline_logger - INFO - hackernews: HTTP 200 GET https://news.ycombinator.com/front
+2026-06-28 11:10:55,410 - pipeline_logger - INFO - HackerNews scraping completado. 10 registros guardados en hackernews_2026-06-28.json
+2026-06-28 11:10:55,411 - pipeline_logger - INFO - Evidencia fuente hackernews: status=success, records=10, http=200
+2026-06-28 11:10:55,412 - pipeline_logger - INFO - Iniciando extraccion relevante en Dev.to...
+2026-06-28 11:10:57,987 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/search?q=AI%20coding%20agent
+2026-06-28 11:10:57,994 - pipeline_logger - WARNING - Dev.to: articulo HTML omitido por parseo: 'NoneType' object has no attribute 'find'
+2026-06-28 11:11:00,315 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=1
+2026-06-28 11:11:02,355 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=2
+2026-06-28 11:11:04,390 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=3
+2026-06-28 11:11:06,677 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=1
+2026-06-28 11:11:08,713 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=2
+2026-06-28 11:11:08,716 - pipeline_logger - INFO - Dev.to extraccion completada. 80 registros relevantes guardados en devto_2026-06-28.json
+2026-06-28 11:11:08,717 - pipeline_logger - INFO - Evidencia fuente devto: status=success, records=80, http=200
+2026-06-28 11:11:08,718 - pipeline_logger - INFO - Iniciando scraping dinamico relevante en Reddit (Playwright)...
+2026-06-28 11:11:33,893 - pipeline_logger - INFO - Evidencia fuente reddit: status=success, records=60, http=200
+2026-06-28 11:11:33,893 - pipeline_logger - INFO - Reddit scraping completado. 60 registros relevantes guardados.
+2026-06-28 11:11:33,893 - pipeline_logger - INFO - Iniciando extraccion de Google Trends (pytrends)...
+2026-06-28 11:11:37,202 - pipeline_logger - INFO - Google Trends extraido: 549 data points guardados.
+2026-06-28 11:11:37,203 - pipeline_logger - INFO - Evidencia fuente google_trends: status=success, records=549, http=200
+2026-06-28 11:11:37,203 - pipeline_logger - INFO - Iniciando extraccion estructurada AIDev Dataset: AI Coding...
+2026-06-28 11:11:37,203 - pipeline_logger - INFO - Leyendo AIDev Dataset: AI Coding desde Parquet...
+2026-06-28 11:11:53,453 - pipeline_logger - INFO - AIDev catalog generado: 118557 registros en aidedev_2026-06-28.json
+2026-06-28 11:11:53,454 - pipeline_logger - INFO - Evidencia fuente catalogo: status=success, records=118557, http=None
+2026-06-28 11:11:53,565 - pipeline_logger - INFO - === FASE 2: CARGA RAW A BD ===
+2026-06-28 11:11:53,565 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-06-28 11:11:53,598 - pipeline_logger - INFO - Omitido (Duplicado): devto_2026-06-27_182252.json
+2026-06-28 11:11:53,720 - pipeline_logger - INFO - Cargado exitosamente: devto_2026-06-28.json (80 registros)
+2026-06-28 11:11:53,730 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_182328.json
+2026-06-28 11:11:54,054 - pipeline_logger - INFO - Cargado exitosamente: google_trends_2026-06-28.json (549 registros)
+2026-06-28 11:11:54,070 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_182236.json
+2026-06-28 11:11:54,095 - pipeline_logger - INFO - Cargado exitosamente: hackernews_2026-06-28.json (10 registros)
+2026-06-28 11:11:54,109 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-27_182325.json
+2026-06-28 11:11:54,169 - pipeline_logger - INFO - Cargado exitosamente: reddit_2026-06-28.json (60 registros)
+2026-06-28 11:13:06,139 - pipeline_logger - INFO - Cargado exitosamente: aidedev_2026-06-28.json (118557 registros)
+2026-06-28 11:13:06,371 - pipeline_logger - INFO - Omitido (Duplicado): aidedev_ai_coding_catalog_2026-06-27_182757.json
+2026-06-28 11:13:06,568 - pipeline_logger - INFO - Cargado exitosamente: github_2026-06-28.json (80 registros)
+2026-06-28 11:13:06,586 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_182234.json
+2026-06-28 11:13:06,588 - pipeline_logger - INFO - Carga completada. Nuevos: 6. Ignorados: 6
+2026-06-28 11:13:06,602 - pipeline_logger - INFO - Inventario CSV exportado a docs\evidencias\inventario_raw.csv
+2026-06-28 11:13:06,999 - pipeline_logger - INFO - Inventario Raw completo exportado a docs\evidencias\inventario_raw_completo.csv
+2026-06-28 11:13:07,001 - pipeline_logger - INFO - === FASE 3: STAGING ===
+2026-06-28 11:13:07,001 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-06-28 11:13:12,546 - pipeline_logger - INFO - Leídos 358430 registros crudos desde BD.
+2026-06-28 11:13:43,942 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-06-28 11:13:47,786 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-06-28 11:13:58,814 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-06-28 11:14:02,179 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-06-28 11:14:02,359 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 237538 registros.
+2026-06-28 11:14:02,900 - pipeline_logger - INFO - Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.
+2026-06-28 11:15:21,064 - pipeline_logger - INFO - Carga a BD completada. Insertados: 120836. Conflictos o fallos de inserción: 0
+2026-06-28 11:15:22,510 - pipeline_logger - INFO - Data final exportada para evidencia en C:\Users\Damian\Documents\Intelegicia de Negocios\Proyecto\docs\evidencias\staging_stats.csv
+2026-06-28 11:15:23,102 - pipeline_logger - INFO - === FASE 4: CALIDAD DE DATOS ===
+2026-06-28 11:15:23,102 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-06-28 11:19:22,777 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias
+2026-06-28 11:19:22,783 - pipeline_logger - INFO - >>> PIPELINE UNIFICADO COMPLETADO EXITOSAMENTE (Run ID: 37) <<<

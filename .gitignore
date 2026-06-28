@@ -16,10 +16,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# Logs
-logs/*.csv
-logs/*.log
-!logs/.gitkeep
+
 
 # Datos locales (Archivos pesados generados)
 data/raw/**/*.json

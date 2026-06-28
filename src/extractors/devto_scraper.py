@@ -10,6 +10,10 @@ from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
 
 
+SOURCE_START_DATE = datetime.date(2023, 1, 1)
+SOURCE_END_DATE = datetime.date(2026, 12, 31)
+
+
 AGENT_TERMS = [
     "ai agent",
     "coding agent",
@@ -53,6 +57,16 @@ def is_relevant(item):
     return has_agent or (has_ai_context and has_dev_context)
 
 
+def is_in_date_range(value):
+    if not value:
+        return True
+    try:
+        parsed = datetime.datetime.fromisoformat(str(value).replace("Z", "+00:00")).date()
+        return SOURCE_START_DATE <= parsed <= SOURCE_END_DATE
+    except ValueError:
+        return True
+
+
 def article_to_record(item, http_status):
     return {
         "id": str(item.get("id") or item.get("url")),
@@ -94,7 +108,7 @@ def extract_from_html(client, url):
                 "tags": [],
                 "description": "",
             }
-            if is_relevant(candidate):
+            if is_relevant(candidate) and is_in_date_range(candidate["created_at"]):
                 records.append(candidate)
         except Exception as exc:
             global_logger.warning(f"Dev.to: articulo HTML omitido por parseo: {exc}")
@@ -115,7 +129,7 @@ def extract_from_public_api(client, max_records=80):
                 break
             response = client.get(api_url, params={"tag": tag, "per_page": per_page, "page": page})
             for item in response.json():
-                if not is_relevant(item):
+                if not is_relevant(item) or not is_in_date_range(item.get("published_at") or item.get("created_at")):
                     continue
                 record = article_to_record(item, response.status_code)
                 records_by_id[record["id"]] = record
@@ -138,7 +152,7 @@ def extract_devto(max_records=80):
         api_records = extract_from_public_api(client, max_records=max_records)
         by_id = {record["id"]: record for record in records}
         by_id.update({record["id"]: record for record in api_records})
-        records = list(by_id.values())[:max_records]
+        records = [record for record in by_id.values() if is_in_date_range(record.get("created_at"))][:max_records]
     except Exception as exc:
         log_error("devto_scraper", type(exc).__name__, str(exc), "Extraccion Dev.to abortada")
         log_source_execution("devto", "failed", len(records), client.last_status_code, url, notes=str(exc))
@@ -162,6 +176,8 @@ def extract_devto(max_records=80):
             "records_extracted": len(records),
             "extraction_method": extraction_method,
             "relevance_rule": "agent term OR (AI term AND software-development term)",
+            "date_range_start": SOURCE_START_DATE.isoformat(),
+            "date_range_end": SOURCE_END_DATE.isoformat(),
             "max_records": max_records,
             "extracted_at": datetime.datetime.now().isoformat(),
         },

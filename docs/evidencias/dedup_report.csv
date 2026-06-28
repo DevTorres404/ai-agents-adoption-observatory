@@ -1,10 +1,10 @@
 source,total_detected,total_removed,total_kept
 api,0,0,162
 archivos,0,0,2
-catalogo,237114,118557,118562
-devto,116,58,122
+catalogo,355671,237114,118562
+devto,125,64,196
 fuente_propia,0,0,2
-github,322,246,76
-google_trends,38,19,882
-hackernews,30,15,195
-reddit,0,0,140
+github,402,326,76
+google_trends,38,19,1431
+hackernews,30,15,205
+reddit,0,0,200
