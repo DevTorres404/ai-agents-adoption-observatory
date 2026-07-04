@@ -1,18 +1,19 @@
-# Observatorio IA - Entregable 3
+# Observatorio IA - Arquitectura Medallion BI
 
 Proyecto de Inteligencia de Negocios: **Observatorio sobre el Nivel de Adopcion de Agentes de IA en el Desarrollo de Software**.
 
-Este entregable implementa el pipeline ETL, la capa Raw/Bronze, la capa Staging/Silver y un framework de calidad de datos con evidencias auditables.
+El proyecto implementa una arquitectura **Medallion** completa para integrar fuentes heterogeneas, conservar evidencia cruda, consolidar datos analiticos y poblar un Data Warehouse dimensional en PostgreSQL.
 
 ## Arquitectura
 
 El flujo sigue una arquitectura Medallion:
 
-1. **Extraction**: GitHub REST API, HackerNews, Dev.to, Reddit, Google Trends y AIDev Dataset: AI Coding como catalogo estructurado.
+1. **Extraction**: GitHub REST API, HackerNews, Dev.to, Reddit, Google Trends, AIDev Dataset: AI Coding y encuesta Google Forms como fuente propia.
 2. **Raw/Bronze**: archivos JSON en `data/raw/` y carga en PostgreSQL bajo `raw.raw_files` y `raw.raw_records`.
 3. **Staging/Silver**: tabla `staging.stg_actividad_agente_ia`, reconstruible desde Raw.
 4. **Quality**: metricas de completitud, duplicados reales, nulos criticos, casting, fuentes no mapeadas e inventario Raw completo.
-5. **Evidence**: CSV academicos en `docs/evidencias/`.
+5. **Gold/Data Warehouse**: esquema `gold` con dimensiones, tabla de hechos y vistas KPI.
+6. **Evidence**: CSV academicos en `docs/evidencias/` y respaldo `dump_gold_entregable4.sql`.
 
 ## Ejecucion
 
@@ -29,7 +30,8 @@ python -m src.extractors.hackernews_scraper
 python -m src.extractors.devto_scraper
 python -m src.extractors.reddit_scraper
 python -m src.extractors.trends_scraper
-python -m src.extractors.file_catalog
+python -m src.extractors.aidedev_catalog
+python -m src.extractors.google_forms_survey
 python -m src.loaders.load_raw_to_db
 python -m src.staging.stg_build_unified
 python -m src.quality.quality_metrics
@@ -74,14 +76,16 @@ La evidencia exacta del contrato se genera en:
 
 ## Metricas verificadas
 
-Ultima corrida verificada para la entrega:
+Ultima corrida verificada tras integrar `data/encuesta/encuesta.json` como fuente propia:
 
-- Raw procesado: **120026 registros**.
-- Staging consolidado: **119760 registros**.
-- Completitud general: **99.78%**.
-- Merma general Raw/Staging: **0.22%**.
-- Duplicados reales por clave compuesta: **210 registros**.
+- Raw/Bronze acumulado en PostgreSQL: **358440 registros**.
+- Staging/Silver consolidado: **120846 registros**.
+- Completitud Raw acumulado vs Staging: **33.71%**.
+- Merma controlada por deduplicacion historica: **66.29%**.
+- Duplicados reales por clave compuesta: **237538 registros**.
 - Nulos criticos: **0 registros**.
+- Fuente propia Google Forms: **12 respuestas reales**.
+- Gold Fact: **120846 hechos**, sin merma contra Staging.
 
 La clave de deduplicacion es:
 
@@ -114,9 +118,11 @@ Los archivos principales de auditoria son:
 - **Reddit**: scraper Playwright funcional con busquedas multiples relevantes; genera Raw y evidencia HTTP.
 - **Google Trends**: extractor pytrends funcional en la corrida final; si aparece rate limit 429, se registra como fallo y no se reporta como extraccion exitosa.
 - **Catalogo / AIDev Dataset**: fuente estructurada en Parquet transformada a Raw JSON analitico; reemplaza el catalogo manual como dataset principal.
+- **Fuente propia / Google Forms**: `data/encuesta/encuesta.json` se normaliza como Raw en `data/raw/fuente_propia/fuente_propia/` y se integra a Staging/Gold como adopcion academica.
 
 ## Limitaciones conocidas
 
 - Las fuentes web pueden variar por cambios HTML, bloqueo anti-scraping o rate limits.
 - Google Trends puede devolver 429; el pipeline lo registra como fallo documentado.
 - Dev.to puede no exponer articulos parseables en HTML; el fallback API queda documentado en metadata Raw y en `source_execution_evidence.csv`.
+- Raw/Bronze conserva historico de cargas; por eso los duplicados acumulados se depuran en Silver/Staging sin alterar la evidencia original.

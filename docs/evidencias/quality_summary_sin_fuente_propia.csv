@@ -1,2 +1,0 @@
-total_raw_records,total_staging_records,completion_rate,total_duplicates_removed,total_nulls_removed,overall_error_rate,scope_note
-120026,119760,99.78,210,0,0.22,"Excluye fuente_propia porque la encuesta UPSE aun no forma parte del analisis final del Entregable 3"

@@ -1,7 +1,2 @@
 fuente,tipo_fuente,ruta_relativa,nombre_archivo,tamano_bytes,cantidad_registros,cantidad_columnas,hash_sha256
-devto,scraping,scraping/devto/devto_2026-06-28.json,devto_2026-06-28.json,53572,80,11,2b743b2fe9c3910993c015c5deb0bf98b21c1deafaeb7cd1b05142554c8fe5a6
-google_trends,scraping,scraping/google_trends/google_trends_2026-06-28.json,google_trends_2026-06-28.json,123706,549,6,9cee1af16e9cb2a5196fd86a16307304c8f1962e407eaa35b3ec0d22d6da79b7
-hackernews,scraping,scraping/hackernews/hackernews_2026-06-28.json,hackernews_2026-06-28.json,4480,10,10,5996b7bbf3a335ce0126410a2e5a67e45f2fde818deda331f615aafc5e8c5d1b
-reddit,scraping,scraping/reddit/reddit_2026-06-28.json,reddit_2026-06-28.json,36475,60,10,48d6563d997b4fc9be22146b0ac3edc99f758cd337549a7b161b39ced2c2c92e
-catalogo,archivos,archivos/catalogo/aidedev_2026-06-28.json,aidedev_2026-06-28.json,103386067,118557,20,dd9ab9ece9d933adaa542ce79cff201c6e4e91409cac8aa0fa32a15217208b6e
-github,api,api/github/github_2026-06-28.json,github_2026-06-28.json,553652,80,83,931960061d6e4ed12e1a1e47e4a333697fe20ccdc89a553f522fb0558896d87d
+fuente_propia,fuente_propia,fuente_propia/fuente_propia/fuente_propia_2026-07-03.json,fuente_propia_2026-07-03.json,6179,12,10,5f199e785f1122122a0636df2b39a7dc9acce6c8ec0919f0ea60cdf3593fcd65

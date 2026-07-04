@@ -96,6 +96,8 @@ def normalize_dataframe(df, file_meta):
         usa_ia = first_existing(df, ["usa_agentes_ia", "usa_ia"], "No especificado")
         perfil = first_existing(df, ["perfil_participante"], "No especificado")
         frecuencia = first_existing(df, ["frecuencia_uso_ia"], "No especificado")
+        actividad = first_existing(df, ["actividad_uso_ia"], "No especificado")
+        barrera = first_existing(df, ["barrera_adopcion"], "No especificado")
 
         stg_df["id_origen_registro"] = df.apply(hash_fallback, axis=1)
         stg_df["plataforma"] = "encuesta_upse"
@@ -104,6 +106,8 @@ def normalize_dataframe(df, file_meta):
             "perfil=" + perfil.astype(str)
             + "; usa_ia=" + usa_ia.astype(str)
             + "; frecuencia=" + frecuencia.astype(str)
+            + "; actividad=" + actividad.astype(str)
+            + "; barrera=" + barrera.astype(str)
         )
         stg_df["url"] = ""
         stg_df["fecha_evento_raw"] = first_existing(df, ["timestamp_respuesta", "Marca temporal", "created_at"], None)

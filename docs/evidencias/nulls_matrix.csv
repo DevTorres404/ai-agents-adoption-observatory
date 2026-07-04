@@ -11,9 +11,9 @@ catalogo,categoria,0,118562,0.0,Conservar si no es critico
 devto,nombre_agente,0,196,0.0,Inferido (Regla Regex)
 devto,fecha_evento,0,196,0.0,Conservar si no es critico
 devto,categoria,0,196,0.0,Conservar si no es critico
-fuente_propia,nombre_agente,0,2,0.0,Inferido (Regla Regex)
-fuente_propia,fecha_evento,0,2,0.0,Conservar si no es critico
-fuente_propia,categoria,0,2,0.0,Conservar si no es critico
+fuente_propia,nombre_agente,0,12,0.0,Inferido (Regla Regex)
+fuente_propia,fecha_evento,0,12,0.0,Conservar si no es critico
+fuente_propia,categoria,0,12,0.0,Conservar si no es critico
 github,nombre_agente,0,76,0.0,Inferido (Regla Regex)
 github,fecha_evento,0,76,0.0,Conservar si no es critico
 github,categoria,0,76,0.0,Conservar si no es critico

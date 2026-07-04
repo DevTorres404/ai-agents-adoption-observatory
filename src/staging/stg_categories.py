@@ -21,8 +21,8 @@ def assign_categories(df):
             return 'popularidad'
 
         if fuente in ['encuesta', 'fuente_propia']:
-            # Motivo: la fuente propia queda separada hasta completar tabulacion y validacion metodologica.
-            return 'pendiente_tabulacion'
+            # Motivo: la encuesta Google Forms mide adopcion declarada en el contexto academico UPSE.
+            return 'adopcion_academica'
 
         # Motivo: fuentes tecnicas estructuradas o articulos quedan como actividad tecnica por defecto.
         return 'actividad_tecnica'
