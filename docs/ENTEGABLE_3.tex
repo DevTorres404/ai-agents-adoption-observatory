@@ -1,0 +1,343 @@
+% ==========================================================
+% ENTREGABLE 3 - INTELIGENCIA DE NEGOCIOS
+% Pipeline de Datos y Calidad
+% Universidad Estatal Peninsula de Santa Elena
+% ==========================================================
+
+\documentclass[12pt,a4paper]{article}
+
+% ==========================================================
+% PAQUETES
+% ==========================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{pdflscape}
+
+% ==========================================================
+% COLORES Y ESTILO
+% ==========================================================
+\definecolor{primarygray}{gray}{0.35}
+\definecolor{textblack}{gray}{0.0}
+\definecolor{lightgray}{gray}{0.92}
+
+\titleformat{\section}
+{\color{primarygray}\Large\bfseries}
+{\thesection.}
+{0.5em}
+{}
+
+\titleformat{\subsection}
+{\color{primarygray}\large\bfseries}
+{\thesubsection.}
+{0.5em}
+{}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=textblack,
+    urlcolor=primarygray,
+    citecolor=primarygray
+}
+
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{4pt}
+
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\StagingTabla}{\texttt{staging.stg\_actividad\_agente\_ia}}
+\newcommand{\pathcode}[1]{\begingroup\footnotesize\ttfamily\nolinkurl{#1}\endgroup}
+
+\begin{document}
+
+% ==========================================================
+% PORTADA
+% ==========================================================
+\begin{titlepage}
+\centering
+\vspace*{0.2cm}
+
+\IfFileExists{upse.jpg}{
+    \includegraphics[width=3.8cm]{upse.jpg}\\[0.25cm]
+}{
+    {\Large \textbf{UPSE}}\\[0.25cm]
+}
+
+{\large \textbf{\textcolor{primarygray}{UNIVERSIDAD ESTATAL PEN\'INSULA DE SANTA ELENA}}}\\[0.2cm]
+{\normalsize \textbf{Ingenier\'ia de Software}}\\[0.05cm]
+{\normalsize Sexto Semestre}\\[0.65cm]
+
+{\normalsize \textbf{VI Inteligencia de Negocios}}\\[0.45cm]
+{\Large \textbf{\textcolor{primarygray}{ENTREGABLE 3}}}\\[0.2cm]
+{\large Pipeline de Datos y Calidad}\\[0.2cm]
+{\normalsize Informe t\'ecnico-acad\'emico de implementaci\'on ETL}\\[0.7cm]
+
+{\normalsize \textbf{T\'itulo del Proyecto}}\\[0.25cm]
+
+\begin{minipage}{0.9\textwidth}
+\centering
+\normalsize
+Plataforma de Inteligencia de Negocios para el an\'alisis de tendencias,
+adopci\'on y evoluci\'on de agentes de Inteligencia Artificial en el
+dominio del desarrollo de software mediante integraci\'on de datos
+heterog\'eneos durante el per\'iodo 2023--2026
+\end{minipage}
+
+\vspace{0.45cm}
+
+{\normalsize \textbf{Repositorio del Proyecto}}\\[0.15cm]
+{\footnotesize \url{https://github.com/DevTorres404/ai-agents-adoption-observatory.git}}
+
+\vspace{0.55cm}
+
+{\textbf{Autores}}\\[0.2cm]
+Damian Jes\'us Torres Cadena\\
+Melanie Adriana Tomal\'a Merejildo\\
+Jean Pierre Cede\~no Andrade
+\vspace{0.45cm}
+{\textbf{Docente:}}\\[0.2cm]
+Ing. Anthony Pachay
+\vspace{0.45cm}
+
+{\textbf{Per\'iodo Acad\'emico}}\\
+2026--1
+
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ==========================================================
+\section{Prop\'osito del Entregable}
+
+El Entregable 3 constituye la evidencia de implementaci\'on del proyecto de Inteligencia de Negocios. A diferencia del Entregable 2, orientado al dise\~no arquitect\'onico y multidimensional, este informe documenta la ejecuci\'on del pipeline ETL, la persistencia de datos en la zona Raw/Bronze, la consolidaci\'on en la zona Staging/Silver y la aplicaci\'on de controles de calidad verificables antes de avanzar hacia el Data Warehouse.
+
+El alcance del entregable comprende la extracci\'on desde fuentes web, API p\'ublica y dataset estructurado; la conservaci\'on de los registros originales; la normalizaci\'on hacia una estructura tabular anal\'itica; y la generaci\'on de evidencias CSV y bit\'acoras persistentes que permiten auditar la trazabilidad del proceso.
+
+% ==========================================================
+\section{Arquitectura ETL Implementada}
+
+La soluci\'on implementa una arquitectura tipo Medallion con dos capas operativas principales dentro del alcance de este entregable:
+
+\begin{table}[H]
+\centering
+\footnotesize
+\rowcolors{2}{gray!8}{white}
+\begin{tabular}{|P{3cm}|P{5.1cm}|P{5.5cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Capa} & \textbf{Implementaci\'on} & \textbf{Funci\'on dentro del E3} \\ \hline
+Raw / Bronze & Archivos JSON por fuente y tablas \pathcode{raw.raw_files}, \pathcode{raw.raw_records} en PostgreSQL & Conserva la informaci\'on original de cada fuente sin transformarla indebidamente. \\ \hline
+Staging / Silver & Tabla \StagingTabla{} reconstruida mediante scripts Python & Integra, limpia, normaliza y homologa los registros para dejarlos listos para el Data Warehouse. \\ \hline
+Quality & M\'odulos \pathcode{src/quality} y evidencias en \pathcode{docs/evidencias} & Verifica completitud, duplicados, nulos, casting, homologaci\'on, trazabilidad y errores de ejecuci\'on. \\ \hline
+\end{tabular}
+\caption{Capas t\'ecnicas implementadas en el Entregable 3}
+\end{table}
+
+El script principal de orquestaci\'on es \pathcode{src/scripts/run_pipeline.py}. La capa Staging unificada se reconstruye desde \pathcode{src/staging/stg_build_unified.py}, lo que permite reproducir el flujo a partir de los registros conservados en Raw.
+
+% ==========================================================
+\section{Fuentes de Datos Implementadas}
+
+El proyecto integra siete fuentes principales para observar actividad t\'ecnica, producci\'on especializada, popularidad, innovaci\'on, percepci\'on comunitaria y adopci\'on acad\'emica sobre agentes de Inteligencia Artificial aplicados al desarrollo de software. La fuente propia UPSE se incorpora desde \pathcode{data/encuesta/encuesta.json}, correspondiente a respuestas reales de Google Forms.
+
+\scriptsize
+\begin{longtable}{|P{2.4cm}|P{2.2cm}|P{2.4cm}|P{6.1cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Fuente} & \textbf{M\'etodo} & \textbf{Rol Anal\'itico} & \textbf{Evidencia t\'ecnica esperada} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Fuente} & \textbf{M\'etodo} & \textbf{Rol Anal\'itico} & \textbf{Evidencia t\'ecnica esperada} \\ \hline
+\endhead
+Reddit & Web scraping & Comunidad & Publicaciones y menciones relacionadas con agentes de IA en comunidades de desarrolladores. Raw en \pathcode{data/raw/scraping/reddit/}. \\ \hline
+DEV Community & Web scraping / API p\'ublica & Producci\'on t\'ecnica & Art\'iculos, tutoriales y experiencias t\'ecnicas de desarrolladores. Raw en \pathcode{data/raw/scraping/devto/}. \\ \hline
+Hacker News & Web scraping & Innovacion tecnologica & Discusiones y tendencias emergentes. Raw en \pathcode{data/raw/scraping/hackernews/}. \\ \hline
+Google Trends & Web scraping / pytrends & Popularidad & Interes relativo de busqueda por agente y periodo. Raw en \pathcode{data/raw/scraping/google_trends/}. \\ \hline
+GitHub & API p\'ublica REST & Actividad t\'ecnica & Repositorios, estrellas, forks, issues y actividad asociada a agentes de IA. Raw en \pathcode{data/raw/api/github/}. \\ \hline
+AIDev Dataset: AI Coding & Archivo estructurado Parquet & Catalogo maestro & Dataset estructurado convertido a Raw JSON analitico. Raw en \pathcode{data/raw/archivos/catalogo/}. \\ \hline
+Fuente propia UPSE & Google Forms / JSON & Adopci\'on acad\'emica & Respuestas reales normalizadas desde \pathcode{data/encuesta/encuesta.json}. Raw en \pathcode{data/raw/fuente_propia/fuente_propia/}. \\ \hline
+\caption{Fuentes de datos utilizadas en el Entregable 3}
+\end{longtable}
+\normalsize
+
+\subsection{Par\'ametros Din\'amicos de Extracci\'on}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\rowcolors{2}{gray!8}{white}
+\begin{tabular}{|P{2.7cm}|P{4.5cm}|P{6.2cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Fuente} & \textbf{Script} & \textbf{Parametros dinamicos o configurables} \\ \hline
+GitHub REST API & \pathcode{src/extractors/github_api.py} & \pathcode{queries}, \pathcode{pages}, \pathcode{per_page}, token opcional y rango temporal desde 2023. \\ \hline
+Hacker News & \pathcode{src/extractors/hackernews_scraper.py} & URL objetivo, l\'imite de registros y metadatos de ejecuci\'on. \\ \hline
+Dev.to & \pathcode{src/extractors/devto_scraper.py} & Busquedas por terminos de agentes, limite de articulos, filtro de relevancia y rango temporal desde 2023. \\ \hline
+Reddit & \pathcode{src/extractors/reddit_scraper.py} & B\'usquedas t\'ecnicas, l\'imite de posts, selectores Playwright y metadata temporal. \\ \hline
+Google Trends & \pathcode{src/extractors/trends_scraper.py} & Lista de keywords, region, timeframe \pathcode{2023-01-01 2026-12-31} y manejo de rate limit. \\ \hline
+AIDev Dataset & \pathcode{src/extractors/aidedev_catalog.py} & Rutas Parquet, descarga controlada, agentes homologados y filtro temporal 2023--2026. \\ \hline
+Fuente propia UPSE & \pathcode{src/extractors/google_forms_survey.py} & Archivo \pathcode{data/encuesta/encuesta.json}, normalizaci\'on de encabezados y rango temporal 2023--2026. \\ \hline
+\end{tabular}
+\caption{Matriz de par\'ametros de extracci\'on}
+\end{table}
+
+% ==========================================================
+\section{Zona Raw / Bronze}
+
+La zona Raw conserva los registros originales en archivos por fuente y en PostgreSQL usando campos JSONB. La convenci\'on cronol\'ogica definida para el entregable es:
+
+\begin{center}
+\texttt{fuente\_YYYY-MM-DD.ext}
+\end{center}
+
+Ejemplos esperados de archivos Raw:
+
+\begin{verbatim}
+data/raw/api/github/github_2026-06-28.json
+data/raw/scraping/devto/devto_2026-06-28.json
+data/raw/scraping/hackernews/hackernews_2026-06-28.json
+data/raw/scraping/reddit/reddit_2026-06-28.json
+data/raw/scraping/google_trends/google_trends_2026-06-28.json
+data/raw/archivos/catalogo/aidedev_2026-06-28.json
+data/raw/fuente_propia/fuente_propia/fuente_propia_2026-07-03.json
+\end{verbatim}
+
+El inventario completo de Raw no debe calcularse solo con archivos de la \'ultima corrida, sino desde PostgreSQL. La evidencia correspondiente se exporta en:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item \pathcode{docs/evidencias/inventario_raw.csv}
+    \item \pathcode{docs/evidencias/inventario_raw_completo.csv}
+\end{itemize}
+
+% ==========================================================
+\section{Zona Staging / Silver}
+
+La tabla de Staging consolidada es \StagingTabla{}. Su objetivo es convertir datos heterog\'eneos en una estructura tabular consistente para el modelo dimensional del Entregable 4.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\rowcolors{2}{gray!8}{white}
+\begin{tabular}{|P{4cm}|P{9.2cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Aspecto} & \textbf{Contrato documentado} \\ \hline
+Tabla f\'isica & 23 columnas en PostgreSQL. \\ \hline
+Columnas anal\'iticas & 21 columnas orientadas al an\'alisis. \\ \hline
+Columnas t\'ecnicas & \pathcode{id} y \pathcode{fecha_carga}. \\ \hline
+Evidencia & \pathcode{docs/evidencias/staging_contract_columns.csv}. \\ \hline
+\end{tabular}
+\caption{Contrato actual de Staging}
+\end{table}
+
+Las transformaciones principales implementadas son:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item Aplanamiento de estructuras JSON para obtener columnas anal\'iticas uniformes.
+    \item Normalizaci\'on de fechas ISO y filtrado del per\'iodo 2023--2026.
+    \item Clasificaci\'on de agentes mediante reglas de expresiones regulares.
+    \item Categorizaci\'on estrat\'egica seg\'un rol anal\'itico de la fuente y tipo de se\~nal.
+    \item Deduplicaci\'on por clave compuesta.
+\end{itemize}
+
+La regla de deduplicaci\'on aplicada es:
+
+\begin{center}
+\texttt{fuente + plataforma + id\_origen\_registro + nombre\_agente + fecha\_evento}
+\end{center}
+
+Esta regla evita contar varias veces el mismo evento cuando aparece duplicado dentro de una fuente o por recargas controladas.
+
+% ==========================================================
+\section{Framework de Calidad de Datos}
+
+El framework de calidad implementa los siete controles obligatorios del Entregable 3. Cada control genera evidencia verificable mediante CSV, logs o consultas sobre PostgreSQL.
+
+\scriptsize
+\begin{longtable}{|P{3.7cm}|P{4.8cm}|P{4.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Control} & \textbf{Implementaci\'on} & \textbf{Evidencia} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Control} & \textbf{Implementaci\'on} & \textbf{Evidencia} \\ \hline
+\endhead
+Completitud Raw/Staging & Comparaci\'on entre registros Raw acumulados y registros consolidados en Staging. & \pathcode{quality_summary.csv}. \\ \hline
+Duplicados reales & Conteo por clave compuesta de deduplicaci\'on. & \pathcode{dedup_report.csv}. \\ \hline
+Nulos cr\'iticos & Revisi\'on de columnas obligatorias para an\'alisis. & \pathcode{nulls_matrix.csv}. \\ \hline
+Formato y casting & Validaci\'on de fechas, num\'ericos y transformaciones. & \pathcode{casting_report.csv}. \\ \hline
+Homologaci\'on entre fuentes & Mapeo de nombres de agentes, plataformas y categor\'ias. & \pathcode{homologation_map.csv}. \\ \hline
+Bit\'acora de errores & Registro persistente de fallos HTTP, rate limit y anomal\'ias. & \pathcode{logs/pipeline_run.log}, \pathcode{logs/pipeline_errors.csv}. \\ \hline
+M\'etricas finales & Resumen estad\'istico reproducible. & \pathcode{staging_stats.csv}, \pathcode{quality_issue_breakdown.csv}. \\ \hline
+\caption{Controles de calidad implementados}
+\end{longtable}
+\normalsize
+
+% ==========================================================
+\section{M\'etricas Verificables}
+
+Las m\'etricas se reportan sobre el universo Raw acumulado en PostgreSQL. En arquitectura Medallion, Raw/Bronze conserva el historial de cargas y Silver/Staging consolida el conjunto anal\'itico mediante deduplicaci\'on controlada.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\rowcolors{2}{gray!8}{white}
+\begin{tabular}{|P{7.5cm}|P{3.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{M\'etrica} & \textbf{Valor verificado} \\ \hline
+Registros Raw/Bronze acumulados & 358440 \\ \hline
+Registros Staging/Silver consolidados & 120846 \\ \hline
+Completitud Raw acumulado vs Staging & 33.71\% \\ \hline
+Merma controlada por deduplicaci\'on hist\'orica & 66.29\% \\ \hline
+Duplicados reales removidos & 237538 \\ \hline
+Registros fuente propia Google Forms & 12 \\ \hline
+Nulos cr\'iticos & 0 \\ \hline
+\end{tabular}
+\caption{M\'etricas finales respaldadas por evidencia CSV}
+\end{table}
+
+Estas cifras deben contrastarse con los archivos de evidencia generados al finalizar la corrida del pipeline. Si una fuente externa falla por restricciones de red, cambios HTML o rate limit, el evento debe quedar documentado en logs y no debe presentarse como extracci\'on exitosa de la \'ultima corrida.
+
+% ==========================================================
+\section{Evidencias Generadas}
+
+Los archivos principales de auditor\'ia t\'ecnica se encuentran en \pathcode{docs/evidencias/}:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item \pathcode{source_execution_evidence.csv}
+    \item \pathcode{inventario_raw.csv}
+    \item \pathcode{inventario_raw_completo.csv}
+    \item \pathcode{staging_stats.csv}
+    \item \pathcode{quality_summary.csv}
+    \item \pathcode{quality_issue_breakdown.csv}
+    \item \pathcode{aidedev_agent_summary.csv}
+    \item \pathcode{dedup_report.csv}
+    \item \pathcode{nulls_matrix.csv}
+    \item \pathcode{casting_report.csv}
+    \item \pathcode{homologation_map.csv}
+    \item \pathcode{staging_contract_columns.csv}
+\end{itemize}
+
+% ==========================================================
+\section{Conclusiones}
+
+El Entregable 3 queda documentado como una implementaci\'on reproducible y defendible del pipeline de datos. La arquitectura Raw/Bronze y Staging/Silver est\'a separada, los extractores generan evidencia por fuente, la capa Raw conserva datos originales, Staging ofrece una estructura tabular preparada para el Data Warehouse y el framework de calidad produce archivos auditables.
+
+La fuente propia UPSE queda integrada como fuente acad\'emica real mediante Google Forms. Con la capa Silver consolidada, el proyecto puede avanzar al Entregable 4 tomando \StagingTabla{} como base para construir la Capa Gold del modelo dimensional.
+
+\end{document}

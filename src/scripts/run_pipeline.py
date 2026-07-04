@@ -12,6 +12,7 @@ from src.extractors.reddit_scraper import extract_reddit
 from src.extractors.trends_scraper import extract_trends
 from src.extractors.file_catalog import extract_and_validate_catalog
 from src.extractors.aidedev_catalog import extract_aidedev_catalog
+from src.extractors.google_forms_survey import extract_google_forms_survey
 
 from src.loaders.load_raw_to_db import run_loader
 from src.staging.stg_build_unified import run_staging_pipeline
@@ -114,6 +115,12 @@ def run_extraction_phase(run_id):
             extract_and_validate_catalog()
         except Exception as fallback_error:
             log_error("file_catalog", type(fallback_error).__name__, str(fallback_error), "Continúa sin catálogo", run_id=run_id)
+
+    # 7. Fuente propia: encuesta Google Forms
+    try:
+        extract_google_forms_survey()
+    except Exception as e:
+        log_error("google_forms_survey", type(e).__name__, str(e), "Continua sin encuesta Google Forms", run_id=run_id)
 
 def main():
     parser = argparse.ArgumentParser(description="Orquestador Maestro del Pipeline ETL Observatorio IA")

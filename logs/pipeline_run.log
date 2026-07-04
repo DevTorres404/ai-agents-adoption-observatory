@@ -780,3 +780,65 @@ Multiple connection attempts failed. All failures were:
 2026-06-28 11:15:23,102 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
 2026-06-28 11:19:22,777 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias
 2026-06-28 11:19:22,783 - pipeline_logger - INFO - >>> PIPELINE UNIFICADO COMPLETADO EXITOSAMENTE (Run ID: 37) <<<
+2026-07-03 23:31:44,796 - pipeline_logger - INFO - Iniciando extraccion local de encuesta Google Forms...
+2026-07-03 23:31:44,799 - pipeline_logger - INFO - Evidencia fuente fuente_propia: status=success, records=12, http=None
+2026-07-03 23:31:44,799 - pipeline_logger - INFO - Encuesta Google Forms guardada en Raw: fuente_propia_2026-07-03.json
+2026-07-03 23:31:52,473 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-07-03 23:31:52,593 - pipeline_logger - INFO - Omitido (Duplicado): devto_2026-06-27_182252.json
+2026-07-03 23:31:52,606 - pipeline_logger - INFO - Omitido (Duplicado): devto_2026-06-28.json
+2026-07-03 23:31:52,623 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_182328.json
+2026-07-03 23:31:52,646 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-28.json
+2026-07-03 23:31:52,663 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_182236.json
+2026-07-03 23:31:52,678 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-28.json
+2026-07-03 23:31:52,693 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-27_182325.json
+2026-07-03 23:31:52,707 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-28.json
+2026-07-03 23:31:52,747 - pipeline_logger - INFO - Cargado exitosamente: fuente_propia_2026-07-03.json (12 registros)
+2026-07-03 23:31:53,031 - pipeline_logger - INFO - Omitido (Duplicado): aidedev_2026-06-28.json
+2026-07-03 23:31:53,191 - pipeline_logger - INFO - Omitido (Duplicado): aidedev_ai_coding_catalog_2026-06-27_182757.json
+2026-07-03 23:31:53,208 - pipeline_logger - INFO - Omitido (Duplicado): github_2026-06-28.json
+2026-07-03 23:31:53,224 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_182234.json
+2026-07-03 23:31:53,224 - pipeline_logger - INFO - Carga completada. Nuevos: 1. Ignorados: 12
+2026-07-03 23:31:53,237 - pipeline_logger - INFO - Inventario CSV exportado a docs\evidencias\inventario_raw.csv
+2026-07-03 23:31:53,711 - pipeline_logger - INFO - Inventario Raw completo exportado a docs\evidencias\inventario_raw_completo.csv
+2026-07-03 23:31:59,744 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-07-03 23:32:03,060 - pipeline_logger - INFO - Leídos 358442 registros crudos desde BD.
+2026-07-03 23:32:19,986 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-07-03 23:32:21,565 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-07-03 23:32:27,443 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-07-03 23:32:29,013 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-07-03 23:32:29,176 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 237538 registros.
+2026-07-03 23:32:29,564 - pipeline_logger - INFO - Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.
+2026-07-03 23:33:29,113 - pipeline_logger - INFO - Carga a BD completada. Insertados: 120848. Conflictos o fallos de inserción: 0
+2026-07-03 23:33:29,907 - pipeline_logger - INFO - Data final exportada para evidencia en C:\Users\Damian\Documents\Intelegicia de Negocios\Proyecto\docs\evidencias\staging_stats.csv
+2026-07-03 23:33:36,289 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-07-03 23:35:21,022 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-07-03 23:35:24,564 - pipeline_logger - INFO - Leídos 358440 registros crudos desde BD.
+2026-07-03 23:35:37,224 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-07-03 23:35:39,117 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-07-03 23:35:45,917 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-07-03 23:35:47,724 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-07-03 23:35:47,839 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 237538 registros.
+2026-07-03 23:35:48,310 - pipeline_logger - INFO - Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.
+2026-07-03 23:35:51,902 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias
+2026-07-03 23:36:44,342 - pipeline_logger - INFO - Carga a BD completada. Insertados: 120846. Conflictos o fallos de inserción: 0
+2026-07-03 23:36:45,034 - pipeline_logger - INFO - Data final exportada para evidencia en C:\Users\Damian\Documents\Intelegicia de Negocios\Proyecto\docs\evidencias\staging_stats.csv
+2026-07-03 23:36:58,000 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-07-03 23:39:39,126 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias
+2026-07-03 23:47:03,199 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-07-03 23:47:03,221 - pipeline_logger - INFO - Omitido (Duplicado): devto_2026-06-27_182252.json
+2026-07-03 23:47:03,223 - pipeline_logger - INFO - Omitido (Duplicado): devto_2026-06-28.json
+2026-07-03 23:47:03,224 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-27_182328.json
+2026-07-03 23:47:03,226 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-06-28.json
+2026-07-03 23:47:03,227 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-27_182236.json
+2026-07-03 23:47:03,228 - pipeline_logger - INFO - Omitido (Duplicado): hackernews_2026-06-28.json
+2026-07-03 23:47:03,230 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-27_182325.json
+2026-07-03 23:47:03,231 - pipeline_logger - INFO - Omitido (Duplicado): reddit_2026-06-28.json
+2026-07-03 23:47:03,232 - pipeline_logger - INFO - Omitido (Duplicado): fuente_propia_2026-07-03.json
+2026-07-03 23:47:03,322 - pipeline_logger - INFO - Omitido (Duplicado): aidedev_2026-06-28.json
+2026-07-03 23:47:03,405 - pipeline_logger - INFO - Omitido (Duplicado): aidedev_ai_coding_catalog_2026-06-27_182757.json
+2026-07-03 23:47:03,407 - pipeline_logger - INFO - Omitido (Duplicado): github_2026-06-28.json
+2026-07-03 23:47:03,409 - pipeline_logger - INFO - Omitido (Duplicado): github_repos_2026-06-27_182234.json
+2026-07-03 23:47:03,409 - pipeline_logger - INFO - Carga completada. Nuevos: 0. Ignorados: 13
+2026-07-03 23:47:03,867 - pipeline_logger - INFO - Inventario Raw completo exportado a docs\evidencias\inventario_raw_completo.csv
+2026-07-03 23:55:57,241 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-07-03 23:58:17,441 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs\evidencias

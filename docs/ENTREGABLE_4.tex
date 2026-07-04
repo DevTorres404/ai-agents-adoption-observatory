@@ -1,0 +1,512 @@
+% ==========================================================
+% ENTREGABLE 4 - INTELIGENCIA DE NEGOCIOS
+% Data Warehouse y Analitica
+% Universidad Estatal Peninsula de Santa Elena
+% ==========================================================
+
+\documentclass[12pt,a4paper]{article}
+
+% ==========================================================
+% PAQUETES
+% ==========================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{pdflscape}
+
+% ==========================================================
+% COLORES Y ESTILO
+% ==========================================================
+\definecolor{primarygray}{gray}{0.35}
+\definecolor{textblack}{gray}{0.0}
+\definecolor{lightgray}{gray}{0.92}
+
+\titleformat{\section}
+{\color{primarygray}\Large\bfseries}
+{\thesection.}
+{0.5em}
+{}
+
+\titleformat{\subsection}
+{\color{primarygray}\large\bfseries}
+{\thesubsection.}
+{0.5em}
+{}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=textblack,
+    urlcolor=primarygray,
+    citecolor=primarygray
+}
+
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{4pt}
+
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcommand{\ProjectTitle}{Plataforma de Inteligencia de Negocios para el an\'alisis de tendencias, adopci\'on y evoluci\'on de agentes de Inteligencia Artificial en el dominio del desarrollo de software mediante integraci\'on de datos heterog\'eneos durante el per\'iodo 2023--2026}
+\newcommand{\StagingTabla}{\texttt{staging.\allowbreak stg\_actividad\_\allowbreak agente\_ia}}
+\newcommand{\FactTabla}{\texttt{gold.\allowbreak fact\_actividad\_\allowbreak agente\_ia}}
+\newcommand{\StagingTablaCell}{\begin{tabular}[t]{@{}l@{}}\texttt{staging.stg\_actividad}\\\texttt{\_agente\_ia}\end{tabular}}
+\newcommand{\FactTablaCell}{\begin{tabular}[t]{@{}l@{}}\texttt{gold.fact\_actividad}\\\texttt{\_agente\_ia}\end{tabular}}
+\newcommand{\pathcode}[1]{\begingroup\scriptsize\ttfamily\nolinkurl{#1}\endgroup}
+
+\begin{document}
+
+% ==========================================================
+% PORTADA
+% ==========================================================
+\begin{titlepage}
+\centering
+\vspace*{0.2cm}
+
+\IfFileExists{upse.jpg}{
+    \includegraphics[width=3.8cm]{upse.jpg}\\[0.25cm]
+}{
+    {\Large \textbf{UPSE}}\\[0.25cm]
+}
+
+{\large \textbf{\textcolor{primarygray}{UNIVERSIDAD ESTATAL PEN\'INSULA DE SANTA ELENA}}}\\[0.2cm]
+{\normalsize \textbf{Ingenier\'ia de Software}}\\[0.05cm]
+{\normalsize Sexto Semestre}\\[0.65cm]
+
+{\normalsize \textbf{VI Inteligencia de Negocios}}\\[0.45cm]
+{\Large \textbf{\textcolor{primarygray}{ENTREGABLE 4}}}\\[0.2cm]
+{\large Data Warehouse y Anal\'itica}\\[0.2cm]
+{\normalsize Informe t\'ecnico-acad\'emico de implementaci\'on Gold}\\[0.7cm]
+
+{\normalsize \textbf{T\'itulo del Proyecto}}\\[0.25cm]
+
+\begin{minipage}{0.9\textwidth}
+\centering
+\normalsize
+Plataforma de Inteligencia de Negocios para el an\'alisis de tendencias,
+adopci\'on y evoluci\'on de agentes de Inteligencia Artificial en el
+dominio del desarrollo de software mediante integraci\'on de datos
+heterog\'eneos durante el per\'iodo 2023--2026
+\end{minipage}
+
+\vspace{0.45cm}
+
+{\normalsize \textbf{Repositorio del Proyecto}}\\[0.15cm]
+{\footnotesize \url{https://github.com/DevTorres404/ai-agents-adoption-observatory.git}}
+
+\vspace{0.55cm}
+
+{\textbf{Autores}}\\[0.2cm]
+Damian Jes\'us Torres Cadena\\
+Melanie Adriana Tomal\'a Merejildo\\
+Jean Pierre Cede\~no Andrade
+\vspace{0.45cm}
+{\textbf{Docente:}}\\[0.2cm]
+Ing. Anthony Pachay
+\vspace{0.45cm}
+
+{\textbf{Per\'iodo Acad\'emico}}\\
+2026--1
+
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ==========================================================
+\section{Introducci\'on}
+
+El presente documento corresponde al Entregable 4 de la asignatura VI Inteligencia de Negocios. Su finalidad es documentar la implementaci\'on de la Capa Gold o Data Warehouse del proyecto \textit{\ProjectTitle}, tomando como base el pipeline ETL desarrollado en el Entregable 3.
+
+En el Entregable 3 se consolid\'o la capa Staging mediante la tabla \StagingTabla{}, generada a partir de fuentes heterog\'eneas relacionadas con agentes de Inteligencia Artificial en el desarrollo de software. La auditor\'ia t\'ecnica utilizada para este entregable registra \textbf{120,846} registros \'utiles en Staging, nulos cr\'iticos equivalentes a \textbf{0} y correspondencia completa con la tabla de hechos Gold. La fuente propia se incorpora desde el archivo \pathcode{data/encuesta/encuesta.json}, correspondiente a respuestas reales de Google Forms.
+
+Sobre esta base, el Entregable 4 implementa un Data Warehouse f\'isico en PostgreSQL 16, ejecutado mediante Docker Compose y el contenedor \texttt{observatorio\_db}. La carga del modelo Gold se realiza exclusivamente desde \StagingTabla{}, lo que garantiza trazabilidad desde la capa Silver del pipeline ETL. No se utilizan datos ficticios, datos simulados ni consultas directas a Raw para poblar el Data Warehouse.
+
+% ==========================================================
+\section{Objetivo del Entregable 4}
+
+Implementar y documentar un Data Warehouse relacional en PostgreSQL que permita analizar el nivel de adopci\'on, actividad, popularidad y evoluci\'on temporal de agentes de IA en el desarrollo de software, mediante un modelo dimensional Gold compuesto por dimensiones, tabla de hechos, vistas KPI y consultas anal\'iticas asociadas a las preguntas de investigaci\'on del proyecto.
+
+De manera espec\'ifica, el Entregable 4 busca:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item Materializar un modelo dimensional en el esquema \texttt{gold}.
+    \item Poblar dimensiones y tabla de hechos exclusivamente desde Staging.
+    \item Implementar KPIs como vistas SQL dentro del motor PostgreSQL.
+    \item Responder las preguntas anal\'iticas del proyecto mediante consultas SQL reproducibles.
+    \item Generar evidencia auditable del Data Warehouse para validaci\'on acad\'emica.
+\end{itemize}
+
+% ==========================================================
+\section{Descripci\'on del Data Warehouse Implementado}
+
+El Data Warehouse se implementa en el esquema \texttt{gold}, siguiendo una arquitectura dimensional tipo estrella. La fuente \'unica para su carga es la tabla \StagingTabla{}, correspondiente a la capa Silver/Staging del pipeline.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\rowcolors{2}{gray!8}{white}
+\begin{tabular}{|P{4cm}|P{9.5cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Elemento} & \textbf{Descripci\'on} \\ \hline
+Motor de base de datos & PostgreSQL 16. \\ \hline
+Orquestaci\'on & Docker Compose. \\ \hline
+Contenedor & \texttt{observatorio\_db}. \\ \hline
+Esquema origen & \texttt{staging}. \\ \hline
+Tabla origen & \StagingTablaCell{}. \\ \hline
+Esquema destino & \texttt{gold}. \\ \hline
+Tabla de hechos & \FactTablaCell{}. \\ \hline
+Regla de carga & La Capa Gold se puebla exclusivamente desde Staging; no se usa Raw ni datos simulados. \\ \hline
+\end{tabular}
+\caption{Resumen t\'ecnico del Data Warehouse Gold}
+\end{table}
+
+La granularidad definida para la tabla de hechos es la siguiente:
+
+\begin{center}
+\textit{Un registro representa una actividad observada de adopci\'on o menci\'on de un agente de IA en una fuente, plataforma y fecha determinada.}
+\end{center}
+
+Esta granularidad fue seleccionada porque permite conservar el nivel de detalle anal\'itico necesario para estudiar adopci\'on, popularidad, actividad comunitaria y evoluci\'on temporal sin duplicar artificialmente los hechos. Asimismo, facilita la agregaci\'on posterior por agente, fuente, plataforma, tecnolog\'ia o periodo, manteniendo coherencia con las preguntas de investigaci\'on planteadas en el proyecto.
+
+% ==========================================================
+\section{Modelo Dimensional Gold}
+
+El modelo dimensional Gold est\'a compuesto por seis dimensiones y una tabla de hechos. Las dimensiones proporcionan contexto anal\'itico sobre tiempo, agente, fuente, plataforma, tecnolog\'ia y comunidad. La tabla de hechos almacena las m\'etricas cuantitativas necesarias para responder las preguntas de investigaci\'on.
+
+\scriptsize
+\begin{longtable}{|P{4cm}|P{3cm}|P{6.6cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Tabla Gold} & \textbf{Tipo} & \textbf{Prop\'osito anal\'itico} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Tabla Gold} & \textbf{Tipo} & \textbf{Prop\'osito anal\'itico} \\ \hline
+\endhead
+\texttt{gold.dim\_tiempo} & Dimensi\'on & Analizar la evoluci\'on temporal por fecha, a\~no, mes, trimestre y semana. \\ \hline
+\texttt{gold.dim\_agente} & Dimensi\'on & Identificar agentes de IA y categor\'ias asociadas. \\ \hline
+\texttt{gold.dim\_fuente} & Dimensi\'on & Diferenciar fuentes digitales y tipos de fuente. \\ \hline
+\texttt{gold.dim\_plataforma} & Dimensi\'on & Analizar el canal o plataforma de procedencia de la evidencia. \\ \hline
+\texttt{gold.dim\_tecnologia} & Dimensi\'on & Clasificar categor\'ias tecnol\'ogicas o se\~nales anal\'iticas. \\ \hline
+\texttt{gold.dim\_comunidad} & Dimensi\'on & Representar comunidades o espacios de conversaci\'on t\'ecnica. \\ \hline
+\FactTablaCell{} & Hechos & Almacenar m\'etricas de menciones, interacciones, actividad, popularidad, adopci\'on e innovaci\'on. \\ \hline
+\caption{Modelo dimensional implementado en Gold}
+\end{longtable}
+\normalsize
+
+Las llaves for\'aneas de la tabla de hechos conectan expl\'icitamente con cada dimensi\'on. Esta relaci\'on permite ejecutar consultas anal\'iticas agregadas sin depender de la capa Raw ni de estructuras transaccionales. En t\'erminos acad\'emicos, el dise\~no responde al principio de separaci\'on entre preparaci\'on de datos y explotaci\'on anal\'itica: Staging conserva los datos normalizados y Gold organiza esos datos en una estructura dimensional orientada a indicadores.
+
+% ==========================================================
+\section{Evidencia de Carga de Datos}
+
+La carga de datos se ejecuta mediante scripts SQL ordenados y reproducibles. Primero se audita Staging, luego se crea el esquema Gold, se cargan dimensiones, se carga la tabla de hechos, se crean vistas KPI y finalmente se validan los resultados. Esta secuencia permite que el docente pueda repetir la ejecuci\'on y verificar cada etapa de forma independiente.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\rowcolors{2}{gray!8}{white}
+\begin{tabular}{|P{5.1cm}|P{8.2cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Script} & \textbf{Funci\'on} \\ \hline
+\pathcode{sql/00_auditoria_staging.sql} & Auditar Staging antes de poblar Gold. \\ \hline
+\pathcode{sql/01_create_gold_schema.sql} & Crear esquema, dimensiones, hechos, llaves e \'indices. \\ \hline
+\pathcode{sql/02_load_gold_dimensions.sql} & Poblar dimensiones exclusivamente desde Staging. \\ \hline
+\pathcode{sql/03_load_gold_fact.sql} & Poblar la tabla de hechos mediante JOINs con dimensiones. \\ \hline
+\pathcode{sql/04_create_kpi_views.sql} & Crear vistas KPI dentro del esquema Gold. \\ \hline
+\pathcode{sql/05_consultas_analiticas_e4.sql} & Responder preguntas de investigaci\'on. \\ \hline
+\pathcode{sql/06_validacion_gold_dw.sql} & Generar evidencia auditable del Data Warehouse. \\ \hline
+\end{tabular}
+\caption{Secuencia de ejecuci\'on del Entregable 4}
+\end{table}
+
+\subsection{Registros por Tabla}
+
+La siguiente tabla resume la salida real del script \pathcode{sql/06_validacion_gold_dw.sql}.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\rowcolors{2}{gray!8}{white}
+\begin{tabular}{|P{6.2cm}|P{2.5cm}|P{4.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Tabla Gold} & \textbf{Total de registros} & \textbf{Evidencia SQL} \\ \hline
+\texttt{gold.dim\_tiempo} & 313 & Validaci\'on Gold. \\ \hline
+\texttt{gold.dim\_agente} & 8 & Validaci\'on Gold. \\ \hline
+\texttt{gold.dim\_fuente} & 9 & Validaci\'on Gold. \\ \hline
+\texttt{gold.dim\_plataforma} & 10 & Validaci\'on Gold. \\ \hline
+\texttt{gold.dim\_tecnologia} & 4 & Validaci\'on Gold. \\ \hline
+\texttt{gold.dim\_comunidad} & 10 & Validaci\'on Gold. \\ \hline
+\FactTablaCell{} & 120,846 & Validaci\'on Gold. \\ \hline
+\end{tabular}
+\caption{Evidencia de registros por tabla Gold}
+\end{table}
+
+\subsection{Comparaci\'on Staging vs Gold}
+
+\begin{table}[H]
+\centering
+\footnotesize
+\rowcolors{2}{gray!8}{white}
+\begin{tabular}{|P{5cm}|P{4cm}|P{5cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{M\'etrica} & \textbf{Valor} & \textbf{Observaci\'on} \\ \hline
+Total Staging & 120,846 & Salida de \pathcode{06_validacion_gold_dw.sql}. \\ \hline
+Total Fact Gold & 120,846 & Coincide con Staging. \\ \hline
+Diferencia absoluta & 0 & No existe merma en la carga Gold. \\ \hline
+Porcentaje de merma & 0.0000\% & Evidencia de carga completa. \\ \hline
+\end{tabular}
+\caption{Comparaci\'on entre Staging y la tabla de hechos Gold}
+\end{table}
+
+% ==========================================================
+\section{Consultas Anal\'iticas por Pregunta de Investigaci\'on}
+
+Las preguntas de investigaci\'on se responden mediante el script \pathcode{sql/05_consultas_analiticas_e4.sql}. Todas las consultas se ejecutan sobre el esquema \texttt{gold} y utilizan JOINs expl\'icitos entre la tabla de hechos y las dimensiones.
+
+\scriptsize
+\begin{longtable}{|P{0.8cm}|P{5.3cm}|P{4.5cm}|P{3.6cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{N.} & \textbf{Pregunta} & \textbf{Consulta / enfoque} & \textbf{Evidencia} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{N.} & \textbf{Pregunta} & \textbf{Consulta / enfoque} & \textbf{Evidencia} \\ \hline
+\endhead
+1 & Nivel de adopci\'on de agentes de IA durante 2023--2026. & Agregaci\'on general de observaciones, menciones, interacciones y score de adopci\'on. & Hallazgo 1. \\ \hline
+2 & Agentes con mayor nivel de adopci\'on. & Ranking Top 10 por score de adopci\'on y volumen de observaciones. & Hallazgo 2. \\ \hline
+3 & Fuentes digitales con mayor actividad. & Participaci\'on porcentual por fuente y score de actividad. & Hallazgo 3. \\ \hline
+4 & Evoluci\'on mensual de la adopci\'on. & Serie mensual con funci\'on \texttt{LAG}. & Hallazgo 4. \\ \hline
+5 & Plataformas o comunidades que impulsan la conversaci\'on t\'ecnica. & Ranking por score de comunidad y actividad. & Hallazgo 5. \\ \hline
+6 & Tecnolog\'ias o categor\'ias asociadas al uso de agentes de IA. & Distribuci\'on por categor\'ia tecnol\'ogica y porcentaje de participaci\'on. & Hallazgo 6. \\ \hline
+\caption{Consultas anal\'iticas asociadas a las preguntas de investigaci\'on}
+\end{longtable}
+\normalsize
+
+% ==========================================================
+\section{Framework de KPIs Implementados}
+
+Los KPIs del Entregable 4 se implementan como vistas SQL dentro del esquema \texttt{gold}. Esto permite que las m\'etricas operen directamente dentro del motor de base de datos y puedan ser auditadas por el docente sin depender de hojas de c\'alculo o c\'alculos externos.
+
+\scriptsize
+\begin{longtable}{|P{5.5cm}|P{5.1cm}|P{2.7cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Vista KPI} & \textbf{Objetivo} & \textbf{Filas devueltas} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Vista KPI} & \textbf{Objetivo} & \textbf{Filas devueltas} \\ \hline
+\endhead
+\pathcode{gold.vw_kpi_adopcion_por_agente} & Medir adopci\'on por agente. & 8 \\ \hline
+\pathcode{gold.vw_kpi_participacion_por_fuente} & Medir participaci\'on de cada fuente. & 9 \\ \hline
+\pathcode{gold.vw_kpi_tendencia_mensual} & Analizar evoluci\'on mensual. & 38 \\ \hline
+\pathcode{gold.vw_kpi_ranking_agentes} & Ordenar agentes por relevancia. & 8 \\ \hline
+\pathcode{gold.vw_kpi_popularidad_open_source} & Evaluar popularidad t\'ecnica open source. & 24 \\ \hline
+\pathcode{gold.vw_kpi_crecimiento_mensual} & Medir crecimiento mensual. & 38 \\ \hline
+\pathcode{gold.vw_kpi_distribucion_por_plataforma} & Analizar distribuci\'on por plataforma. & 10 \\ \hline
+\caption{Framework de KPIs implementados como vistas SQL}
+\end{longtable}
+\normalsize
+
+% ==========================================================
+\section{Hallazgos Anal\'iticos}
+
+Los siguientes hallazgos fueron redactados a partir de la ejecuci\'on real de los scripts SQL del Entregable 4 sobre el esquema \texttt{gold}. Por tanto, los valores provienen del Data Warehouse cargado desde \StagingTabla{} y no de datos ficticios ni de estimaciones manuales.
+
+\subsection*{Hallazgo 1: Nivel general de adopci\'on consolidado en Gold}
+
+El Data Warehouse Gold consolid\'o \textbf{120,846} hechos anal\'iticos, provenientes de \textbf{8} agentes de IA y \textbf{9} fuentes distintas. El total agregado registra \textbf{932,803} menciones, \textbf{5,700,694} interacciones, un \textbf{score de adopci\'on total de 10,323.7100} y un \textbf{promedio de adopci\'on de 0.0854}.
+
+\textbf{Interpretaci\'on anal\'itica:} existe evidencia cuantitativa suficiente para analizar adopci\'on de agentes de IA en el desarrollo de software durante el per\'iodo observado. La adopci\'on no se mide solo por volumen de registros, sino por menciones, interacciones y score acumulado.
+
+\textbf{Relaci\'on con la pregunta de investigaci\'on:} responde la pregunta principal: cu\'al es el nivel de adopci\'on de agentes de IA en el desarrollo de software durante 2023--2026.
+
+\textbf{Relaci\'on con la expectativa inicial:} confirma la expectativa de que la adopci\'on de agentes de IA puede medirse con datos provenientes de m\'ultiples fuentes digitales.
+
+\textbf{Implicaci\'on para BI:} el Data Warehouse permite monitorear adopci\'on con m\'etricas trazables y no con percepciones aisladas.
+
+\subsection*{Hallazgo 2: Predominio de OpenAI Codex como agente con mayor adopci\'on}
+
+\textbf{OpenAI Codex} concentra \textbf{84,702} hechos, equivalentes al \textbf{70.09\%} de participaci\'on por agente. Adem\'as, registra \textbf{814,471} menciones, \textbf{1,708,676} interacciones y un \textbf{score de adopci\'on total de 9,035.0600}.
+
+\textbf{Interpretaci\'on anal\'itica:} OpenAI Codex domina el conjunto anal\'itico tanto por volumen de observaciones como por score de adopci\'on. Esto indica una presencia superior frente a otros agentes evaluados.
+
+\textbf{Relaci\'on con la pregunta de investigaci\'on:} responde la pregunta secundaria sobre qu\'e agentes de IA presentan mayor nivel de adopci\'on.
+
+\textbf{Relaci\'on con la expectativa inicial:} confirma la expectativa de que algunos agentes tendr\'ian una adopci\'on significativamente mayor que otros.
+
+\textbf{Implicaci\'on para BI:} OpenAI Codex se identifica como agente prioritario para dashboards, comparativas y seguimiento temporal.
+
+\subsection*{Hallazgo 3: Alta concentraci\'on de evidencia en la fuente cat\'alogo}
+
+La fuente \textbf{catalogo} aporta \textbf{118,562} hechos, equivalentes al \textbf{98.11\%} del total de registros en Gold. La segunda fuente es \textbf{google\_trends}, con \textbf{1,431} registros y \textbf{1.18\%}. La fuente propia \textbf{fuente\_propia} aporta \textbf{12} respuestas reales de Google Forms, equivalentes al \textbf{0.01\%}.
+
+\textbf{Interpretaci\'on anal\'itica:} el Data Warehouse est\'a fuertemente concentrado en el dataset estructurado de cat\'alogo/AIDev. Aunque existen fuentes web y API, su peso relativo es menor dentro del total consolidado.
+
+\textbf{Relaci\'on con la pregunta de investigaci\'on:} responde la pregunta sobre qu\'e fuentes digitales evidencian mayor actividad sobre agentes de IA.
+
+\textbf{Relaci\'on con la expectativa inicial:} matiza la expectativa de equilibrio entre fuentes; existen m\'ultiples fuentes, pero la mayor carga anal\'itica proviene del cat\'alogo estructurado.
+
+\textbf{Implicaci\'on para BI:} las decisiones de BI requieren considerar este sesgo de concentraci\'on. La participaci\'on por fuente debe mostrarse como indicador de contexto para evitar interpretar el Data Warehouse como si todas las fuentes tuvieran el mismo peso anal\'itico.
+
+\subsection*{Hallazgo 4: Pico temporal de actividad en julio de 2025}
+
+El mes con mayor volumen de observaciones es \textbf{julio de 2025}, con \textbf{54,208} observaciones, \textbf{574,175} menciones, \textbf{1,438,120} interacciones y un \textbf{score de actividad total de 12,254,604.0000}.
+
+\textbf{Interpretaci\'on anal\'itica:} la adopci\'on y actividad sobre agentes de IA no es uniforme en el tiempo. Julio de 2025 representa un pico significativo dentro de la serie mensual.
+
+\textbf{Relaci\'on con la pregunta de investigaci\'on:} responde la pregunta sobre c\'omo evoluciona mensualmente la adopci\'on de agentes de IA.
+
+\textbf{Relaci\'on con la expectativa inicial:} apoya la expectativa de variaci\'on temporal, pero evidencia que el comportamiento presenta picos concentrados y no una progresi\'on perfectamente lineal.
+
+\textbf{Implicaci\'on para BI:} el dashboard requiere an\'alisis temporal mensual para detectar picos, anomal\'ias o periodos de mayor actividad tecnol\'ogica.
+
+\subsection*{Hallazgo 5: Predominio de la plataforma AIDev AI Coding}
+
+La plataforma \textbf{aidedev\_ai\_coding} concentra \textbf{118,557} observaciones, equivalentes al \textbf{98.11\%} de la distribuci\'on por plataforma. En segundo lugar aparece \textbf{google\_trends}, con \textbf{1,431} observaciones y \textbf{1.18\%}.
+
+\textbf{Interpretaci\'on anal\'itica:} la mayor parte de la evidencia proviene de una plataforma o dataset t\'ecnico estructurado. Las comunidades y plataformas web aportan se\~nales complementarias, pero no dominan el volumen del DW.
+
+\textbf{Relaci\'on con la pregunta de investigaci\'on:} responde la pregunta sobre qu\'e plataformas o comunidades impulsan m\'as la conversaci\'on t\'ecnica sobre agentes de IA.
+
+\textbf{Relaci\'on con la expectativa inicial:} matiza la expectativa de que comunidades como Reddit, Dev.to o Hacker News ser\'ian las principales impulsoras. En volumen, predomina AIDev; en an\'alisis cualitativo, las comunidades siguen siendo \'utiles como se\~nales complementarias.
+
+\textbf{Implicaci\'on para BI:} los indicadores de actividad t\'ecnica estructurada e interacci\'on comunitaria deben analizarse por separado, debido a que representan naturalezas de datos distintas.
+
+\subsection*{Hallazgo 6: Predominio de la categor\'ia actividad t\'ecnica}
+
+La categor\'ia \textbf{actividad\_tecnica} concentra \textbf{119,122} hechos, equivalentes al \textbf{98.57\%} del Data Warehouse. La categor\'ia \textbf{popularidad} registra \textbf{1,507} hechos, equivalente al \textbf{1.25\%}; \textbf{comunidad} registra \textbf{205} hechos, equivalente al \textbf{0.17\%}; y \textbf{adopcion\_academica} registra \textbf{12} respuestas de la fuente propia, equivalente al \textbf{0.01\%}.
+
+\textbf{Interpretaci\'on anal\'itica:} el uso de agentes de IA est\'a principalmente representado por evidencia t\'ecnica, no por conversaci\'on comunitaria ni por se\~nales de popularidad general.
+
+\textbf{Relaci\'on con la pregunta de investigaci\'on:} responde la pregunta sobre qu\'e tecnolog\'ias o categor\'ias se asocian con mayor frecuencia al uso de agentes de IA.
+
+\textbf{Relaci\'on con la expectativa inicial:} confirma que la adopci\'on se manifiesta sobre todo en actividad t\'ecnica vinculada al desarrollo de software.
+
+\textbf{Implicaci\'on para BI:} el modelo BI prioriza KPIs de actividad t\'ecnica, repositorios, interacciones y agentes; las m\'etricas de comunidad y popularidad se utilizan como contexto complementario.
+
+% ==========================================================
+\section{Comparaci\'on entre Expectativas Iniciales del E1 y Resultados Reales del DW}
+
+Esta secci\'on contrasta las hip\'otesis o expectativas iniciales planteadas en el Entregable 1 con los resultados reales obtenidos desde el Data Warehouse Gold. La comparaci\'on se basa en evidencia SQL y no en percepciones.
+
+\scriptsize
+\begin{longtable}{|P{4.1cm}|P{4.9cm}|P{2.4cm}|P{2.6cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Expectativa / Hip\'otesis del E1} & \textbf{Resultado real del DW} & \textbf{Estado} & \textbf{Evidencia} \\ \hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Expectativa / Hip\'otesis del E1} & \textbf{Resultado real del DW} & \textbf{Estado} & \textbf{Evidencia} \\ \hline
+\endhead
+Mayor adopci\'on de determinados agentes de IA. & OpenAI Codex lidera con 84,702 hechos y 70.09\% de participaci\'on. & Confirmada & Hallazgo 2. \\ \hline
+Mayor actividad en fuentes t\'ecnicas abiertas. & La fuente catalogo concentra 118,562 hechos, equivalentes al 98.11\%. & Matizada & Hallazgo 3. \\ \hline
+Crecimiento progresivo de adopci\'on durante 2023--2026. & Julio de 2025 registra el pico mensual con 54,208 observaciones. & Matizada & Hallazgo 4. \\ \hline
+Concentraci\'on de conversaci\'on en comunidades espec\'ificas. & La plataforma aidedev\_ai\_coding concentra 118,557 observaciones y 98.11\%. & Matizada & Hallazgo 5. \\ \hline
+Asociaci\'on de agentes con categor\'ias t\'ecnicas espec\'ificas. & La categor\'ia actividad\_tecnica concentra 119,122 hechos y 98.58\%. & Confirmada & Hallazgo 6. \\ \hline
+\caption{Comparaci\'on entre expectativas iniciales y resultados del Data Warehouse}
+\end{longtable}
+\normalsize
+
+% ==========================================================
+\section{Validaci\'on T\'ecnica}
+
+La validaci\'on t\'ecnica del Data Warehouse se realiza con el script \pathcode{sql/06_validacion_gold_dw.sql}. Este script genera conteos por tabla, compara Staging contra la tabla de hechos, revisa integridad referencial y verifica que las vistas KPI devuelvan resultados.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\rowcolors{2}{gray!8}{white}
+\begin{tabular}{|P{5cm}|P{3cm}|P{5.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Control} & \textbf{Resultado} & \textbf{Observaci\'on} \\ \hline
+Hechos sin agente & 0 & Integridad referencial consistente. \\ \hline
+Hechos sin fuente & 0 & Integridad referencial consistente. \\ \hline
+Hechos sin tiempo & 0 & Integridad referencial consistente. \\ \hline
+Hechos sin plataforma & 0 & Integridad referencial consistente. \\ \hline
+Hechos sin tecnolog\'ia & 0 & Integridad referencial consistente. \\ \hline
+Hechos sin comunidad & 0 & Integridad referencial consistente. \\ \hline
+Periodo Staging 2023--2026 & 0 fuera de rango & Fechas entre 2023-01-06 y 2026-07-04. \\ \hline
+Periodo Gold 2023--2026 & 0 fuera de rango & Fechas entre 2023-01-06 y 2026-07-04. \\ \hline
+Vistas KPI con resultados & 7 vistas & Todas devuelven filas en la validaci\'on Gold. \\ \hline
+\end{tabular}
+\caption{Controles de validaci\'on t\'ecnica del Data Warehouse}
+\end{table}
+
+% ==========================================================
+\section{Conclusiones}
+
+El Entregable 4 implementa la Capa Gold del proyecto mediante un Data Warehouse f\'isico en PostgreSQL 16. El modelo dimensional permite analizar la adopci\'on de agentes de IA desde distintas perspectivas: tiempo, agente, fuente, plataforma, tecnolog\'ia y comunidad.
+
+La principal garant\'ia metodol\'ogica del entregable es que la carga del Data Warehouse se realiza exclusivamente desde la tabla \StagingTabla{}, consolidada en el Entregable 3. Por tanto, el modelo Gold conserva trazabilidad desde la capa Silver y evita el uso de datos ficticios, datos simulados o intervenciones manuales no verificables.
+
+Las vistas KPI y consultas anal\'iticas permiten responder las preguntas de investigaci\'on dentro del propio motor relacional. La ejecuci\'on de validaci\'on confirma que las tablas Gold fueron pobladas correctamente, que la tabla de hechos conserva correspondencia con Staging y que las dimensiones se relacionan mediante llaves for\'aneas consistentes.
+
+% ==========================================================
+\section{Anexos T\'ecnicos}
+
+\subsection{Scripts SQL del Entregable 4}
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item \pathcode{sql/00_auditoria_staging.sql}
+    \item \pathcode{sql/01_create_gold_schema.sql}
+    \item \pathcode{sql/02_load_gold_dimensions.sql}
+    \item \pathcode{sql/03_load_gold_fact.sql}
+    \item \pathcode{sql/04_create_kpi_views.sql}
+    \item \pathcode{sql/05_consultas_analiticas_e4.sql}
+    \item \pathcode{sql/06_validacion_gold_dw.sql}
+\end{itemize}
+
+\subsection{Comandos de Respaldo}
+
+Generaci\'on del dump del esquema Gold:
+
+\begingroup
+\footnotesize
+\begin{verbatim}
+docker exec -t observatorio_db pg_dump `
+  -U postgres `
+  -d observatorio_ia `
+  --schema=gold > dump_gold_entregable4.sql
+\end{verbatim}
+\endgroup
+
+Restauraci\'on del dump:
+
+\begingroup
+\footnotesize
+\begin{verbatim}
+psql -U postgres `
+  -d observatorio_ia `
+  -f dump_gold_entregable4.sql
+\end{verbatim}
+\endgroup
+
+\subsection{Espacio para Evidencias}
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item Ejecuci\'on de \pathcode{06_validacion_gold_dw.sql}: realizada sobre PostgreSQL 16.
+    \item Vistas KPI con resultados: 7 vistas validadas.
+    \item Conteos por tabla Gold: registrados en la secci\'on de evidencia de carga.
+    \item Integridad referencial: 0 hechos sin dimensi\'on relacionada.
+    \item Evidencia del dump Gold: respaldo generado en \pathcode{dump_gold_entregable4.sql}.
+\end{itemize}
+
+\end{document}
