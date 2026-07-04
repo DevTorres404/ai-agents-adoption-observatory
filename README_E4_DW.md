@@ -70,6 +70,12 @@ docker exec -i observatorio_db psql -U postgres -d observatorio_ia -f /ruta/dent
 
 Si los scripts se ejecutan desde el host, tambien pueden abrirse en una herramienta como pgAdmin, DBeaver o psql, siempre que la conexion apunte a la base `observatorio_ia`.
 
+## Descarga Alternativa del Dump Gold
+
+El archivo `dump_gold_entregable4.sql` se encuentra en este repositorio. Sin embargo, como alternativa, tambi\u00e9n puedes descargarlo desde el siguiente enlace de Google Drive:
+
+[Descargar dump_gold_entregable4.sql (Google Drive)](https://drive.google.com/file/d/1pBIYA5voH7R67oR4GDS3XmtUEhioTQiu/view?usp=sharing)
+
 ## Generacion del Dump Gold
 
 Para entregar o respaldar el esquema Gold del Data Warehouse, ejecutar:
