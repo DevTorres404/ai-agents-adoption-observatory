@@ -108,8 +108,7 @@ heterog\'eneos durante el per\'iodo 2023--2026
 {\textbf{Autores}}\\[0.2cm]
 Damian Jes\'us Torres Cadena\\
 Melanie Adriana Tomal\'a Merejildo\\
-Jean Pierre Cede\~no Andrade
-\vspace{0.45cm}
+Jean Pierre Cede\~no Andrade\\[0.45cm]
 {\textbf{Docente:}}\\[0.2cm]
 Ing. Anthony Pachay
 \vspace{0.45cm}
@@ -207,6 +206,8 @@ El modelo dimensional Gold est\'a compuesto por seis dimensiones y una tabla de 
 
 Las llaves for\'aneas de la tabla de hechos conectan expl\'icitamente con cada dimensi\'on. Esta relaci\'on permite ejecutar consultas anal\'iticas agregadas sin depender de la capa Raw ni de estructuras transaccionales. En t\'erminos acad\'emicos, el dise\~no responde al principio de separaci\'on entre preparaci\'on de datos y explotaci\'on anal\'itica: Staging conserva los datos normalizados y Gold organiza esos datos en una estructura dimensional orientada a indicadores.
 
+El modelo Gold conserva la orientaci\'on dimensional planteada en el Entregable 2, organizada alrededor de una tabla de hechos y dimensiones de contexto anal\'itico. Las dimensiones finalmente materializadas responden a los atributos efectivamente consolidados en \StagingTabla{}, por lo que el dise\~no f\'isico prioriza trazabilidad, carga verificable y consistencia con los datos reales del pipeline. La dimensi\'on plataforma se incorpora como extensi\'on anal\'itica de la fuente, permitiendo diferenciar el origen general de la evidencia y el canal espec\'ifico de procedencia. En caso de atributos no disponibles de forma consistente, estos no se materializan como dimensiones independientes para evitar datos ficticios o inferencias no auditables.
+
 % ==========================================================
 \section{Evidencia de Carga de Datos}
 
@@ -237,19 +238,19 @@ La siguiente tabla resume la salida real del script \pathcode{sql/06_validacion_
 
 \begin{table}[H]
 \centering
-\footnotesize
+\scriptsize
 \rowcolors{2}{gray!8}{white}
-\begin{tabular}{|P{6.2cm}|P{2.5cm}|P{4.8cm}|}
+\begin{tabular}{|P{3.5cm}|P{2cm}|P{2.8cm}|P{5cm}|}
 \hline
 \rowcolor{gray!25}
-\textbf{Tabla Gold} & \textbf{Total de registros} & \textbf{Evidencia SQL} \\ \hline
-\texttt{gold.dim\_tiempo} & 313 & Validaci\'on Gold. \\ \hline
-\texttt{gold.dim\_agente} & 8 & Validaci\'on Gold. \\ \hline
-\texttt{gold.dim\_fuente} & 9 & Validaci\'on Gold. \\ \hline
-\texttt{gold.dim\_plataforma} & 10 & Validaci\'on Gold. \\ \hline
-\texttt{gold.dim\_tecnologia} & 4 & Validaci\'on Gold. \\ \hline
-\texttt{gold.dim\_comunidad} & 10 & Validaci\'on Gold. \\ \hline
-\FactTablaCell{} & 120,846 & Validaci\'on Gold. \\ \hline
+\textbf{Tabla del Modelo} & \textbf{Registros Cargados} & \textbf{Fecha de Carga} & \textbf{Fuentes Integradas} \\ \hline
+\texttt{gold.dim\_tiempo} & 313 & 2026-07-04 & Staging consolidado \\ \hline
+\texttt{gold.dim\_agente} & 8 & 2026-07-04 & Staging consolidado \\ \hline
+\texttt{gold.dim\_fuente} & 9 & 2026-07-04 & Staging consolidado \\ \hline
+\texttt{gold.dim\_plataforma} & 10 & 2026-07-04 & Staging consolidado \\ \hline
+\texttt{gold.dim\_tecnologia} & 4 & 2026-07-04 & Staging consolidado \\ \hline
+\texttt{gold.dim\_comunidad} & 10 & 2026-07-04 & Staging consolidado (GitHub, Reddit, Dev.to, HackerNews) \\ \hline
+\FactTablaCell{} & 120,846 & 2026-07-04 & Staging consolidado (GitHub, Reddit, Dev.to, HackerNews, Google Trends, AIDev/cat\'alogo y fuente propia) \\ \hline
 \end{tabular}
 \caption{Evidencia de registros por tabla Gold}
 \end{table}
@@ -275,27 +276,130 @@ Porcentaje de merma & 0.0000\% & Evidencia de carga completa. \\ \hline
 % ==========================================================
 \section{Consultas Anal\'iticas por Pregunta de Investigaci\'on}
 
-Las preguntas de investigaci\'on se responden mediante el script \pathcode{sql/05_consultas_analiticas_e4.sql}. Todas las consultas se ejecutan sobre el esquema \texttt{gold} y utilizan JOINs expl\'icitos entre la tabla de hechos y las dimensiones.
+Las preguntas de investigaci\'on se responden mediante el script \pathcode{sql/05_consultas_analiticas_e4.sql}. Todas las consultas se ejecutan sobre el esquema \texttt{gold} y utilizan JOINs expl\'icitos entre la tabla de hechos y las dimensiones. No se consulta \texttt{raw} ni \texttt{staging}.
 
-\scriptsize
-\begin{longtable}{|P{0.8cm}|P{5.3cm}|P{4.5cm}|P{3.6cm}|}
-\hline
-\rowcolor{gray!25}
-\textbf{N.} & \textbf{Pregunta} & \textbf{Consulta / enfoque} & \textbf{Evidencia} \\ \hline
-\endfirsthead
-\hline
-\rowcolor{gray!25}
-\textbf{N.} & \textbf{Pregunta} & \textbf{Consulta / enfoque} & \textbf{Evidencia} \\ \hline
-\endhead
-1 & Nivel de adopci\'on de agentes de IA durante 2023--2026. & Agregaci\'on general de observaciones, menciones, interacciones y score de adopci\'on. & Hallazgo 1. \\ \hline
-2 & Agentes con mayor nivel de adopci\'on. & Ranking Top 10 por score de adopci\'on y volumen de observaciones. & Hallazgo 2. \\ \hline
-3 & Fuentes digitales con mayor actividad. & Participaci\'on porcentual por fuente y score de actividad. & Hallazgo 3. \\ \hline
-4 & Evoluci\'on mensual de la adopci\'on. & Serie mensual con funci\'on \texttt{LAG}. & Hallazgo 4. \\ \hline
-5 & Plataformas o comunidades que impulsan la conversaci\'on t\'ecnica. & Ranking por score de comunidad y actividad. & Hallazgo 5. \\ \hline
-6 & Tecnolog\'ias o categor\'ias asociadas al uso de agentes de IA. & Distribuci\'on por categor\'ia tecnol\'ogica y porcentaje de participaci\'on. & Hallazgo 6. \\ \hline
-\caption{Consultas anal\'iticas asociadas a las preguntas de investigaci\'on}
-\end{longtable}
-\normalsize
+\subsection{Pregunta principal: \textquestiondown Cu\'al es el nivel de adopci\'on de agentes de IA en el desarrollo de software durante 2023--2026?}
+
+\textbf{Consulta SQL completa:}
+\begin{verbatim}
+SELECT
+    COUNT(fa.hecho_id) AS total_hechos,
+    COUNT(DISTINCT da.agente_id) AS total_agentes,
+    COUNT(DISTINCT df.fuente_id) AS total_fuentes,
+    SUM(fa.cantidad_menciones) AS total_menciones,
+    SUM(fa.cantidad_interacciones) AS total_interacciones,
+    ROUND(SUM(fa.score_adopcion), 4) AS score_adopcion_total,
+    ROUND(AVG(fa.score_adopcion), 4) AS promedio_adopcion
+FROM gold.fact_actividad_agente_ia fa
+JOIN gold.dim_agente da ON fa.agente_id = da.agente_id
+JOIN gold.dim_fuente df ON fa.fuente_id = df.fuente_id
+JOIN gold.dim_tiempo dt ON fa.tiempo_id = dt.tiempo_id
+WHERE dt.anio BETWEEN 2023 AND 2026;
+\end{verbatim}
+\textbf{Resultado resumido:} El Data Warehouse Gold consolid\'o 120,846 hechos anal\'iticos, 8 agentes de IA, 9 fuentes, 932,803 menciones, 5,700,694 interacciones, un score de adopci\'on total de 10,323.7100 y un promedio de adopci\'on de 0.0854. \\
+\textbf{Interpretaci\'on anal\'itica:} El proyecto cuenta con una base cuantitativa suficiente para medir el nivel de adopci\'on de agentes de IA en el desarrollo de software durante el periodo 2023--2026. La adopci\'on se evidencia mediante volumen de hechos, menciones, interacciones y score de adopci\'on acumulado. \\
+\textbf{Referencia:} Hallazgo 1.
+
+\subsection{\textquestiondown Qu\'e agentes de IA presentan mayor nivel de adopci\'on?}
+
+\textbf{Consulta SQL completa:}
+\begin{verbatim}
+SELECT 
+    da.nombre_agente,
+    COUNT(fa.hecho_id) AS total_hechos,
+    SUM(fa.cantidad_menciones) AS total_menciones,
+    SUM(fa.cantidad_interacciones) AS total_interacciones,
+    ROUND(SUM(fa.score_adopcion), 4) AS score_total,
+    DENSE_RANK() OVER (ORDER BY SUM(fa.score_adopcion) DESC) AS ranking
+FROM gold.fact_actividad_agente_ia fa
+JOIN gold.dim_agente da ON fa.agente_id = da.agente_id
+GROUP BY da.nombre_agente
+ORDER BY score_total DESC
+LIMIT 5;
+\end{verbatim}
+\textbf{Resultado resumido:} OpenAI Codex lidera con 84,702 hechos, 814,471 menciones, 1,708,676 interacciones y un score total de 9,035.0600. \\
+\textbf{Interpretaci\'on anal\'itica:} Existe una concentraci\'on abrumadora de adopci\'on hacia OpenAI Codex comparado con el resto de agentes. \\
+\textbf{Referencia:} Hallazgo 2.
+
+\subsection{\textquestiondown Qu\'e fuentes digitales evidencian mayor actividad sobre agentes de IA?}
+
+\textbf{Consulta SQL completa:}
+\begin{verbatim}
+SELECT 
+    df.nombre_fuente,
+    COUNT(fa.hecho_id) AS total_hechos,
+    ROUND((COUNT(fa.hecho_id) * 100.0) / SUM(COUNT(fa.hecho_id)) OVER (), 2) 
+        AS porcentaje_participacion
+FROM gold.fact_actividad_agente_ia fa
+JOIN gold.dim_fuente df ON fa.fuente_id = df.fuente_id
+GROUP BY df.nombre_fuente
+ORDER BY total_hechos DESC;
+\end{verbatim}
+\textbf{Resultado resumido:} La fuente \texttt{catalogo} aporta 118,562 hechos, representando el 98.11\% del total. \\
+\textbf{Interpretaci\'on anal\'itica:} Las fuentes estructuradas y bases de datos curadas (cat\'alogo) proveen el mayor volumen de se\~nales anal\'iticas. \\
+\textbf{Referencia:} Hallazgo 3.
+
+\subsection{\textquestiondown C\'omo evoluciona mensualmente la adopci\'on de agentes de IA?}
+
+\textbf{Consulta SQL completa:}
+\begin{verbatim}
+WITH mensual AS (
+    SELECT 
+        dt.anio,
+        dt.mes,
+        COUNT(fa.hecho_id) AS total_observaciones
+    FROM gold.fact_actividad_agente_ia fa
+    JOIN gold.dim_tiempo dt ON fa.tiempo_id = dt.tiempo_id
+    GROUP BY dt.anio, dt.mes
+)
+SELECT 
+    anio, 
+    mes, 
+    total_observaciones,
+    LAG(total_observaciones) OVER (ORDER BY anio, mes) AS mes_anterior
+FROM mensual
+ORDER BY anio, mes;
+\end{verbatim}
+\textbf{Resultado resumido:} Julio de 2025 es el pico m\'aximo temporal con 54,208 observaciones registradas. \\
+\textbf{Interpretaci\'on anal\'itica:} La adopci\'on muestra picos concentrados en el tiempo, probablemente alineados con actualizaciones, lanzamientos o consolidaciones de informaci\'on en las fuentes evaluadas. \\
+\textbf{Referencia:} Hallazgo 4.
+
+\subsection{\textquestiondown Qu\'e plataformas o comunidades impulsan m\'as la conversaci\'on t\'ecnica sobre agentes de IA?}
+
+\textbf{Consulta SQL completa:}
+\begin{verbatim}
+SELECT 
+    dp.nombre_plataforma,
+    COUNT(fa.hecho_id) AS total_observaciones,
+    ROUND((COUNT(fa.hecho_id) * 100.0) / SUM(COUNT(fa.hecho_id)) OVER (), 2) 
+        AS porcentaje_participacion
+FROM gold.fact_actividad_agente_ia fa
+JOIN gold.dim_plataforma dp ON fa.plataforma_id = dp.plataforma_id
+GROUP BY dp.nombre_plataforma
+ORDER BY total_observaciones DESC
+LIMIT 5;
+\end{verbatim}
+\textbf{Resultado resumido:} La plataforma \texttt{aidedev\_ai\_coding} concentra 118,557 observaciones (98.11\%). Google Trends contribuye con 1,431 (1.18\%). \\
+\textbf{Interpretaci\'on anal\'itica:} Los cat\'alogos centralizados dominan la visibilidad de adopci\'on en el DW, mientras que las plataformas puramente comunitarias proveen se\~nales secundarias de validaci\'on. \\
+\textbf{Referencia:} Hallazgo 5.
+
+\subsection{\textquestiondown Qu\'e tecnolog\'ias o categor\'ias se asocian con mayor frecuencia al uso de agentes de IA?}
+
+\textbf{Consulta SQL completa:}
+\begin{verbatim}
+SELECT 
+    dte.nombre_categoria,
+    COUNT(fa.hecho_id) AS total_hechos,
+    ROUND((COUNT(fa.hecho_id) * 100.0) / SUM(COUNT(fa.hecho_id)) OVER (), 2) 
+        AS porcentaje_participacion
+FROM gold.fact_actividad_agente_ia fa
+JOIN gold.dim_tecnologia dte ON fa.tecnologia_id = dte.tecnologia_id
+GROUP BY dte.nombre_categoria
+ORDER BY total_hechos DESC;
+\end{verbatim}
+\textbf{Resultado resumido:} La categor\'ia \texttt{actividad\_tecnica} agrupa 119,122 hechos (98.57\%). \\
+\textbf{Interpretaci\'on anal\'itica:} El uso de agentes est\'a profundamente asociado a tareas de codificaci\'on o actividad t\'ecnica pr\'actica, mucho m\'as que a mera popularidad o discusi\'on acad\'emica. \\
+\textbf{Referencia:} Hallazgo 6.
 
 % ==========================================================
 \section{Framework de KPIs Implementados}
@@ -303,22 +407,22 @@ Las preguntas de investigaci\'on se responden mediante el script \pathcode{sql/0
 Los KPIs del Entregable 4 se implementan como vistas SQL dentro del esquema \texttt{gold}. Esto permite que las m\'etricas operen directamente dentro del motor de base de datos y puedan ser auditadas por el docente sin depender de hojas de c\'alculo o c\'alculos externos.
 
 \scriptsize
-\begin{longtable}{|P{5.5cm}|P{5.1cm}|P{2.7cm}|}
+\begin{longtable}{|P{2.5cm}|P{3.5cm}|P{3.2cm}|P{3.3cm}|P{2.5cm}|}
 \hline
 \rowcolor{gray!25}
-\textbf{Vista KPI} & \textbf{Objetivo} & \textbf{Filas devueltas} \\ \hline
+\textbf{KPI definido} & \textbf{Vista SQL} & \textbf{F\'ormula SQL resumida} & \textbf{Resultado real obtenido} & \textbf{Benchmark sem\'antico / interpretaci\'on} \\ \hline
 \endfirsthead
 \hline
 \rowcolor{gray!25}
-\textbf{Vista KPI} & \textbf{Objetivo} & \textbf{Filas devueltas} \\ \hline
+\textbf{KPI definido} & \textbf{Vista SQL} & \textbf{F\'ormula SQL resumida} & \textbf{Resultado real obtenido} & \textbf{Benchmark sem\'antico / interpretaci\'on} \\ \hline
 \endhead
-\pathcode{gold.vw_kpi_adopcion_por_agente} & Medir adopci\'on por agente. & 8 \\ \hline
-\pathcode{gold.vw_kpi_participacion_por_fuente} & Medir participaci\'on de cada fuente. & 9 \\ \hline
-\pathcode{gold.vw_kpi_tendencia_mensual} & Analizar evoluci\'on mensual. & 38 \\ \hline
-\pathcode{gold.vw_kpi_ranking_agentes} & Ordenar agentes por relevancia. & 8 \\ \hline
-\pathcode{gold.vw_kpi_popularidad_open_source} & Evaluar popularidad t\'ecnica open source. & 24 \\ \hline
-\pathcode{gold.vw_kpi_crecimiento_mensual} & Medir crecimiento mensual. & 38 \\ \hline
-\pathcode{gold.vw_kpi_distribucion_por_plataforma} & Analizar distribuci\'on por plataforma. & 10 \\ \hline
+Adopci\'on por agente & \pathcode{gold.vw_kpi_adopcion_por_agente} & \texttt{SUM(score\_adopcion)} \newline \texttt{GROUP BY agente} & OpenAI Codex: 84,702 hechos, score 9,035.0600 & L\'ider del mercado en adopci\'on t\'ecnica \\ \hline
+Participaci\'on porcentual por fuente & \pathcode{gold.vw_kpi_participacion_por_fuente} & \texttt{COUNT / SUM(COUNT)} \newline \texttt{OVER ()} & Fuente \pathcode{catalogo}: \newline 98.11\% & Alta concentraci\'on en cat\'alogos \\ \hline
+Tendencia mensual de adopci\'on & \pathcode{gold.vw_kpi_tendencia_mensual} & \texttt{COUNT(hecho\_id)} \newline \texttt{GROUP BY anio, mes} & Julio de 2025: 54,208 observaciones & Pico temporal de registros \\ \hline
+Ranking de agentes & \pathcode{gold.vw_kpi_ranking_agentes} & \texttt{DENSE\_RANK() OVER} \newline \texttt{(ORDER BY score DESC)} & OpenAI Codex ocupa el Rank 1 seg\'un el score de adopci\'on acumulado. & Liderazgo t\'ecnico frente al resto de agentes evaluados. \\ \hline
+Popularidad open source & \pathcode{gold.vw_kpi_popularidad_open_source} & \texttt{SUM(interacciones)} \newline \texttt{filtrado por fuente GitHub} & Otro Agente IA registra la mayor popularidad open source, con un score de 5,457,501.0000, seg\'un la vista \pathcode{gold.vw_kpi_popularidad_open_source}. & Permite identificar agentes con mayor presencia en repositorios y se\~nales t\'ecnicas abiertas. \\ \hline
+Crecimiento mensual & \pathcode{gold.vw_kpi_crecimiento_mensual} & \texttt{LAG(metric) OVER} \newline \texttt{(ORDER BY mes)} & El mayor crecimiento mensual se registra en Junio de 2025, con una variaci\'on de 44,606 respecto al mes anterior, seg\'un la vista \pathcode{gold.vw_kpi_crecimiento_mensual}. & Permite detectar variaciones mensuales, picos y periodos de mayor actividad. \\ \hline
+Distribuci\'on por plataforma & \pathcode{gold.vw_kpi_distribucion_por_plataforma} & \texttt{COUNT(hecho\_id)} \newline \texttt{GROUP BY plataforma} & \pathcode{aidedev_ai_coding}: \newline 98.11\% & Plataformas de cat\'alogo lideran la evidencia \\ \hline
 \caption{Framework de KPIs implementados como vistas SQL}
 \end{longtable}
 \normalsize
@@ -356,7 +460,7 @@ El Data Warehouse Gold consolid\'o \textbf{120,846} hechos anal\'iticos, proveni
 
 La fuente \textbf{catalogo} aporta \textbf{118,562} hechos, equivalentes al \textbf{98.11\%} del total de registros en Gold. La segunda fuente es \textbf{google\_trends}, con \textbf{1,431} registros y \textbf{1.18\%}. La fuente propia \textbf{fuente\_propia} aporta \textbf{12} respuestas reales de Google Forms, equivalentes al \textbf{0.01\%}.
 
-\textbf{Interpretaci\'on anal\'itica:} el Data Warehouse est\'a fuertemente concentrado en el dataset estructurado de cat\'alogo/AIDev. Aunque existen fuentes web y API, su peso relativo es menor dentro del total consolidado.
+\textbf{Interpretaci\'on anal\'itica:} el Data Warehouse est\'a fuertemente concentrado en el dataset estructurado de cat\'alogo/AIDev. Aunque existen fuentes web y API, su peso relativo es menor dentro del total consolidado. Por tanto, las conclusiones del proyecto deben interpretarse principalmente como una lectura de actividad t\'ecnica estructurada, complementada por se\~nales web y encuesta propia.
 
 \textbf{Relaci\'on con la pregunta de investigaci\'on:} responde la pregunta sobre qu\'e fuentes digitales evidencian mayor actividad sobre agentes de IA.
 
@@ -406,20 +510,20 @@ La categor\'ia \textbf{actividad\_tecnica} concentra \textbf{119,122} hechos, eq
 Esta secci\'on contrasta las hip\'otesis o expectativas iniciales planteadas en el Entregable 1 con los resultados reales obtenidos desde el Data Warehouse Gold. La comparaci\'on se basa en evidencia SQL y no en percepciones.
 
 \scriptsize
-\begin{longtable}{|P{4.1cm}|P{4.9cm}|P{2.4cm}|P{2.6cm}|}
+\begin{longtable}{|P{3cm}|P{3.5cm}|P{3.5cm}|P{1.5cm}|P{3.5cm}|}
 \hline
 \rowcolor{gray!25}
-\textbf{Expectativa / Hip\'otesis del E1} & \textbf{Resultado real del DW} & \textbf{Estado} & \textbf{Evidencia} \\ \hline
+\textbf{Dimensi\'on o Variable} & \textbf{Expectativa Te\'orica E1} & \textbf{M\'etrica Real del DW E4} & \textbf{Estado} & \textbf{Explicaci\'on Anal\'itica de la Desviaci\'on} \\ \hline
 \endfirsthead
 \hline
 \rowcolor{gray!25}
-\textbf{Expectativa / Hip\'otesis del E1} & \textbf{Resultado real del DW} & \textbf{Estado} & \textbf{Evidencia} \\ \hline
+\textbf{Dimensi\'on o Variable} & \textbf{Expectativa Te\'orica E1} & \textbf{M\'etrica Real del DW E4} & \textbf{Estado} & \textbf{Explicaci\'on Anal\'itica de la Desviaci\'on} \\ \hline
 \endhead
-Mayor adopci\'on de determinados agentes de IA. & OpenAI Codex lidera con 84,702 hechos y 70.09\% de participaci\'on. & Confirmada & Hallazgo 2. \\ \hline
-Mayor actividad en fuentes t\'ecnicas abiertas. & La fuente catalogo concentra 118,562 hechos, equivalentes al 98.11\%. & Matizada & Hallazgo 3. \\ \hline
-Crecimiento progresivo de adopci\'on durante 2023--2026. & Julio de 2025 registra el pico mensual con 54,208 observaciones. & Matizada & Hallazgo 4. \\ \hline
-Concentraci\'on de conversaci\'on en comunidades espec\'ificas. & La plataforma aidedev\_ai\_coding concentra 118,557 observaciones y 98.11\%. & Matizada & Hallazgo 5. \\ \hline
-Asociaci\'on de agentes con categor\'ias t\'ecnicas espec\'ificas. & La categor\'ia actividad\_tecnica concentra 119,122 hechos y 98.58\%. & Confirmada & Hallazgo 6. \\ \hline
+Adopci\'on de Agentes & Mayor adopci\'on de determinados agentes de IA. & OpenAI Codex lidera con 84,702 hechos y 70.09\%. & Confirmada & Comportamiento esperado. Un l\'ider claro en el mercado. \\ \hline
+Fuentes de Actividad & Mayor actividad en fuentes t\'ecnicas abiertas. & Cat\'alogo concentra 118,562 hechos y 98.11\%. & Matizada & Las fuentes t\'ecnicas estructuradas dominan en volumen frente a comunidades. \\ \hline
+Evoluci\'on Temporal & Crecimiento progresivo de adopci\'on 2023--2026. & Julio 2025 registra un pico de 54,208 observaciones. & Matizada & El crecimiento no es lineal; existen picos pronunciados. \\ \hline
+Rol de las Comunidades & Concentraci\'on de conversaci\'on en comunidades espec\'ificas. & \texttt{aidedev\_ai\_coding} concentra 118,557 observaciones y 98.11\%. & Matizada & Los datasets estructurados tienen m\'as peso que las comunidades abiertas individuales. \\ \hline
+Categor\'ias Tecnol\'ogicas & Asociaci\'on de agentes con categor\'ias t\'ecnicas espec\'ificas. & La categor\'ia \texttt{actividad\_tecnica} concentra 119,122 hechos y 98.57\%. & Confirmada & Confirmaci\'on del uso pr\'actico sobre la mera discusi\'on. \\ \hline
 \caption{Comparaci\'on entre expectativas iniciales y resultados del Data Warehouse}
 \end{longtable}
 \normalsize
@@ -449,6 +553,8 @@ Vistas KPI con resultados & 7 vistas & Todas devuelven filas en la validaci\'on 
 \end{tabular}
 \caption{Controles de validaci\'on t\'ecnica del Data Warehouse}
 \end{table}
+
+Esto demuestra integridad referencial, trazabilidad y consistencia de carga en el modelo dimensional implementado.
 
 % ==========================================================
 \section{Conclusiones}
@@ -486,10 +592,7 @@ Generaci\'on del dump del esquema Gold (comando de referencia):
 \begingroup
 \footnotesize
 \begin{verbatim}
-docker exec -t observatorio_db pg_dump `
-  -U postgres `
-  -d observatorio_ia `
-  --schema=gold > dump_gold_entregable4.sql
+docker exec -t observatorio_db pg_dump -U postgres -d observatorio_ia --schema=gold > dump_gold_entregable4.sql
 \end{verbatim}
 \endgroup
 
@@ -498,9 +601,7 @@ Restauraci\'on del dump:
 \begingroup
 \footnotesize
 \begin{verbatim}
-psql -U postgres `
-  -d observatorio_ia `
-  -f dump_gold_entregable4.sql
+psql -U postgres -d observatorio_ia -f dump_gold_entregable4.sql
 \end{verbatim}
 \endgroup
 
