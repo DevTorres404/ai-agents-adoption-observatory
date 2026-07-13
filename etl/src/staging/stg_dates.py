@@ -10,37 +10,34 @@ def parse_dates(df):
         df['fecha_evento'] = pd.Timestamp.today().strftime('%Y-%m-%d')
         return df
 
+    # Motivo: Inicialmente todas las fechas se asumen reales.
+    df['is_imputed_date'] = False
+
     # Motivo: Pandas homologa fechas ISO, timestamps web y fechas de encuesta sin parsers por fuente.
     parsed_dates = pd.to_datetime(df['fecha_evento_raw'], errors='coerce', utc=True)
 
-    import numpy as np
-
-    # Motivo: El dataset del catalogo (AIDev) agrupa miles de interacciones en la fecha de 'last_activity',
-    # creando un pico masivo artificial en la fecha de extraccion (Julio 2025).
-    # Para distribuir este peso de forma realista, aleatorizamos sus fechas.
+    # Motivo: El dataset del catalogo (AIDev) agrupa miles de interacciones en la fecha de 'last_activity'.
+    # Científicamente no se debe inventar la cronología. Registramos la fecha de extracción actual
+    # y marcamos is_imputed_date = True para no falsear datos históricos.
     if 'fuente' in df.columns:
         mask_catalog = df['fuente'] == 'catalogo'
         if mask_catalog.any():
-            start_ts = pd.to_datetime('2023-01-01', utc=True).value // 10**9
-            end_ts = pd.Timestamp.today(tz='UTC').value // 10**9
-            random_ts = np.random.randint(start_ts, end_ts, size=mask_catalog.sum())
-            random_dates = pd.to_datetime(random_ts, unit='s', utc=True)
-            parsed_dates.loc[mask_catalog] = random_dates
+            parsed_dates.loc[mask_catalog] = pd.Timestamp.today(tz='UTC')
+            df.loc[mask_catalog, 'is_imputed_date'] = True
 
-    # Motivo: Para evitar picos por fechas vacias, 
-    # los valores NaT se distribuyen aleatoriamente entre 2023-01-01 y hoy.
+    # Motivo: Para fechas nulas en cualquier otra fuente, imputamos a hoy pero 
+    # dejamos la huella de auditoría explícita.
     mask_nat = parsed_dates.isna()
     if mask_nat.any():
-        start_ts = pd.to_datetime('2023-01-01', utc=True).value // 10**9
-        end_ts = pd.Timestamp.today(tz='UTC').value // 10**9
-        random_ts = np.random.randint(start_ts, end_ts, size=mask_nat.sum())
-        random_dates = pd.to_datetime(random_ts, unit='s', utc=True)
-        parsed_dates.loc[mask_nat] = random_dates
+        parsed_dates.loc[mask_nat] = pd.Timestamp.today(tz='UTC')
+        df.loc[mask_nat, 'is_imputed_date'] = True
 
     # Motivo: el Data Warehouse requiere granularidad diaria, no hora/minuto/segundo.
     df['fecha_evento'] = parsed_dates.dt.strftime('%Y-%m-%d')
 
     # Motivo: el estudio analiza adopcion reciente de agentes IA en el periodo academico definido.
+    # Nota: Filtramos descartando fechas antiguas, pero conservamos las imputadas (que son = hoy) 
+    # si 'hoy' <= 2026-12-31.
     df = df[(df['fecha_evento'] >= '2023-01-01') & (df['fecha_evento'] <= '2026-12-31')]
     df = df.reset_index(drop=True)
 

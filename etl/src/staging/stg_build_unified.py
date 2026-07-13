@@ -106,7 +106,8 @@ def run_staging_pipeline():
             'stars_github', 'forks_github', 'issues_abiertos', 'releases',
             'indice_adopcion', 'indice_innovacion', 'sentimiento_promedio',
             'llm_entorno_uso', 'llm_tipo_integracion', 'llm_categoria_tecnologia',
-            'llm_capacidades', 'llm_comunidad_tipo', 'llm_confianza', 'raw_file_id'
+            'llm_capacidades', 'llm_comunidad_tipo', 'llm_confianza', 'raw_file_id',
+            'is_imputed_date'
         ]
         
         # Motivo: se ajustan nulos y caracteres no validos para que PostgreSQL reciba un dataset tabular consistente.
@@ -134,7 +135,7 @@ def run_staging_pipeline():
                 INSERT INTO staging.stg_actividad_agente_ia
                 ({','.join(contrato_columnas)})
                 VALUES (:{',:'.join(contrato_columnas)})
-                ON CONFLICT (fuente, plataforma, id_origen_registro, nombre_agente, fecha_evento) DO NOTHING
+                ON CONFLICT (fuente, plataforma, id_origen_registro, nombre_agente) DO NOTHING
             """)
             
             records_to_insert = df_final.to_dict(orient='records')

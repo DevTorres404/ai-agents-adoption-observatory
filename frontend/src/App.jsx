@@ -231,7 +231,7 @@ function App() {
         {data && activeTab === 'ejecutivo' && (
           <>
             <div className="grid-cards">
-              <KPICard title="Total Menciones Globales" value={data.ranking?.reduce((sum, item) => sum + (item.menciones || 0), 0).toLocaleString() || 0} subtext="Impacto total en todas las fuentes" icon={TrendingUp} color="var(--mentions)" />
+              <KPICard title="Total Menciones Globales" value={data.ranking?.reduce((sum, item) => sum + (item.total_menciones || 0), 0).toLocaleString() || 0} subtext="Impacto total en todas las fuentes" icon={TrendingUp} color="var(--mentions)" />
               <KPICard title="Líder Absoluto" value={topAgente.nombre_agente} subtext={`Score Adopción: ${topAgente.adopcion?.toLocaleString()}`} icon={Activity} color="var(--primary)" />
               <KPICard title="Innovador Destacado" value={data.ranking ? [...data.ranking].sort((a,b) => (b.innovacion||0) - (a.innovacion||0))[0]?.nombre_agente || '-' : '-'} subtext="Mayor puntaje de innovación" icon={Cpu} color="var(--accent)" />
             </div>

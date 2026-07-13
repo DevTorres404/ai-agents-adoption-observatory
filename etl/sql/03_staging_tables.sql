@@ -30,7 +30,8 @@ CREATE TABLE staging.stg_actividad_agente_ia (
     llm_capacidades TEXT,
     llm_comunidad_tipo VARCHAR(100),
     llm_confianza NUMERIC(3,2),
+    is_imputed_date BOOLEAN DEFAULT FALSE,
     fecha_carga TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     raw_file_id INTEGER REFERENCES raw.raw_files(id),
-    UNIQUE(fuente, plataforma, id_origen_registro, nombre_agente, fecha_evento)
+    UNIQUE(fuente, plataforma, id_origen_registro, nombre_agente)
 );
