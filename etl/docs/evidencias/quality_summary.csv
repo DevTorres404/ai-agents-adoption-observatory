@@ -1,0 +1,2 @@
+total_raw_records,total_staging_records,completion_rate,total_duplicates_removed,total_nulls_removed,overall_error_rate
+399900,356945,89.26,24557,0,10.74

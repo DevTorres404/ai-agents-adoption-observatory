@@ -1,0 +1,781 @@
+% ==============================================================
+% PARTE B - REPORTE DE INVESTIGACION
+% Universidad Estatal Peninsula de Santa Elena (UPSE)
+% Archivo autocontenido: bibliografia IEEE incluida al final.
+% Fecha de corte de la auditoria tecnica: 13 de julio de 2026.
+% ==============================================================
+
+\documentclass[12pt,a4paper]{article}
+
+% --------------------------------------------------------------
+% Paquetes
+% --------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm]{geometry}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{caption}
+\usepackage{url}
+\usepackage{xurl}
+\usepackage{hyperref}
+
+% --------------------------------------------------------------
+% Identidad visual compatible con los entregables UPSE previos
+% --------------------------------------------------------------
+\definecolor{primarygray}{gray}{0.35}
+\definecolor{lightgray}{gray}{0.93}
+\definecolor{darkblue}{RGB}{25,55,90}
+
+\titleformat{\section}
+  {\color{primarygray}\Large\bfseries}
+  {\thesection.}{0.5em}{}
+\titleformat{\subsection}
+  {\color{primarygray}\large\bfseries}
+  {\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}
+  {\color{darkblue}\normalsize\bfseries}
+  {\thesubsubsection.}{0.5em}{}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=darkblue,
+  urlcolor=darkblue,
+  citecolor=darkblue,
+  pdftitle={Parte B - Reporte de Investigación: Observatorio de adopción de agentes de IA},
+  pdfauthor={Damian Jesús Torres Cadena; Melanie Adriana Tomalá Merejildo; Jean Pierre Cedeño Andrade}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small UPSE -- Inteligencia de Negocios}
+\fancyhead[R]{\small Parte B: Reporte de Investigación}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14.5pt}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\renewcommand{\arraystretch}{1.20}
+\setlength{\tabcolsep}{4pt}
+\captionsetup{font=small,labelfont=bf}
+
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\pathcode}[1]{\begingroup\small\ttfamily\nolinkurl{#1}\endgroup}
+\newcommand{\ProjectTitle}{Observatorio de adopción de agentes de inteligencia artificial en el desarrollo de software: arquitectura Medallion, KPIs y evaluación crítica de validez}
+
+\begin{document}
+
+% ==============================================================
+% 1. PORTADA OFICIAL UPSE
+% ==============================================================
+\begin{titlepage}
+\centering
+\vspace*{0.15cm}
+
+\IfFileExists{upse.jpg}{
+  \includegraphics[width=3.8cm]{upse.jpg}\\[0.25cm]
+}{
+  {\Large\bfseries UPSE}\\[0.25cm]
+}
+
+{\large\bfseries\textcolor{primarygray}{UNIVERSIDAD ESTATAL PENÍNSULA DE SANTA ELENA}}\\[0.20cm]
+{\normalsize\bfseries Carrera de Ingeniería de Software}\\[0.05cm]
+{\normalsize Sexto Semestre}\\[0.60cm]
+
+{\normalsize\bfseries VI Inteligencia de Negocios}\\[0.35cm]
+{\Large\bfseries\textcolor{primarygray}{PARTE B}}\\[0.10cm]
+{\Large\bfseries\textcolor{primarygray}{REPORTE DE INVESTIGACIÓN}}\\[0.30cm]
+{\normalsize Documento técnico en formato de artículo científico}\\[0.65cm]
+
+{\normalsize\bfseries Título del artículo}\\[0.20cm]
+\begin{minipage}{0.92\textwidth}
+\centering
+\large\bfseries
+\ProjectTitle
+\end{minipage}
+
+\vspace{0.55cm}
+{\normalsize\bfseries Proyecto de BI}\\[0.15cm]
+\begin{minipage}{0.90\textwidth}
+\centering
+Plataforma de Inteligencia de Negocios para el análisis de tendencias, adopción y evolución de agentes de inteligencia artificial en el dominio del desarrollo de software durante el período 2023--2026
+\end{minipage}
+
+\vspace{0.45cm}
+{\bfseries Autores}\\[0.15cm]
+Damian Jesús Torres Cadena\\
+Melanie Adriana Tomalá Merejildo\\
+Jean Pierre Cedeño Andrade\\[0.35cm]
+
+{\bfseries Docente}\\[0.12cm]
+Ing. Anthony Pachay\\[0.35cm]
+
+{\bfseries Período académico}\\
+2026--1\\[0.25cm]
+
+La Libertad, Santa Elena -- Ecuador\\
+Julio de 2026
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ==============================================================
+% 2. ABSTRACT (150-200 palabras)
+% ==============================================================
+\begin{abstract}
+Este estudio presenta el diseño, implementación y auditoría crítica de un observatorio de inteligencia de negocios orientado a medir señales de adopción de agentes de inteligencia artificial en el desarrollo de software entre 2023 y julio de 2026. Se integraron diez fuentes heterogéneas mediante una arquitectura Medallion con capas Raw, Staging y Gold, PostgreSQL 16, procesos ETL en Python, una API FastAPI y un tablero React. La lectura operativa del Data Warehouse registró 356.945 hechos, 14 agentes, 2.714.357 menciones y 5.485.179 interacciones. Sin embargo, una prueba de robustez por clave estable redujo el universo a 127.756 observaciones únicas, revelando un factor de inflación de 2,794 asociado a instantáneas repetidas y fechas aleatorizadas. En el conjunto robusto, Codex concentró el 66,99\% de observaciones y el catálogo AIDev el 89,11\% de la evidencia. La calidad reportada fue 89,26\% de completitud, sin nulos críticos. Se concluye que la plataforma es funcional para BI descriptivo y trazabilidad técnica, pero sus tendencias temporales y totales acumulados no deben interpretarse como inferencia poblacional hasta corregir la identidad de registros, preservar las fechas originales y equilibrar las fuentes.
+\end{abstract}
+
+\textbf{Palabras clave:} inteligencia de negocios, agentes de IA, arquitectura Medallion, Data Warehouse, calidad de datos, adopción tecnológica, ingeniería de software.
+
+% ==============================================================
+% 3. INTRODUCCION Y JUSTIFICACION
+% ==============================================================
+\section{Introducción y justificación}
+
+Los agentes de inteligencia artificial para programación han evolucionado desde asistentes de autocompletado hacia sistemas capaces de proponer cambios, ejecutar tareas y participar en flujos de desarrollo. El conjunto AIDev documenta esta transición mediante actividad real de agentes en GitHub y ofrece una base empírica para estudiar adopción, colaboración y calidad en ingeniería de software \cite{aidev_dataset,aidev_paper}. A su vez, la evidencia experimental indica que un asistente de programación puede reducir el tiempo de una tarea controlada, aunque ese resultado no equivale automáticamente a productividad sostenida en proyectos reales \cite{peng_copilot,stray_copilot}.
+
+El problema de investigación surge porque la adopción de estas herramientas deja señales dispersas y semánticamente distintas: repositorios, pull requests, búsquedas, publicaciones, noticias, conversaciones comunitarias y respuestas de encuesta. Contar registros sin conservar su procedencia o sin distinguir su unidad de análisis puede convertir volumen de datos en una falsa apariencia de evidencia. Por ello, el proyecto desarrolla una plataforma de BI que integra fuentes heterogéneas, conserva Raw como evidencia, normaliza un contrato analítico, materializa un esquema dimensional y publica KPIs auditables.
+
+La justificación científica es doble. Primero, el observatorio permite estudiar un fenómeno reciente con un proceso reproducible y trazable. Segundo, obliga a evaluar la validez de los indicadores: una mención, una estrella, un pull request o una respuesta de encuesta representan constructos diferentes y no deben tratarse como equivalentes directos de uso efectivo. Esta distinción es coherente con estudios longitudinales que advierten que la actividad observable y la productividad percibida pueden divergir \cite{stray_copilot}.
+
+\subsection{Objetivo general}
+
+Diseñar y evaluar una plataforma de inteligencia de negocios capaz de integrar, depurar y analizar señales heterogéneas sobre adopción de agentes de IA en el desarrollo de software, determinando tanto sus principales KPIs como los límites metodológicos que condicionan su interpretación.
+
+\subsection{Objetivos específicos}
+
+\begin{enumerate}[leftmargin=1.1cm]
+  \item Implementar un pipeline Medallion con trazabilidad desde Raw hasta Gold.
+  \item Construir un modelo dimensional y vistas SQL para adopción, actividad, popularidad, fuentes, plataformas y evolución temporal.
+  \item Verificar completitud, nulos, duplicados, integridad referencial y consistencia del grano analítico.
+  \item Comparar los KPIs operativos con una lectura robusta que elimine repeticiones entre instantáneas.
+  \item Identificar amenazas de validez y proponer una ruta de mejora para una futura publicación científica.
+\end{enumerate}
+
+\subsection{Preguntas de investigación}
+
+\begin{itemize}[leftmargin=1.0cm]
+  \item \textbf{PI1:} ¿Qué nivel de actividad y adopción observable presentan los agentes de IA dentro de las fuentes integradas?
+  \item \textbf{PI2:} ¿Qué agentes, fuentes y plataformas concentran la evidencia disponible?
+  \item \textbf{PI3:} ¿En qué medida las reglas de integración, deduplicación y fecha alteran los KPIs resultantes?
+  \item \textbf{PI4:} ¿Qué condiciones deben cumplirse para transformar el observatorio operativo en un estudio publicable y reproducible?
+\end{itemize}
+
+% ==============================================================
+% 4. MARCO TEORICO (4+ SUBTEMAS)
+% ==============================================================
+\section{Marco teórico}
+
+\subsection{Agentes de IA aplicados al desarrollo de software}
+
+Un agente de programación puede entenderse operacionalmente como una herramienta que, además de generar código, actúa sobre un entorno de desarrollo y produce artefactos verificables. AIDev caracteriza pull requests atribuidos a agentes en proyectos reales y muestra que el fenómeno ya puede estudiarse a escala de repositorios \cite{aidev_paper}. En este proyecto, la adopción no se equipara a una sola variable: se aproxima mediante actividad técnica, menciones, interacciones, popularidad, señales de encuesta y un índice normalizado por fuente.
+
+La literatura también obliga a separar tres conceptos: \emph{presencia} de la herramienta, \emph{uso} durante una tarea y \emph{impacto} sobre productividad o calidad. El experimento de Peng \emph{et al.} encontró una reducción del 55,8\% en el tiempo de una tarea controlada con Copilot \cite{peng_copilot}; en cambio, un estudio longitudinal posterior no halló cambios estadísticamente significativos en actividad de commits después de la adopción \cite{stray_copilot}. En consecuencia, los KPIs de este observatorio son descriptivos y no causales.
+
+\subsection{Inteligencia de negocios y modelado dimensional}
+
+La inteligencia de negocios transforma datos integrados en estructuras que facilitan análisis, comparación y toma de decisiones. El modelado dimensional organiza los hechos cuantitativos alrededor de dimensiones descriptivas; su diseño exige seleccionar el proceso, declarar el grano, identificar dimensiones y determinar hechos \cite{kimball_book,kimball_process}.
+
+El modelo del proyecto adopta un esquema estrella con una tabla de hechos de actividad y seis dimensiones: tiempo, agente, fuente, plataforma, tecnología y comunidad. El grano declarado es una actividad observada para un agente, fuente, plataforma, categoría y fecha. Las claves primarias, foráneas, restricciones de no negatividad y unicidad implementadas en PostgreSQL aportan integridad estructural \cite{postgres_constraints}.
+
+\subsection{Arquitectura Medallion y procesos ETL}
+
+La arquitectura Medallion organiza el ciclo de datos en capas que incrementan progresivamente su estructura y calidad: Bronze conserva datos crudos, Silver limpia y valida, y Gold presenta datos enriquecidos para análisis \cite{databricks_medallion}. En el proyecto, estas capas se materializan como esquemas PostgreSQL y archivos de evidencia:
+
+\begin{center}
+\small
+\setlength{\fboxsep}{8pt}
+\fbox{Fuentes heterogéneas}
+$\rightarrow$
+\fbox{Raw/Bronze}
+$\rightarrow$
+\fbox{Staging/Silver}
+$\rightarrow$
+\fbox{Gold/DW}
+$\rightarrow$
+\fbox{API y dashboard}
+\end{center}
+
+Esta separación permite reconstruir capas posteriores sin alterar la evidencia original. No obstante, la reproducibilidad depende de que las transformaciones sean deterministas y de que una misma entidad conserve una identidad estable entre ejecuciones.
+
+\subsection{Calidad, procedencia y reproducibilidad de datos}
+
+ISO/IEC 25012 define un modelo general para establecer requisitos y evaluar calidad de datos estructurados \cite{iso25012}. El proyecto operacionaliza este principio mediante completitud, nulos críticos, conversiones, duplicados, conflictos de clave e integridad referencial. La procedencia se conserva con \pathcode{raw_file_id}, inventarios, hashes SHA-256, fechas de carga y bitácoras de ejecución.
+
+Los principios FAIR recomiendan que datos, algoritmos y flujos sean localizables, accesibles, interoperables y reutilizables \cite{fair}. A su vez, W3C PROV ofrece un marco conceptual para describir entidades, actividades y agentes involucrados en la generación de datos \cite{prov}. Aunque el repositorio contiene trazas útiles, una publicación científica requeriría versionar explícitamente cada instantánea analítica, sus parámetros y la consulta exacta que genera cada tabla del artículo.
+
+\subsection{KPIs, validez de constructo y concentración de fuentes}
+
+Un KPI es válido cuando su fórmula y unidad de análisis representan el constructo que se desea estudiar. En este proyecto, \emph{score de adopción} es un indicador operacional derivado de cada fuente; no es una tasa poblacional de adopción. Para examinar la dependencia respecto de un origen se utiliza también un índice de concentración:
+
+\begin{equation}
+H = \sum_{s=1}^{S} p_s^2,
+\end{equation}
+
+donde $p_s$ es la proporción de observaciones atribuida a la fuente $s$. Valores próximos a uno indican que la evidencia está dominada por pocas fuentes. Este índice se emplea de forma descriptiva, sin trasladar umbrales regulatorios de concentración de mercado.
+
+% ==============================================================
+% 5. METODOLOGIA E INFRAESTRUCTURA
+% ==============================================================
+\section{Metodología e infraestructura}
+
+\subsection{Diseño del estudio y alcance}
+
+Se realizó un estudio observacional, retrospectivo, descriptivo y exploratorio apoyado en ingeniería de datos. La ventana configurada fue del 1 de enero de 2023 al 13 de julio de 2026. La fecha final corresponde al corte de auditoría y el mes de julio de 2026 es parcial. La unidad técnica de la tabla de hechos es una observación asociada a agente, fuente, plataforma, tecnología, comunidad, identificador de origen y fecha.
+
+No se realizó muestreo probabilístico de desarrolladores ni inferencia causal. Los resultados describen exclusivamente el corpus integrado por el pipeline.
+
+\subsection{Fuentes de datos}
+
+\begin{table}[H]
+\centering
+\small
+\rowcolors{2}{gray!8}{white}
+\begin{tabularx}{\textwidth}{P{2.9cm} P{2.5cm} Y Y}
+\toprule
+\rowcolor{gray!22}
+\textbf{Fuente} & \textbf{Mecanismo} & \textbf{Señal principal} & \textbf{Riesgo dominante} \\
+\midrule
+AIDev & Parquet/Zenodo & Pull requests, repositorios y agentes & Sobrerrepresentación y repetición de instantáneas \\
+GitHub & API REST & Repositorios, estrellas, forks e incidencias & Límite de búsqueda y ambigüedad de palabras clave \\
+Google Trends & \pathcode{pytrends} & Interés relativo de búsqueda & Rate limits y escala relativa \\
+Stack Overflow & Stack Exchange API & Preguntas asociadas a términos de agentes & Cobertura y falsos positivos semánticos \\
+arXiv & API pública & Publicaciones académicas & Mención no equivalente a adopción \\
+Google News & RSS & Cobertura informativa & Duplicación editorial y ruido \\
+Reddit & Playwright & Conversación comunitaria & Sesgo de plataforma y cambios HTML \\
+Hacker News & Extracción web & Puntos y comentarios & Muestra pequeña \\
+Dev.to & API/extracción & Artículos y reacciones & Variación de estructura y relevancia \\
+Encuesta UPSE & Google Forms/JSON & Adopción declarada & Muestra de conveniencia reducida \\
+\bottomrule
+\end{tabularx}
+\caption{Fuentes y naturaleza de las señales integradas.}
+\label{tab:fuentes}
+\end{table}
+
+El dataset principal AIDev corresponde a la versión 2 publicada en Zenodo por Li, Zhang y Hassan \cite{aidev_dataset}. El repositorio descarga y transforma los archivos Parquet a JSON analítico sin modificar los archivos fuente. Para Stack Overflow se utiliza la API Stack Exchange v2.3 y su mecanismo de búsqueda documentado \cite{stackexchange_api}.
+
+\subsection{Proceso de extracción, transformación y carga}
+
+El procedimiento auditado consta de seis fases:
+
+\begin{enumerate}[leftmargin=1.1cm]
+  \item \textbf{Extracción:} ejecución independiente por fuente, captura de estado, cantidad, código HTTP, ruta y observaciones.
+  \item \textbf{Raw/Bronze:} persistencia en JSON y en \pathcode{raw.raw_files}/\pathcode{raw.raw_records} con hash y metadatos.
+  \item \textbf{Normalización:} homologación de columnas, conversiones numéricas, limpieza de caracteres y tipado de fechas.
+  \item \textbf{Homologación:} clasificación por expresiones regulares de 14 agentes autorizados y exclusión de registros no identificados.
+  \item \textbf{Calidad y Silver:} deduplicación, matrices de nulos, casting, reglas de categorías y exportación de evidencias CSV.
+  \item \textbf{Gold y servicio:} carga de dimensiones/hechos, siete vistas KPI, API REST y dashboard interactivo.
+\end{enumerate}
+
+Para fuentes no estructuradas existe un enriquecimiento opcional con Llama 3.2 mediante Ollama. El modelo opera con temperatura cero, semilla 42, vocabularios cerrados y umbral de confianza de 0,85. Los atributos derivados alimentan dimensiones de plataforma, tecnología y comunidad.
+
+\subsection{Modelo dimensional}
+
+El Data Warehouse implementa el proceso de actividad de agentes con la siguiente estructura:
+
+\begin{table}[H]
+\centering
+\small
+\rowcolors{2}{gray!8}{white}
+\begin{tabularx}{\textwidth}{P{4.2cm} P{2.2cm} Y P{1.5cm}}
+\toprule
+\rowcolor{gray!22}
+\textbf{Objeto} & \textbf{Tipo} & \textbf{Propósito} & \textbf{Filas} \\
+\midrule
+\pathcode{gold.dim_tiempo} & Dimensión & Fecha, año, semestre, trimestre, mes, semana y día & 1.290 \\
+\pathcode{gold.dim_agente} & Dimensión & Identidad, proveedor, tipo y categoría del agente & 14 \\
+\pathcode{gold.dim_fuente} & Dimensión & Origen, tipo, categoría y condición de fuente propia & 10 \\
+\pathcode{gold.dim_plataforma} & Dimensión & Canal, tipo y ecosistema & 10 \\
+\pathcode{gold.dim_tecnologia} & Dimensión & Categoría, dominio y tipo de señal & 5 \\
+\pathcode{gold.dim_comunidad} & Dimensión & Comunidad, plataforma y región & 10 \\
+\pathcode{gold.fact_actividad_agente_ia} & Hechos & Métricas y claves de procedencia & 356.945 \\
+\bottomrule
+\end{tabularx}
+\caption{Modelo dimensional y conteos del corte auditado.}
+\label{tab:modelo}
+\end{table}
+
+\subsection{Definición de métricas y pruebas de robustez}
+
+La completitud se calculó como:
+
+\begin{equation}
+C = \frac{N_{Staging}}{N_{Raw}}\times 100,
+\qquad
+M = 100-C,
+\end{equation}
+
+donde $C$ es completitud y $M$ merma. La participación de una fuente o agente se define como:
+
+\begin{equation}
+P_g = \frac{N_g}{\sum_j N_j}\times 100.
+\end{equation}
+
+El \emph{score de actividad} implementado en SQL es:
+
+\begin{equation}
+S_{act}=I+Stars+Forks+Issues+Releases,
+\end{equation}
+
+donde $I$ corresponde a interacciones. El score de comunidad suma menciones e interacciones únicamente para Reddit, Hacker News, Dev.to o registros clasificados como comunidad.
+
+Para detectar repetición entre cargas se definió una clave de robustez independiente de la fecha:
+
+\begin{equation}
+K_r=(fuente,plataforma,agente,id\_origen),
+\qquad
+F=\frac{N_{Gold}}{N_{K_r}},
+\end{equation}
+
+donde $F$ es el factor de inflación por instantáneas repetidas. Esta prueba no sustituye una corrección del ETL; sirve para cuantificar la sensibilidad de los KPIs.
+
+\subsection{Infraestructura tecnológica}
+
+\begin{table}[H]
+\centering
+\small
+\rowcolors{2}{gray!8}{white}
+\begin{tabularx}{\textwidth}{P{3.2cm} P{3.5cm} Y}
+\toprule
+\rowcolor{gray!22}
+\textbf{Capa} & \textbf{Tecnología} & \textbf{Función} \\
+\midrule
+Orquestación & Docker Compose & Despliegue de PostgreSQL, ETL, API y frontend \\
+Datos & PostgreSQL 16 & Esquemas Raw, Staging, Audit y Gold \\
+ETL & Python, pandas, SQLAlchemy & Extracción, normalización, calidad y carga \\
+Extracción & requests, Playwright, pytrends & APIs, RSS y fuentes web \\
+Semántica & Ollama/Llama 3.2 & Enriquecimiento opcional de texto no estructurado \\
+Backend & FastAPI, asyncpg, Uvicorn & Endpoints asíncronos de KPIs y filtros \\
+Frontend & React, Vite, Recharts & Dashboard, gráficos, filtros y caché cliente \\
+Publicación & Nginx, Cloudflare Tunnel & Servicio web y proxy hacia la API \\
+\bottomrule
+\end{tabularx}
+\caption{Infraestructura del observatorio.}
+\end{table}
+
+% ==============================================================
+% 6. ANALISIS Y KPIS
+% ==============================================================
+\section{Análisis y KPIs obtenidos}
+
+\subsection{Estado operativo del Data Warehouse}
+
+La auditoría directa de PostgreSQL del 13 de julio de 2026 registró 399.900 filas Raw y 356.945 hechos Gold. Las seis claves foráneas de la tabla de hechos resultaron válidas, no se detectaron métricas negativas ni duplicados bajo el grano SQL vigente y las siete vistas KPI devolvieron resultados.
+
+\begin{table}[H]
+\centering
+\small
+\rowcolors{2}{gray!8}{white}
+\begin{tabularx}{\textwidth}{Y P{3.2cm} Y}
+\toprule
+\rowcolor{gray!22}
+\textbf{KPI operativo} & \textbf{Resultado} & \textbf{Interpretación permitida} \\
+\midrule
+Hechos Gold & 356.945 & Volumen materializado por el DW \\
+Agentes / fuentes / plataformas & 14 / 10 / 10 & Cobertura nominal del modelo \\
+Menciones & 2.714.357 & Suma de la variable homologada; depende de la fuente \\
+Interacciones & 5.485.179 & Suma de señales de interacción heterogéneas \\
+Score de adopción total & 29.958,79 & Indicador acumulado, sensible a duplicación \\
+Score de adopción promedio & 0,0839 & Promedio por hecho; no es porcentaje poblacional \\
+Período Gold & 2023-01-01 a 2026-07-13 & Ventana técnica, con julio de 2026 incompleto \\
+\bottomrule
+\end{tabularx}
+\caption{Resumen operacional del Gold activo.}
+\label{tab:operativos}
+\end{table}
+
+\subsection{Robustez frente a instantáneas repetidas}
+
+La deduplicación adicional por $K_r$ redujo los 356.945 hechos a 127.756 observaciones únicas y produjo $F=2,794$. Es decir, el volumen Gold es 2,794 veces el volumen obtenido cuando se conserva una sola representación de cada entidad estable. En el catálogo AIDev el factor fue 2,997, consistente con tres cargas históricas del mismo dataset cuyos registros recibieron fechas distintas.
+
+\begin{table}[H]
+\centering
+\small
+\rowcolors{2}{gray!8}{white}
+\begin{tabularx}{\textwidth}{P{3.2cm} P{2.2cm} P{2.2cm} P{2.0cm} Y}
+\toprule
+\rowcolor{gray!22}
+\textbf{Métrica} & \textbf{Gold operativo} & \textbf{Lectura robusta} & \textbf{Razón} & \textbf{Efecto} \\
+\midrule
+Observaciones & 356.945 & 127.756 & 2,794 & Inflación global entre instantáneas \\
+Menciones & 2.714.357 & 909.707 & 2,984 & Totales dominados por catálogo repetido \\
+Interacciones & 5.485.179 & 1.908.504 & 2,874 & Sensibilidad alta a cargas sucesivas \\
+Adopción total & 29.958,79 & 9.993,99 & 2,998 & Suma no comparable sin deduplicación \\
+Adopción promedio & 0,0839 & 0,0782 & 1,073 & Menor sensibilidad que los totales \\
+\bottomrule
+\end{tabularx}
+\caption{Comparación entre KPIs operativos y lectura robusta.}
+\label{tab:robustez}
+\end{table}
+
+Por tanto, los conteos acumulados y scores totales deben publicarse con la clave de robustez o después de corregir el ETL. Los promedios son menos sensibles, pero permanecen afectados por la mezcla de escalas entre fuentes.
+
+\subsection{Adopción por agente en la lectura robusta}
+
+\begin{table}[H]
+\centering
+\small
+\rowcolors{2}{gray!8}{white}
+\begin{tabularx}{\textwidth}{P{3.0cm} P{2.0cm} P{1.8cm} P{2.2cm} P{2.2cm} Y}
+\toprule
+\rowcolor{gray!22}
+\textbf{Agente} & \textbf{Observaciones} & \textbf{Part.} & \textbf{Menciones} & \textbf{Interacciones} & \textbf{Adopción total} \\
+\midrule
+Codex & 85.585 & 66,99\% & 814.733 & 1.628.228 & 9.032,78 \\
+GitHub Copilot & 16.488 & 12,91\% & 51.241 & 103.717 & 544,97 \\
+Cursor & 15.136 & 11,85\% & 34.857 & 116.929 & 353,48 \\
+Claude Code & 4.043 & 3,16\% & 6.502 & 50.403 & 61,60 \\
+AWS Kiro & 989 & 0,77\% & 576 & 239 & 0,00 \\
+Aider & 739 & 0,58\% & 366 & 2.226 & 0,05 \\
+Cline & 717 & 0,56\% & 343 & 3.980 & 0,06 \\
+Resto de agentes & 4.059 & 3,18\% & 1.089 & 2.782 & 1,05 \\
+\bottomrule
+\end{tabularx}
+\caption{Principales agentes después de deduplicar entre instantáneas.}
+\label{tab:agentes}
+\end{table}
+
+Codex lidera el corpus robusto con 66,99\% de las observaciones y 90,38\% del score de adopción total robusto. Este hallazgo describe la composición del corpus; no demuestra que dos tercios de la población de desarrolladores use Codex.
+
+\subsection{Participación y concentración por fuente}
+
+\begin{table}[H]
+\centering
+\small
+\rowcolors{2}{gray!8}{white}
+\begin{tabularx}{\textwidth}{P{3.2cm} P{2.3cm} P{2.1cm} P{2.3cm} P{2.1cm} Y}
+\toprule
+\rowcolor{gray!22}
+\textbf{Fuente} & \textbf{Gold} & \textbf{Part. Gold} & \textbf{Únicos} & \textbf{Part. robusta} & \textbf{Factor} \\
+\midrule
+Catálogo AIDev & 341.241 & 95,60\% & 113.845 & 89,11\% & 2,997 \\
+GitHub & 6.299 & 1,76\% & 6.299 & 4,93\% & 1,000 \\
+Google Trends & 5.180 & 1,45\% & 5.180 & 4,05\% & 1,000 \\
+Stack Overflow & 1.670 & 0,47\% & 924 & 0,72\% & 1,807 \\
+Google News & 1.445 & 0,40\% & 753 & 0,59\% & 1,919 \\
+arXiv & 524 & 0,15\% & 524 & 0,41\% & 1,000 \\
+Reddit & 535 & 0,15\% & 199 & 0,16\% & 2,688 \\
+Dev.to & 23 & 0,01\% & 23 & 0,02\% & 1,000 \\
+Encuesta UPSE & 24 & 0,01\% & 8 & 0,01\% & 3,000 \\
+Hacker News & 4 & $<$0,01\% & 1 & $<$0,01\% & 4,000 \\
+\bottomrule
+\end{tabularx}
+\caption{Participación por fuente antes y después de la prueba de robustez.}
+\label{tab:participacion}
+\end{table}
+
+El índice de concentración robusto fue $H=0,7983$ (7.983 sobre una escala de 10.000), lo que confirma una dependencia muy alta del catálogo AIDev. La diversidad nominal de diez fuentes no implica equilibrio efectivo entre ellas.
+
+\subsection{Calidad de datos}
+
+\begin{table}[H]
+\centering
+\small
+\rowcolors{2}{gray!8}{white}
+\begin{tabularx}{\textwidth}{Y P{3.0cm} Y}
+\toprule
+\rowcolor{gray!22}
+\textbf{Control} & \textbf{Resultado} & \textbf{Lectura crítica} \\
+\midrule
+Raw procesado & 399.900 & Universo persistido al corte \\
+Staging reportado por auditoría & 356.945 & Base usada para el Gold actual \\
+Completitud & 89,26\% & Relación Staging/Raw \\
+Merma & 10,74\% & Incluye duplicados y conflictos históricos \\
+Duplicados removidos & 24.557 & El desglose registra 24.549; existe diferencia de 8 \\
+Nulos críticos removidos & 0 & Cumplimiento del contrato crítico \\
+Errores de casting & 0 & Conversión satisfactoria en campos auditados \\
+Duplicados en grano Gold & 0 & Válido bajo la clave que incluye fecha \\
+Claves foráneas inválidas & 0 & Integridad referencial satisfactoria \\
+\bottomrule
+\end{tabularx}
+\caption{Indicadores de calidad del corte 2026-07-13.}
+\end{table}
+
+El resultado de cero duplicados Gold no contradice el factor de inflación. La restricción de unicidad incluye la fecha, y la fecha del catálogo se reasigna aleatoriamente; por ello, copias de una misma entidad pueden ser distintas para la base aunque representen la misma observación lógica.
+
+\subsection{Piloto de enriquecimiento semántico}
+
+El piloto LLM procesó 50 registros estratificados de cinco fuentes no estructuradas. Todos produjeron JSON válido, 40 registros (80\%) superaron simultáneamente el umbral de confianza 0,85 y la presencia de evidencia, y el tiempo promedio fue 5,89 segundos por registro. Estos valores prueban conformidad de salida, no exactitud semántica: no existe un conjunto etiquetado por humanos para estimar precisión, exhaustividad o acuerdo interevaluador.
+
+% ==============================================================
+% 7. DISCUSION CRITICA Y LIMITES
+% ==============================================================
+\section{Discusión crítica y límites}
+
+\subsection{Aporte del sistema}
+
+El proyecto demuestra una integración técnica completa: múltiples extractores, persistencia Raw, un contrato Silver, auditoría, modelo estrella, vistas KPI, API asíncrona y dashboard. La arquitectura es coherente con el patrón Medallion y con la separación entre preparación y consumo analítico \cite{databricks_medallion}. Además, el uso de claves foráneas, restricciones y vistas SQL favorece consistencia e inspección independiente \cite{postgres_constraints}.
+
+La principal contribución no es afirmar una tasa universal de adopción, sino ofrecer un mecanismo auditable para estudiar señales de agentes de IA y mostrar cómo las decisiones del pipeline alteran la interpretación. Esta conclusión es especialmente relevante porque la literatura evidencia que actividad, percepción y productividad no son sinónimos \cite{peng_copilot,stray_copilot}.
+
+\subsection{Amenazas a la validez}
+
+\subsubsection{Validez temporal}
+
+El archivo \pathcode{stg_dates.py} reemplaza las fechas del catálogo AIDev por fechas aleatorias entre 2023 y el día de ejecución y también imputa valores faltantes aleatoriamente, sin una semilla fija. En consecuencia, la distribución mensual cambia entre corridas y no representa la cronología original. El pico operativo de mayo de 2026 (9.286 hechos) y los indicadores de crecimiento mensual no deben usarse para sostener evolución temporal, estacionalidad o causalidad.
+
+\subsubsection{Duplicación entre instantáneas}
+
+La clave Silver incluye \pathcode{fecha_evento}. Una misma fila del catálogo recibe una fecha diferente en cada reconstrucción, por lo que la deduplicación deja de reconocerla. El resultado es una inflación global de 2,794 y de 2,997 en AIDev. Los totales de observaciones, menciones, interacciones y scores acumulados están afectados. La lectura robusta mitiga el problema para este artículo, pero la solución definitiva debe implementarse en el ETL.
+
+\subsubsection{Validez de constructo}
+
+Las métricas combinan señales de naturaleza distinta. Por ejemplo, en AIDev una observación resume actividad por agente y repositorio, en GitHub una fila representa un repositorio, en Google Trends un valor relativo de búsqueda y en la encuesta una declaración individual. La suma transversal es útil como monitor operativo, pero no constituye una escala psicométrica ni una tasa poblacional validada.
+
+\subsubsection{Sesgo y concentración de fuentes}
+
+Después de la deduplicación, AIDev aún representa 89,11\% del corpus y el índice $H$ es 0,7983. Por ello, el ranking reproduce principalmente la composición y ontología del dataset dominante. Las fuentes comunitarias, académicas y de búsqueda funcionan como triangulación secundaria y no como estratos comparables.
+
+\subsubsection{Encuesta y generalización}
+
+El archivo fuente contiene 12 respuestas, pero solo 8 registros con agente autorizado aparecen como entidades únicas en Gold; las tres cargas históricas producen 24 hechos. La muestra es de conveniencia, pequeña y localizada en UPSE. No permite estimar prevalencia con margen de error conocido ni generalizar a la población de desarrolladores.
+
+\subsubsection{Extracción y clasificación}
+
+Las APIs y páginas pueden imponer límites, bloqueos o cambios de estructura. La búsqueda por términos como \emph{Cursor}, \emph{Codex} o \emph{Copilot} puede recuperar homónimos. La exclusión de \emph{Otro Agente IA} aumenta precisión aparente, pero reduce cobertura y puede introducir sesgo de catálogo cerrado.
+
+\subsubsection{Enriquecimiento LLM}
+
+La confianza es declarada por el propio modelo y no está calibrada contra verdad de referencia. El piloto no mide exactitud. Además, el caché usa la función \pathcode{hash()} de Python, cuya sal aleatoria puede cambiar entre procesos, debilitando la reutilización determinista. Los campos LLM deben tratarse como anotaciones auxiliares hasta realizar validación humana ciega y reportar métricas de acuerdo.
+
+\subsubsection{Reproducibilidad operativa}
+
+Durante la auditoría, Gold contenía 356.945 hechos, pero la tabla Staging activa estaba vacía, aunque el CSV y la tabla de auditoría reportaban 356.945 registros. Esto sugiere una ejecución posterior incompleta o una pérdida de estado intermedio. También se observaron tres cifras históricas en el repositorio: 120.846, 238.840 y 356.945 hechos, correspondientes a distintos cortes. El proyecto no incluye pruebas automatizadas. Sin un identificador de versión de dataset y una corrida inmutable por resultado, la reproducción exacta depende del estado local.
+
+\subsection{Ruta de corrección para publicación científica}
+
+\begin{enumerate}[leftmargin=1.1cm]
+  \item Usar el identificador estable \pathcode{agent:repo_id} de AIDev como \pathcode{id_origen_registro}; no calcularlo desde toda la fila.
+  \item Preservar \pathcode{first_activity} y \pathcode{last_activity}. Si una fecha falta, mantenerla nula o registrar \pathcode{fecha_imputada=true}; nunca reemplazar cronología real por aleatoriedad silenciosa.
+  \item Separar \emph{entidad observada} de \emph{instantánea de extracción}. La instantánea debe ser una dimensión de auditoría, no parte de la identidad analítica.
+  \item Recalcular Gold desde una versión congelada de Raw y publicar manifiesto, hashes, parámetros, commit de Git y consulta de reproducción.
+  \item Definir KPIs por estrato de fuente y evitar sumas entre escalas no homologadas. Reportar intervalos de incertidumbre cuando el diseño muestral lo permita.
+  \item Ampliar la encuesta con protocolo de consentimiento, marco muestral, variables demográficas mínimas y análisis separado de telemetría y percepción.
+  \item Validar el enriquecimiento LLM contra anotaciones humanas y reportar precisión, exhaustividad, F1 y acuerdo entre evaluadores.
+  \item Incorporar pruebas unitarias, pruebas de contrato, casos de idempotencia y una prueba de regresión que exija iguales KPIs para iguales entradas.
+\end{enumerate}
+
+% ==============================================================
+% 8. CONCLUSIONES EXPLICITAS
+% ==============================================================
+\section{Conclusiones}
+
+\begin{enumerate}[leftmargin=1.1cm]
+  \item \textbf{La plataforma es funcional como producto de BI descriptivo.} Integra diez fuentes, conserva evidencia Raw, materializa un esquema estrella con seis dimensiones, expone siete vistas KPI y sirve los resultados mediante FastAPI y React.
+
+  \item \textbf{El Gold operativo no equivale al número de observaciones independientes.} Los 356.945 hechos se reducen a 127.756 entidades únicas bajo una clave estable, con un factor de inflación de 2,794. Por ello, la lectura robusta debe reemplazar a los totales operativos en cualquier manuscrito científico.
+
+  \item \textbf{Codex domina el corpus, pero no puede afirmarse que domina la población de desarrolladores.} En la lectura robusta representa 66,99\% de observaciones y 90,38\% del score de adopción, resultado condicionado por la composición de AIDev.
+
+  \item \textbf{La principal limitación es temporal y de identidad.} La aleatorización de fechas rompe reproducibilidad, impide interpretar crecimiento mensual y permite que instantáneas repetidas sobrevivan a la deduplicación. Esta regla debe corregirse antes de publicar tendencias.
+
+  \item \textbf{El proyecto posee potencial para revista o congreso si se ejecuta una réplica congelada y metodológicamente corregida.} La ruta mínima incluye claves estables, fechas originales, versionado de snapshots, KPIs estratificados, encuesta ampliada, validación humana del LLM y pruebas automatizadas.
+\end{enumerate}
+
+% ==============================================================
+% 9. BIBLIOGRAFIA IEEE (AUTOCONTENIDA)
+% ==============================================================
+\addcontentsline{toc}{section}{Bibliografía}
+\renewcommand{\refname}{Bibliografía}
+\begin{thebibliography}{99}
+
+\bibitem{aidev_dataset}
+H. Li, H. Zhang and A. E. Hassan, ``AIDev: Studying AI Coding Agents on GitHub,'' Zenodo, version 2, Aug. 19, 2025, doi: 10.5281/zenodo.16919051. [Online]. Available: \url{https://doi.org/10.5281/zenodo.16919051}
+
+\bibitem{aidev_paper}
+H. Li, H. Zhang and A. E. Hassan, ``AIDev: Studying AI Coding Agents on GitHub,'' \emph{arXiv preprint arXiv:2602.09185}, 2026. [Online]. Available: \url{https://arxiv.org/abs/2602.09185}
+
+\bibitem{peng_copilot}
+S. Peng, E. Kalliamvakou, P. Cihon and M. Demirer, ``The Impact of AI on Developer Productivity: Evidence from GitHub Copilot,'' \emph{arXiv preprint arXiv:2302.06590}, 2023. [Online]. Available: \url{https://arxiv.org/abs/2302.06590}
+
+\bibitem{stray_copilot}
+V. Stray, E. G. Brandtzæg, V. T. Wivestad, A. Barbala and N. B. Moe, ``Developer Productivity With and Without GitHub Copilot: A Longitudinal Mixed-Methods Case Study,'' \emph{arXiv preprint arXiv:2509.20353}, 2025. [Online]. Available: \url{https://arxiv.org/abs/2509.20353}
+
+\bibitem{kimball_book}
+R. Kimball and M. Ross, \emph{The Data Warehouse Toolkit: The Definitive Guide to Dimensional Modeling}, 3rd ed. Indianapolis, IN, USA: Wiley, 2013, ISBN 978-1-118-53080-1.
+
+\bibitem{kimball_process}
+Kimball Group, ``Four-Step Dimensional Design Process.'' [Online]. Available: \url{https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/dimensional-modeling-techniques/four-4-step-design-process/}. Accessed: Jul. 13, 2026.
+
+\bibitem{databricks_medallion}
+Databricks, ``What is the medallion lakehouse architecture?'' [Online]. Available: \url{https://docs.databricks.com/aws/en/lakehouse/medallion}. Accessed: Jul. 13, 2026.
+
+\bibitem{iso25012}
+ISO/IEC, \emph{Software Engineering---Software Product Quality Requirements and Evaluation (SQuaRE)---Data Quality Model}, ISO/IEC 25012:2008, confirmed 2025. [Online]. Available: \url{https://www.iso.org/standard/35736.html}
+
+\bibitem{fair}
+M. D. Wilkinson \emph{et al.}, ``The FAIR Guiding Principles for scientific data management and stewardship,'' \emph{Scientific Data}, vol. 3, Art. no. 160018, 2016, doi: 10.1038/sdata.2016.18.
+
+\bibitem{prov}
+P. Groth and L. Moreau, Eds., ``PROV-Overview: An Overview of the PROV Family of Documents,'' W3C Working Group Note, Apr. 30, 2013. [Online]. Available: \url{https://www.w3.org/TR/2013/NOTE-prov-overview-20130430/}
+
+\bibitem{postgres_constraints}
+PostgreSQL Global Development Group, ``PostgreSQL 16 Documentation: Constraints,'' 2026. [Online]. Available: \url{https://www.postgresql.org/docs/16/ddl-constraints.html}. Accessed: Jul. 13, 2026.
+
+\bibitem{stackexchange_api}
+Stack Exchange, ``Stack Exchange API v2.3 Documentation.'' [Online]. Available: \url{https://api.stackexchange.com/docs}. Accessed: Jul. 13, 2026.
+
+\end{thebibliography}
+
+% ==============================================================
+% 10. ANEXOS: MODELO Y DICCIONARIO
+% ==============================================================
+\appendix
+\section{Modelo lógico y reglas de cálculo}
+
+\subsection{Relaciones del esquema estrella}
+
+\begin{center}
+\small
+\begin{tabular}{c}
+\pathcode{dim_tiempo} \quad \pathcode{dim_agente} \quad \pathcode{dim_fuente} \\
+$\searrow$ \hspace{2.5cm} $\downarrow$ \hspace{2.5cm} $\swarrow$ \\
+\fbox{\pathcode{fact_actividad_agente_ia}} \\
+$\nearrow$ \hspace{2.2cm} $\uparrow$ \hspace{2.2cm} $\nwarrow$ \\
+\pathcode{dim_plataforma} \quad \pathcode{dim_tecnologia} \quad \pathcode{dim_comunidad}
+\end{tabular}
+\end{center}
+
+La restricción vigente de granularidad es la combinación de tiempo, agente, fuente, plataforma, tecnología, comunidad e identificador de origen. Para investigación longitudinal se recomienda agregar una dimensión de instantánea y retirar la fecha imputada de la identidad de la entidad.
+
+\subsection{Diccionario de KPIs}
+
+\small
+\begin{longtable}{P{3.1cm} P{4.2cm} P{4.2cm} P{2.6cm}}
+\toprule
+\rowcolor{gray!22}
+\textbf{KPI} & \textbf{Fórmula/implementación} & \textbf{Uso} & \textbf{Limitación} \\
+\midrule
+\endfirsthead
+\toprule
+\rowcolor{gray!22}
+\textbf{KPI} & \textbf{Fórmula/implementación} & \textbf{Uso} & \textbf{Limitación} \\
+\midrule
+\endhead
+Adopción por agente & \pathcode{AVG(score_adopcion)}, \pathcode{SUM(score_adopcion)} & Comparar señal normalizada por agente & Escala dependiente de fuente \\
+Participación por fuente & $N_s/N\times100$ & Medir composición del corpus & No mide calidad ni representatividad \\
+Tendencia mensual & Agregación por año y mes & Monitoreo temporal & Inválida con fechas aleatorizadas \\
+Ranking de agentes & Suma de actividad, popularidad, adopción, comunidad e innovación & Priorización operativa & Mezcla escalas heterogéneas \\
+Popularidad abierta & Stars, forks, issues, releases y actividad & Presencia técnica en repositorios & Sesgo hacia GitHub/AIDev \\
+Crecimiento mensual & Diferencia y variación con \pathcode{LAG()} & Cambio respecto al mes previo & No interpretable antes de corregir fechas \\
+Distribución por plataforma & $N_p/N\times100$ y ranking & Concentración por canal & Dominio del catálogo \\
+Factor de inflación & $N_{Gold}/N_{K_r}$ & Sensibilidad a snapshots repetidos & Auditoría adicional, aún no es vista oficial \\
+Concentración de fuente & $\sum p_s^2$ & Dependencia del corpus & Descriptivo, no causal \\
+\bottomrule
+\end{longtable}
+\normalsize
+
+\section{Diccionario de datos Staging/Silver}
+
+\small
+\begin{longtable}{P{0.9cm} P{4.1cm} P{2.8cm} P{6.0cm}}
+\toprule
+\rowcolor{gray!22}
+\textbf{N.} & \textbf{Campo} & \textbf{Tipo} & \textbf{Definición} \\
+\midrule
+\endfirsthead
+\toprule
+\rowcolor{gray!22}
+\textbf{N.} & \textbf{Campo} & \textbf{Tipo} & \textbf{Definición} \\
+\midrule
+\endhead
+1 & \pathcode{id} & integer & Clave sustituta técnica de Staging. \\
+2 & \pathcode{id_origen_registro} & varchar & Identificador de la observación en la fuente o hash de respaldo. \\
+3 & \pathcode{fuente} & varchar & Nombre normalizado del origen. \\
+4 & \pathcode{tipo_fuente} & varchar & API, scraping, archivos o fuente propia. \\
+5 & \pathcode{plataforma} & varchar & Canal específico de captura. \\
+6 & \pathcode{fecha_evento} & date & Fecha analítica diaria; actualmente puede ser imputada. \\
+7 & \pathcode{nombre_agente} & varchar & Agente homologado a uno de 14 valores. \\
+8 & \pathcode{categoria} & varchar & Actividad técnica, producción, popularidad, comunidad o adopción académica. \\
+9 & \pathcode{titulo} & text & Título del artefacto o descripción corta. \\
+10 & \pathcode{texto} & text & Contenido o resumen normalizado. \\
+11 & \pathcode{url} & varchar & Enlace de procedencia, máximo 500 caracteres. \\
+12 & \pathcode{cantidad_menciones} & integer & Conteo homologado de menciones. \\
+13 & \pathcode{cantidad_interacciones} & integer & Conteo homologado de interacciones. \\
+14 & \pathcode{score_popularidad} & numeric & Señal relativa de popularidad provista o derivada. \\
+15 & \pathcode{stars_github} & integer & Estrellas del repositorio. \\
+16 & \pathcode{forks_github} & integer & Forks del repositorio. \\
+17 & \pathcode{issues_abiertos} & integer & Incidencias abiertas. \\
+18 & \pathcode{releases} & integer & Versiones publicadas cuando la fuente las aporta. \\
+19 & \pathcode{indice_adopcion} & numeric & Índice de adopción específico por fuente. \\
+20 & \pathcode{indice_innovacion} & numeric & Índice de innovación específico por fuente. \\
+21 & \pathcode{sentimiento_promedio} & numeric & Sentimiento agregado cuando está disponible. \\
+22 & \pathcode{llm_entorno_uso} & varchar & Entorno de uso inferido por LLM. \\
+23 & \pathcode{llm_tipo_integracion} & varchar & Tipo de integración inferido por LLM. \\
+24 & \pathcode{llm_categoria_tecnologia} & varchar & Categoría tecnológica inferida. \\
+25 & \pathcode{llm_capacidades} & text & Capacidades inferidas, separadas por coma. \\
+26 & \pathcode{llm_comunidad_tipo} & varchar & Tipo de comunidad inferido. \\
+27 & \pathcode{llm_confianza} & numeric & Confianza declarada por el modelo. \\
+28 & \pathcode{fecha_carga} & timestamp & Momento de persistencia en Staging. \\
+29 & \pathcode{raw_file_id} & integer & Clave de procedencia hacia \pathcode{raw.raw_files}. \\
+\bottomrule
+\end{longtable}
+\normalsize
+
+\section{Diccionario resumido de la tabla de hechos Gold}
+
+\small
+\begin{longtable}{P{4.1cm} P{2.8cm} P{7.0cm}}
+\toprule
+\rowcolor{gray!22}
+\textbf{Campo/grupo} & \textbf{Tipo} & \textbf{Descripción} \\
+\midrule
+\endfirsthead
+\toprule
+\rowcolor{gray!22}
+\textbf{Campo/grupo} & \textbf{Tipo} & \textbf{Descripción} \\
+\midrule
+\endhead
+\pathcode{id_fact_actividad} & bigint & Clave sustituta del hecho. \\
+\pathcode{id_tiempo} & bigint/FK & Fecha de la observación. \\
+\pathcode{id_agente} & bigint/FK & Agente homologado. \\
+\pathcode{id_fuente} & bigint/FK & Fuente de procedencia. \\
+\pathcode{id_plataforma} & bigint/FK & Plataforma de captura. \\
+\pathcode{id_tecnologia} & bigint/FK & Categoría y dominio tecnológico. \\
+\pathcode{id_comunidad} & bigint/FK & Contexto comunitario. \\
+\pathcode{id_origen_registro} & varchar & Identificador de procedencia usado en la unicidad. \\
+\pathcode{raw_file_id} & integer & Enlace de auditoría al archivo Raw. \\
+\pathcode{cantidad_menciones} & integer & Menciones homologadas no negativas. \\
+\pathcode{cantidad_interacciones} & integer & Interacciones homologadas no negativas. \\
+\pathcode{score_popularidad} & numeric & Popularidad específica por fuente. \\
+\pathcode{score_actividad} & numeric & Interacciones más señales técnicas de repositorio. \\
+\pathcode{score_comunidad} & numeric & Menciones más interacciones para fuentes comunitarias. \\
+\pathcode{score_adopcion} & numeric & Índice de adopción recibido desde Silver. \\
+\pathcode{score_innovacion} & numeric & Índice de innovación recibido desde Silver. \\
+\pathcode{valor_numerico_normalizado} & numeric & Primer indicador disponible según precedencia definida. \\
+\pathcode{stars_github}, \pathcode{forks_github} & integer & Señales de popularidad y reutilización en GitHub. \\
+\pathcode{issues_abiertos}, \pathcode{releases} & integer & Señales de mantenimiento y publicación. \\
+\pathcode{sentimiento_promedio} & numeric & Sentimiento cuando existe. \\
+\pathcode{titulo}, \pathcode{url} & text/varchar & Contexto legible y enlace de evidencia. \\
+\pathcode{fecha_carga} & timestamp & Momento de materialización Gold. \\
+\bottomrule
+\end{longtable}
+\normalsize
+
+\section{Artefactos de reproducibilidad del repositorio}
+
+\begin{itemize}[leftmargin=1.0cm]
+  \item Scripts de creación y carga Gold: \pathcode{etl/sql/01_create_gold_schema.sql} a \pathcode{etl/sql/03_load_gold_fact.sql}.
+  \item Vistas y consultas: \pathcode{etl/sql/04_create_kpi_views.sql} y \pathcode{etl/sql/05_consultas_analiticas_e4.sql}.
+  \item Validación: \pathcode{etl/sql/06_validacion_gold_dw.sql}.
+  \item Evidencias: \pathcode{etl/docs/evidencias/quality_summary.csv}, \pathcode{dedup_report.csv}, \pathcode{nulls_matrix.csv}, \pathcode{casting_report.csv} y archivos \pathcode{e4_respuesta_*.csv}.
+  \item Respaldo físico: \pathcode{dump_gold_entregable4.sql}.
+  \item Código ETL: \pathcode{etl/src/}; API: \pathcode{backend/}; dashboard: \pathcode{frontend/}.
+\end{itemize}
+
+\end{document}

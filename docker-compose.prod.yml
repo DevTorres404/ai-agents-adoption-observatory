@@ -1,17 +1,14 @@
 services:
   postgres:
     image: postgres:16
-    container_name: observatorio_db
+    container_name: observatorio_db_prod
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
       POSTGRES_DB: ${DB_NAME:-observatorio_ia}
-    ports:
-      - "127.0.0.1:5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./etl/sql:/docker-entrypoint-initdb.d
+      - postgres_prod_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-observatorio_ia}"]
       interval: 10s
@@ -28,7 +25,7 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    container_name: observatorio_api
+    container_name: observatorio_api_prod
     restart: unless-stopped
     environment:
       DB_USER: ${DB_USER:-postgres}
@@ -37,7 +34,7 @@ services:
       DB_HOST: postgres
       DB_PORT: "5432"
       CORS_ORIGINS: ${CORS_ORIGINS:-https://bi.labtorres.me}
-      SWAGGER_ENABLED: ${SWAGGER_ENABLED:-false}
+      SWAGGER_ENABLED: "false" # Deshabilitado en producción por seguridad
     depends_on:
       postgres:
         condition: service_healthy
@@ -57,10 +54,10 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: observatorio_frontend
+    container_name: observatorio_frontend_prod
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:8080:8080" # Expuesto solo a localhost para tu túnel de Cloudflare nativo
     depends_on:
       backend:
         condition: service_started
@@ -76,26 +73,5 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  etl:
-    build:
-      context: ./etl
-      dockerfile: Dockerfile.etl
-    container_name: observatorio_etl
-    environment:
-      DB_USER: ${DB_USER:-postgres}
-      DB_PASSWORD: ${DB_PASSWORD:-postgres}
-      DB_NAME: ${DB_NAME:-observatorio_ia}
-      DB_HOST: postgres
-      DB_PORT: "5432"
-    volumes:
-      - ./etl/data:/app/data
-      - ./etl/logs:/app/logs
-      - ./etl/docs:/app/docs
-    depends_on:
-      postgres:
-        condition: service_healthy
-    profiles:
-      - etl
-
 volumes:
-  postgres_data:
+  postgres_prod_data:

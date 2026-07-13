@@ -1,0 +1,11 @@
+nombre_plataforma,tipo_plataforma,nombre_comunidad,tipo_comunidad,total_observaciones,total_menciones,total_interacciones,score_comunidad_total,score_actividad_total,ranking_comunidad
+hackernews,scraping,hackernews,scraping,2,0,988,988.0,988.0,1
+reddit,scraping,reddit,scraping,357,357,0,357.0,0.0,2
+devto,scraping,devto,scraping,11,2,0,2.0,0.0,3
+aidedev_ai_coding,archivos,aidedev_ai_coding,archivos,227591,1805651,3577686,0.0,36271085.0,4
+github,api,github,api,3597,3597,151720,0.0,6423469.0,5
+google_trends,scraping,google_trends,scraping,5180,0,0,0.0,0.0,6
+stackoverflow,scraping,stackoverflow,scraping,836,0,0,0.0,0.0,6
+gnews,scraping,gnews,scraping,726,0,0,0.0,0.0,6
+arxiv,scraping,arxiv,scraping,524,0,0,0.0,0.0,6
+encuesta_upse,fuente_propia,encuesta_upse,fuente_propia,16,16,0,0.0,0.0,6
