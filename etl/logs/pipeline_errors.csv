@@ -189,3 +189,4 @@ LINE 3:             FROM raw.raw_records r
 2026-07-13 02:23:01,7,gold_loader,sql/02_load_gold_dimensions.sql,[Errno 2] No such file or directory: 'sql/02_load_gold_dimensions.sql',Error critico en carga Gold
 2026-07-13 06:09:38,,staging_pipeline,DuplicateWarning,Se descartaron 18039 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
 2026-07-13 06:14:37,13,gold_quality,validaciones,'>' not supported between instances of 'NoneType' and 'int',Error critico en calidad Gold
+2026-07-13 08:03:39,,staging_pipeline,DuplicateWarning,Se descartaron 18021 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.

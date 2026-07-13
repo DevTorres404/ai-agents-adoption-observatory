@@ -72,7 +72,7 @@ def normalize_dataframe(df, file_meta):
             merged_count = pd.to_numeric(first_existing(df, ["merged_pull_requests"], 0), errors="coerce").fillna(0)
             contributors = pd.to_numeric(first_existing(df, ["unique_contributors"], 0), errors="coerce").fillna(0)
 
-            stg_df["id_origen_registro"] = df.apply(hash_fallback, axis=1)
+            stg_df["id_origen_registro"] = agent.astype(str) + ":" + repo.astype(str)
             stg_df["plataforma"] = "aidedev_ai_coding"
             stg_df["titulo"] = agent.astype(str) + " - " + repo.astype(str)
             stg_df["texto"] = (

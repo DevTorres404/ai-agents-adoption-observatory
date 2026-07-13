@@ -168,6 +168,7 @@ CREATE TABLE gold.fact_actividad_agente_ia (
 
     titulo TEXT,
     url VARCHAR(500),
+    is_imputed_date BOOLEAN NOT NULL DEFAULT FALSE,
     fecha_carga TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_fact_tiempo
@@ -190,7 +191,6 @@ CREATE TABLE gold.fact_actividad_agente_ia (
         REFERENCES gold.dim_comunidad (id_comunidad),
     CONSTRAINT uq_fact_granularidad
         UNIQUE (
-            id_tiempo,
             id_agente,
             id_fuente,
             id_plataforma,

@@ -65,7 +65,8 @@ INSERT INTO gold.fact_actividad_agente_ia (
     releases,
     sentimiento_promedio,
     titulo,
-    url
+    url,
+    is_imputed_date
 )
 SELECT
     dt.id_tiempo,
@@ -115,7 +116,8 @@ SELECT
     COALESCE(s.releases, 0) AS releases,
     s.sentimiento_promedio,
     s.titulo,
-    s.url
+    s.url,
+    s.is_imputed_date
 FROM staging.stg_actividad_agente_ia s
 INNER JOIN gold.dim_tiempo dt
     ON dt.fecha = s.fecha_evento

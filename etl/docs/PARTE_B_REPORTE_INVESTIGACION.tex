@@ -560,15 +560,17 @@ Durante la auditoría, Gold contenía 356.945 hechos, pero la tabla Staging acti
 \subsection{Ruta de corrección para publicación científica}
 
 \begin{enumerate}[leftmargin=1.1cm]
-  \item Usar el identificador estable \pathcode{agent:repo_id} de AIDev como \pathcode{id_origen_registro}; no calcularlo desde toda la fila.
-  \item Preservar \pathcode{first_activity} y \pathcode{last_activity}. Si una fecha falta, mantenerla nula o registrar \pathcode{fecha_imputada=true}; nunca reemplazar cronología real por aleatoriedad silenciosa.
-  \item Separar \emph{entidad observada} de \emph{instantánea de extracción}. La instantánea debe ser una dimensión de auditoría, no parte de la identidad analítica.
+  \item \textbf{[Completado]} Usar el identificador estable \pathcode{agent:repo_id} de AIDev como \pathcode{id_origen_registro}; no calcularlo desde toda la fila.
+  \item \textbf{[Completado]} Preservar \pathcode{first_activity} y \pathcode{last_activity}. Si una fecha falta, mantenerla nula o registrar \pathcode{fecha_imputada=true}; nunca reemplazar cronología real por aleatoriedad silenciosa.
+  \item \textbf{[Completado]} Separar \emph{entidad observada} de \emph{instantánea de extracción}. La instantánea debe ser una dimensión de auditoría, no parte de la identidad analítica.
   \item Recalcular Gold desde una versión congelada de Raw y publicar manifiesto, hashes, parámetros, commit de Git y consulta de reproducción.
   \item Definir KPIs por estrato de fuente y evitar sumas entre escalas no homologadas. Reportar intervalos de incertidumbre cuando el diseño muestral lo permita.
   \item Ampliar la encuesta con protocolo de consentimiento, marco muestral, variables demográficas mínimas y análisis separado de telemetría y percepción.
   \item Validar el enriquecimiento LLM contra anotaciones humanas y reportar precisión, exhaustividad, F1 y acuerdo entre evaluadores.
   \item Incorporar pruebas unitarias, pruebas de contrato, casos de idempotencia y una prueba de regresión que exija iguales KPIs para iguales entradas.
 \end{enumerate}
+
+\textit{Nota: Las correcciones 1, 2 y 3 fueron solventadas. Las correcciones restantes (4 al 8) quedan propuestas como trabajo futuro.}
 
 % ==============================================================
 % 8. CONCLUSIONES EXPLICITAS
