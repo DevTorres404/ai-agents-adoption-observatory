@@ -16,22 +16,64 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Backups
+*.dump
+backup_*
 
+# ETL temporary data
+node_modules/
 
 # Datos locales (Archivos pesados generados)
-data/raw/**/*.json
-data/raw/**/*.parquet
-data/staging/*.csv
-!data/raw/.gitkeep
-!data/staging/.gitkeep
-data/manual/
+etl/data/raw/**/*.json
+etl/data/raw/**/*.parquet
+etl/data/staging/*.csv
+!etl/data/raw/.gitkeep
+!etl/data/staging/.gitkeep
+etl/data/manual/
+# IDEs
+.vscode/
+# Entornos virtuales
+.venv/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Variables de entorno y credenciales
+.env
+.env.local
+.env.*
+!.env.example
+
+# Archivos compilados Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Backups
+*.dump
+backup_*
+
+# ETL temporary data
+node_modules/
+
+# Datos locales (Archivos pesados generados)
+etl/data/raw/**/*.json
+etl/data/raw/**/*.parquet
+etl/data/staging/*.csv
+!etl/data/raw/.gitkeep
+!etl/data/staging/.gitkeep
+etl/data/manual/
 # IDEs
 .vscode/
 .idea/
 .gemini/
+.agents/
 .spyderproject
 .ropeproject
 
 # SO
 .DS_Store
 Thumbs.db
+dump_gold_entregable4.sql
+etl/docs/evidencias/staging_stats.csv

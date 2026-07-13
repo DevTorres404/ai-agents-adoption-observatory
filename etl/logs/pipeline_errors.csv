@@ -1,0 +1,191 @@
+2026-06-27 00:52:48,Múltiple,Duplicidad,Detectados 31 registros duplicados.,Mantenido el primer registro completo.
+2026-06-27 08:45:43,Múltiple,Duplicidad,Detectados 266 registros duplicados.,Mantenido el primer registro completo.
+2026-06-27 09:02:12,,load_raw_to_db,TypeError,Object of type Timestamp is not JSON serializable,Fallo al procesar github_repos_2026-06-27_005248.json
+2026-06-27 09:02:12,,load_raw_to_db,TypeError,Object of type Timestamp is not JSON serializable,Fallo al procesar github_repos_2026-06-27_084543.json
+2026-06-27 09:02:12,,load_raw_to_db,DataError,"(psycopg.errors.InvalidTextRepresentation) invalid input syntax for type json
+DETAIL:  Token ""NaN"" is invalid.
+CONTEXT:  JSON data, line 1: ..."": 2, ""usa_ia"": ""No"", ""herramienta_favorita"": NaN...
+unnamed portal parameter $2 = '...'
+[SQL: 
+                            INSERT INTO raw.raw_records (file_id, raw_data)
+                            VALUES (%(file_id)s, %(raw_data)s)
+                        ]
+[parameters: {'file_id': 4, 'raw_data': '{""id_estudiante"": 2, ""usa_ia"": ""No"", ""herramienta_favorita"": NaN}'}]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)",Fallo al procesar encuesta_upse_2026-06-27_005227.json
+2026-06-27 09:02:12,,load_raw_to_db,TypeError,Object of type Timestamp is not JSON serializable,Fallo al procesar google_trends_2026-06-27_005232.json
+2026-06-27 09:02:12,,load_raw_to_db,TypeError,Object of type Timestamp is not JSON serializable,Fallo al procesar google_trends_2026-06-27_084524.json
+2026-06-27 09:05:52,,staging_pipeline,DuplicateWarning,Se descartaron 34 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-06-27 09:11:12,,staging_pipeline,DuplicateWarning,Se descartaron 48 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-06-27 09:18:25,2,hackernews_scraper,TypeError,HttpClient.__init__() got an unexpected keyword argument 'source_name',Continúa con siguiente extractor
+2026-06-27 09:18:25,2,devto_scraper,TypeError,HttpClient.__init__() got an unexpected keyword argument 'source_name',Continúa con siguiente extractor
+2026-06-27 09:18:36,,trends_scraper,TooManyRequestsError,The request failed: Google returned a response with code 429,Fallo en Pytrends
+2026-06-27 09:18:37,,staging_pipeline,DuplicateWarning,Se descartaron 128 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-06-27 09:45:44,,trends_scraper,TypeError,Retry.__init__() got an unexpected keyword argument 'method_whitelist',Fallo en Pytrends
+2026-06-27 09:46:47,,staging_pipeline,DuplicateWarning,Se descartaron 128 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-06-27 09:48:47,,staging_pipeline,DuplicateWarning,Se descartaron 138 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-06-27 10:04:31,,staging_pipeline,DuplicateWarning,Se descartaron 210 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-06-27 16:00:27,,staging_pipeline,DuplicateWarning,Se descartaron 210 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-06-27 16:16:52,,staging_pipeline,DuplicateWarning,Se descartaron 348 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-06-27 16:19:50,,staging_pipeline,DuplicateWarning,Se descartaron 210 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-06-27 16:23:03,,staging_pipeline,DuplicateWarning,Se descartaron 210 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-06-27 16:24:25,,staging_pipeline,OSError,[Errno 22] Invalid argument: 'C:\\Users\\Damian\\Documents\\Intelegicia de Negocios\\Proyecto\\docs\\evidencias\\staging_stats.csv',Pipeline abortado
+2026-06-27 16:25:27,,staging_pipeline,DuplicateWarning,Se descartaron 210 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-06-27 16:30:48,,staging_pipeline,DuplicateWarning,Se descartaron 210 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-06-27 18:30:15,,staging_pipeline,DuplicateWarning,Se descartaron 118895 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-06-28 10:58:06,,hackernews_scraper,HTTPError,429 Client Error: Too Many Requests for url: https://news.ycombinator.com/front,Scraping abortado
+2026-06-28 11:08:43,,load_raw_to_db,OperationalError,"(psycopg.errors.ConnectionTimeout) connection timeout expired
+Multiple connection attempts failed. All failures were:
+- host: 'localhost', port: 5432, hostaddr: '::1': connection timeout expired
+- host: 'localhost', port: 5432, hostaddr: '127.0.0.1': connection timeout expired
+(Background on this error at: https://sqlalche.me/e/20/e3q8)",Fallo al procesar devto_2026-06-27_182252.json
+2026-06-28 11:14:02,,staging_pipeline,DuplicateWarning,Se descartaron 237538 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-03 23:32:29,,staging_pipeline,DuplicateWarning,Se descartaron 237538 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-03 23:35:47,,staging_pipeline,DuplicateWarning,Se descartaron 237538 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-12 17:44:55,,staging_pipeline,DuplicateWarning,Se descartaron 356185 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-12 18:43:00,,staging_pipeline,AttributeError,'int' object has no attribute 'fillna',Pipeline abortado
+2026-07-12 18:45:17,,staging_pipeline,DuplicateWarning,Se descartaron 475129 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-12 18:52:22,,staging_pipeline,DuplicateWarning,Se descartaron 475257 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-12 18:56:48,,staging_pipeline,DuplicateWarning,Se descartaron 475376 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-12 19:22:44,,staging_pipeline,DuplicateWarning,Se descartaron 133019 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-12 19:38:05,,staging_pipeline,DuplicateWarning,Se descartaron 133019 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-12 20:42:10,,hackernews_scraper,SSLError,"HTTPSConnectionPool(host='news.ycombinator.com', port=443): Max retries exceeded with url: /front (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1032)')))",Scraping abortado
+2026-07-12 20:46:21,,staging_pipeline,DuplicateWarning,Se descartaron 164809 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-12 20:48:50,,staging_pipeline,DuplicateWarning,Se descartaron 164565 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-12 21:56:17,,staging_pipeline,DuplicateWarning,Se descartaron 870 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-12 22:22:21,,hackernews_scraper,HTTPError,429 Client Error: Too Many Requests for url: https://news.ycombinator.com/front,Scraping abortado
+2026-07-12 22:27:34,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Cursor AI
+2026-07-12 22:27:36,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Claude Code
+2026-07-12 22:27:39,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: OpenAI Codex
+2026-07-12 22:27:42,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: GitHub Copilot
+2026-07-12 22:27:44,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Cline agent
+2026-07-12 22:27:47,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Roo Code
+2026-07-12 22:27:49,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Windsurf AI
+2026-07-12 22:27:52,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Aider AI
+2026-07-12 22:27:55,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Augment Code
+2026-07-12 22:27:58,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: JetBrains Junie
+2026-07-12 22:28:01,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Gemini CLI
+2026-07-12 22:28:03,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: AWS Kiro
+2026-07-12 22:28:06,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Kilo Code
+2026-07-12 22:28:08,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Zencoder
+2026-07-12 22:28:12,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Cursor AI
+2026-07-12 22:28:15,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Claude Code
+2026-07-12 22:28:18,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: OpenAI Codex
+2026-07-12 22:28:21,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: GitHub Copilot
+2026-07-12 22:28:23,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Cline agent
+2026-07-12 22:28:26,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Roo Code
+2026-07-12 22:28:28,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Windsurf AI
+2026-07-12 22:28:31,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Aider AI
+2026-07-12 22:28:34,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Augment Code
+2026-07-12 22:28:36,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: JetBrains Junie
+2026-07-12 22:28:39,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Gemini CLI
+2026-07-12 22:28:41,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: AWS Kiro
+2026-07-12 22:28:44,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Kilo Code
+2026-07-12 22:28:47,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Zencoder
+2026-07-12 22:29:09,,load_raw_to_db,OperationalError,"(psycopg.errors.AdminShutdown) terminating connection due to administrator command
+[SQL: 
+                            INSERT INTO raw.raw_records (file_id, raw_data)
+                            VALUES (%(file_id)s, %(raw_data)s)
+                        ]
+[parameters: {'file_id': 118, 'raw_data': '{""id"": ""OpenAI_Codex:962193830.0"", ""agent"": ""OpenAI_Codex"", ""repo_id"": 962193830, ""repo_url"": ""https://api.github.com/repos/uxillary/tray-xmr"", ""repo ... (381 characters truncated) ... g GUI feedback"", ""sample_pr_url"": ""https://github.com/uxillary/tray-xmr/pull/5"", ""dataset"": ""AIDev Dataset: AI Coding"", ""total_users_dataset"": 72167}'}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)",Fallo al procesar aidedev_2026-07-12.json
+2026-07-12 22:29:09,,load_raw_to_db,ProgrammingError,"(psycopg.errors.UndefinedTable) relation ""raw.raw_files"" does not exist
+LINE 14:         FROM raw.raw_files f
+                      ^
+[SQL: 
+        SELECT
+            f.id AS raw_file_id,
+            f.fuente,
+            f.tipo_fuente,
+            f.ruta_relativa,
+            f.nombre_archivo,
+            f.cantidad_registros AS declared_records,
+            COUNT(r.id) AS loaded_records,
+            f.cantidad_columnas,
+            f.tamano_bytes,
+            f.hash_sha256,
+            f.fecha_carga
+        FROM raw.raw_files f
+        LEFT JOIN raw.raw_records r ON r.file_id = f.id
+        GROUP BY f.id
+        ORDER BY f.id
+    ]
+(Background on this error at: https://sqlalche.me/e/20/f405)",No se pudo exportar inventario Raw completo
+2026-07-12 22:29:09,,staging_pipeline,ProgrammingError,"(psycopg.errors.UndefinedTable) relation ""raw.raw_records"" does not exist
+LINE 3:             FROM raw.raw_records r
+                         ^
+[SQL: 
+            SELECT r.raw_data, f.fuente, f.tipo_fuente, f.id as file_id
+            FROM raw.raw_records r
+            JOIN raw.raw_files f ON r.file_id = f.id
+        ]
+(Background on this error at: https://sqlalche.me/e/20/f405)",Pipeline abortado
+2026-07-12 22:43:49,,stackoverflow_scraper,HTTPError,400 Client Error: Bad Request for url: https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Cursor+AI&site=stackoverflow&fromdate=1672549200&todate=1783914226&pagesize=500&filter=%219_bDDxJY5,Agente: Cursor AI
+2026-07-12 22:43:52,,stackoverflow_scraper,HTTPError,400 Client Error: Bad Request for url: https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Claude+Code&site=stackoverflow&fromdate=1672549200&todate=1783914226&pagesize=500&filter=%219_bDDxJY5,Agente: Claude Code
+2026-07-12 22:43:54,,stackoverflow_scraper,HTTPError,400 Client Error: Bad Request for url: https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=OpenAI+Codex&site=stackoverflow&fromdate=1672549200&todate=1783914226&pagesize=500&filter=%219_bDDxJY5,Agente: OpenAI Codex
+2026-07-12 22:43:56,,stackoverflow_scraper,HTTPError,400 Client Error: Bad Request for url: https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=GitHub+Copilot&site=stackoverflow&fromdate=1672549200&todate=1783914226&pagesize=500&filter=%219_bDDxJY5,Agente: GitHub Copilot
+2026-07-12 22:43:58,,stackoverflow_scraper,HTTPError,400 Client Error: Bad Request for url: https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Cline+agent&site=stackoverflow&fromdate=1672549200&todate=1783914226&pagesize=500&filter=%219_bDDxJY5,Agente: Cline agent
+2026-07-12 22:44:00,,stackoverflow_scraper,HTTPError,400 Client Error: Bad Request for url: https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Roo+Code&site=stackoverflow&fromdate=1672549200&todate=1783914226&pagesize=500&filter=%219_bDDxJY5,Agente: Roo Code
+2026-07-12 22:44:03,,stackoverflow_scraper,HTTPError,400 Client Error: Bad Request for url: https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Windsurf+AI&site=stackoverflow&fromdate=1672549200&todate=1783914226&pagesize=500&filter=%219_bDDxJY5,Agente: Windsurf AI
+2026-07-12 22:44:05,,stackoverflow_scraper,HTTPError,400 Client Error: Bad Request for url: https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Aider+AI&site=stackoverflow&fromdate=1672549200&todate=1783914226&pagesize=500&filter=%219_bDDxJY5,Agente: Aider AI
+2026-07-12 22:44:07,,stackoverflow_scraper,HTTPError,400 Client Error: Bad Request for url: https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Augment+Code&site=stackoverflow&fromdate=1672549200&todate=1783914226&pagesize=500&filter=%219_bDDxJY5,Agente: Augment Code
+2026-07-12 22:44:09,,stackoverflow_scraper,HTTPError,400 Client Error: Bad Request for url: https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=JetBrains+Junie&site=stackoverflow&fromdate=1672549200&todate=1783914226&pagesize=500&filter=%219_bDDxJY5,Agente: JetBrains Junie
+2026-07-12 22:44:11,,stackoverflow_scraper,HTTPError,400 Client Error: Bad Request for url: https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Gemini+CLI&site=stackoverflow&fromdate=1672549200&todate=1783914226&pagesize=500&filter=%219_bDDxJY5,Agente: Gemini CLI
+2026-07-12 22:44:14,,stackoverflow_scraper,HTTPError,400 Client Error: Bad Request for url: https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=AWS+Kiro&site=stackoverflow&fromdate=1672549200&todate=1783914226&pagesize=500&filter=%219_bDDxJY5,Agente: AWS Kiro
+2026-07-12 22:44:16,,stackoverflow_scraper,HTTPError,400 Client Error: Bad Request for url: https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Kilo+Code&site=stackoverflow&fromdate=1672549200&todate=1783914226&pagesize=500&filter=%219_bDDxJY5,Agente: Kilo Code
+2026-07-12 22:44:18,,stackoverflow_scraper,HTTPError,400 Client Error: Bad Request for url: https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Zencoder&site=stackoverflow&fromdate=1672549200&todate=1783914226&pagesize=500&filter=%219_bDDxJY5,Agente: Zencoder
+2026-07-12 22:44:21,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Cursor AI
+2026-07-12 22:44:25,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Claude Code
+2026-07-12 22:44:28,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: OpenAI Codex
+2026-07-12 22:44:32,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: GitHub Copilot
+2026-07-12 22:44:35,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Cline agent
+2026-07-12 22:44:37,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Roo Code
+2026-07-12 22:44:39,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Windsurf AI
+2026-07-12 22:44:42,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Aider AI
+2026-07-12 22:44:45,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Augment Code
+2026-07-12 22:44:47,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: JetBrains Junie
+2026-07-12 22:44:50,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Gemini CLI
+2026-07-12 22:44:52,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: AWS Kiro
+2026-07-12 22:44:54,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Kilo Code
+2026-07-12 22:44:57,,arxiv_scraper,AttributeError,'str' object has no attribute 'text',Agente: Zencoder
+2026-07-12 22:45:01,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Cursor AI
+2026-07-12 22:45:04,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Claude Code
+2026-07-12 22:45:06,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: OpenAI Codex
+2026-07-12 22:45:09,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: GitHub Copilot
+2026-07-12 22:45:11,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Cline agent
+2026-07-12 22:45:14,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Roo Code
+2026-07-12 22:45:16,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Windsurf AI
+2026-07-12 22:45:19,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Aider AI
+2026-07-12 22:45:21,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Augment Code
+2026-07-12 22:45:24,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: JetBrains Junie
+2026-07-12 22:45:26,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Gemini CLI
+2026-07-12 22:45:29,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: AWS Kiro
+2026-07-12 22:45:31,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Kilo Code
+2026-07-12 22:45:34,,gnews_scraper,AttributeError,'str' object has no attribute 'text',Agente: Zencoder
+2026-07-12 22:48:00,,staging_pipeline,DuplicateWarning,Se descartaron 676 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-12 23:09:46,,staging_pipeline,DuplicateWarning,Se descartaron 4913 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-12 23:13:59,4,gold_loader,sql/07_create_dashboard_view.sql,[Errno 2] No such file or directory: 'sql/07_create_dashboard_view.sql',Error critico en carga Gold
+2026-07-12 23:24:22,,staging_pipeline,DuplicateWarning,Se descartaron 5049 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-12 23:35:18,,staging_pipeline,DuplicateWarning,Se descartaron 5059 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-13 01:26:18,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:27:08,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Claude+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:27:59,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Codex+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:28:56,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=GitHub+Copilot+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:29:51,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Cline+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:30:59,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Windsurf+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:31:58,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Aider+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:32:55,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Augment+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:33:54,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Gemini+CLI+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:40:47,,staging_pipeline,DuplicateWarning,Se descartaron 9831 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-13 01:51:54,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:52:44,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Claude+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:53:34,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Codex+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:54:29,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=GitHub+Copilot+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:55:25,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Cline+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:56:36,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Windsurf+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:57:35,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Aider+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:58:32,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Augment+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 01:59:32,,github,HTTPError,422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Gemini+CLI+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11,Paginacion abortada para esta query
+2026-07-13 02:13:02,,staging_pipeline,DuplicateWarning,Se descartaron 18050 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-13 02:23:01,7,gold_loader,sql/02_load_gold_dimensions.sql,[Errno 2] No such file or directory: 'sql/02_load_gold_dimensions.sql',Error critico en carga Gold
+2026-07-13 06:09:38,,staging_pipeline,DuplicateWarning,Se descartaron 18039 registros durante la deduplicación de Staging.,Omitidos de la inserción a BD.
+2026-07-13 06:14:37,13,gold_quality,validaciones,'>' not supported between instances of 'NoneType' and 'int',Error critico en calidad Gold

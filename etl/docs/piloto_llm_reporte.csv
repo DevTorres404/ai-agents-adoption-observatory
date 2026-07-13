@@ -1,0 +1,51 @@
+fuente,texto_truncado,json_valido,confianza,entorno_uso,tecnologias_detectadas,evidencia_presente,tiempo_segundos
+devto,周日慢读：如果细胞会写日记——FROST家族的记忆传承 周日慢读：如果细胞会写日记——FROST家族的记忆传承   作者：FROST Team 日期：2026-07-12 主题：轻量科普 | 周日轮换...,True,0.95,Web,0,False,8.43
+devto,"I thought my PDF parser was done — then I ran it on 80 real resumes Building RAG pipelines, the step...",True,0.95,Terminal,0,True,5.9
+devto,I Tested My Static Analysis Tool Against 4 Real Open-Source Repos. Here's What It Got Wrong. I've be...,True,0.85,Web,1,True,6.71
+devto,I Built a Social Network Where Humans and AI Models Can Talk Together AI models usually live inside ...,True,0.95,Web,1,True,6.69
+devto,Day 3/30: LLM Context Window Limits Single-shot LLM calls can break down due to limited context wind...,True,0.95,Terminal,0,True,5.24
+devto,RNAValidate: CPU-only validator for AI-predicted 3D RNA structures RNAValidate: CPU-only validator f...,True,0.95,Terminal,1,True,6.11
+devto,How to put a real human approval step between your AI agent and any real-world action I have been bu...,True,0.85,Terminal,1,True,6.14
+devto,Git Solved Source Control. Who Solves Project Intelligence? Git changed software forever.  Before Gi...,True,0.95,Web,1,True,5.92
+devto,"I Poked a 10-Year-Old Chat Protocol With a Stick Hello, I'm Maneshwar. I'm building git-lrc, a Micro...",True,0.95,GitHub,1,True,6.88
+devto,How I Built an AI Agent Store on a Raspberry Pi (And You Can Too) How I Built an AI Agent Store on a...,True,0.85,Terminal,1,True,6.44
+gnews,"GitHub Copilot in Visual Studio Code, May releases - The GitHub Blog...",True,0.95,VS Code,1,True,6.04
+gnews,Living Specs vs Static Specs: Agent Output Guide - Augment Code...,True,0.95,Web,1,True,5.81
+gnews,Auggie 0.25.1 Release Notes - Augment Code...,True,0.95,Terminal,0,False,4.99
+gnews,Max-severity RCE flaw found in Google Gemini CLI - csoonline.com...,True,0.95,Terminal,1,True,6.03
+gnews,Google I/O Recap - Substack...,True,0.95,Web,1,True,6.23
+gnews,Zencoder Launches Zenflow to End the Era of Vibe Coding and Bring Engineering Discipline to AI - HPC...,True,0.85,Web,0,True,5.88
+gnews,"OpenAI’s Codex Rebrand Is a Masterclass in Killing a Developer Brand, Theo Browne Says - finance.big...",True,0.95,Web,0,False,5.21
+gnews,SpaceX Acquires AI Coding Startup Cursor for $60B as Post-IPO Valuation Surges Past $2.7T - AI Insid...,True,0.95,Web,1,True,6.19
+gnews,Unlocking the Codex harness: how we built the App Server - OpenAI...,True,0.85,Web,1,True,6.46
+gnews,"Google Introduces Conductor, a Context-Driven Development Extension for Gemini CLI - infoq.com...",True,0.95,Terminal,1,True,5.93
+hackernews,"Since Chromium 148, Math.tanh is now fingerprintable to link underlying OS...",True,0.85,Terminal,1,True,6.01
+hackernews,I Did Not Kill Stanley Lieber: How to Draw (With 9front)...,True,0.95,Terminal,0,False,5.09
+hackernews,"Old and new apps, via modern coding agents...",True,0.95,Web,1,True,6.23
+hackernews,What xAI's Grok build CLI sends to xAI: A wire-level analysis...,True,0.95,Terminal,0,True,5.56
+hackernews,Ghostel.el: Terminal emulator powered by libghostty...,True,0.95,Terminal,1,True,6.28
+hackernews,Claude Code sends 33k tokens before reading the prompt; OpenCode sends 7k...,True,0.95,Terminal,0,True,5.6
+hackernews,I Did Not Kill Stanley Lieber: How to Draw (With 9front)...,True,0.95,Terminal,0,False,5.06
+hackernews,"Migrating a production AI agent to GPT-5.6: 2.2x faster, 27% cheaper...",True,0.95,Web,1,True,5.73
+hackernews,A dock that wakes up reliably...,True,0.95,Terminal,0,True,5.32
+hackernews,How to read more books...,True,0.85,Web,0,True,5.19
+reddit,What I've Learned After 2 Weeks Working With Cline...,True,0.95,Terminal,1,True,6.03
+reddit,Is Cline dying?...,True,0.85,Terminal,0,True,5.56
+reddit,Cursor is still a beast with unlimited at $20usd...,True,0.95,Web,1,True,5.86
+reddit,Is anyone else upset that Augment is sunsetting their IDE Extensions...,True,0.95,Terminal,0,True,5.43
+reddit,Is RooCode ready to give up the project?...,True,0.95,Terminal,0,False,5.22
+reddit,Has anyone tried ZenCoder?...,True,0.8,Web,0,True,5.47
+reddit,"If your entire job is able being done by Claude code, something is wrong...",True,0.95,Terminal,1,True,5.98
+reddit,Kilo Code Project Rules & Skills (?)...,True,0.5,No determinado,0,False,5.28
+reddit,I switched to Codex and switched back 20 mins later...,True,0.95,Terminal,0,True,5.3
+reddit,Why aren't you using Aider??...,True,0.95,Web,1,True,6.0
+stackoverflow,Intellij Co-pilot No completions were found issue...,True,0.85,JetBrains IDEs,1,True,6.11
+stackoverflow,Combine connected list elements to form distinct list elements...,True,0.95,Terminal,0,False,5.23
+stackoverflow,How to stop Codex from always asking for approval?...,True,0.95,Terminal,0,False,5.1
+stackoverflow,XAML Binding of a property of an object from a collection using a static enum key...,True,0.85,Terminal,1,True,5.83
+stackoverflow,Delphi 13 macOS app and Drag &amp; Drop launch...,True,0.85,Terminal,1,True,6.21
+stackoverflow,Removing GitHub Copilot pop-up settings from VS Code...,True,0.85,VS Code,0,True,6.09
+stackoverflow,How to search a utf8 string in word files using powershell...,True,0.95,Terminal,1,True,5.92
+stackoverflow,Cannot see .csproj files in Visual Studio 2022 Solution Explorer...,True,0.85,VS Code,1,True,6.32
+stackoverflow,How can I disable Chrome pop-ups like this while running automated Selenium tests in Python?...,True,0.85,Terminal,1,True,6.0
+stackoverflow,Sharing and auto inclusion of razor class library static assets via MSBuild &lt;AutoImportReference&...,True,0.85,VS Code,1,True,6.02

@@ -1,0 +1,11 @@
+nombre_agente,categoria_agente,total_observaciones,total_menciones,total_interacciones,promedio_score_adopcion,score_adopcion_total,ranking_adopcion
+Codex,Modelo fundacional de codigo,170036,1628234,3239260,0.1062,18057.82,1
+GitHub Copilot,Equipos GitHub/Microsoft,30492,101243,197698,0.0357,1089.62,2
+Cursor,"Usuarios de VS Code, desarrollo general",27097,67260,227968,0.0261,706.79,3
+Claude Code,Tareas de razonamiento complejo,5313,11010,57033,0.0232,123.16,4
+Windsurf,"Codebases grandes, enterprise",536,280,560,0.0039,2.1,5
+Cline,Usuarios de VS Code agnosticos al modelo,560,190,3497,0.0002,0.12,6
+Aider,Desarrolladores terminal-first,550,180,2145,0.0002,0.1,7
+AWS Kiro,Equipos nativos de AWS,871,459,228,0.0,0.0,8
+Kilo Code,Desarrollo Web / iOS,653,265,927,0.0,0.0,9
+Augment,Enterprise Code AI,623,54,291,0.0,0.0,10

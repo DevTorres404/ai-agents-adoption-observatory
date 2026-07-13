@@ -1,0 +1,11 @@
+source,total_detected,total_removed,total_kept
+arxiv,1190,595,595
+catalogo,620,310,355361
+devto,273,172,136
+fuente_propia,0,0,36
+github,32585,23520,9068
+gnews,0,0,1782
+google_trends,0,0,5180
+hackernews,0,0,120
+reddit,4,2,601
+stackoverflow,4,2,2318

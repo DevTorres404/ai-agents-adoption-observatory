@@ -1,0 +1,31 @@
+source,column_name,null_count,total_count,null_percentage,strategy_applied
+arxiv,nombre_agente,0,524,0.0,Inferido (Regla Regex)
+arxiv,fecha_evento,0,524,0.0,Conservar si no es critico
+arxiv,categoria,0,524,0.0,Conservar si no es critico
+catalogo,nombre_agente,0,341241,0.0,Inferido (Regla Regex)
+catalogo,fecha_evento,0,341241,0.0,Conservar si no es critico
+catalogo,categoria,0,341241,0.0,Conservar si no es critico
+devto,nombre_agente,0,23,0.0,Inferido (Regla Regex)
+devto,fecha_evento,0,23,0.0,Conservar si no es critico
+devto,categoria,0,23,0.0,Conservar si no es critico
+fuente_propia,nombre_agente,0,24,0.0,Inferido (Regla Regex)
+fuente_propia,fecha_evento,0,24,0.0,Conservar si no es critico
+fuente_propia,categoria,0,24,0.0,Conservar si no es critico
+github,nombre_agente,0,6299,0.0,Inferido (Regla Regex)
+github,fecha_evento,0,6299,0.0,Conservar si no es critico
+github,categoria,0,6299,0.0,Conservar si no es critico
+gnews,nombre_agente,0,1445,0.0,Inferido (Regla Regex)
+gnews,fecha_evento,0,1445,0.0,Conservar si no es critico
+gnews,categoria,0,1445,0.0,Conservar si no es critico
+google_trends,nombre_agente,0,5180,0.0,Inferido (Regla Regex)
+google_trends,fecha_evento,0,5180,0.0,Conservar si no es critico
+google_trends,categoria,0,5180,0.0,Conservar si no es critico
+hackernews,nombre_agente,0,4,0.0,Inferido (Regla Regex)
+hackernews,fecha_evento,0,4,0.0,Conservar si no es critico
+hackernews,categoria,0,4,0.0,Conservar si no es critico
+reddit,nombre_agente,0,535,0.0,Inferido (Regla Regex)
+reddit,fecha_evento,0,535,0.0,Conservar si no es critico
+reddit,categoria,0,535,0.0,Conservar si no es critico
+stackoverflow,nombre_agente,0,1670,0.0,Inferido (Regla Regex)
+stackoverflow,fecha_evento,0,1670,0.0,Conservar si no es critico
+stackoverflow,categoria,0,1670,0.0,Conservar si no es critico

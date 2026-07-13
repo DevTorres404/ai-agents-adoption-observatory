@@ -1,0 +1,10 @@
+fuente,tipo_fuente,ruta_relativa,nombre_archivo,tamano_bytes,cantidad_registros,cantidad_columnas,hash_sha256
+arxiv,arxiv,arxiv/arxiv_2026-07-13.json,arxiv_2026-07-13.json,1168129,646,8,8c96ce22e173ccd17785277477a9f825e82935848769649fa7ec1be4812da473
+catalogo,catalogo,catalogo/aidedev_2026-07-13.json,aidedev_2026-07-13.json,103386067,118557,20,0fc5efc37f4aa72add6bcfa8aa53abbad2e41b6d6c9529747b581481331ce3cb
+devto,devto,devto/devto_2026-07-13.json,devto_2026-07-13.json,72538,108,11,c78e17234f61b6c73a8eeaf2466dcb28309c6d535563496558ba4ba635e1d50c
+fuente_propia,fuente_propia,fuente_propia/fuente_propia_2026-07-13.json,fuente_propia_2026-07-13.json,6179,12,10,fe8d1509ab6e6eca171083db84f716a692413d48ea7d3a9aa5dadd68f9007a8d
+github,github,github/github_2026-07-13.json,github_2026-07-13.json,71943420,10470,83,2a3273ad3a9ef7709567c2258c61bdb6b77eac82c9ed6889a016c6b46e30f684
+gnews,gnews,gnews/gnews_2026-07-13.json,gnews_2026-07-13.json,782877,891,8,7f95b9d581329659ca57458583378e0018074608645793d7d06890d30aad0fd4
+hackernews,hackernews,hackernews/hackernews_2026-07-13.json,hackernews_2026-07-13.json,12756,30,10,d095e738bd811b0c42bc763ef70f93670c79a999c5dadcdfb72d5804fcf5bb9f
+reddit,reddit,reddit/reddit_2026-07-13.json,reddit_2026-07-13.json,111584,201,10,6760f6c905a4f203e8e26085c55b082733e95583fbd9f246149e32b57fef3475
+stackoverflow,stackoverflow,stackoverflow/stackoverflow_2026-07-13.json,stackoverflow_2026-07-13.json,4586074,1160,12,d4bdeb0beeaed88a0665b1944490a2c2ab72286bfb4d8b8fca8fc5d1ad01dc47
