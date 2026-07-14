@@ -40,6 +40,7 @@ def extract_gnews():
                     title = item.find('title').text if item.find('title') is not None else ""
                     link = item.find('link').text if item.find('link') is not None else ""
                     pubDate = item.find('pubDate').text if item.find('pubDate') is not None else ""
+                    publisher = item.find('source').text if item.find('source') is not None else ""
                     
                     try:
                         # pubDate form: "Thu, 26 Oct 2023 07:00:00 GMT"
@@ -57,6 +58,7 @@ def extract_gnews():
                         "platform": "google_news",
                         "source": "rss_gnews",
                         "agent_search": agent_query,
+                        "publisher": publisher,
                     })
                     
                 global_logger.info(f"Google News: {len(items)} noticias para '{agent_query}'.")

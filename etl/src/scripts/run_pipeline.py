@@ -39,19 +39,25 @@ def start_pipeline_audit():
         return None
 
 def end_pipeline_audit(run_id, status="completed", error_msg=None):
-    """Actualiza el registro final con las métricas extraídas desde quality_summary"""
+    """Cierra el run con conteos actuales, sin reutilizar resúmenes históricos."""
     if not db_connector.engine or not run_id:
         return
         
     try:
         with db_connector.engine.begin() as conn:
-            # Recuperar las últimas métricas calculadas por Quality Framework
-            metrics = conn.execute(text("SELECT * FROM audit.quality_summary ORDER BY id DESC LIMIT 1")).fetchone()
-            
-            raw_recs = metrics.total_raw_records if metrics else 0
-            stg_recs = metrics.total_staging_records if metrics else 0
-            dropped = metrics.total_duplicates_removed if metrics else 0
-            comp_rate = metrics.completion_rate if metrics else 0.0
+            # Cada run debe reflejar el estado materializado de la BD al cerrar.
+            # quality_summary puede pertenecer a otra ejecución y no es una
+            # fuente válida para auditar el run actual.
+            counts = conn.execute(text("""
+                SELECT
+                    (SELECT COUNT(*) FROM raw.raw_records) AS raw_records,
+                    (SELECT COUNT(*) FROM staging.stg_actividad_agente_ia) AS staging_records
+            """)).one()
+
+            raw_recs = int(counts.raw_records or 0)
+            stg_recs = int(counts.staging_records or 0)
+            dropped = max(raw_recs - stg_recs, 0)
+            comp_rate = round((stg_recs / raw_recs) * 100, 2) if raw_recs else 0.0
             
             query = text("""
                 UPDATE audit.pipeline_runs
@@ -149,6 +155,7 @@ def run_gold_phase(run_id):
         raise Exception("Sin conexión a BD para la fase Gold")
         
     etl_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    migration_path = os.path.join(etl_dir, "sql", "07_add_semantic_staging_columns.sql")
     scripts = [
         os.path.join(etl_dir, "sql", "02_load_gold_dimensions.sql"),
         os.path.join(etl_dir, "sql", "03_load_gold_fact.sql"),
@@ -159,6 +166,24 @@ def run_gold_phase(run_id):
     with db_connector.engine.begin() as conn:
         raw_conn = conn.connection
         cursor = raw_conn.cursor()
+        global_logger.info(f"Ejecutando {migration_path}...")
+        with open(migration_path, 'r', encoding='utf-8') as migration_file:
+            cursor.execute(migration_file.read())
+
+        cursor.execute("""
+            SELECT COUNT(*)
+            FROM staging.stg_actividad_agente_ia
+            WHERE dim_nombre_plataforma IS NULL
+               OR dim_nombre_tecnologia IS NULL
+               OR dim_nombre_comunidad IS NULL
+        """)
+        pending_semantic_rows = cursor.fetchone()[0]
+        if pending_semantic_rows > 0:
+            raise Exception(
+                f"Staging contiene {pending_semantic_rows} registros sin enriquecimiento semántico. "
+                "Ejecute primero la fase staging antes de cargar Gold."
+            )
+
         for script_path in scripts:
             global_logger.info(f"Ejecutando {script_path}...")
             try:
@@ -220,9 +245,9 @@ def run_gold_quality(run_id):
             # 6. Duplicados por grano
             dups = conn.execute(text("""
                 SELECT COUNT(*) FROM (
-                    SELECT id_tiempo, id_agente, id_fuente, id_plataforma, id_tecnologia, id_comunidad, id_origen_registro
+                    SELECT id_agente, id_fuente, id_plataforma, id_origen_registro
                     FROM gold.fact_actividad_agente_ia
-                    GROUP BY id_tiempo, id_agente, id_fuente, id_plataforma, id_tecnologia, id_comunidad, id_origen_registro
+                    GROUP BY id_agente, id_fuente, id_plataforma, id_origen_registro
                     HAVING COUNT(*) > 1
                 ) sub
             """)).scalar()
@@ -271,6 +296,7 @@ def main():
         error_str = f"Fallo Crítico: {str(e)}"
         global_logger.error(error_str)
         end_pipeline_audit(run_id, status="failed", error_msg=error_str)
+        raise
 
 if __name__ == "__main__":
     main()

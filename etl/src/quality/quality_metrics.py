@@ -4,6 +4,7 @@ from src.utils.db import db_connector
 from src.utils.logger import global_logger
 from src.utils.paths import ROOT_DIR
 from src.quality.quality_checks import (
+    build_candidate_staging_frame,
     get_casting_report,
     get_dedup_report,
     get_homologation_map,
@@ -19,6 +20,11 @@ def run_quality_framework():
     if not db_connector.engine:
         global_logger.error("No hay conexión a la base de datos.")
         return
+
+    # Evita reutilizar candidatos de una invocación previa dentro de procesos
+    # persistentes, pero comparte una sola construcción entre todos los
+    # reportes de esta ejecución.
+    build_candidate_staging_frame.cache_clear()
 
     # Extraer métricas
     summary = get_overall_metrics()

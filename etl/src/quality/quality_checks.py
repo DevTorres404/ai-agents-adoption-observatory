@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 import pandas as pd
 from sqlalchemy import text
 
@@ -5,6 +7,7 @@ from src.staging.stg_agents import extract_agent
 from src.staging.stg_categories import assign_categories
 from src.staging.stg_dates import parse_dates
 from src.staging.stg_normalize_columns import normalize_dataframe
+from src.staging.stg_semantic_dimensions import enrich_semantic_dimensions
 from src.utils.db import db_connector
 
 
@@ -29,11 +32,28 @@ STAGING_CONTRACT_COLUMNS = [
     "indice_adopcion",
     "indice_innovacion",
     "sentimiento_promedio",
+    "dim_nombre_plataforma",
+    "dim_tipo_plataforma",
+    "dim_ecosistema",
+    "dim_plataforma_metodo",
+    "dim_nombre_tecnologia",
+    "dim_categoria_tecnologia",
+    "dim_dominio_tecnologico",
+    "dim_tipo_senal",
+    "dim_tecnologia_metodo",
+    "dim_nombre_comunidad",
+    "dim_tipo_comunidad",
+    "dim_region_comunidad",
+    "dim_comunidad_metodo",
     "raw_file_id",
 ]
 
-DEDUP_KEY = ["fuente", "plataforma", "id_origen_registro", "nombre_agente", "fecha_evento"]
-CRITICAL_COLUMNS = ["id_origen_registro", "fuente", "plataforma", "fecha_evento", "nombre_agente", "categoria"]
+DEDUP_KEY = ["fuente", "plataforma", "id_origen_registro", "nombre_agente"]
+CRITICAL_COLUMNS = [
+    "id_origen_registro", "fuente", "plataforma", "fecha_evento",
+    "nombre_agente", "categoria", "dim_nombre_plataforma",
+    "dim_nombre_tecnologia", "dim_nombre_comunidad",
+]
 NUMERIC_COLUMNS = [
     "cantidad_menciones",
     "cantidad_interacciones",
@@ -50,7 +70,8 @@ NUMERIC_COLUMNS = [
 
 def _fetch_raw_rows():
     query = text("""
-        SELECT r.raw_data, f.fuente, f.tipo_fuente, f.id AS file_id
+        SELECT r.raw_data, f.fuente, f.tipo_fuente, f.id AS file_id,
+               f.fecha_carga AS file_load_date
         FROM raw.raw_records r
         JOIN raw.raw_files f ON r.file_id = f.id
     """)
@@ -58,26 +79,34 @@ def _fetch_raw_rows():
         return conn.execute(query).fetchall()
 
 
+@lru_cache(maxsize=1)
 def build_candidate_staging_frame():
+    """Construye una vez por ejecución el candidato usado por todos los reportes."""
     rows = _fetch_raw_rows()
     if not rows:
         return pd.DataFrame(columns=STAGING_CONTRACT_COLUMNS)
 
     grouped = {}
     for row in rows:
-        key = (row.fuente, row.tipo_fuente, row.file_id)
+        key = (row.fuente, row.tipo_fuente, row.file_id, row.file_load_date)
         grouped.setdefault(key, []).append(row.raw_data)
 
     frames = []
-    for (fuente, tipo_fuente, file_id), records in grouped.items():
+    for (fuente, tipo_fuente, file_id, file_load_date), records in grouped.items():
         raw_df = pd.DataFrame(records)
-        meta = {"fuente": fuente, "tipo_fuente": tipo_fuente, "id": file_id}
+        meta = {
+            "fuente": fuente,
+            "tipo_fuente": tipo_fuente,
+            "id": file_id,
+            "fecha_carga": file_load_date,
+        }
         frames.append(normalize_dataframe(raw_df, meta))
 
     df = pd.concat(frames, ignore_index=True)
     df = parse_dates(df)
     df = extract_agent(df)
     df = assign_categories(df)
+    df = enrich_semantic_dimensions(df)
 
     for col in DEDUP_KEY:
         if col in df.columns:

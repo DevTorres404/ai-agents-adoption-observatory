@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS staging.stg_actividad_agente_ia CASCADE;
 
 CREATE TABLE staging.stg_actividad_agente_ia (
     id SERIAL PRIMARY KEY,
-    id_origen_registro VARCHAR(255) NOT NULL,
+    id_origen_registro TEXT NOT NULL,
     fuente VARCHAR(100) NOT NULL,
     tipo_fuente VARCHAR(50) NOT NULL,
     plataforma VARCHAR(100) NOT NULL,
@@ -30,6 +30,21 @@ CREATE TABLE staging.stg_actividad_agente_ia (
     llm_capacidades TEXT,
     llm_comunidad_tipo VARCHAR(100),
     llm_confianza NUMERIC(3,2),
+    -- Claves de negocio enriquecidas para las dimensiones Gold.
+    -- Los campos *_metodo conservan la procedencia de cada derivación.
+    dim_nombre_plataforma VARCHAR(100),
+    dim_tipo_plataforma VARCHAR(100),
+    dim_ecosistema VARCHAR(100),
+    dim_plataforma_metodo VARCHAR(50),
+    dim_nombre_tecnologia VARCHAR(120),
+    dim_categoria_tecnologia VARCHAR(100),
+    dim_dominio_tecnologico VARCHAR(120),
+    dim_tipo_senal VARCHAR(100),
+    dim_tecnologia_metodo VARCHAR(50),
+    dim_nombre_comunidad VARCHAR(120),
+    dim_tipo_comunidad VARCHAR(100),
+    dim_region_comunidad VARCHAR(100),
+    dim_comunidad_metodo VARCHAR(50),
     is_imputed_date BOOLEAN DEFAULT FALSE,
     fecha_carga TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     raw_file_id INTEGER REFERENCES raw.raw_files(id),

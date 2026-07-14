@@ -114,6 +114,14 @@
 Plataforma de Inteligencia de Negocios para el análisis de tendencias, adopción y evolución de agentes de inteligencia artificial en el dominio del desarrollo de software durante el período 2023--2026
 \end{minipage}
 
+\vspace{0.4cm}
+{\normalsize\bfseries Enlaces del Proyecto}\\[0.15cm]
+\begin{minipage}{0.90\textwidth}
+\centering
+\textbf{Producción:} \url{https://bi.labtorres.me/} \\[0.1cm]
+\textbf{Repositorio:} \url{https://github.com/DevTorres404/ai-agents-adoption-observatory}
+\end{minipage}
+
 \vspace{0.45cm}
 {\bfseries Autores}\\[0.15cm]
 Damian Jesús Torres Cadena\\
@@ -137,7 +145,7 @@ Julio de 2026
 % 2. ABSTRACT (150-200 palabras)
 % ==============================================================
 \begin{abstract}
-Este estudio presenta el diseño, implementación y auditoría crítica de un observatorio de inteligencia de negocios orientado a medir señales de adopción de agentes de inteligencia artificial en el desarrollo de software entre 2023 y julio de 2026. Se integraron diez fuentes heterogéneas mediante una arquitectura Medallion con capas Raw, Staging y Gold, PostgreSQL 16, procesos ETL en Python, una API FastAPI y un tablero React. La lectura operativa del Data Warehouse registró 356.945 hechos, 14 agentes, 2.714.357 menciones y 5.485.179 interacciones. Sin embargo, una prueba de robustez por clave estable redujo el universo a 127.756 observaciones únicas, revelando un factor de inflación de 2,794 asociado a instantáneas repetidas y fechas aleatorizadas. En el conjunto robusto, Codex concentró el 66,99\% de observaciones y el catálogo AIDev el 89,11\% de la evidencia. La calidad reportada fue 89,26\% de completitud, sin nulos críticos. Se concluye que la plataforma es funcional para BI descriptivo y trazabilidad técnica, pero sus tendencias temporales y totales acumulados no deben interpretarse como inferencia poblacional hasta corregir la identidad de registros, preservar las fechas originales y equilibrar las fuentes.
+Este estudio presenta el diseño, implementación y auditoría crítica de un observatorio de inteligencia de negocios orientado a medir señales de adopción de agentes de inteligencia artificial en el desarrollo de software entre 2023 y julio de 2026. Se integraron diez fuentes heterogéneas mediante una arquitectura Medallion con capas Raw, Staging y Gold, PostgreSQL 16, procesos ETL en Python, una API FastAPI y un tablero React. El corte reproducible contiene 399.900 registros Raw y 127.364 hechos Gold correspondientes a entidades de origen únicas, con 14 agentes, 910.231 menciones y 1.905.375 interacciones. La completitud Raw--Staging fue 31,85\%, se identificaron 264.211 candidatos duplicados y no se detectaron nulos críticos, claves foráneas inválidas ni métricas negativas. Codex concentró el 67,07\% de las observaciones y el catálogo AIDev el 89,22\% de la evidencia. Fuente, plataforma, tecnología y comunidad se modelaron como conceptos distintos mediante metadatos, reglas trazables y miembros explícitos no determinados. Se concluye que la plataforma es reproducible y funcional para BI descriptivo, aunque la concentración de fuentes, la heterogeneidad de señales y las fechas agregadas de AIDev impiden interpretar sus KPIs como una tasa poblacional o una estimación causal.
 \end{abstract}
 
 \textbf{Palabras clave:} inteligencia de negocios, agentes de IA, arquitectura Medallion, Data Warehouse, calidad de datos, adopción tecnológica, ingeniería de software.
@@ -191,7 +199,7 @@ La literatura también obliga a separar tres conceptos: \emph{presencia} de la h
 
 La inteligencia de negocios transforma datos integrados en estructuras que facilitan análisis, comparación y toma de decisiones. El modelado dimensional organiza los hechos cuantitativos alrededor de dimensiones descriptivas; su diseño exige seleccionar el proceso, declarar el grano, identificar dimensiones y determinar hechos \cite{kimball_book,kimball_process}.
 
-El modelo del proyecto adopta un esquema estrella con una tabla de hechos de actividad y seis dimensiones: tiempo, agente, fuente, plataforma, tecnología y comunidad. El grano declarado es una actividad observada para un agente, fuente, plataforma, categoría y fecha. Las claves primarias, foráneas, restricciones de no negatividad y unicidad implementadas en PostgreSQL aportan integridad estructural \cite{postgres_constraints}.
+El modelo del proyecto adopta un esquema estrella con una tabla de hechos de actividad y seis dimensiones: tiempo, agente, fuente, plataforma, tecnología y comunidad. El grano declarado es la última representación disponible de una entidad de origen para un agente, una fuente y una plataforma. La fecha describe la observación, pero no forma parte de su identidad estable. Las claves primarias, foráneas, restricciones de no negatividad y unicidad implementadas en PostgreSQL aportan integridad estructural \cite{postgres_constraints}.
 
 \subsection{Arquitectura Medallion y procesos ETL}
 
@@ -236,7 +244,7 @@ donde $p_s$ es la proporción de observaciones atribuida a la fuente $s$. Valore
 
 \subsection{Diseño del estudio y alcance}
 
-Se realizó un estudio observacional, retrospectivo, descriptivo y exploratorio apoyado en ingeniería de datos. La ventana configurada fue del 1 de enero de 2023 al 13 de julio de 2026. La fecha final corresponde al corte de auditoría y el mes de julio de 2026 es parcial. La unidad técnica de la tabla de hechos es una observación asociada a agente, fuente, plataforma, tecnología, comunidad, identificador de origen y fecha.
+Se realizó un estudio observacional, retrospectivo, descriptivo y exploratorio apoyado en ingeniería de datos. La ventana configurada fue del 1 de enero de 2023 al 13 de julio de 2026; el rango efectivamente observado fue del 3 de enero de 2023 al 13 de julio de 2026. La fecha final corresponde al corte de auditoría y el mes de julio de 2026 es parcial. La unidad técnica de la tabla de hechos es una entidad de origen única asociada a agente, fuente y plataforma, descrita además por fecha, tecnología y comunidad.
 
 No se realizó muestreo probabilístico de desarrolladores ni inferencia causal. Los resultados describen exclusivamente el corpus integrado por el pipeline.
 
@@ -282,7 +290,18 @@ El procedimiento auditado consta de seis fases:
   \item \textbf{Gold y servicio:} carga de dimensiones/hechos, siete vistas KPI, API REST y dashboard interactivo.
 \end{enumerate}
 
-Para fuentes no estructuradas existe un enriquecimiento opcional con Llama 3.2 mediante Ollama. El modelo opera con temperatura cero, semilla 42, vocabularios cerrados y umbral de confianza de 0,85. Los atributos derivados alimentan dimensiones de plataforma, tecnología y comunidad.
+Como se muestra en la Figura~\ref{fig:arquitectura-medallion}, el observatorio integra las fuentes heterogéneas mediante las capas Raw/Bronze, Staging/Silver y Gold/Data Warehouse, antes de publicar los resultados mediante FastAPI y el dashboard React.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{diagrama.png}
+\caption{Arquitectura lógica y pipeline Medallion del Observatorio de Adopción de Agentes de IA.}
+\label{fig:arquitectura-medallion}
+\vspace{0.15cm}
+{\footnotesize Fuente: Elaboración propia.}
+\end{figure}
+
+Para fuentes no estructuradas existe un enriquecimiento opcional con Llama 3.2 mediante Ollama. El modelo opera con temperatura cero, semilla 42, vocabularios cerrados y umbral de confianza de 0,85. Después se ejecuta una capa determinista: primero consume metadatos estructurados, luego reglas contextuales y de agente, y finalmente asigna un miembro explícito ``No determinada'' cuando no existe evidencia. En este contrato, \emph{fuente} es el origen de extracción; \emph{plataforma} es el entorno de ejecución o integración; \emph{tecnología} identifica lenguajes, frameworks, protocolos o infraestructura; y \emph{comunidad} representa propietarios, organizaciones o espacios sociales, académicos y editoriales.
 
 \subsection{Modelo dimensional}
 
@@ -297,13 +316,13 @@ El Data Warehouse implementa el proceso de actividad de agentes con la siguiente
 \rowcolor{gray!22}
 \textbf{Objeto} & \textbf{Tipo} & \textbf{Propósito} & \textbf{Filas} \\
 \midrule
-\pathcode{gold.dim_tiempo} & Dimensión & Fecha, año, semestre, trimestre, mes, semana y día & 1.290 \\
+\pathcode{gold.dim_tiempo} & Dimensión & Fecha, año, semestre, trimestre, mes, semana y día & 955 \\
 \pathcode{gold.dim_agente} & Dimensión & Identidad, proveedor, tipo y categoría del agente & 14 \\
 \pathcode{gold.dim_fuente} & Dimensión & Origen, tipo, categoría y condición de fuente propia & 10 \\
-\pathcode{gold.dim_plataforma} & Dimensión & Canal, tipo y ecosistema & 10 \\
-\pathcode{gold.dim_tecnologia} & Dimensión & Categoría, dominio y tipo de señal & 5 \\
-\pathcode{gold.dim_comunidad} & Dimensión & Comunidad, plataforma y región & 10 \\
-\pathcode{gold.fact_actividad_agente_ia} & Hechos & Métricas y claves de procedencia & 356.945 \\
+\pathcode{gold.dim_plataforma} & Dimensión & Entorno de ejecución/integración, tipo y ecosistema & 12 \\
+\pathcode{gold.dim_tecnologia} & Dimensión & Tecnología, categoría, dominio y tipo de señal & 42 \\
+\pathcode{gold.dim_comunidad} & Dimensión & Propietario o espacio, tipo, plataforma y región & 91.158 \\
+\pathcode{gold.fact_actividad_agente_ia} & Hechos & Métricas y claves de procedencia & 127.364 \\
 \bottomrule
 \end{tabularx}
 \caption{Modelo dimensional y conteos del corte auditado.}
@@ -334,15 +353,15 @@ S_{act}=I+Stars+Forks+Issues+Releases,
 
 donde $I$ corresponde a interacciones. El score de comunidad suma menciones e interacciones únicamente para Reddit, Hacker News, Dev.to o registros clasificados como comunidad.
 
-Para detectar repetición entre cargas se definió una clave de robustez independiente de la fecha:
+Para impedir repetición entre cargas se definió una clave estable independiente de la fecha:
 
 \begin{equation}
-K_r=(fuente,plataforma,agente,id\_origen),
+K_e=(fuente,plataforma,agente,id\_origen),
 \qquad
-F=\frac{N_{Gold}}{N_{K_r}},
+F=\frac{N_{Gold}}{N_{K_e}},
 \end{equation}
 
-donde $F$ es el factor de inflación por instantáneas repetidas. Esta prueba no sustituye una corrección del ETL; sirve para cuantificar la sensibilidad de los KPIs.
+donde $F$ es el control de idempotencia por instantáneas repetidas. El ETL ordena versiones por fecha y \pathcode{raw_file_id}, conserva determinísticamente la más reciente y aplica la misma unicidad en Staging y Gold. En el corte final, $N_{Gold}=N_{K_e}=127.364$ y $F=1,000$.
 
 \subsection{Infraestructura tecnológica}
 
@@ -375,7 +394,7 @@ Publicación & Nginx, Cloudflare Tunnel & Servicio web y proxy hacia la API \\
 
 \subsection{Estado operativo del Data Warehouse}
 
-La auditoría directa de PostgreSQL del 13 de julio de 2026 registró 399.900 filas Raw y 356.945 hechos Gold. Las seis claves foráneas de la tabla de hechos resultaron válidas, no se detectaron métricas negativas ni duplicados bajo el grano SQL vigente y las siete vistas KPI devolvieron resultados.
+La auditoría directa de PostgreSQL del 13 de julio de 2026 registró 399.900 filas Raw, 127.364 filas Staging y 127.364 hechos Gold. Las seis claves foráneas de la tabla de hechos resultaron válidas, no se detectaron métricas negativas ni duplicados bajo la clave estable y las siete vistas KPI devolvieron resultados. La igualdad Staging--Gold confirma que la materialización dimensional no perdió observaciones aptas.
 
 \begin{table}[H]
 \centering
@@ -386,22 +405,23 @@ La auditoría directa de PostgreSQL del 13 de julio de 2026 registró 399.900 fi
 \rowcolor{gray!22}
 \textbf{KPI operativo} & \textbf{Resultado} & \textbf{Interpretación permitida} \\
 \midrule
-Hechos Gold & 356.945 & Volumen materializado por el DW \\
-Agentes / fuentes / plataformas & 14 / 10 / 10 & Cobertura nominal del modelo \\
-Menciones & 2.714.357 & Suma de la variable homologada; depende de la fuente \\
-Interacciones & 5.485.179 & Suma de señales de interacción heterogéneas \\
-Score de adopción total & 29.958,79 & Indicador acumulado, sensible a duplicación \\
-Score de adopción promedio & 0,0839 & Promedio por hecho; no es porcentaje poblacional \\
-Período Gold & 2023-01-01 a 2026-07-13 & Ventana técnica, con julio de 2026 incompleto \\
+Hechos Gold & 127.364 & Entidades de origen únicas materializadas por el DW \\
+Agentes / fuentes / plataformas & 14 / 10 / 12 & Cobertura nominal del modelo \\
+Tecnologías / comunidades & 42 / 91.158 & Tecnologías y propietarios/espacios identificados \\
+Menciones & 910.231 & Suma de la variable homologada; depende de la fuente \\
+Interacciones & 1.905.375 & Suma de señales de interacción heterogéneas \\
+Score de adopción total & 9.966,14 & Indicador operacional acumulado \\
+Score de adopción promedio & 0,0782 & Promedio por hecho; no es porcentaje poblacional \\
+Período Gold & 2023-01-03 a 2026-07-13 & Rango observado, con julio de 2026 incompleto \\
 \bottomrule
 \end{tabularx}
 \caption{Resumen operacional del Gold activo.}
 \label{tab:operativos}
 \end{table}
 
-\subsection{Robustez frente a instantáneas repetidas}
+\subsection{Corrección de identidad e idempotencia}
 
-La deduplicación adicional por $K_r$ redujo los 356.945 hechos a 127.756 observaciones únicas y produjo $F=2,794$. Es decir, el volumen Gold es 2,794 veces el volumen obtenido cuando se conserva una sola representación de cada entidad estable. En el catálogo AIDev el factor fue 2,997, consistente con tres cargas históricas del mismo dataset cuyos registros recibieron fechas distintas.
+Un corte histórico anterior contenía 356.945 hechos porque varias instantáneas de una misma entidad podían sobrevivir cuando la fecha participaba en la identidad. La corrección incorporó el identificador estable de origen, retiró la fecha de la clave de deduplicación, conservó la versión más reciente y alineó las restricciones SQL. El Gold vigente contiene 127.364 entidades y una segunda agrupación por $K_e$ devuelve exactamente 127.364; por tanto, $F=1,000$. La comparación siguiente documenta el efecto de la corrección, no dos lecturas coexistentes del DW actual.
 
 \begin{table}[H]
 \centering
@@ -410,22 +430,22 @@ La deduplicación adicional por $K_r$ redujo los 356.945 hechos a 127.756 observ
 \begin{tabularx}{\textwidth}{P{3.2cm} P{2.2cm} P{2.2cm} P{2.0cm} Y}
 \toprule
 \rowcolor{gray!22}
-\textbf{Métrica} & \textbf{Gold operativo} & \textbf{Lectura robusta} & \textbf{Razón} & \textbf{Efecto} \\
+\textbf{Métrica} & \textbf{Corte histórico} & \textbf{Gold corregido} & \textbf{Razón} & \textbf{Efecto} \\
 \midrule
-Observaciones & 356.945 & 127.756 & 2,794 & Inflación global entre instantáneas \\
-Menciones & 2.714.357 & 909.707 & 2,984 & Totales dominados por catálogo repetido \\
-Interacciones & 5.485.179 & 1.908.504 & 2,874 & Sensibilidad alta a cargas sucesivas \\
-Adopción total & 29.958,79 & 9.993,99 & 2,998 & Suma no comparable sin deduplicación \\
-Adopción promedio & 0,0839 & 0,0782 & 1,073 & Menor sensibilidad que los totales \\
+Observaciones & 356.945 & 127.364 & 2,803 & Eliminación de instantáneas repetidas \\
+Menciones & 2.714.357 & 910.231 & 2,982 & Corrección de acumulación histórica \\
+Interacciones & 5.485.179 & 1.905.375 & 2,879 & Corrección de acumulación histórica \\
+Adopción total & 29.958,79 & 9.966,14 & 3,006 & Una representación por entidad \\
+Adopción promedio & 0,0839 & 0,0782 & 1,072 & Menor sensibilidad que los totales \\
 \bottomrule
 \end{tabularx}
-\caption{Comparación entre KPIs operativos y lectura robusta.}
+\caption{Efecto documentado de la corrección de identidad sobre los KPIs.}
 \label{tab:robustez}
 \end{table}
 
-Por tanto, los conteos acumulados y scores totales deben publicarse con la clave de robustez o después de corregir el ETL. Los promedios son menos sensibles, pero permanecen afectados por la mezcla de escalas entre fuentes.
+El corte histórico se conserva únicamente como evidencia de auditoría. Toda consulta, API y visualización vigente utiliza el Gold corregido. Los promedios continúan afectados por la mezcla de escalas entre fuentes, aunque ya no por repetición de instantáneas.
 
-\subsection{Adopción por agente en la lectura robusta}
+\subsection{Adopción por agente en el Gold corregido}
 
 \begin{table}[H]
 \centering
@@ -436,21 +456,21 @@ Por tanto, los conteos acumulados y scores totales deben publicarse con la clave
 \rowcolor{gray!22}
 \textbf{Agente} & \textbf{Observaciones} & \textbf{Part.} & \textbf{Menciones} & \textbf{Interacciones} & \textbf{Adopción total} \\
 \midrule
-Codex & 85.585 & 66,99\% & 814.733 & 1.628.228 & 9.032,78 \\
-GitHub Copilot & 16.488 & 12,91\% & 51.241 & 103.717 & 544,97 \\
-Cursor & 15.136 & 11,85\% & 34.857 & 116.929 & 353,48 \\
-Claude Code & 4.043 & 3,16\% & 6.502 & 50.403 & 61,60 \\
-AWS Kiro & 989 & 0,77\% & 576 & 239 & 0,00 \\
-Aider & 739 & 0,58\% & 366 & 2.226 & 0,05 \\
-Cline & 717 & 0,56\% & 343 & 3.980 & 0,06 \\
-Resto de agentes & 4.059 & 3,18\% & 1.089 & 2.782 & 1,05 \\
+Codex & 85.424 & 67,07\% & 812.655 & 1.623.787 & 9.007,68 \\
+GitHub Copilot & 16.383 & 12,86\% & 52.516 & 105.025 & 544,19 \\
+Cursor & 15.069 & 11,83\% & 35.140 & 116.674 & 351,68 \\
+Claude Code & 3.991 & 3,13\% & 6.943 & 50.561 & 61,43 \\
+AWS Kiro & 989 & 0,78\% & 619 & 239 & 0,00 \\
+Aider & 739 & 0,58\% & 372 & 2.226 & 0,05 \\
+Cline & 717 & 0,56\% & 354 & 3.985 & 0,06 \\
+Resto de agentes & 4.052 & 3,18\% & 1.632 & 2.878 & 1,05 \\
 \bottomrule
 \end{tabularx}
-\caption{Principales agentes después de deduplicar entre instantáneas.}
+\caption{Principales agentes en el Gold corregido.}
 \label{tab:agentes}
 \end{table}
 
-Codex lidera el corpus robusto con 66,99\% de las observaciones y 90,38\% del score de adopción total robusto. Este hallazgo describe la composición del corpus; no demuestra que dos tercios de la población de desarrolladores use Codex.
+Codex lidera el corpus con 67,07\% de las observaciones y 90,38\% del score de adopción total. Este hallazgo describe la composición del corpus; no demuestra que dos tercios de la población de desarrolladores use Codex.
 
 \subsection{Participación y concentración por fuente}
 
@@ -458,28 +478,28 @@ Codex lidera el corpus robusto con 66,99\% de las observaciones y 90,38\% del sc
 \centering
 \small
 \rowcolors{2}{gray!8}{white}
-\begin{tabularx}{\textwidth}{P{3.2cm} P{2.3cm} P{2.1cm} P{2.3cm} P{2.1cm} Y}
+\begin{tabularx}{\textwidth}{P{3.2cm} P{2.2cm} P{2.1cm} P{2.3cm} P{2.3cm} Y}
 \toprule
 \rowcolor{gray!22}
-\textbf{Fuente} & \textbf{Gold} & \textbf{Part. Gold} & \textbf{Únicos} & \textbf{Part. robusta} & \textbf{Factor} \\
+\textbf{Fuente} & \textbf{Observaciones} & \textbf{Participación} & \textbf{Menciones} & \textbf{Interacciones} & \textbf{Adopción} \\
 \midrule
-Catálogo AIDev & 341.241 & 95,60\% & 113.845 & 89,11\% & 2,997 \\
-GitHub & 6.299 & 1,76\% & 6.299 & 4,93\% & 1,000 \\
-Google Trends & 5.180 & 1,45\% & 5.180 & 4,05\% & 1,000 \\
-Stack Overflow & 1.670 & 0,47\% & 924 & 0,72\% & 1,807 \\
-Google News & 1.445 & 0,40\% & 753 & 0,59\% & 1,919 \\
-arXiv & 524 & 0,15\% & 524 & 0,41\% & 1,000 \\
-Reddit & 535 & 0,15\% & 199 & 0,16\% & 2,688 \\
-Dev.to & 23 & 0,01\% & 23 & 0,02\% & 1,000 \\
-Encuesta UPSE & 24 & 0,01\% & 8 & 0,01\% & 3,000 \\
-Hacker News & 4 & $<$0,01\% & 1 & $<$0,01\% & 4,000 \\
+Catálogo AIDev & 113.633 & 89,22\% & 900.698 & 1.784.645 & 9.958,14 \\
+GitHub & 6.299 & 4,95\% & 6.299 & 118.375 & 0,00 \\
+Google Trends & 5.180 & 4,07\% & 0 & 0 & 0,00 \\
+Stack Overflow & 812 & 0,64\% & 1.815 & 1.808 & 0,00 \\
+Google News & 743 & 0,58\% & 743 & 0 & 0,00 \\
+arXiv & 466 & 0,37\% & 466 & 0 & 0,00 \\
+Reddit & 199 & 0,16\% & 199 & 0 & 0,00 \\
+Dev.to & 23 & 0,02\% & 3 & 3 & 0,00 \\
+Encuesta UPSE & 8 & 0,01\% & 8 & 0 & 8,00 \\
+Hacker News & 1 & $<$0,01\% & 0 & 544 & 0,00 \\
 \bottomrule
 \end{tabularx}
-\caption{Participación por fuente antes y después de la prueba de robustez.}
+\caption{Participación y métricas por fuente en el Gold corregido.}
 \label{tab:participacion}
 \end{table}
 
-El índice de concentración robusto fue $H=0,7983$ (7.983 sobre una escala de 10.000), lo que confirma una dependencia muy alta del catálogo AIDev. La diversidad nominal de diez fuentes no implica equilibrio efectivo entre ellas.
+El índice de concentración fue $H=0,8002$ (8.002 sobre una escala de 10.000), lo que confirma una dependencia muy alta del catálogo AIDev. La diversidad nominal de diez fuentes no implica equilibrio efectivo entre ellas.
 
 \subsection{Calidad de datos}
 
@@ -493,24 +513,26 @@ El índice de concentración robusto fue $H=0,7983$ (7.983 sobre una escala de 1
 \textbf{Control} & \textbf{Resultado} & \textbf{Lectura crítica} \\
 \midrule
 Raw procesado & 399.900 & Universo persistido al corte \\
-Staging reportado por auditoría & 356.945 & Base usada para el Gold actual \\
-Completitud & 89,26\% & Relación Staging/Raw \\
-Merma & 10,74\% & Incluye duplicados y conflictos históricos \\
-Duplicados removidos & 24.557 & El desglose registra 24.549; existe diferencia de 8 \\
+Staging materializado & 127.364 & Base reproducible usada por el Gold actual \\
+Completitud & 31,85\% & Relación Staging/Raw \\
+Merma & 68,15\% & Diferencia Raw--Staging; las causas pueden solaparse \\
+Candidatos duplicados & 264.211 & Repeticiones detectadas por la clave estable \\
 Nulos críticos removidos & 0 & Cumplimiento del contrato crítico \\
 Errores de casting & 0 & Conversión satisfactoria en campos auditados \\
-Duplicados en grano Gold & 0 & Válido bajo la clave que incluye fecha \\
+Duplicados en clave estable Gold & 0 & Identidad independiente de fecha y clasificación \\
 Claves foráneas inválidas & 0 & Integridad referencial satisfactoria \\
 \bottomrule
 \end{tabularx}
 \caption{Indicadores de calidad del corte 2026-07-13.}
 \end{table}
 
-El resultado de cero duplicados Gold no contradice el factor de inflación. La restricción de unicidad incluye la fecha, y la fecha del catálogo se reasigna aleatoriamente; por ello, copias de una misma entidad pueden ser distintas para la base aunque representen la misma observación lógica.
+La diferencia Raw--Staging es 272.536 registros. Los 264.211 candidatos duplicados se calculan sobre el candidato normalizado antes de todas las exclusiones, por lo que no deben sumarse mecánicamente con ruido semántico u otras causas. El control final sí es directo: Staging y Gold contienen 127.364 filas y la clave estable no presenta duplicados.
 
 \subsection{Piloto de enriquecimiento semántico}
 
 El piloto LLM procesó 50 registros estratificados de cinco fuentes no estructuradas. Todos produjeron JSON válido, 40 registros (80\%) superaron simultáneamente el umbral de confianza 0,85 y la presencia de evidencia, y el tiempo promedio fue 5,89 segundos por registro. Estos valores prueban conformidad de salida, no exactitud semántica: no existe un conjunto etiquetado por humanos para estimar precisión, exhaustividad o acuerdo interevaluador.
+
+En el corte completo, plataforma se obtuvo por metadatos estructurados en 375 filas (0,29\%), regla contextual en 5.414 (4,25\%) y regla de agente en 20.839 (16,36\%); 100.736 filas (79,09\%) permanecieron como ``No determinada''. Tecnología se obtuvo por metadatos en 84.461 filas (66,31\%), por contexto en 4.738 (3,72\%) y quedó no determinada en 38.165 (29,97\%). Esta cobertura explícita evita presentar inferencias sin evidencia como datos observados.
 
 % ==============================================================
 % 7. DISCUSION CRITICA Y LIMITES
@@ -527,11 +549,11 @@ La principal contribución no es afirmar una tasa universal de adopción, sino o
 
 \subsubsection{Validez temporal}
 
-El archivo \pathcode{stg_dates.py} reemplaza las fechas del catálogo AIDev por fechas aleatorias entre 2023 y el día de ejecución y también imputa valores faltantes aleatoriamente, sin una semilla fija. En consecuencia, la distribución mensual cambia entre corridas y no representa la cronología original. El pico operativo de mayo de 2026 (9.286 hechos) y los indicadores de crecimiento mensual no deben usarse para sostener evolución temporal, estacionalidad o causalidad.
+El ETL preserva la fecha observada por la fuente; para AIDev utiliza \pathcode{last_activity} y, si falta una fecha, emplea la fecha inmutable de carga del archivo Raw con \pathcode{is_imputed_date=true}. En el Gold, 120.421 hechos (94,55\%) conservan fecha de fuente y 6.943 (5,45\%) usan ese sustituto trazable. La transformación es reproducible, pero \pathcode{last_activity} resume el último momento de un agregado agente--repositorio y no cada evento individual. Por ello, las tendencias describen fechas de última actividad y no una incidencia mensual de adopción.
 
 \subsubsection{Duplicación entre instantáneas}
 
-La clave Silver incluye \pathcode{fecha_evento}. Una misma fila del catálogo recibe una fecha diferente en cada reconstrucción, por lo que la deduplicación deja de reconocerla. El resultado es una inflación global de 2,794 y de 2,997 en AIDev. Los totales de observaciones, menciones, interacciones y scores acumulados están afectados. La lectura robusta mitiga el problema para este artículo, pero la solución definitiva debe implementarse en el ETL.
+La identidad Silver excluye \pathcode{fecha_evento} y las clasificaciones semánticas. Ante varias instantáneas, el ETL ordena por fecha y \pathcode{raw_file_id} y conserva la versión más reciente; PostgreSQL aplica la misma unicidad. El control $F=1,000$ confirma ausencia de repeticiones en el corte actual. La contrapartida es que el DW representa estado vigente, no la evolución entre instantáneas; un análisis de snapshots requeriría una dimensión separada y hechos periódicos no acumulativos.
 
 \subsubsection{Validez de constructo}
 
@@ -539,11 +561,11 @@ Las métricas combinan señales de naturaleza distinta. Por ejemplo, en AIDev un
 
 \subsubsection{Sesgo y concentración de fuentes}
 
-Después de la deduplicación, AIDev aún representa 89,11\% del corpus y el índice $H$ es 0,7983. Por ello, el ranking reproduce principalmente la composición y ontología del dataset dominante. Las fuentes comunitarias, académicas y de búsqueda funcionan como triangulación secundaria y no como estratos comparables.
+Después de la deduplicación, AIDev aún representa 89,22\% del corpus y el índice $H$ es 0,8002. Por ello, el ranking reproduce principalmente la composición y ontología del dataset dominante. Las fuentes comunitarias, académicas y de búsqueda funcionan como triangulación secundaria y no como estratos comparables.
 
 \subsubsection{Encuesta y generalización}
 
-El archivo fuente contiene 12 respuestas, pero solo 8 registros con agente autorizado aparecen como entidades únicas en Gold; las tres cargas históricas producen 24 hechos. La muestra es de conveniencia, pequeña y localizada en UPSE. No permite estimar prevalencia con margen de error conocido ni generalizar a la población de desarrolladores.
+El archivo fuente contiene 12 respuestas, pero solo 8 registros con agente autorizado aparecen como entidades únicas en Gold. Las cargas históricas ya no multiplican los hechos. La muestra es de conveniencia, pequeña y localizada en UPSE. No permite estimar prevalencia con margen de error conocido ni generalizar a la población de desarrolladores.
 
 \subsubsection{Extracción y clasificación}
 
@@ -551,26 +573,30 @@ Las APIs y páginas pueden imponer límites, bloqueos o cambios de estructura. L
 
 \subsubsection{Enriquecimiento LLM}
 
-La confianza es declarada por el propio modelo y no está calibrada contra verdad de referencia. El piloto no mide exactitud. Además, el caché usa la función \pathcode{hash()} de Python, cuya sal aleatoria puede cambiar entre procesos, debilitando la reutilización determinista. Los campos LLM deben tratarse como anotaciones auxiliares hasta realizar validación humana ciega y reportar métricas de acuerdo.
+La confianza es declarada por el propio modelo y no está calibrada contra verdad de referencia. El piloto no mide exactitud. El caché utiliza un hash MD5 determinista del texto, pero la reproducción externa también exige fijar la versión o digest del modelo Ollama y conservar el caché. Los campos LLM y las reglas contextuales deben tratarse como anotaciones auxiliares hasta realizar validación humana ciega y reportar métricas de acuerdo. Además, 79,09\% de las plataformas y 29,97\% de las tecnologías permanecen explícitamente no determinadas; esta ausencia es preferible a reciclar la fuente o la categoría.
+
+La dimensión comunidad alcanza 91.158 miembros porque, según la fuente, conserva propietarios de repositorios, organizaciones, subreddits, medios o espacios académicos. Esta cardinalidad es coherente con el contrato implementado, pero no debe interpretarse como 91.158 comunidades sociales independientes; para ciertos análisis podría convenir modelar el propietario del repositorio como una dimensión separada.
 
 \subsubsection{Reproducibilidad operativa}
 
-Durante la auditoría, Gold contenía 356.945 hechos, pero la tabla Staging activa estaba vacía, aunque el CSV y la tabla de auditoría reportaban 356.945 registros. Esto sugiere una ejecución posterior incompleta o una pérdida de estado intermedio. También se observaron tres cifras históricas en el repositorio: 120.846, 238.840 y 356.945 hechos, correspondientes a distintos cortes. El proyecto no incluye pruebas automatizadas. Sin un identificador de versión de dataset y una corrida inmutable por resultado, la reproducción exacta depende del estado local.
+Durante la auditoría final se registraron 127.364 filas tanto en Staging como en Gold, reconstruidas desde 399.900 registros Raw. Los archivos Raw conservan hash SHA-256, las fechas imputadas proceden de metadatos inmutables y 12 pruebas automatizadas cubren fechas, deduplicación y dimensiones semánticas. Persisten requisitos para reproducción externa: publicar un manifiesto del snapshot, el commit de Git, parámetros, digest del modelo local y consultas exactas de cada resultado.
 
 \subsection{Ruta de corrección para publicación científica}
 
 \begin{enumerate}[leftmargin=1.1cm]
   \item \textbf{[Completado]} Usar el identificador estable \pathcode{agent:repo_id} de AIDev como \pathcode{id_origen_registro}; no calcularlo desde toda la fila.
-  \item \textbf{[Completado]} Preservar \pathcode{first_activity} y \pathcode{last_activity}. Si una fecha falta, mantenerla nula o registrar \pathcode{fecha_imputada=true}; nunca reemplazar cronología real por aleatoriedad silenciosa.
+  \item \textbf{[Completado]} Usar \pathcode{last_activity} de AIDev, con \pathcode{first_activity} como respaldo. Si una fuente no aporta fecha, usar la carga Raw inmutable y registrar \pathcode{is_imputed_date=true}; nunca depender del día de ejecución.
   \item \textbf{[Completado]} Separar \emph{entidad observada} de \emph{instantánea de extracción}. La instantánea debe ser una dimensión de auditoría, no parte de la identidad analítica.
-  \item Recalcular Gold desde una versión congelada de Raw y publicar manifiesto, hashes, parámetros, commit de Git y consulta de reproducción.
+  \item \textbf{[Completado]} Diferenciar fuente, plataforma, tecnología y comunidad mediante metadatos, reglas trazables, método de derivación y miembros no determinados.
+  \item \textbf{[Completado]} Recalcular Staging y Gold desde Raw, exigir igualdad de filas, validar integridad y ejecutar pruebas automatizadas de fechas, identidad y semántica.
+  \item Publicar un manifiesto externo del snapshot con hashes, parámetros, commit de Git, digest del modelo y consulta de reproducción.
   \item Definir KPIs por estrato de fuente y evitar sumas entre escalas no homologadas. Reportar intervalos de incertidumbre cuando el diseño muestral lo permita.
   \item Ampliar la encuesta con protocolo de consentimiento, marco muestral, variables demográficas mínimas y análisis separado de telemetría y percepción.
   \item Validar el enriquecimiento LLM contra anotaciones humanas y reportar precisión, exhaustividad, F1 y acuerdo entre evaluadores.
-  \item Incorporar pruebas unitarias, pruebas de contrato, casos de idempotencia y una prueba de regresión que exija iguales KPIs para iguales entradas.
+  \item Ampliar las pruebas con contratos de cada extractor y una regresión de extremo a extremo que compare todos los KPIs para entradas idénticas.
 \end{enumerate}
 
-\textit{Nota: Las correcciones 1, 2 y 3 fueron solventadas. Las correcciones restantes (4 al 8) quedan propuestas como trabajo futuro.}
+\textit{Nota: Las correcciones 1 a 5 fueron solventadas. Las restantes corresponden a validación científica, publicación del snapshot y ampliación del diseño muestral.}
 
 % ==============================================================
 % 8. CONCLUSIONES EXPLICITAS
@@ -580,13 +606,13 @@ Durante la auditoría, Gold contenía 356.945 hechos, pero la tabla Staging acti
 \begin{enumerate}[leftmargin=1.1cm]
   \item \textbf{La plataforma es funcional como producto de BI descriptivo.} Integra diez fuentes, conserva evidencia Raw, materializa un esquema estrella con seis dimensiones, expone siete vistas KPI y sirve los resultados mediante FastAPI y React.
 
-  \item \textbf{El Gold operativo no equivale al número de observaciones independientes.} Los 356.945 hechos se reducen a 127.756 entidades únicas bajo una clave estable, con un factor de inflación de 2,794. Por ello, la lectura robusta debe reemplazar a los totales operativos en cualquier manuscrito científico.
+  \item \textbf{El Gold vigente representa entidades de origen únicas.} Staging y Gold contienen 127.364 registros, la agrupación por clave estable produce el mismo total y $F=1,000$. Los 356.945 hechos corresponden a un corte histórico anterior a la corrección y no deben presentarse como estado actual.
 
-  \item \textbf{Codex domina el corpus, pero no puede afirmarse que domina la población de desarrolladores.} En la lectura robusta representa 66,99\% de observaciones y 90,38\% del score de adopción, resultado condicionado por la composición de AIDev.
+  \item \textbf{Codex domina el corpus, pero no puede afirmarse que domina la población de desarrolladores.} Representa 67,07\% de observaciones y 90,38\% del score de adopción, resultado condicionado por la composición de AIDev.
 
-  \item \textbf{La principal limitación es temporal y de identidad.} La aleatorización de fechas rompe reproducibilidad, impide interpretar crecimiento mensual y permite que instantáneas repetidas sobrevivan a la deduplicación. Esta regla debe corregirse antes de publicar tendencias.
+  \item \textbf{La identidad y la reproducibilidad técnica fueron corregidas, pero permanece una limitación temporal.} Las fechas ya no son aleatorias y solo 5,45\% son imputadas de forma trazable; sin embargo, AIDev aporta \pathcode{last_activity} agregada, por lo que la tendencia no equivale a eventos mensuales de adopción.
 
-  \item \textbf{El proyecto posee potencial para revista o congreso si se ejecuta una réplica congelada y metodológicamente corregida.} La ruta mínima incluye claves estables, fechas originales, versionado de snapshots, KPIs estratificados, encuesta ampliada, validación humana del LLM y pruebas automatizadas.
+  \item \textbf{El proyecto posee potencial para revista o congreso si completa la validación científica.} La ruta pendiente incluye publicar el snapshot y su manifiesto, estratificar KPIs, ampliar la encuesta, validar humanamente el enriquecimiento semántico y separar propietarios de repositorio cuando el análisis de comunidad lo requiera.
 \end{enumerate}
 
 % ==============================================================
@@ -653,7 +679,7 @@ $\nearrow$ \hspace{2.2cm} $\uparrow$ \hspace{2.2cm} $\nwarrow$ \\
 \end{tabular}
 \end{center}
 
-La restricción vigente de granularidad es la combinación de tiempo, agente, fuente, plataforma, tecnología, comunidad e identificador de origen. Para investigación longitudinal se recomienda agregar una dimensión de instantánea y retirar la fecha imputada de la identidad de la entidad.
+La restricción vigente de identidad combina agente, fuente, plataforma e identificador de origen; tiempo, tecnología y comunidad son descriptores del hecho conservado. Para investigación longitudinal se recomienda agregar una dimensión de instantánea y una tabla de hechos periódicos separada, sin convertir la fecha de evento en identidad de la entidad.
 
 \subsection{Diccionario de KPIs}
 
@@ -671,12 +697,12 @@ La restricción vigente de granularidad es la combinación de tiempo, agente, fu
 \endhead
 Adopción por agente & \pathcode{AVG(score_adopcion)}, \pathcode{SUM(score_adopcion)} & Comparar señal normalizada por agente & Escala dependiente de fuente \\
 Participación por fuente & $N_s/N\times100$ & Medir composición del corpus & No mide calidad ni representatividad \\
-Tendencia mensual & Agregación por año y mes & Monitoreo temporal & Inválida con fechas aleatorizadas \\
+Tendencia mensual & Agregación por año y mes & Monitoreo temporal & AIDev representa última actividad agregada \\
 Ranking de agentes & Suma de actividad, popularidad, adopción, comunidad e innovación & Priorización operativa & Mezcla escalas heterogéneas \\
 Popularidad abierta & Stars, forks, issues, releases y actividad & Presencia técnica en repositorios & Sesgo hacia GitHub/AIDev \\
-Crecimiento mensual & Diferencia y variación con \pathcode{LAG()} & Cambio respecto al mes previo & No interpretable antes de corregir fechas \\
-Distribución por plataforma & $N_p/N\times100$ y ranking & Concentración por canal & Dominio del catálogo \\
-Factor de inflación & $N_{Gold}/N_{K_r}$ & Sensibilidad a snapshots repetidos & Auditoría adicional, aún no es vista oficial \\
+Crecimiento mensual & Diferencia y variación con \pathcode{LAG()} & Cambio respecto al mes previo & No equivale a incidencia mensual de adopción \\
+Distribución por plataforma & $N_p/N\times100$ y ranking & Entorno de ejecución o integración & 79,09\% no determinado \\
+Control de idempotencia & $N_{Gold}/N_{K_e}$ & Detectar snapshots repetidos & $F=1,000$ en el corte final \\
 Concentración de fuente & $\sum p_s^2$ & Dependencia del corpus & Descriptivo, no causal \\
 \bottomrule
 \end{longtable}
@@ -697,11 +723,11 @@ Concentración de fuente & $\sum p_s^2$ & Dependencia del corpus & Descriptivo, 
 \midrule
 \endhead
 1 & \pathcode{id} & integer & Clave sustituta técnica de Staging. \\
-2 & \pathcode{id_origen_registro} & varchar & Identificador de la observación en la fuente o hash de respaldo. \\
+2 & \pathcode{id_origen_registro} & text & Identificador estable de la entidad en la fuente o hash SHA-256 de respaldo. \\
 3 & \pathcode{fuente} & varchar & Nombre normalizado del origen. \\
 4 & \pathcode{tipo_fuente} & varchar & API, scraping, archivos o fuente propia. \\
-5 & \pathcode{plataforma} & varchar & Canal específico de captura. \\
-6 & \pathcode{fecha_evento} & date & Fecha analítica diaria; actualmente puede ser imputada. \\
+5 & \pathcode{plataforma} & varchar & Entorno de ejecución o integración; no representa la fuente de captura. \\
+6 & \pathcode{fecha_evento} & date & Fecha observada o fecha inmutable de carga Raw cuando falta la primera. \\
 7 & \pathcode{nombre_agente} & varchar & Agente homologado a uno de 14 valores. \\
 8 & \pathcode{categoria} & varchar & Actividad técnica, producción, popularidad, comunidad o adopción académica. \\
 9 & \pathcode{titulo} & text & Título del artefacto o descripción corta. \\
@@ -725,6 +751,20 @@ Concentración de fuente & $\sum p_s^2$ & Dependencia del corpus & Descriptivo, 
 27 & \pathcode{llm_confianza} & numeric & Confianza declarada por el modelo. \\
 28 & \pathcode{fecha_carga} & timestamp & Momento de persistencia en Staging. \\
 29 & \pathcode{raw_file_id} & integer & Clave de procedencia hacia \pathcode{raw.raw_files}. \\
+30 & \pathcode{is_imputed_date} & boolean & Indica que \pathcode{fecha_evento} procede de la carga Raw. \\
+31 & \pathcode{dim_nombre_plataforma} & varchar & Entorno de ejecución o integración derivado. \\
+32 & \pathcode{dim_tipo_plataforma} & varchar & Tipo de entorno: IDE, CLI, nube, API o web. \\
+33 & \pathcode{dim_ecosistema} & varchar & Ecosistema tecnológico de la plataforma. \\
+34 & \pathcode{dim_plataforma_metodo} & varchar & Metadato, regla contextual, regla de agente o sin evidencia. \\
+35 & \pathcode{dim_nombre_tecnologia} & varchar & Lenguaje, framework, protocolo, herramienta o infraestructura. \\
+36 & \pathcode{dim_categoria_tecnologia} & varchar & Clase analítica de la tecnología. \\
+37 & \pathcode{dim_dominio_tecnologico} & varchar & Dominio de aplicación de la tecnología. \\
+38 & \pathcode{dim_tipo_senal} & varchar & Naturaleza de la señal aportada por la fuente. \\
+39 & \pathcode{dim_tecnologia_metodo} & varchar & Metadato, regla contextual o sin evidencia. \\
+40 & \pathcode{dim_nombre_comunidad} & varchar & Propietario, organización, medio o espacio comunitario. \\
+41 & \pathcode{dim_tipo_comunidad} & varchar & Tipo de propietario o espacio. \\
+42 & \pathcode{dim_region_comunidad} & varchar & Región informada; Global cuando no existe detalle. \\
+43 & \pathcode{dim_comunidad_metodo} & varchar & Metadato estructurado o regla de fuente. \\
 \bottomrule
 \end{longtable}
 \normalsize
@@ -747,10 +787,10 @@ Concentración de fuente & $\sum p_s^2$ & Dependencia del corpus & Descriptivo, 
 \pathcode{id_tiempo} & bigint/FK & Fecha de la observación. \\
 \pathcode{id_agente} & bigint/FK & Agente homologado. \\
 \pathcode{id_fuente} & bigint/FK & Fuente de procedencia. \\
-\pathcode{id_plataforma} & bigint/FK & Plataforma de captura. \\
-\pathcode{id_tecnologia} & bigint/FK & Categoría y dominio tecnológico. \\
-\pathcode{id_comunidad} & bigint/FK & Contexto comunitario. \\
-\pathcode{id_origen_registro} & varchar & Identificador de procedencia usado en la unicidad. \\
+\pathcode{id_plataforma} & bigint/FK & Entorno de ejecución o integración. \\
+\pathcode{id_tecnologia} & bigint/FK & Tecnología, categoría y dominio tecnológico. \\
+\pathcode{id_comunidad} & bigint/FK & Propietario, organización o espacio contextual. \\
+\pathcode{id_origen_registro} & text & Identificador estable de procedencia usado en la unicidad. \\
 \pathcode{raw_file_id} & integer & Enlace de auditoría al archivo Raw. \\
 \pathcode{cantidad_menciones} & integer & Menciones homologadas no negativas. \\
 \pathcode{cantidad_interacciones} & integer & Interacciones homologadas no negativas. \\
@@ -764,6 +804,7 @@ Concentración de fuente & $\sum p_s^2$ & Dependencia del corpus & Descriptivo, 
 \pathcode{issues_abiertos}, \pathcode{releases} & integer & Señales de mantenimiento y publicación. \\
 \pathcode{sentimiento_promedio} & numeric & Sentimiento cuando existe. \\
 \pathcode{titulo}, \pathcode{url} & text/varchar & Contexto legible y enlace de evidencia. \\
+\pathcode{is_imputed_date} & boolean & Marca fechas sustituidas por la fecha estable de carga Raw. \\
 \pathcode{fecha_carga} & timestamp & Momento de materialización Gold. \\
 \bottomrule
 \end{longtable}
@@ -775,9 +816,11 @@ Concentración de fuente & $\sum p_s^2$ & Dependencia del corpus & Descriptivo, 
   \item Scripts de creación y carga Gold: \pathcode{etl/sql/01_create_gold_schema.sql} a \pathcode{etl/sql/03_load_gold_fact.sql}.
   \item Vistas y consultas: \pathcode{etl/sql/04_create_kpi_views.sql} y \pathcode{etl/sql/05_consultas_analiticas_e4.sql}.
   \item Validación: \pathcode{etl/sql/06_validacion_gold_dw.sql}.
+  \item Migración semántica e identidad estable: \pathcode{etl/sql/07_add_semantic_staging_columns.sql}.
   \item Evidencias: \pathcode{etl/docs/evidencias/quality_summary.csv}, \pathcode{dedup_report.csv}, \pathcode{nulls_matrix.csv}, \pathcode{casting_report.csv} y archivos \pathcode{e4_respuesta_*.csv}.
   \item Respaldo físico: \pathcode{dump_gold_entregable4.sql}.
   \item Código ETL: \pathcode{etl/src/}; API: \pathcode{backend/}; dashboard: \pathcode{frontend/}.
+  \item Pruebas automatizadas: \pathcode{etl/tests/test_dates.py}, \pathcode{test_dedup.py} y \pathcode{test_semantic_dimensions.py} (12 casos).
 \end{itemize}
 
 \end{document}

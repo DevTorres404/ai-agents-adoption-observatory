@@ -266,8 +266,8 @@ DimAgente & categoria\_agente & VARCHAR(80) & Asistente, editor IA, agente autó
 DimAgente & fecha\_lanzamiento & DATE & Fecha válida o NULL & stg\_fecha\_lanzamiento & Conversión a tipo DATE. & Dataset CSV/JSON \\ \hline
 
 DimPlataforma & id\_plataforma & INT & PK auto-incremental & stg\_plataforma & Generación de clave surrogada. & Todas las fuentes \\ \hline
-DimPlataforma & nombre\_plataforma & VARCHAR(80) & GitHub, Reddit, DEV Community, Hacker News, Google Trends, UPSE & stg\_plataforma & Estandarización del nombre de plataforma. & Todas las fuentes \\ \hline
-DimPlataforma & tipo\_plataforma & VARCHAR(60) & Repositorio, comunidad, buscador, encuesta, archivo & stg\_tipo\_plataforma & Clasificación analítica de plataforma. & Todas las fuentes \\ \hline
+DimPlataforma & nombre\_plataforma & VARCHAR(80) & VS Code, JetBrains IDEs, Terminal/CLI, API/SDK, Web, cloud & dim\_nombre\_plataforma & Inferencia desde metadata, contexto o formato inequívoco del agente. & Todas las fuentes \\ \hline
+DimPlataforma & tipo\_plataforma & VARCHAR(60) & Entorno de desarrollo, CLI, interfaz programática, aplicación web, cloud & dim\_tipo\_plataforma & Clasificación del entorno de ejecución o integración. & Todas las fuentes \\ \hline
 
 DimCategoria & id\_categoria & INT & PK auto-incremental & stg\_categoria & Generación de clave surrogada. & Todas las fuentes \\ \hline
 DimCategoria & nombre\_categoria & VARCHAR(80) & Popularidad, adopción, actividad técnica, producción técnica, innovación & stg\_categoria & Homologación de categoría analítica. & Todas las fuentes \\ \hline
@@ -277,7 +277,7 @@ DimCategoria & descripcion & VARCHAR(200) & Descripción funcional de la categor
 \FactTabla & id\_tiempo & INT & FK válida en DimTiempo & stg\_fecha & Búsqueda de clave en DimTiempo. & Todas las fuentes \\ \hline
 \FactTabla & id\_agente & INT & FK válida en DimAgente & stg\_nombre\_agente & Búsqueda de clave por nombre estandarizado del agente. & Todas las fuentes \\ \hline
 \FactTabla & id\_fuente & INT & FK válida en DimFuente & stg\_fuente & Búsqueda de clave por fuente homologada. & Todas las fuentes \\ \hline
-\FactTabla & id\_plataforma & INT & FK válida en DimPlataforma & stg\_plataforma & Búsqueda de clave por plataforma. & Todas las fuentes \\ \hline
+\FactTabla & id\_plataforma & INT & FK válida en DimPlataforma & dim\_nombre\_plataforma & Búsqueda de clave por entorno de ejecución o integración. & Todas las fuentes \\ \hline
 \FactTabla & id\_categoria & INT & FK válida en DimCategoria & stg\_categoria & Clasificación según tipo de métrica y fuente. & Todas las fuentes \\ \hline
 \FactTabla & id\_origen\_registro & VARCHAR(120) & ID original, URL o hash & stg\_id\_origen & Conservación del identificador original del registro. & Todas las fuentes \\ \hline
 \FactTabla & cantidad\_menciones & INT & Mayor o igual a 0 & stg\_menciones & Conteo de apariciones del agente por período y fuente. & Reddit, DEV, Hacker News, Trends \\ \hline

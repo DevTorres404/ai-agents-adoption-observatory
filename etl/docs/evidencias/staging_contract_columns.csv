@@ -1,6 +1,6 @@
 ordinal_position,column_name,data_type,is_nullable,contract_role
 1,id,integer,NO,technical_surrogate_key
-2,id_origen_registro,character varying,NO,analytical_contract_column
+2,id_origen_registro,text,NO,analytical_contract_column
 3,fuente,character varying,NO,analytical_contract_column
 4,tipo_fuente,character varying,NO,analytical_contract_column
 5,plataforma,character varying,NO,analytical_contract_column
@@ -20,5 +20,25 @@ ordinal_position,column_name,data_type,is_nullable,contract_role
 19,indice_adopcion,numeric,YES,analytical_contract_column
 20,indice_innovacion,numeric,YES,analytical_contract_column
 21,sentimiento_promedio,numeric,YES,analytical_contract_column
-22,fecha_carga,timestamp without time zone,YES,technical_audit_column
-23,raw_file_id,integer,YES,analytical_contract_column
+22,llm_entorno_uso,character varying,YES,analytical_contract_column
+23,llm_tipo_integracion,character varying,YES,analytical_contract_column
+24,llm_categoria_tecnologia,character varying,YES,analytical_contract_column
+25,llm_capacidades,text,YES,analytical_contract_column
+26,llm_comunidad_tipo,character varying,YES,analytical_contract_column
+27,llm_confianza,numeric,YES,analytical_contract_column
+28,fecha_carga,timestamp without time zone,YES,technical_audit_column
+29,raw_file_id,integer,YES,analytical_contract_column
+30,is_imputed_date,boolean,YES,analytical_contract_column
+31,dim_nombre_plataforma,character varying,YES,analytical_contract_column
+32,dim_tipo_plataforma,character varying,YES,analytical_contract_column
+33,dim_ecosistema,character varying,YES,analytical_contract_column
+34,dim_plataforma_metodo,character varying,YES,analytical_contract_column
+35,dim_nombre_tecnologia,character varying,YES,analytical_contract_column
+36,dim_categoria_tecnologia,character varying,YES,analytical_contract_column
+37,dim_dominio_tecnologico,character varying,YES,analytical_contract_column
+38,dim_tipo_senal,character varying,YES,analytical_contract_column
+39,dim_tecnologia_metodo,character varying,YES,analytical_contract_column
+40,dim_nombre_comunidad,character varying,YES,analytical_contract_column
+41,dim_tipo_comunidad,character varying,YES,analytical_contract_column
+42,dim_region_comunidad,character varying,YES,analytical_contract_column
+43,dim_comunidad_metodo,character varying,YES,analytical_contract_column
