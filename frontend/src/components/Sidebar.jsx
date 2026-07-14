@@ -10,7 +10,6 @@ import {
   Moon,
   ShieldCheck,
   Sun,
-  Terminal,
   X
 } from 'lucide-react';
 
@@ -27,8 +26,7 @@ const NAV_GROUPS = [
   {
     label: 'Operaciones',
     items: [
-      { id: 'quality', label: 'Calidad de datos', icon: ShieldCheck },
-      { id: 'etl', label: 'Ejecución ETL', icon: Terminal }
+      { id: 'quality', label: 'Calidad de datos', icon: ShieldCheck }
     ]
   }
 ];

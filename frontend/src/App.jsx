@@ -18,18 +18,16 @@ import {
   QualityDedupBarChart,
   AgenteMesHeatMap
 } from './components/charts/Charts';
-import EjecucionETL from './components/EjecucionETL';
 import './index.css';
 
-const TAB_MAP = { '/': 'analytics', '/dimensiones': 'dimensiones', '/calidad': 'quality', '/tendencias': 'tendencias', '/ejecutivo': 'ejecutivo', '/etl': 'etl' };
-const REV_TAB_MAP = { analytics: '/', dimensiones: '/dimensiones', quality: '/calidad', tendencias: '/tendencias', ejecutivo: '/ejecutivo', etl: '/etl' };
+const TAB_MAP = { '/': 'analytics', '/dimensiones': 'dimensiones', '/calidad': 'quality', '/tendencias': 'tendencias', '/ejecutivo': 'ejecutivo' };
+const REV_TAB_MAP = { analytics: '/', dimensiones: '/dimensiones', quality: '/calidad', tendencias: '/tendencias', ejecutivo: '/ejecutivo' };
 const PAGE_META = {
   ejecutivo: { eyebrow: 'Visión ejecutiva', title: 'Radar de mercado', description: 'Señales clave de presencia, adopción e innovación en el ecosistema de agentes de IA.' },
   analytics: { eyebrow: 'Análisis principal', title: 'Analítica general', description: 'Desempeño agregado, comparativas y detalle de los agentes identificados.' },
   dimensiones: { eyebrow: 'Modelo analítico', title: 'Dimensiones', description: 'Explora categorías, tecnologías, comunidad, innovación y actividad.' },
   tendencias: { eyebrow: 'Evolución temporal', title: 'Tendencias', description: 'Comportamiento mensual de la adopción y el volumen de observaciones.' },
-  quality: { eyebrow: 'Gobierno de datos', title: 'Calidad de datos', description: 'Trazabilidad del procesamiento, duplicados y registros aptos para análisis.' },
-  etl: { eyebrow: 'Operaciones', title: 'Ejecución ETL', description: 'Supervisa y ejecuta el pipeline que alimenta el modelo analítico.' }
+  quality: { eyebrow: 'Gobierno de datos', title: 'Calidad de datos', description: 'Trazabilidad del procesamiento, duplicados y registros aptos para análisis.' }
 };
 
 function computeTrend(data, metricKey) {
@@ -94,6 +92,12 @@ function App() {
     localStorage.setItem('dashboard-theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    if (!Object.prototype.hasOwnProperty.call(TAB_MAP, location.pathname)) {
+      navigate('/', { replace: true });
+    }
+  }, [location.pathname, navigate]);
+
   const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
 
   const handleTabChange = (tab) => {
@@ -130,7 +134,7 @@ function App() {
   const totalAgentes = data?.ranking?.length || 0;
 
   const totalObservaciones = useMemo(() => {
-    return data?.distribucion?.reduce((acc, curr) => acc + (curr.total_observaciones || 0), 0) || 0;
+    return data?.distribucion?.reduce((acc, curr) => acc + (Number(curr.total_observaciones) || 0), 0) || 0;
   }, [data]);
 
   const topAgente = data?.ranking?.[0] || { nombre_agente: 'Sin datos', categoria_agente: '-' };
@@ -368,9 +372,6 @@ function App() {
         )}
         </ErrorBoundary>
 
-        {data && activeTab === 'etl' && (
-          <EjecucionETL />
-        )}
         </main>
       </div>
     </div>

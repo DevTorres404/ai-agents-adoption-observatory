@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
-  LineChart, Line, PieChart, Pie, Cell, AreaChart, Area, ScatterChart, Scatter, ZAxis, ReferenceLine, Legend
+  PieChart, Pie, Cell, AreaChart, Area, ScatterChart, Scatter, ZAxis, ReferenceLine, Legend
 } from 'recharts';
 
 const CHART_COLORS = [
@@ -9,11 +9,24 @@ const CHART_COLORS = [
   "var(--warning)", "var(--info)", "var(--neutral)"
 ];
 
+const toNumber = value => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const EmptyChart = ({ title, large = false, message = 'No hay datos para los filtros seleccionados.' }) => (
+  <div className={`panel ${large ? 'chart-panel-lg' : 'chart-panel'}`}>
+    <h2>{title}</h2>
+    <div className="chart-empty-state"><p>{message}</p></div>
+  </div>
+);
+
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
+    const displayLabel = label ?? payload[0]?.payload?.categoria_agente ?? payload[0]?.payload?.name;
     return (
       <div className="recharts-default-tooltip">
-        <p className="recharts-tooltip-label">{label}</p>
+        {displayLabel && <p className="recharts-tooltip-label">{displayLabel}</p>}
         {payload.map((entry, index) => (
           <p key={index} className="recharts-tooltip-item" style={{ color: entry.color }}>
             {entry.name}: <span className="tooltip-value">{typeof entry.value === 'number' ? entry.value.toLocaleString(undefined, { maximumFractionDigits: 2 }) : entry.value}</span>
@@ -26,12 +39,18 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export const RankingBarChart = ({ data, metric, title, color }) => {
+  const chartData = (data || [])
+    .map(item => ({ ...item, [metric]: toNumber(item[metric]) }))
+    .filter(item => item[metric] > 0);
+
+  if (chartData.length === 0) return <EmptyChart title={title} />;
+
   return (
     <div className="panel chart-panel">
       <h2>{title}</h2>
       <div className="chart-body">
         <ResponsiveContainer>
-          <BarChart data={data} layout="vertical" margin={{ top: 10, right: 30, left: 100, bottom: 20 }}>
+          <BarChart data={chartData} layout="vertical" margin={{ top: 10, right: 30, left: 100, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="var(--border-primary)" />
             <XAxis type="number" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
             <YAxis type="category" dataKey="nombre_agente" tick={{ fill: 'var(--text-secondary)', fontSize: 12, fontWeight: 600 }} width={90} />
@@ -45,19 +64,23 @@ export const RankingBarChart = ({ data, metric, title, color }) => {
 };
 
 export const TendenciaLineChart = ({ data, metricKey, metricName, color }) => {
-  const chartData = data.map(item => ({
+  const title = `Evolución Temporal: ${metricName}`;
+  const gradientId = `metric-gradient-${metricKey.replace(/[^a-z0-9_-]/gi, '-')}`;
+  const chartData = (data || []).map(item => ({
     name: `${item.nombre_mes} ${item.anio}`,
-    valor: item[metricKey]
+    valor: toNumber(item[metricKey])
   }));
+
+  if (!chartData.some(item => item.valor > 0)) return <EmptyChart title={title} />;
 
   return (
     <div className="panel chart-panel">
-      <h2>Evolución Temporal: {metricName}</h2>
+      <h2>{title}</h2>
       <div className="chart-body">
         <ResponsiveContainer>
           <AreaChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 50 }}>
             <defs>
-              <linearGradient id="colorMetric" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor={color || "var(--primary)"} stopOpacity={0.8}/>
                 <stop offset="95%" stopColor={color || "var(--primary)"} stopOpacity={0}/>
               </linearGradient>
@@ -66,7 +89,7 @@ export const TendenciaLineChart = ({ data, metricKey, metricName, color }) => {
             <XAxis dataKey="name" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} angle={-45} textAnchor="end" />
             <YAxis tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
             <RechartsTooltip content={<CustomTooltip />} />
-            <Area type="monotone" dataKey="valor" name={metricName} stroke={color || "var(--primary)"} fillOpacity={1} fill="url(#colorMetric)" />
+            <Area type="monotone" dataKey="valor" name={metricName} stroke={color || "var(--primary)"} fillOpacity={1} fill={`url(#${gradientId})`} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
@@ -75,12 +98,21 @@ export const TendenciaLineChart = ({ data, metricKey, metricName, color }) => {
 };
 
 export const ComparadorAgentesChart = ({ data }) => {
+  const title = 'Comparativa de Líderes (Adopción vs Popularidad)';
+  const chartData = (data || []).map(item => ({
+    ...item,
+    adopcion: toNumber(item.adopcion),
+    popularidad: toNumber(item.popularidad)
+  }));
+
+  if (!chartData.some(item => item.adopcion > 0 || item.popularidad > 0)) return <EmptyChart title={title} />;
+
   return (
     <div className="panel chart-panel">
-      <h2>Comparativa de Líderes (Adopción vs Popularidad)</h2>
+      <h2>{title}</h2>
       <div className="chart-body">
         <ResponsiveContainer>
-          <BarChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 50 }}>
+          <BarChart data={chartData} margin={{ top: 20, right: 10, left: 10, bottom: 50 }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-primary)" />
             <XAxis dataKey="nombre_agente" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} angle={-45} textAnchor="end" />
             <YAxis yAxisId="left" orientation="left" tick={{ fill: 'var(--primary)', fontSize: 12 }} />
@@ -97,12 +129,20 @@ export const ComparadorAgentesChart = ({ data }) => {
 };
 
 export const FuenteBarChart = ({ data }) => {
+  const title = 'Participación por Fuente';
+  const chartData = (data || [])
+    .map(item => ({ ...item, total_observaciones: toNumber(item.total_observaciones) }))
+    .filter(item => item.total_observaciones > 0)
+    .sort((a, b) => b.total_observaciones - a.total_observaciones);
+
+  if (chartData.length === 0) return <EmptyChart title={title} />;
+
   return (
     <div className="panel chart-panel">
-      <h2>Participación por Fuente</h2>
+      <h2>{title}</h2>
       <div className="chart-body">
         <ResponsiveContainer>
-          <BarChart data={data} layout="vertical" margin={{ top: 20, right: 30, left: 120, bottom: 20 }}>
+          <BarChart data={chartData} layout="vertical" margin={{ top: 20, right: 30, left: 120, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="var(--border-primary)" />
             <XAxis type="number" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
             <YAxis type="category" dataKey="nombre_fuente" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} width={110} />
@@ -131,8 +171,14 @@ const ScatterTooltip = ({ active, payload }) => {
 };
 
 export const PosicionamientoScatterChart = ({ data }) => {
-  const validData = data.filter(d => d.adopcion > 0 || d.popularidad > 0);
-  if (validData.length === 0) return null;
+  const title = 'Posicionamiento: Adopción vs Popularidad';
+  const validData = (data || []).map(item => ({
+    ...item,
+    adopcion: toNumber(item.adopcion),
+    popularidad: toNumber(item.popularidad),
+    total_observaciones: toNumber(item.total_observaciones)
+  })).filter(item => item.adopcion > 0 || item.popularidad > 0);
+  if (validData.length === 0) return <EmptyChart title={title} large />;
   
   const sortedAdop = [...validData].sort((a,b) => a.adopcion - b.adopcion);
   const medAdop = sortedAdop[Math.floor(sortedAdop.length/2)]?.adopcion || 0;
@@ -142,7 +188,7 @@ export const PosicionamientoScatterChart = ({ data }) => {
 
   return (
     <div className="panel chart-panel-lg">
-      <h2>Posicionamiento: Adopción vs Popularidad</h2>
+      <h2>{title}</h2>
       <div className="chart-body-lg">
         <ResponsiveContainer>
           <ScatterChart margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
@@ -162,18 +208,38 @@ export const PosicionamientoScatterChart = ({ data }) => {
 };
 
 export const CategoriaPieChart = ({ data }) => {
+  const title = 'Distribución por Categoría';
+  const normalized = (data || []).map(item => ({
+    ...item,
+    adopcion: toNumber(item.adopcion),
+    total_observaciones: toNumber(item.total_observaciones)
+  }));
+  const metric = normalized.some(item => item.adopcion > 0) ? 'adopcion' : 'total_observaciones';
+  const sorted = normalized
+    .map(item => ({ ...item, valor: item[metric] }))
+    .filter(item => item.valor > 0)
+    .sort((a, b) => b.valor - a.valor);
+  const topCategories = sorted.slice(0, 6);
+  const otherValue = sorted.slice(6).reduce((sum, item) => sum + item.valor, 0);
+  const chartData = otherValue > 0
+    ? [...topCategories, { categoria_agente: 'Otros', valor: otherValue }]
+    : topCategories;
+
+  if (chartData.length === 0) return <EmptyChart title={title} />;
+
   return (
     <div className="panel chart-panel">
-      <h2>Distribución por Categoría</h2>
+      <h2>{title}</h2>
       <div className="chart-body">
         <ResponsiveContainer>
           <PieChart>
-            <Pie data={data} cx="50%" cy="50%" innerRadius={80} outerRadius={120} paddingAngle={5} dataKey="adopcion" nameKey="categoria_agente" stroke="none">
-              {data.map((entry, index) => (
+            <Pie data={chartData} cx="50%" cy="45%" innerRadius={62} outerRadius={104} paddingAngle={3} dataKey="valor" nameKey="categoria_agente" stroke="none">
+              {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
               ))}
             </Pie>
             <RechartsTooltip content={<CustomTooltip />} />
+            <Legend verticalAlign="bottom" height={56} iconType="circle" />
           </PieChart>
         </ResponsiveContainer>
       </div>
@@ -182,15 +248,23 @@ export const CategoriaPieChart = ({ data }) => {
 };
 
 export const TecnologiaBarChart = ({ data }) => {
+  const title = 'Adopción por Dominio Tecnológico';
+  const chartData = (data || [])
+    .map(item => ({ ...item, adopcion: toNumber(item.adopcion) }))
+    .filter(item => item.adopcion > 0)
+    .sort((a, b) => b.adopcion - a.adopcion);
+
+  if (chartData.length === 0) return <EmptyChart title={title} />;
+
   return (
     <div className="panel chart-panel">
-      <h2>Adopción por Dominio Tecnológico</h2>
+      <h2>{title}</h2>
       <div className="chart-body">
         <ResponsiveContainer>
-          <BarChart data={data} layout="vertical" margin={{ top: 20, right: 30, left: 120, bottom: 20 }}>
+          <BarChart data={chartData} layout="vertical" margin={{ top: 20, right: 30, left: 155, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="var(--border-primary)" />
             <XAxis type="number" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
-            <YAxis type="category" dataKey="dominio_tecnologico" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} width={110} />
+            <YAxis type="category" dataKey="dominio_tecnologico" tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} width={145} />
             <RechartsTooltip content={<CustomTooltip />} />
             <Bar dataKey="adopcion" name="Adopción" fill="var(--observations)" radius={[0, 4, 4, 0]} />
           </BarChart>
@@ -202,13 +276,16 @@ export const TecnologiaBarChart = ({ data }) => {
 
 export const QualitySummaryPieChart = ({ data }) => {
   const chartData = [
-    { name: 'Aptos (Staging)', value: parseFloat(data.completion_rate) },
-    { name: 'Merma (Errores)', value: parseFloat(data.overall_error_rate) }
+    { name: 'Aptos (Staging)', value: toNumber(data?.completion_rate) },
+    { name: 'Merma (Errores)', value: toNumber(data?.overall_error_rate) }
   ];
+
+  const title = 'Tasa de Completitud General';
+  if (!chartData.some(item => item.value > 0)) return <EmptyChart title={title} />;
 
   return (
     <div className="panel chart-panel">
-      <h2>Tasa de Completitud General</h2>
+      <h2>{title}</h2>
       <div className="chart-body">
         <ResponsiveContainer>
           <PieChart>
@@ -217,6 +294,7 @@ export const QualitySummaryPieChart = ({ data }) => {
               <Cell fill="var(--danger)" />
             </Pie>
             <RechartsTooltip content={<CustomTooltip />} />
+            <Legend verticalAlign="bottom" iconType="circle" />
           </PieChart>
         </ResponsiveContainer>
       </div>
@@ -225,10 +303,17 @@ export const QualitySummaryPieChart = ({ data }) => {
 };
 
 export const QualityDedupBarChart = ({ data }) => {
-  const chartData = data.filter(d => d.total_removed > 0);
+  const title = 'Duplicados Removidos por Fuente';
+  const chartData = (data || [])
+    .map(item => ({ ...item, total_removed: toNumber(item.total_removed) }))
+    .filter(item => item.total_removed > 0)
+    .sort((a, b) => b.total_removed - a.total_removed);
+
+  if (chartData.length === 0) return <EmptyChart title={title} />;
+
   return (
     <div className="panel chart-panel">
-      <h2>Duplicados Removidos por Fuente</h2>
+      <h2>{title}</h2>
       <div className="chart-body">
         <ResponsiveContainer>
           <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 50 }}>
@@ -254,24 +339,44 @@ export const AgenteMesHeatMap = ({ data }) => {
     );
   }
 
-  const months = [...new Set(data.map(d => `${d.nombre_mes} ${d.anio}`))];
-  const agents = [...new Set(data.map(d => d.nombre_agente))].slice(0, 20);
+  const monthOrder = {
+    enero: 1, febrero: 2, marzo: 3, abril: 4, mayo: 5, junio: 6,
+    julio: 7, agosto: 8, septiembre: 9, octubre: 10, noviembre: 11, diciembre: 12
+  };
+  const monthMap = new Map();
+  data.forEach(item => {
+    const monthNumber = toNumber(item.mes) || monthOrder[String(item.nombre_mes).toLowerCase()] || 0;
+    const year = toNumber(item.anio);
+    const key = `${year}-${monthNumber}`;
+    if (!monthMap.has(key)) {
+      monthMap.set(key, { key, year, monthNumber, label: `${item.nombre_mes} ${item.anio}` });
+    }
+  });
+  const months = [...monthMap.values()].sort((a, b) => a.year - b.year || a.monthNumber - b.monthNumber);
 
-  const values = data.flatMap(d => [d.total_observaciones, d.adopcion, d.popularidad].filter(v => v != null));
+  const agentTotals = new Map();
+  data.forEach(item => {
+    agentTotals.set(item.nombre_agente, (agentTotals.get(item.nombre_agente) || 0) + toNumber(item.adopcion));
+  });
+  const agents = [...agentTotals.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 20)
+    .map(([agent]) => agent);
+
+  const values = data.map(item => toNumber(item.adopcion));
   const maxVal = Math.max(...values, 1);
 
   const getColor = (val) => {
-    const intensity = val / maxVal;
-    if (intensity === 0) return 'var(--heatmap-empty)';
-    const r = Math.round(29 + (6 - 29) * intensity);
-    const g = Math.round(78 + (78 - 78) * intensity);
-    const b = Math.round(216 + (160 - 216) * intensity);
-    return `rgb(${r}, ${g}, ${b})`;
+    if (val <= 0) return 'var(--heatmap-empty)';
+    const opacity = 0.14 + (val / maxVal) * 0.76;
+    return `rgba(53, 106, 230, ${opacity.toFixed(2)})`;
   };
 
   const getCellData = (agent, month) => {
-    const [mes, anio] = month.split(' ');
-    return data.find(d => d.nombre_agente === agent && d.nombre_mes === mes && String(d.anio) === anio);
+    return data.find(item => {
+      const itemMonth = toNumber(item.mes) || monthOrder[String(item.nombre_mes).toLowerCase()] || 0;
+      return item.nombre_agente === agent && toNumber(item.anio) === month.year && itemMonth === month.monthNumber;
+    });
   };
 
   return (
@@ -280,19 +385,19 @@ export const AgenteMesHeatMap = ({ data }) => {
       <div className="heatmap-wrapper">
         <div className="heatmap-grid" style={{ gridTemplateColumns: `140px repeat(${months.length}, 1fr)` }}>
           <div className="heatmap-corner">Agente \ Mes</div>
-          {months.map(m => <div key={m} className="heatmap-header heatmap-cell">{m}</div>)}
+          {months.map(month => <div key={month.key} className="heatmap-header heatmap-cell">{month.label}</div>)}
           {agents.map(agent => (
             <React.Fragment key={agent}>
               <div className="heatmap-row-label heatmap-cell">{agent}</div>
               {months.map(month => {
                 const cell = getCellData(agent, month);
-                const val = cell?.adopcion || 0;
+                const val = toNumber(cell?.adopcion);
                 return (
                   <div
-                    key={`${agent}-${month}`}
+                    key={`${agent}-${month.key}`}
                     className="heatmap-cell heatmap-data-cell"
                     style={{ backgroundColor: getColor(val) }}
-                    title={`${agent} — ${month}: ${val.toLocaleString()}`}
+                    title={`${agent} — ${month.label}: ${val.toLocaleString()}`}
                   >
                     <span className="heatmap-cell-value">{val > 0 ? val.toLocaleString() : ''}</span>
                   </div>
