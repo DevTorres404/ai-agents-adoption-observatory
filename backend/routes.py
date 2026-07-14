@@ -133,10 +133,13 @@ async def get_tendencia(
     fecha_inicio: Optional[str] = None, fecha_fin: Optional[str] = None,
     agentes: Optional[List[str]] = Query(None), categoria: Optional[str] = None,
     fuente: Optional[str] = None, plataforma: Optional[str] = None, tecnologia: Optional[str] = None,
+    excluir_catalogo: bool = False,
     db: AsyncSession = Depends(get_db)
 ):
     try:
         joins, where_sql, params = build_filter_clause(fecha_inicio, fecha_fin, agentes, categoria, fuente, plataforma, tecnologia)
+        if excluir_catalogo:
+            where_sql += " AND src.tipo_fuente <> 'catalogo'"
         query = f"""
             SELECT 
                 t.anio, t.mes, t.nombre_mes,
@@ -148,7 +151,8 @@ async def get_tendencia(
                 ROUND(AVG(f.score_adopcion), 4) AS promedio_adopcion,
                 ROUND(SUM(f.score_adopcion), 4) AS suma_adopcion,
                 ROUND(SUM(f.score_innovacion), 4) AS suma_innovacion,
-                ROUND(SUM(f.score_comunidad), 4) AS suma_comunidad
+                ROUND(SUM(f.score_comunidad), 4) AS suma_comunidad,
+                MODE() WITHIN GROUP (ORDER BY src.nombre_fuente) AS fuente_predominante
             {joins}
             WHERE {where_sql}
             GROUP BY t.anio, t.mes, t.nombre_mes
