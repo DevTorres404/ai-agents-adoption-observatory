@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Activity, Users, Database, TrendingUp, Cpu, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Activity, Users, Database, TrendingUp, Cpu, ShieldCheck, AlertCircle, CalendarClock, CopyCheck } from 'lucide-react';
 import { fetchKpiData } from './services/api';
 import GlobalFilters from './components/GlobalFilters';
 import Sidebar from './components/Sidebar';
+import TendenciasDashboard from './components/TendenciasDashboard';
 import { KPICard } from './components/KPI';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import {
@@ -15,8 +16,7 @@ import {
   CategoriaPieChart,
   TecnologiaBarChart,
   QualitySummaryPieChart,
-  QualityDedupBarChart,
-  AgenteMesHeatMap
+  QualityDedupBarChart
 } from './components/charts/Charts';
 import './index.css';
 
@@ -26,9 +26,24 @@ const PAGE_META = {
   ejecutivo: { eyebrow: 'Visión ejecutiva', title: 'Radar de mercado', description: 'Señales clave de presencia, adopción e innovación en el ecosistema de agentes de IA.' },
   analytics: { eyebrow: 'Análisis principal', title: 'Analítica general', description: 'Desempeño agregado, comparativas y detalle de los agentes identificados.' },
   dimensiones: { eyebrow: 'Modelo analítico', title: 'Dimensiones', description: 'Explora categorías, tecnologías, comunidad, innovación y actividad.' },
-  tendencias: { eyebrow: 'Evolución temporal', title: 'Tendencias', description: 'Comportamiento mensual de la adopción y el volumen de observaciones.' },
+  tendencias: { eyebrow: 'Evolución temporal', title: 'Tendencias', description: 'Explica cambios mensuales, fuentes dominantes y comportamiento por agente.' },
   quality: { eyebrow: 'Gobierno de datos', title: 'Calidad de datos', description: 'Trazabilidad del procesamiento, duplicados y registros aptos para análisis.' }
 };
+
+const SOURCE_LABELS = {
+  arxiv: 'arXiv',
+  catalogo: 'Catálogo',
+  devto: 'Dev.to',
+  fuente_propia: 'Fuente propia',
+  github: 'GitHub',
+  gnews: 'Google News',
+  google_trends: 'Google Trends',
+  hackernews: 'Hacker News',
+  reddit: 'Reddit',
+  stackoverflow: 'Stack Overflow'
+};
+
+const formatSourceLabel = source => SOURCE_LABELS[source] || source || 'Sin fuente';
 
 function computeTrend(data, metricKey) {
   if (!data || data.length < 2) return null;
@@ -128,8 +143,12 @@ function App() {
     loadData(filters);
   }, [filters, loadData]);
 
-  const handleApplyFilters = (newFilters) => { setFilters(newFilters); };
-  const handleClearFilters = () => { setFilters({}); };
+  const handleApplyFilters = useCallback(newFilters => { setFilters(newFilters); }, []);
+  const handleClearFilters = useCallback(() => { setFilters({}); }, []);
+  const handleViewDataset = useCallback(() => {
+    navigate('/');
+    window.setTimeout(() => document.getElementById('dataset-table')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+  }, [navigate]);
 
   const totalAgentes = data?.ranking?.length || 0;
 
@@ -155,6 +174,19 @@ function App() {
     nulls: data.qualityNulls
   } : null;
 
+  const executionDate = quality?.summary?.execution_date;
+  const headerUpdateLabel = executionDate
+    ? new Date(executionDate.endsWith('Z') ? executionDate : `${executionDate}Z`).toLocaleDateString('es-EC', {
+        day: '2-digit', month: 'short', year: 'numeric', timeZone: 'America/Guayaquil'
+      }).replace('.', '')
+    : null;
+
+  const qualityExecutionLabel = executionDate
+    ? new Date(executionDate.endsWith('Z') ? executionDate : `${executionDate}Z`).toLocaleString('es-EC', {
+        day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'America/Guayaquil'
+      }).replace('.', '')
+    : 'Sin ejecución registrada';
+
   const mainApiError = apiErrors.length > 0
     ? `${apiErrors.length} endpoint(s) fallaron. Los datos pueden estar incompletos.`
     : null;
@@ -172,8 +204,6 @@ function App() {
           isOpen={isSidebarOpen}
           onOpen={() => setIsSidebarOpen(true)}
           onClose={() => setIsSidebarOpen(false)}
-          refreshing
-          hasErrors={false}
         />
         <div className="app-main">
           <header className="content-header">
@@ -206,8 +236,6 @@ function App() {
         isOpen={isSidebarOpen}
         onOpen={() => setIsSidebarOpen(true)}
         onClose={() => setIsSidebarOpen(false)}
-        refreshing={refreshing}
-        hasErrors={apiErrors.length > 0}
       />
       <div className="app-main">
         <header className="content-header">
@@ -218,16 +246,25 @@ function App() {
           </div>
           <div className={`refresh-status ${apiErrors.length ? 'has-errors' : ''}`}>
             {refreshing ? <span className="spinner spinner-small" /> : <span className="refresh-dot" />}
-            {refreshing ? 'Actualizando datos' : apiErrors.length ? 'Datos incompletos' : 'Datos actualizados'}
+            {refreshing
+              ? 'Actualizando datos'
+              : apiErrors.length
+                ? 'Datos incompletos'
+                : activeTab === 'tendencias' && headerUpdateLabel
+                  ? `Actualizado: ${headerUpdateLabel}`
+                  : 'Datos actualizados'}
           </div>
         </header>
 
         <main className="dashboard-content">
-        <GlobalFilters
-          currentFilters={filters}
-          onApplyFilters={handleApplyFilters}
-          onClearFilters={handleClearFilters}
-        />
+        {activeTab !== 'quality' && (
+          <GlobalFilters
+            currentFilters={filters}
+            onApplyFilters={handleApplyFilters}
+            onClearFilters={handleClearFilters}
+            onViewDataset={handleViewDataset}
+          />
+        )}
 
         {mainApiError && <ErrorBanner message={mainApiError} />}
 
@@ -272,7 +309,7 @@ function App() {
               <ComparadorAgentesChart data={data.ranking?.slice(0, 5) || []} />
               <FuenteBarChart data={data.participacion || []} />
 
-              <div className="panel" style={{ height: '450px', overflowY: 'auto' }}>
+              <div id="dataset-table" className="panel" style={{ height: '450px', overflowY: 'auto' }}>
                 <h2>Tabla Analítica Detallada</h2>
                 <div className="table-responsive">
                   <table className="data-table">
@@ -321,54 +358,81 @@ function App() {
 
         <ErrorBoundary name="Tendencias tab">
         {data && activeTab === 'tendencias' && (
-          <div className="grid-charts">
-            <TendenciaLineChart data={data.tendencia || []} metricKey="suma_adopcion" metricName="Score Adopción" color="var(--primary)" />
-            <TendenciaLineChart data={data.tendencia || []} metricKey="total_observaciones" metricName="Total Observaciones" color="var(--observations)" />
-            <AgenteMesHeatMap data={data.tendenciaAgentes || []} />
-          </div>
+          <TendenciasDashboard data={data} filters={filters} />
         )}
         </ErrorBoundary>
 
-        <ErrorBoundary name="Calidad ETL tab">
+        <ErrorBoundary name="Calidad tab">
         {data && activeTab === 'quality' && (
-          <>
-            <div className="grid-cards">
+          <div className="quality-dashboard">
+            <section className="panel quality-run-strip" aria-label="Estado de la auditoría">
+              <div className="quality-run-summary">
+                <span className="quality-run-icon"><ShieldCheck size={20} /></span>
+                <div>
+                  <strong>Auditoría de la carga actual</strong>
+                  <span>Resumen consolidado del último procesamiento ETL.</span>
+                </div>
+              </div>
+              <div className="quality-run-meta">
+                <div>
+                  <CalendarClock size={17} />
+                  <span><small>Última ejecución</small><strong>{qualityExecutionLabel}</strong></span>
+                </div>
+                <div>
+                  <Database size={17} />
+                  <span><small>Fuentes auditadas</small><strong>{quality?.dedup?.length || 0}</strong></span>
+                </div>
+                <span className="quality-status-chip"><ShieldCheck size={15} /> Validación completada</span>
+              </div>
+            </section>
+
+            <div className="quality-kpi-grid">
               <KPICard title="Registros Raw Extraídos" value={quality?.summary?.total_raw_records?.toLocaleString() || 0} subtext="Datos crudos pre-limpieza" icon={Database} color="var(--info)" />
               <KPICard title="Registros Staging Aptos" value={quality?.summary?.total_staging_records?.toLocaleString() || 0} subtext="Datos limpios insertados en Gold" icon={ShieldCheck} color="var(--success)" />
-              <KPICard title="Nulos Críticos" value={quality?.summary?.total_nulls_removed ?? 0} subtext="Registros descartados por faltar datos" icon={AlertCircle} color="var(--danger)" />
+              <KPICard title="Tasa de Completitud" value={`${Number(quality?.summary?.completion_rate || 0).toLocaleString('es-EC', { maximumFractionDigits: 2 })} %`} subtext="Porcentaje apto para análisis" icon={Activity} color="var(--primary)" />
+              <KPICard title="Duplicados Removidos" value={quality?.summary?.total_duplicates_removed?.toLocaleString() || 0} subtext="Registros depurados en la carga" icon={CopyCheck} color="var(--warning)" />
+              <KPICard title="Nulos Críticos" value={quality?.summary?.total_nulls_removed ?? 0} subtext="Descartados por campos críticos" icon={AlertCircle} color={(quality?.summary?.total_nulls_removed || 0) === 0 ? 'var(--success)' : 'var(--danger)'} />
             </div>
 
-            <div className="grid-charts">
+            <div className="quality-visual-grid">
               {quality?.summary && <QualitySummaryPieChart data={quality.summary} />}
               {quality?.dedup && <QualityDedupBarChart data={quality.dedup} />}
+            </div>
 
-              <div className="panel" style={{ height: '400px', overflowY: 'auto' }}>
+              <div className="panel quality-table-panel">
                 <h2>Auditoría de Duplicados por Fuente</h2>
                 <div className="table-responsive">
                   <table className="data-table">
                     <thead>
                       <tr>
                         <th>Fuente</th>
-                        <th>Detectados</th>
+                        <th>Procesados</th>
                         <th>Removidos</th>
                         <th>Aprobados</th>
+                        <th>Tasa de depuración</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {(quality?.dedup || []).map((item, i) => (
-                        <tr key={i}>
-                          <td style={{ fontWeight: 600 }}>{item.source}</td>
-                          <td className="status-info">{item.total_detected?.toLocaleString()}</td>
-                          <td className="status-warning">{item.total_removed?.toLocaleString()}</td>
-                          <td className="status-success">{item.total_kept?.toLocaleString()}</td>
-                        </tr>
-                      ))}
+                      {(quality?.dedup || []).map((item, i) => {
+                        const removed = Number(item.total_removed) || 0;
+                        const kept = Number(item.total_kept) || 0;
+                        const processed = removed + kept;
+                        const removalRate = processed > 0 ? (removed / processed) * 100 : 0;
+                        return (
+                          <tr key={i}>
+                            <td style={{ fontWeight: 600 }}>{formatSourceLabel(item.source)}</td>
+                            <td className="status-info">{processed.toLocaleString()}</td>
+                            <td className="status-warning">{removed.toLocaleString()}</td>
+                            <td className="status-success">{kept.toLocaleString()}</td>
+                            <td><span className="quality-rate-badge">{removalRate.toLocaleString('es-EC', { maximumFractionDigits: 1 })} %</span></td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
               </div>
-            </div>
-          </>
+          </div>
         )}
         </ErrorBoundary>
 

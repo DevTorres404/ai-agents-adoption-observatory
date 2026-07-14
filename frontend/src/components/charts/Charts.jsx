@@ -1,13 +1,19 @@
 import React from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, AreaChart, Area, ScatterChart, Scatter, ZAxis, ReferenceLine, Legend
+  PieChart, Pie, Cell, AreaChart, Area, ScatterChart, Scatter, ZAxis, ReferenceLine, Legend, Label
 } from 'recharts';
 
 const CHART_COLORS = [
   "var(--primary)", "var(--secondary)", "var(--accent)", 
   "var(--warning)", "var(--info)", "var(--neutral)"
 ];
+
+const QUALITY_SOURCE_LABELS = {
+  arxiv: 'arXiv', catalogo: 'Catálogo', devto: 'Dev.to', fuente_propia: 'Fuente propia',
+  github: 'GitHub', gnews: 'Google News', google_trends: 'Google Trends',
+  hackernews: 'Hacker News', reddit: 'Reddit', stackoverflow: 'Stack Overflow'
+};
 
 const toNumber = value => {
   const parsed = Number(value);
@@ -38,6 +44,22 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
+const CategoryAxisTick = ({ x, y, payload, maxLength = 20, fontWeight = 500 }) => {
+  const label = String(payload?.value ?? '');
+  const visibleLabel = label.length > maxLength
+    ? `${label.slice(0, maxLength - 1).trimEnd()}…`
+    : label;
+
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <title>{label}</title>
+      <text x={-8} y={0} dy="0.32em" textAnchor="end" fill="var(--text-secondary)" fontSize={11} fontWeight={fontWeight}>
+        {visibleLabel}
+      </text>
+    </g>
+  );
+};
+
 export const RankingBarChart = ({ data, metric, title, color }) => {
   const chartData = (data || [])
     .map(item => ({ ...item, [metric]: toNumber(item[metric]) }))
@@ -53,7 +75,7 @@ export const RankingBarChart = ({ data, metric, title, color }) => {
           <BarChart data={chartData} layout="vertical" margin={{ top: 10, right: 30, left: 100, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="var(--border-primary)" />
             <XAxis type="number" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
-            <YAxis type="category" dataKey="nombre_agente" tick={{ fill: 'var(--text-secondary)', fontSize: 12, fontWeight: 600 }} width={90} />
+            <YAxis type="category" dataKey="nombre_agente" interval={0} tick={<CategoryAxisTick maxLength={18} fontWeight={600} />} width={110} />
             <RechartsTooltip content={<CustomTooltip />} />
             <Bar dataKey={metric} name="Puntuación" fill={color || "var(--primary)"} radius={[0, 4, 4, 0]} />
           </BarChart>
@@ -145,7 +167,7 @@ export const FuenteBarChart = ({ data }) => {
           <BarChart data={chartData} layout="vertical" margin={{ top: 20, right: 30, left: 120, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="var(--border-primary)" />
             <XAxis type="number" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
-            <YAxis type="category" dataKey="nombre_fuente" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} width={110} />
+            <YAxis type="category" dataKey="nombre_fuente" interval={0} tick={<CategoryAxisTick maxLength={18} />} width={110} />
             <RechartsTooltip content={<CustomTooltip />} />
             <Bar dataKey="total_observaciones" name="Observaciones" fill="var(--secondary)" radius={[0, 4, 4, 0]} />
           </BarChart>
@@ -228,20 +250,30 @@ export const CategoriaPieChart = ({ data }) => {
   if (chartData.length === 0) return <EmptyChart title={title} />;
 
   return (
-    <div className="panel chart-panel">
+    <div className="panel chart-panel category-chart-panel">
       <h2>{title}</h2>
-      <div className="chart-body">
-        <ResponsiveContainer>
-          <PieChart>
-            <Pie data={chartData} cx="50%" cy="45%" innerRadius={62} outerRadius={104} paddingAngle={3} dataKey="valor" nameKey="categoria_agente" stroke="none">
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
-              ))}
-            </Pie>
-            <RechartsTooltip content={<CustomTooltip />} />
-            <Legend verticalAlign="bottom" height={56} iconType="circle" />
-          </PieChart>
-        </ResponsiveContainer>
+      <div className="category-chart-content">
+        <div className="category-donut">
+          <ResponsiveContainer>
+            <PieChart>
+              <Pie data={chartData} cx="50%" cy="50%" innerRadius={62} outerRadius={98} paddingAngle={3} dataKey="valor" nameKey="categoria_agente" stroke="none">
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                ))}
+              </Pie>
+              <RechartsTooltip content={<CustomTooltip />} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="category-legend" aria-label="Categorías representadas">
+          {chartData.map((entry, index) => (
+            <div className="category-legend-item" key={entry.categoria_agente} title={entry.categoria_agente}>
+              <span style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }} />
+              <span>{entry.categoria_agente}</span>
+              <strong>{((entry.valor / chartData.reduce((sum, item) => sum + item.valor, 0)) * 100).toLocaleString('es-EC', { maximumFractionDigits: 1 })}%</strong>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -264,7 +296,7 @@ export const TecnologiaBarChart = ({ data }) => {
           <BarChart data={chartData} layout="vertical" margin={{ top: 20, right: 30, left: 155, bottom: 20 }}>
             <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="var(--border-primary)" />
             <XAxis type="number" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
-            <YAxis type="category" dataKey="dominio_tecnologico" tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} width={145} />
+            <YAxis type="category" dataKey="dominio_tecnologico" interval={0} tick={<CategoryAxisTick maxLength={22} />} width={145} />
             <RechartsTooltip content={<CustomTooltip />} />
             <Bar dataKey="adopcion" name="Adopción" fill="var(--observations)" radius={[0, 4, 4, 0]} />
           </BarChart>
@@ -275,23 +307,25 @@ export const TecnologiaBarChart = ({ data }) => {
 };
 
 export const QualitySummaryPieChart = ({ data }) => {
+  const completionRate = toNumber(data?.completion_rate);
   const chartData = [
-    { name: 'Aptos (Staging)', value: toNumber(data?.completion_rate) },
+    { name: 'Aptos (Staging)', value: completionRate },
     { name: 'Merma (Errores)', value: toNumber(data?.overall_error_rate) }
   ];
 
-  const title = 'Tasa de Completitud General';
+  const title = 'Completitud de la carga';
   if (!chartData.some(item => item.value > 0)) return <EmptyChart title={title} />;
 
   return (
-    <div className="panel chart-panel">
+    <div className="panel chart-panel quality-chart-panel">
       <h2>{title}</h2>
       <div className="chart-body">
         <ResponsiveContainer>
           <PieChart>
-            <Pie data={chartData} cx="50%" cy="50%" innerRadius={0} outerRadius={120} dataKey="value" nameKey="name" stroke="none">
+            <Pie data={chartData} cx="50%" cy="48%" innerRadius={72} outerRadius={108} dataKey="value" nameKey="name" stroke="none">
               <Cell fill="var(--success)" />
               <Cell fill="var(--danger)" />
+              <Label value={`${completionRate.toLocaleString('es-EC', { maximumFractionDigits: 2 })}%`} position="center" fill="var(--text-primary)" fontSize={24} fontWeight={750} />
             </Pie>
             <RechartsTooltip content={<CustomTooltip />} />
             <Legend verticalAlign="bottom" iconType="circle" />
@@ -303,25 +337,33 @@ export const QualitySummaryPieChart = ({ data }) => {
 };
 
 export const QualityDedupBarChart = ({ data }) => {
-  const title = 'Duplicados Removidos por Fuente';
+  const title = 'Tasa de depuración por fuente';
   const chartData = (data || [])
-    .map(item => ({ ...item, total_removed: toNumber(item.total_removed) }))
-    .filter(item => item.total_removed > 0)
-    .sort((a, b) => b.total_removed - a.total_removed);
+    .map(item => {
+      const removed = toNumber(item.total_removed);
+      const kept = toNumber(item.total_kept);
+      const processed = removed + kept;
+      return {
+        ...item,
+        source_label: QUALITY_SOURCE_LABELS[item.source] || item.source,
+        duplicate_rate: processed > 0 ? (removed / processed) * 100 : 0
+      };
+    })
+    .sort((a, b) => a.duplicate_rate - b.duplicate_rate);
 
   if (chartData.length === 0) return <EmptyChart title={title} />;
 
   return (
-    <div className="panel chart-panel">
+    <div className="panel chart-panel quality-chart-panel">
       <h2>{title}</h2>
       <div className="chart-body">
         <ResponsiveContainer>
-          <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 50 }}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-primary)" />
-            <XAxis dataKey="source" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} angle={-45} textAnchor="end" />
-            <YAxis tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
+          <BarChart data={chartData} layout="vertical" margin={{ top: 12, right: 24, left: 8, bottom: 12 }}>
+            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border-primary)" />
+            <XAxis type="number" domain={[0, 100]} tickFormatter={value => `${value}%`} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
+            <YAxis type="category" dataKey="source_label" interval={0} tick={<CategoryAxisTick maxLength={17} />} width={105} />
             <RechartsTooltip content={<CustomTooltip />} />
-            <Bar dataKey="total_removed" name="Duplicados Removidos" fill="var(--warning)" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="duplicate_rate" name="Registros removidos (%)" fill="var(--warning)" radius={[0, 4, 4, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

@@ -110,6 +110,13 @@ export async function fetchTendencia(filters = {}) {
   );
 }
 
+export async function fetchCommunityTrend(filters = {}) {
+  const communityFilters = { ...filters, excluir_catalogo: true };
+  return apiCache.fetch(`tendenciaComunidad${JSON.stringify(communityFilters)}`, () =>
+    fetchEndpoint('/tendencia', buildQuery(communityFilters))
+  );
+}
+
 export async function fetchMatriz(filters = {}) {
   return apiCache.fetch(`matriz${JSON.stringify(filters)}`, () =>
     fetchEndpoint('/matriz_cobertura', buildQuery(filters))
