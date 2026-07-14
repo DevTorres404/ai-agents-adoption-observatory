@@ -13,6 +13,29 @@ from src.staging.stg_agents import extract_agent
 from src.staging.stg_categories import assign_categories
 from src.staging.stg_dedup import deduplicate_staging
 from src.staging.stg_llm_enrichment import enrich_with_llm
+from src.staging.stg_semantic_dimensions import enrich_semantic_dimensions
+
+
+SEMANTIC_DB_COLUMNS = {
+    "dim_nombre_plataforma": "VARCHAR(100)",
+    "dim_tipo_plataforma": "VARCHAR(100)",
+    "dim_ecosistema": "VARCHAR(100)",
+    "dim_plataforma_metodo": "VARCHAR(50)",
+    "dim_nombre_tecnologia": "VARCHAR(120)",
+    "dim_categoria_tecnologia": "VARCHAR(100)",
+    "dim_dominio_tecnologico": "VARCHAR(120)",
+    "dim_tipo_senal": "VARCHAR(100)",
+    "dim_tecnologia_metodo": "VARCHAR(50)",
+    "dim_nombre_comunidad": "VARCHAR(120)",
+    "dim_tipo_comunidad": "VARCHAR(100)",
+    "dim_region_comunidad": "VARCHAR(100)",
+    "dim_comunidad_metodo": "VARCHAR(50)",
+}
+
+STAGING_COMPAT_DB_COLUMNS = {
+    "is_imputed_date": "BOOLEAN DEFAULT FALSE",
+    **SEMANTIC_DB_COLUMNS,
+}
 
 def run_staging_pipeline():
     global_logger.info(">>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<")
@@ -24,7 +47,8 @@ def run_staging_pipeline():
     try:
         # Extraer registros crudos con metadata de archivo (JOIN)
         query = text("""
-            SELECT r.raw_data, f.fuente, f.tipo_fuente, f.id as file_id
+            SELECT r.raw_data, f.fuente, f.tipo_fuente, f.id as file_id,
+                   f.fecha_carga AS file_load_date
             FROM raw.raw_records r
             JOIN raw.raw_files f ON r.file_id = f.id
         """)
@@ -41,7 +65,7 @@ def run_staging_pipeline():
         # Procesaremos agrupando por archivo para optimizar
         grouped_data = {}
         for fila in raw_data:
-            key = (fila.fuente, fila.tipo_fuente, fila.file_id)
+            key = (fila.fuente, fila.tipo_fuente, fila.file_id, fila.file_load_date)
             if key not in grouped_data:
                 grouped_data[key] = []
             grouped_data[key].append(fila.raw_data)
@@ -49,9 +73,14 @@ def run_staging_pipeline():
         df_consolidado = pd.DataFrame()
         
         # Paso 1: Mapeo y Normalización por Fuente
-        for (fuente, tipo_fuente, file_id), records in grouped_data.items():
+        for (fuente, tipo_fuente, file_id, file_load_date), records in grouped_data.items():
             df_crudo = pd.DataFrame(records)
-            meta = {'fuente': fuente, 'tipo_fuente': tipo_fuente, 'id': file_id}
+            meta = {
+                'fuente': fuente,
+                'tipo_fuente': tipo_fuente,
+                'id': file_id,
+                'fecha_carga': file_load_date,
+            }
             
             # Motivo: cada fuente tiene estructura propia; se homologa a un contrato comun antes de integrar.
             df_norm = normalize_dataframe(df_crudo, meta)
@@ -82,6 +111,12 @@ def run_staging_pipeline():
         
         # Paso 4.5: Enriquecimiento Semántico (LLM)
         df_consolidado = enrich_with_llm(df_consolidado)
+
+        # Paso 4.6: Dimensiones semánticas deterministas
+        # Motivo: Gold recibe claves de negocio explícitas; nunca reutiliza
+        # categoria o plataforma como sustitutos de tecnología/comunidad.
+        df_consolidado = enrich_semantic_dimensions(df_consolidado)
+        global_logger.info("Paso 4.6: Plataforma, tecnología y comunidad enriquecidas con reglas trazables.")
         
         # Paso 5: Deduplicacion
         # Motivo: se eliminan repeticiones analiticas sin alterar la capa Raw, que permanece como evidencia original.
@@ -107,12 +142,22 @@ def run_staging_pipeline():
             'indice_adopcion', 'indice_innovacion', 'sentimiento_promedio',
             'llm_entorno_uso', 'llm_tipo_integracion', 'llm_categoria_tecnologia',
             'llm_capacidades', 'llm_comunidad_tipo', 'llm_confianza', 'raw_file_id',
-            'is_imputed_date'
+            'is_imputed_date',
+            'dim_nombre_plataforma', 'dim_tipo_plataforma', 'dim_ecosistema',
+            'dim_plataforma_metodo', 'dim_nombre_tecnologia',
+            'dim_categoria_tecnologia', 'dim_dominio_tecnologico', 'dim_tipo_senal',
+            'dim_tecnologia_metodo', 'dim_nombre_comunidad', 'dim_tipo_comunidad',
+            'dim_region_comunidad', 'dim_comunidad_metodo'
         ]
         
         # Motivo: se ajustan nulos y caracteres no validos para que PostgreSQL reciba un dataset tabular consistente.
         df_final = df_consolidado[contrato_columnas].copy()
-        text_cols = ['id_origen_registro', 'fuente', 'tipo_fuente', 'plataforma', 'fecha_evento', 'nombre_agente', 'categoria', 'titulo', 'texto', 'url', 'llm_entorno_uso', 'llm_tipo_integracion', 'llm_categoria_tecnologia', 'llm_capacidades', 'llm_comunidad_tipo']
+        text_cols = [
+            'id_origen_registro', 'fuente', 'tipo_fuente', 'plataforma',
+            'fecha_evento', 'nombre_agente', 'categoria', 'titulo', 'texto', 'url',
+            'llm_entorno_uso', 'llm_tipo_integracion', 'llm_categoria_tecnologia',
+            'llm_capacidades', 'llm_comunidad_tipo', *SEMANTIC_DB_COLUMNS.keys()
+        ]
         for col in text_cols:
             if col in df_final.columns:
                 df_final[col] = df_final[col].map(lambda value: value.replace('\x00', '') if isinstance(value, str) else value)
@@ -124,34 +169,52 @@ def run_staging_pipeline():
         # Escribir con to_sql
         # Al usar if_exists='append', dependemos de la clave UNIQUE de la BD para rechazar fallos
         with db_connector.engine.begin() as conn:
+            # Compatibilidad con instalaciones existentes que no vuelven a
+            # ejecutar 03_staging_tables.sql antes de reconstruir Staging.
+            for column, sql_type in STAGING_COMPAT_DB_COLUMNS.items():
+                conn.execute(text(
+                    f"ALTER TABLE staging.stg_actividad_agente_ia "
+                    f"ADD COLUMN IF NOT EXISTS {column} {sql_type}"
+                ))
+            # Algunos IDs de origen son URLs completas de más de 255 caracteres.
+            # TEXT evita truncamiento y conserva la identidad real del registro.
+            conn.execute(text(
+                "ALTER TABLE staging.stg_actividad_agente_ia "
+                "ALTER COLUMN id_origen_registro TYPE TEXT"
+            ))
             conn.execute(text("TRUNCATE TABLE staging.stg_actividad_agente_ia RESTART IDENTITY"))
             global_logger.info("Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.")
 
-            # Motivo: la insercion fila a fila permite registrar conflictos sin abortar toda la reconstruccion Staging.
+            # Motivo: los lotes reducen round-trips. ON CONFLICT sin columnas
+            # funciona tanto con la clave histórica de 5 campos como con el
+            # contrato actual de 4 campos.
             exitos = 0
-            fallos = 0
             
             insert_query = text(f"""
                 INSERT INTO staging.stg_actividad_agente_ia
                 ({','.join(contrato_columnas)})
                 VALUES (:{',:'.join(contrato_columnas)})
-                ON CONFLICT (fuente, plataforma, id_origen_registro, nombre_agente) DO NOTHING
+                ON CONFLICT DO NOTHING
             """)
             
             records_to_insert = df_final.to_dict(orient='records')
-            
-            for rec in records_to_insert:
+
+            batch_size = 1000
+            for start in range(0, len(records_to_insert), batch_size):
+                batch = records_to_insert[start:start + batch_size]
                 try:
-                    res = conn.execute(insert_query, rec)
-                    if res.rowcount > 0:
-                        exitos += 1
-                    else:
-                        fallos += 1
+                    conn.execute(insert_query, batch)
                 except Exception as ex:
-                    fallos += 1
-                    global_logger.debug(f"Fallo inserción individual: {ex}")
-                    
-        global_logger.info(f"Carga a BD completada. Insertados: {exitos}. Conflictos o fallos de inserción: {fallos}")
+                    raise RuntimeError(
+                        f"Fallo insertando lote Staging {start}-{start + len(batch) - 1}: {ex}"
+                    ) from ex
+
+            exitos = conn.execute(text(
+                "SELECT COUNT(*) FROM staging.stg_actividad_agente_ia"
+            )).scalar_one()
+            conflictos = len(records_to_insert) - exitos
+
+        global_logger.info(f"Carga a BD completada. Insertados: {exitos}. Conflictos omitidos: {conflictos}")
         
         # Exportar evidencia
         evidencia_path = ROOT_DIR / "docs" / "evidencias" / "staging_stats.csv"
@@ -161,6 +224,7 @@ def run_staging_pipeline():
     except Exception as e:
         log_error("staging_pipeline", type(e).__name__, str(e), "Pipeline abortado")
         global_logger.error(f"Fallo crítico en Staging: {e}")
+        raise
 
 if __name__ == "__main__":
     run_staging_pipeline()

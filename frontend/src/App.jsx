@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Activity, Users, Database, LayoutDashboard, TrendingUp, Cpu, ShieldCheck, AlertCircle, Layers, Sun, Moon, BarChart3 } from 'lucide-react';
+import { Activity, Users, Database, TrendingUp, Cpu, ShieldCheck, AlertCircle } from 'lucide-react';
 import { fetchKpiData } from './services/api';
 import GlobalFilters from './components/GlobalFilters';
+import Sidebar from './components/Sidebar';
 import { KPICard } from './components/KPI';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import {
@@ -17,10 +18,19 @@ import {
   QualityDedupBarChart,
   AgenteMesHeatMap
 } from './components/charts/Charts';
+import EjecucionETL from './components/EjecucionETL';
 import './index.css';
 
-const TAB_MAP = { '/': 'analytics', '/dimensiones': 'dimensiones', '/calidad': 'quality', '/tendencias': 'tendencias', '/ejecutivo': 'ejecutivo' };
-const REV_TAB_MAP = { analytics: '/', dimensiones: '/dimensiones', quality: '/calidad', tendencias: '/tendencias', ejecutivo: '/ejecutivo' };
+const TAB_MAP = { '/': 'analytics', '/dimensiones': 'dimensiones', '/calidad': 'quality', '/tendencias': 'tendencias', '/ejecutivo': 'ejecutivo', '/etl': 'etl' };
+const REV_TAB_MAP = { analytics: '/', dimensiones: '/dimensiones', quality: '/calidad', tendencias: '/tendencias', ejecutivo: '/ejecutivo', etl: '/etl' };
+const PAGE_META = {
+  ejecutivo: { eyebrow: 'Visión ejecutiva', title: 'Radar de mercado', description: 'Señales clave de presencia, adopción e innovación en el ecosistema de agentes de IA.' },
+  analytics: { eyebrow: 'Análisis principal', title: 'Analítica general', description: 'Desempeño agregado, comparativas y detalle de los agentes identificados.' },
+  dimensiones: { eyebrow: 'Modelo analítico', title: 'Dimensiones', description: 'Explora categorías, tecnologías, comunidad, innovación y actividad.' },
+  tendencias: { eyebrow: 'Evolución temporal', title: 'Tendencias', description: 'Comportamiento mensual de la adopción y el volumen de observaciones.' },
+  quality: { eyebrow: 'Gobierno de datos', title: 'Calidad de datos', description: 'Trazabilidad del procesamiento, duplicados y registros aptos para análisis.' },
+  etl: { eyebrow: 'Operaciones', title: 'Ejecución ETL', description: 'Supervisa y ejecuta el pipeline que alimenta el modelo analítico.' }
+};
 
 function computeTrend(data, metricKey) {
   if (!data || data.length < 2) return null;
@@ -74,6 +84,7 @@ function App() {
   const [refreshing, setRefreshing] = useState(false);
   const [apiErrors, setApiErrors] = useState([]);
   const [filters, setFilters] = useState({});
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('dashboard-theme') || 'light';
   });
@@ -87,6 +98,7 @@ function App() {
 
   const handleTabChange = (tab) => {
     navigate(REV_TAB_MAP[tab]);
+    setIsSidebarOpen(false);
   };
 
   const loadData = useCallback(async (currentFilters) => {
@@ -143,28 +155,37 @@ function App() {
     ? `${apiErrors.length} endpoint(s) fallaron. Los datos pueden estar incompletos.`
     : null;
 
+  const pageMeta = PAGE_META[activeTab];
+
   if (loading && !data) {
     return (
       <div className="dashboard-container">
-        <header className="dashboard-header" style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <div style={{ padding: '0.5rem', background: 'var(--primary)', borderRadius: '0.5rem' }}>
-              <Cpu color="#fff" size={24} />
-            </div>
+        <Sidebar
+          activeTab={activeTab}
+          onNavigate={handleTabChange}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          isOpen={isSidebarOpen}
+          onOpen={() => setIsSidebarOpen(true)}
+          onClose={() => setIsSidebarOpen(false)}
+          refreshing
+          hasErrors={false}
+        />
+        <div className="app-main">
+          <header className="content-header">
             <div>
-              <h1 style={{ fontSize: '1.25rem', marginBottom: 0 }}>Observatorio AI</h1>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Plataforma de Inteligencia de Negocios</p>
+              <span className="page-eyebrow">{pageMeta.eyebrow}</span>
+              <h1>{pageMeta.title}</h1>
+              <p>{pageMeta.description}</p>
             </div>
-          </div>
-          <button className="theme-toggle" onClick={toggleTheme} title="Cambiar tema">
-            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
-          </button>
-        </header>
-        <main className="dashboard-content">
-          <div className="panel skeleton skeleton-card" style={{ height: '80px' }} />
-          <SkeletonCards />
-          <SkeletonCharts />
-        </main>
+            <div className="refresh-status"><span className="spinner spinner-small" /> Preparando datos</div>
+          </header>
+          <main className="dashboard-content">
+            <div className="panel skeleton skeleton-card" style={{ height: '80px' }} />
+            <SkeletonCards />
+            <SkeletonCharts />
+          </main>
+        </div>
       </div>
     );
   }
@@ -173,44 +194,31 @@ function App() {
 
   return (
     <div className="dashboard-container">
-      <header className="dashboard-header" style={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ padding: '0.5rem', background: 'var(--primary)', borderRadius: '0.5rem' }}>
-            <Cpu color="#fff" size={24} />
-          </div>
+      <Sidebar
+        activeTab={activeTab}
+        onNavigate={handleTabChange}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        isOpen={isSidebarOpen}
+        onOpen={() => setIsSidebarOpen(true)}
+        onClose={() => setIsSidebarOpen(false)}
+        refreshing={refreshing}
+        hasErrors={apiErrors.length > 0}
+      />
+      <div className="app-main">
+        <header className="content-header">
           <div>
-            <h1 style={{ fontSize: '1.25rem', marginBottom: 0 }}>Observatorio AI</h1>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-              {refreshing ? 'Actualizando...' : 'Plataforma de Inteligencia de Negocios'}
-            </p>
+            <span className="page-eyebrow">{pageMeta.eyebrow}</span>
+            <h1>{pageMeta.title}</h1>
+            <p>{pageMeta.description}</p>
           </div>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', gap: '0.5rem', background: 'var(--bg-input)', padding: '0.25rem', borderRadius: '0.5rem', border: '1px solid var(--border-primary)' }}>
-            <button className={`nav-tab ${activeTab === 'ejecutivo' ? 'active' : ''}`} onClick={() => handleTabChange('ejecutivo')}>
-              <Activity size={18} /> Radar de Mercado
-            </button>
-            <button className={`nav-tab ${activeTab === 'analytics' ? 'active' : ''}`} onClick={() => handleTabChange('analytics')}>
-              <LayoutDashboard size={18} /> Analítica
-            </button>
-            <button className={`nav-tab ${activeTab === 'dimensiones' ? 'active' : ''}`} onClick={() => handleTabChange('dimensiones')}>
-              <Layers size={18} /> Dimensiones
-            </button>
-            <button className={`nav-tab ${activeTab === 'tendencias' ? 'active' : ''}`} onClick={() => handleTabChange('tendencias')}>
-              <BarChart3 size={18} /> Tendencias
-            </button>
-            <button className={`nav-tab ${activeTab === 'quality' ? 'active' : ''}`} onClick={() => handleTabChange('quality')}>
-              <ShieldCheck size={18} /> Calidad ETL
-            </button>
+          <div className={`refresh-status ${apiErrors.length ? 'has-errors' : ''}`}>
+            {refreshing ? <span className="spinner spinner-small" /> : <span className="refresh-dot" />}
+            {refreshing ? 'Actualizando datos' : apiErrors.length ? 'Datos incompletos' : 'Datos actualizados'}
           </div>
-          <button className="theme-toggle" onClick={toggleTheme} title="Cambiar tema">
-            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
-          </button>
-        </div>
-      </header>
+        </header>
 
-      <main className="dashboard-content">
+        <main className="dashboard-content">
         <GlobalFilters
           currentFilters={filters}
           onApplyFilters={handleApplyFilters}
@@ -359,7 +367,12 @@ function App() {
           </>
         )}
         </ErrorBoundary>
-      </main>
+
+        {data && activeTab === 'etl' && (
+          <EjecucionETL />
+        )}
+        </main>
+      </div>
     </div>
   );
 }

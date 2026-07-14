@@ -1,5 +1,6 @@
+import os
+import docker
 from datetime import datetime
-
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import text
@@ -8,6 +9,7 @@ from fastapi.responses import JSONResponse
 from typing import List, Optional
 
 router = APIRouter()
+etl_router = APIRouter()
 
 async def fetch_all(db: AsyncSession, query: str, params: dict = None):
     result = await db.execute(text(query), params or {})
@@ -64,7 +66,7 @@ def build_filter_clause(
         where_clauses.append("p.nombre_plataforma = :plataforma")
         params["plataforma"] = plataforma
     if tecnologia:
-        where_clauses.append("tec.dominio_tecnologico = :tecnologia")
+        where_clauses.append("tec.nombre_tecnologia = :tecnologia")
         params["tecnologia"] = tecnologia
         
     where_sql = " AND ".join(where_clauses)
@@ -365,16 +367,51 @@ async def get_filtros_opciones(db: AsyncSession = Depends(get_db)):
         categorias = await fetch_all(db, "SELECT DISTINCT categoria_agente FROM gold.dim_agente WHERE categoria_agente IS NOT NULL ORDER BY categoria_agente ASC;")
         fuentes = await fetch_all(db, "SELECT DISTINCT nombre_fuente FROM gold.dim_fuente WHERE nombre_fuente IS NOT NULL ORDER BY nombre_fuente ASC;")
         plataformas = await fetch_all(db, "SELECT DISTINCT nombre_plataforma FROM gold.dim_plataforma WHERE nombre_plataforma IS NOT NULL ORDER BY nombre_plataforma ASC;")
-        tecnologias = await fetch_all(db, "SELECT DISTINCT dominio_tecnologico FROM gold.dim_tecnologia WHERE dominio_tecnologico IS NOT NULL ORDER BY dominio_tecnologico ASC;")
+        tecnologias = await fetch_all(db, "SELECT DISTINCT nombre_tecnologia FROM gold.dim_tecnologia WHERE nombre_tecnologia IS NOT NULL ORDER BY nombre_tecnologia ASC;")
         agentes_list = await fetch_all(db, "SELECT DISTINCT nombre_agente FROM gold.dim_agente WHERE nombre_agente NOT IN ('No Identificado', 'Otro Agente IA') ORDER BY nombre_agente ASC;")
         
         return {
             "categorias": [c["categoria_agente"] for c in categorias],
             "fuentes": [f["nombre_fuente"] for f in fuentes],
             "plataformas": [p["nombre_plataforma"] for p in plataformas],
-            "tecnologias": [t["dominio_tecnologico"] for t in tecnologias],
+            "tecnologias": [t["nombre_tecnologia"] for t in tecnologias],
             "agentes": [a["nombre_agente"] for a in agentes_list]
         }
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": "Error al consultar opciones de filtros", "detail": str(e)})
 
+# --- ETL Endpoints ---
+
+@etl_router.post("/etl/run")
+async def run_etl():
+    try:
+        client = docker.from_env()
+        container = client.containers.get("observatorio_etl")
+        container.start()
+        return {"status": "started", "message": "Pipeline ETL iniciado."}
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": "Error al iniciar el ETL", "detail": str(e)})
+
+@etl_router.get("/etl/status")
+async def get_etl_status():
+    try:
+        client = docker.from_env()
+        container = client.containers.get("observatorio_etl")
+        container.reload()
+        return {"status": container.status}
+    except Exception as e:
+        return {"status": "unknown", "detail": str(e)}
+
+@etl_router.get("/etl/logs")
+async def get_etl_logs():
+    try:
+        log_path = "/app/etl_logs/pipeline_run.log"
+        if not os.path.exists(log_path):
+            return {"logs": "No hay logs disponibles o el archivo no se ha creado."}
+        
+        with open(log_path, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+            last_lines = lines[-500:] if len(lines) > 500 else lines
+            return {"logs": "".join(last_lines)}
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": "Error al leer logs", "detail": str(e)})

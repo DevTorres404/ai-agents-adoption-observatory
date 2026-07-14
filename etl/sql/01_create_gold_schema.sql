@@ -99,9 +99,9 @@ CREATE TABLE gold.dim_plataforma (
 
 -- ==========================================================
 -- DIMENSION: TECNOLOGIA
--- Clasifica la naturaleza tecnica/estrategica del registro.
--- Se deriva de campos como categoria y senales tecnicas disponibles
--- en staging.stg_actividad_agente_ia durante la carga posterior.
+-- Clasifica la tecnología, capacidad o área técnica observada.
+-- Se alimenta con metadata estructurada y reglas contextuales trazables
+-- generadas explícitamente en staging.stg_actividad_agente_ia.
 -- ==========================================================
 CREATE TABLE gold.dim_tecnologia (
     id_tecnologia BIGSERIAL PRIMARY KEY,
@@ -118,8 +118,8 @@ CREATE TABLE gold.dim_tecnologia (
 -- ==========================================================
 -- DIMENSION: COMUNIDAD
 -- Agrupa el contexto comunitario o canal de discusion asociado.
--- Su poblacion posterior debe derivarse exclusivamente desde Staging
--- usando fuente, plataforma, categoria, titulo, texto o url.
+-- Representa propietarios, organizaciones, foros, instituciones o medios;
+-- no reutiliza el nombre de plataforma como sustituto de comunidad.
 -- ==========================================================
 CREATE TABLE gold.dim_comunidad (
     id_comunidad BIGSERIAL PRIMARY KEY,
@@ -148,7 +148,7 @@ CREATE TABLE gold.fact_actividad_agente_ia (
     id_tecnologia BIGINT NOT NULL,
     id_comunidad BIGINT NOT NULL,
 
-    id_origen_registro VARCHAR(255) NOT NULL,
+    id_origen_registro TEXT NOT NULL,
     raw_file_id INTEGER,
 
     cantidad_menciones INTEGER NOT NULL DEFAULT 0 CHECK (cantidad_menciones >= 0),
@@ -194,8 +194,6 @@ CREATE TABLE gold.fact_actividad_agente_ia (
             id_agente,
             id_fuente,
             id_plataforma,
-            id_tecnologia,
-            id_comunidad,
             id_origen_registro
         )
 );

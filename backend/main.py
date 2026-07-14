@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from .database import AsyncSessionLocal
-from .routes import router
+from .routes import router, etl_router
 
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env"))
 
@@ -24,6 +24,7 @@ app.add_middleware(
 )
 
 app.include_router(router, prefix="/api/kpi")
+app.include_router(etl_router, prefix="/api")
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):

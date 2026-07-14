@@ -231,15 +231,15 @@ GROUP BY nombre_fuente;
 
 -- ==========================================================
 -- 04. DIMENSION PLATAFORMA
--- Fuente: plataforma y tipo_fuente desde Staging.
+-- Fuente: atributos semánticos explícitos generados en Staging.
 -- ==========================================================
 WITH plataformas_distintas AS (
     SELECT DISTINCT
-        COALESCE(NULLIF(BTRIM(s.plataforma), ''), 'No especificado') AS nombre_plataforma,
-        COALESCE(NULLIF(BTRIM(s.llm_tipo_integracion), ''), NULLIF(BTRIM(s.tipo_fuente), ''), 'No especificado') AS tipo_plataforma,
-        COALESCE(NULLIF(BTRIM(s.llm_entorno_uso), ''), NULLIF(BTRIM(s.fuente), ''), 'No especificado') AS ecosistema
+        COALESCE(NULLIF(BTRIM(s.dim_nombre_plataforma), ''), 'No determinada') AS nombre_plataforma,
+        COALESCE(NULLIF(BTRIM(s.dim_tipo_plataforma), ''), 'No determinado') AS tipo_plataforma,
+        COALESCE(NULLIF(BTRIM(s.dim_ecosistema), ''), 'No determinado') AS ecosistema
     FROM staging.stg_actividad_agente_ia s
-    WHERE s.plataforma IS NOT NULL
+    WHERE s.dim_nombre_plataforma IS NOT NULL
 )
 INSERT INTO gold.dim_plataforma (
     nombre_plataforma,
@@ -256,16 +256,16 @@ GROUP BY nombre_plataforma;
 
 -- ==========================================================
 -- 05. DIMENSION TECNOLOGIA
--- Fuente: categoria, tipo_fuente y plataforma desde Staging.
+-- Fuente: metadata estructurada o vocabulario contextual trazable de Staging.
 -- ==========================================================
 WITH tecnologias_distintas AS (
     SELECT DISTINCT
-        COALESCE(NULLIF(BTRIM(s.categoria), ''), 'No especificado') AS nombre_tecnologia,
-        COALESCE(NULLIF(BTRIM(s.llm_categoria_tecnologia), ''), NULLIF(BTRIM(s.categoria), ''), 'No especificado') AS categoria_tecnologia,
-        COALESCE(NULLIF(BTRIM(s.llm_capacidades), ''), NULLIF(BTRIM(s.plataforma), ''), 'No especificado') AS dominio_tecnologico,
-        COALESCE(NULLIF(BTRIM(s.tipo_fuente), ''), 'No especificado') AS tipo_senal
+        COALESCE(NULLIF(BTRIM(s.dim_nombre_tecnologia), ''), 'No determinada') AS nombre_tecnologia,
+        COALESCE(NULLIF(BTRIM(s.dim_categoria_tecnologia), ''), 'No determinada') AS categoria_tecnologia,
+        COALESCE(NULLIF(BTRIM(s.dim_dominio_tecnologico), ''), 'No determinado') AS dominio_tecnologico,
+        COALESCE(NULLIF(BTRIM(s.dim_tipo_senal), ''), 'Observación digital') AS tipo_senal
     FROM staging.stg_actividad_agente_ia s
-    WHERE s.categoria IS NOT NULL
+    WHERE s.dim_nombre_tecnologia IS NOT NULL
 )
 INSERT INTO gold.dim_tecnologia (
     nombre_tecnologia,
@@ -284,17 +284,16 @@ GROUP BY nombre_tecnologia, categoria_tecnologia;
 
 -- ==========================================================
 -- 06. DIMENSION COMUNIDAD
--- Fuente: fuente, tipo_fuente y plataforma desde Staging.
--- region no existe en Staging; se conserva como No especificado.
+-- Fuente: propietario, grupo, foro, institución o medio identificado en Staging.
 -- ==========================================================
 WITH comunidades_distintas AS (
     SELECT DISTINCT
-        COALESCE(NULLIF(BTRIM(s.plataforma), ''), 'No especificado') AS nombre_comunidad,
-        COALESCE(NULLIF(BTRIM(s.llm_comunidad_tipo), ''), NULLIF(BTRIM(s.tipo_fuente), ''), 'No especificado') AS tipo_comunidad,
-        'No especificado' AS region,
-        COALESCE(NULLIF(BTRIM(s.plataforma), ''), 'No especificado') AS plataforma_comunidad
+        COALESCE(NULLIF(BTRIM(s.dim_nombre_comunidad), ''), 'Comunidad no determinada') AS nombre_comunidad,
+        COALESCE(NULLIF(BTRIM(s.dim_tipo_comunidad), ''), 'comunidad no determinada') AS tipo_comunidad,
+        COALESCE(NULLIF(BTRIM(s.dim_region_comunidad), ''), 'No especificado') AS region,
+        COALESCE(NULLIF(BTRIM(s.dim_nombre_plataforma), ''), 'No determinada') AS plataforma_comunidad
     FROM staging.stg_actividad_agente_ia s
-    WHERE s.plataforma IS NOT NULL
+    WHERE s.dim_nombre_comunidad IS NOT NULL
 )
 INSERT INTO gold.dim_comunidad (
     nombre_comunidad,
@@ -304,10 +303,17 @@ INSERT INTO gold.dim_comunidad (
 )
 SELECT
     nombre_comunidad,
-    MIN(tipo_comunidad) AS tipo_comunidad,
+    tipo_comunidad,
     MIN(region) AS region,
     plataforma_comunidad
 FROM comunidades_distintas
-GROUP BY nombre_comunidad, plataforma_comunidad;
+GROUP BY nombre_comunidad, tipo_comunidad, plataforma_comunidad;
 
-
+-- Las dimensiones se reconstruyen dentro de la misma transacción. Actualizar
+-- sus estadísticas evita planes de nested-loop costosos al cargar la Fact.
+ANALYZE gold.dim_tiempo;
+ANALYZE gold.dim_agente;
+ANALYZE gold.dim_fuente;
+ANALYZE gold.dim_plataforma;
+ANALYZE gold.dim_tecnologia;
+ANALYZE gold.dim_comunidad;

@@ -126,13 +126,14 @@ INNER JOIN gold.dim_agente da
 INNER JOIN gold.dim_fuente df
     ON df.nombre_fuente = COALESCE(NULLIF(BTRIM(s.fuente), ''), 'No especificado')
 INNER JOIN gold.dim_plataforma dp
-    ON dp.nombre_plataforma = COALESCE(NULLIF(BTRIM(s.plataforma), ''), 'No especificado')
+    ON dp.nombre_plataforma = COALESCE(NULLIF(BTRIM(s.dim_nombre_plataforma), ''), 'No determinada')
 INNER JOIN gold.dim_tecnologia dtec
-    ON dtec.nombre_tecnologia = COALESCE(NULLIF(BTRIM(s.categoria), ''), 'No especificado')
-   AND dtec.categoria_tecnologia = COALESCE(NULLIF(BTRIM(s.llm_categoria_tecnologia), ''), NULLIF(BTRIM(s.categoria), ''), 'No especificado')
+    ON dtec.nombre_tecnologia = COALESCE(NULLIF(BTRIM(s.dim_nombre_tecnologia), ''), 'No determinada')
+   AND dtec.categoria_tecnologia = COALESCE(NULLIF(BTRIM(s.dim_categoria_tecnologia), ''), 'No determinada')
 INNER JOIN gold.dim_comunidad dc
-    ON dc.nombre_comunidad = COALESCE(NULLIF(BTRIM(s.plataforma), ''), 'No especificado')
-   AND dc.plataforma_comunidad = COALESCE(NULLIF(BTRIM(s.plataforma), ''), 'No especificado')
+    ON dc.nombre_comunidad = COALESCE(NULLIF(BTRIM(s.dim_nombre_comunidad), ''), 'Comunidad no determinada')
+   AND dc.tipo_comunidad = COALESCE(NULLIF(BTRIM(s.dim_tipo_comunidad), ''), 'comunidad no determinada')
+   AND dc.plataforma_comunidad = COALESCE(NULLIF(BTRIM(s.dim_nombre_plataforma), ''), 'No determinada')
 WHERE s.id_origen_registro IS NOT NULL
   AND s.fecha_evento IS NOT NULL
   AND s.nombre_agente IS NOT NULL
@@ -140,6 +141,8 @@ WHERE s.id_origen_registro IS NOT NULL
   AND s.tipo_fuente IS NOT NULL
   AND s.plataforma IS NOT NULL
   AND s.categoria IS NOT NULL
+  AND s.dim_nombre_plataforma IS NOT NULL
+  AND s.dim_nombre_tecnologia IS NOT NULL
+  AND s.dim_nombre_comunidad IS NOT NULL
 ON CONFLICT ON CONSTRAINT uq_fact_granularidad DO NOTHING;
-
 

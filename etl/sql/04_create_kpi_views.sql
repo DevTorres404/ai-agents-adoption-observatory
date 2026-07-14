@@ -215,7 +215,7 @@ INNER JOIN gold.dim_tecnologia dtec
 INNER JOIN gold.dim_comunidad dc
     ON dc.id_comunidad = f.id_comunidad
 WHERE df.nombre_fuente IN ('github', 'api', 'catalogo')
-   OR dp.nombre_plataforma IN ('github', 'api', 'aidedev_ai_coding')
+   OR dp.nombre_plataforma IN ('GitHub', 'API / SDK')
 GROUP BY da.nombre_agente, df.nombre_fuente, dp.nombre_plataforma;
 
 
@@ -278,13 +278,12 @@ FROM mensual;
 -- ==========================================================
 -- 07. KPI: Distribucion por plataforma
 -- Objetivo:
--- Analizar la concentracion de registros por plataforma de observacion.
+-- Analizar la concentracion de registros por entorno de ejecucion/integracion.
 -- Formula:
 -- COUNT(*) por plataforma / COUNT(*) total * 100, junto con SUM de
 -- menciones e interacciones.
 -- Interpretacion esperada:
--- Muestra que plataformas aportan mas senales al DW y donde se concentra
--- la evidencia analitica.
+-- Muestra en que entornos operan o se integran los agentes observados.
 -- ==========================================================
 CREATE OR REPLACE VIEW gold.vw_kpi_distribucion_por_plataforma AS
 SELECT
@@ -316,5 +315,4 @@ INNER JOIN gold.dim_tecnologia dtec
 INNER JOIN gold.dim_comunidad dc
     ON dc.id_comunidad = f.id_comunidad
 GROUP BY dp.nombre_plataforma, dp.tipo_plataforma, dp.ecosistema;
-
 

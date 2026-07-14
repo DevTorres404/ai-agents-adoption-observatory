@@ -43,6 +43,11 @@ def extract_arxiv(max_per_agent=20):
                 title = entry.find('atom:title', ns).text.replace('\n', ' ').strip()
                 summary = entry.find('atom:summary', ns).text.replace('\n', ' ').strip()
                 link = entry.find('atom:id', ns).text
+                categories = [
+                    category.get('term')
+                    for category in entry.findall('atom:category', ns)
+                    if category.get('term')
+                ]
                 
                 records.append({
                     "id": link,
@@ -53,6 +58,7 @@ def extract_arxiv(max_per_agent=20):
                     "platform": "arxiv",
                     "source": "api_arxiv",
                     "agent_search": agent_query,
+                    "categories": categories,
                 })
                 
             global_logger.info(f"arXiv: {len(entries)} papers para '{agent_query}'.")

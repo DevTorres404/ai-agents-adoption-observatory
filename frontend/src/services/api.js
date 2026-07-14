@@ -133,3 +133,20 @@ export async function fetchFilterOptions() {
     fetchEndpoint('/filtros_opciones', '')
   );
 }
+
+// --- ETL API ---
+
+export async function runEtl() {
+  const { data } = await axios.post('/api/etl/run');
+  return data;
+}
+
+export async function getEtlStatus() {
+  const { data } = await axios.get('/api/etl/status');
+  return data;
+}
+
+export async function getEtlLogs() {
+  const { data } = await axios.get('/api/etl/logs');
+  return data;
+}

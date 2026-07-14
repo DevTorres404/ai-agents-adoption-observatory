@@ -1,5 +1,7 @@
 # Observatorio IA - Arquitectura Medallion BI
 
+🚀 **Enlace de Producción:** [https://bi.labtorres.me/](https://bi.labtorres.me/)
+
 Proyecto de Inteligencia de Negocios: **Observatorio sobre el Nivel de Adopcion de Agentes de IA en el Desarrollo de Software**.
 
 El proyecto implementa una arquitectura **Medallion** completa para integrar fuentes heterogeneas, conservar evidencia cruda, consolidar datos analiticos y poblar un Data Warehouse dimensional en PostgreSQL.
@@ -16,27 +18,32 @@ El flujo sigue una arquitectura Medallion y se complementa con un Frontend inter
 6. **API (Backend)**: aplicacion en `FastAPI` que expone los datos de `gold` y las metricas de `audit` hacia la web.
 7. **Dashboard (Frontend)**: SPA en `React + Vite` que consume la API para graficar KPIs de analitica (E4) y calidad ETL (E3).
 
-## Ejecucion
+## Ejecución en Local (Docker)
 
-### 1. Levantar Pipeline (PostgreSQL y Python)
+El proyecto completo (Base de datos, Backend, Frontend y ETL) está completamente contenerizado. Para levantarlo:
+
+### 1. Construir e Iniciar los Servicios
 
 ```bash
-docker-compose up -d
-cd etl && python -m src.scripts.run_pipeline --date 2026-06-27
+docker compose up -d --build
 ```
 
-### 2. Iniciar el Dashboard Interactivo
+Esto desplegará:
+- **PostgreSQL** (`observatorio_db`)
+- **Backend FastAPI** (`observatorio_api`) 
+- **Frontend React** (`observatorio_frontend`) accesible en tu navegador
+- **ETL Worker** (`observatorio_etl`) que corre a demanda
 
-**Terminal 1 (Backend - FastAPI):**
-```powershell
-$env:PYTHONPATH="."
-.venv\Scripts\python.exe -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
-```
+### 2. Acceder al Dashboard y correr el ETL
 
-**Terminal 2 (Frontend - React):**
-```powershell
-cd frontend
-npm run dev
+Abre tu navegador y entra a:
+**[http://localhost:8080](http://localhost:8080)**
+
+Desde la interfaz web podrás navegar a la pestaña **Control de Extracción (ETL)** y presionar el botón **Iniciar Extracción** para que el pipeline se ejecute completamente en segundo plano.
+
+*(Opcional)* Si prefieres correr el pipeline manualmente por terminal:
+```bash
+docker exec observatorio_etl python -m src.scripts.run_pipeline
 ```
 
 Comandos por fase (Opcional):
@@ -89,16 +96,16 @@ La evidencia exacta del contrato se genera en:
 
 ## Metricas verificadas
 
-Ultima corrida verificada tras integrar `etl/data/encuesta/encuesta.json` como fuente propia:
+Última corrida verificada (Run ID: 27) con deduplicación estricta por origen:
 
-- Raw/Bronze acumulado en PostgreSQL: **358440 registros**.
-- Staging/Silver consolidado: **120846 registros**.
-- Completitud Raw acumulado vs Staging: **33.71%**.
-- Merma controlada por deduplicacion historica: **66.29%**.
-- Duplicados reales por clave compuesta: **237538 registros**.
+- Raw/Bronze acumulado en PostgreSQL: **399900 registros**.
+- Staging/Silver consolidado: **127364 registros**.
+- Completitud Raw acumulado vs Staging: **31.85%**.
+- Merma controlada por deduplicacion historica: **68.15%**.
+- Duplicados reales y registros genéricos descartados: **264211 registros**.
 - Nulos criticos: **0 registros**.
 - Fuente propia Google Forms: **12 respuestas reales**.
-- Gold Fact: **120846 hechos**, sin merma contra Staging.
+- Gold Fact: **127364 hechos**, sin merma contra Staging.
 
 La clave de deduplicacion es:
 
