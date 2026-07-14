@@ -34,7 +34,9 @@ const NAV_GROUPS = [
 function Brand() {
   return (
     <div className="sidebar-brand">
-      <div className="brand-mark" aria-hidden="true"><Cpu size={23} /></div>
+      <div className="brand-mark" aria-hidden="true">
+        <img src="/img/logo.png" alt="Logo" style={{ width: '28px', height: 'auto' }} />
+      </div>
       <div>
         <strong>Observatorio AI</strong>
         <span>Business Intelligence</span>
@@ -50,12 +52,8 @@ export default function Sidebar({
   onToggleTheme,
   isOpen,
   onOpen,
-  onClose,
-  refreshing,
-  hasErrors
+  onClose
 }) {
-  const statusLabel = hasErrors ? 'Datos incompletos' : refreshing ? 'Actualizando datos' : 'Datos sincronizados';
-
   return (
     <>
       <header className="mobile-header">
@@ -103,10 +101,6 @@ export default function Sidebar({
         </nav>
 
         <div className="sidebar-footer">
-          <div className={`sync-status ${hasErrors ? 'has-errors' : ''}`}>
-            <span className="sync-dot" />
-            <div><strong>{statusLabel}</strong><span>Plataforma BI</span></div>
-          </div>
           <button className="theme-control" onClick={onToggleTheme}>
             {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
             <span>{theme === 'light' ? 'Modo oscuro' : 'Modo claro'}</span>
