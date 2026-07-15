@@ -15,14 +15,25 @@ const QUALITY_SOURCE_LABELS = {
   hackernews: 'Hacker News', reddit: 'Reddit', stackoverflow: 'Stack Overflow'
 };
 
+const RANKING_DESCRIPTIONS = {
+  adopcion: 'Ordena los agentes por su score acumulado de adopción. Una barra más larga indica mayor presencia y uso observado en las fuentes analizadas.',
+  popularidad: 'Compara la visibilidad relativa de los agentes. Una barra más larga representa mayor señal agregada de popularidad.',
+  comunidad: 'Mide la señal comunitaria acumulada de cada agente. Una barra más larga indica mayor presencia e interacción en fuentes de comunidad.',
+  innovacion: 'Resume señales asociadas con novedad y avance tecnológico. Una barra más larga indica mayor score de innovación dentro del periodo.',
+  actividad: 'Compara la intensidad total de actividad registrada por agente. Una barra más larga representa mayor volumen de señales observadas.'
+};
+
+const ChartDescription = ({ children }) => <p className="chart-description">{children}</p>;
+
 const toNumber = value => {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
-const EmptyChart = ({ title, large = false, message = 'No hay datos para los filtros seleccionados.' }) => (
+const EmptyChart = ({ title, description, large = false, message = 'No hay datos para los filtros seleccionados.' }) => (
   <div className={`panel ${large ? 'chart-panel-lg' : 'chart-panel'}`}>
     <h2>{title}</h2>
+    {description && <ChartDescription>{description}</ChartDescription>}
     <div className="chart-empty-state"><p>{message}</p></div>
   </div>
 );
@@ -61,15 +72,17 @@ const CategoryAxisTick = ({ x, y, payload, maxLength = 20, fontWeight = 500 }) =
 };
 
 export const RankingBarChart = ({ data, metric, title, color }) => {
+  const description = RANKING_DESCRIPTIONS[metric] || 'Compara el valor acumulado de cada agente para la métrica seleccionada.';
   const chartData = (data || [])
     .map(item => ({ ...item, [metric]: toNumber(item[metric]) }))
     .filter(item => item[metric] > 0);
 
-  if (chartData.length === 0) return <EmptyChart title={title} />;
+  if (chartData.length === 0) return <EmptyChart title={title} description={description} />;
 
   return (
     <div className="panel chart-panel">
       <h2>{title}</h2>
+      <ChartDescription>{description}</ChartDescription>
       <div className="chart-body">
         <ResponsiveContainer>
           <BarChart data={chartData} layout="vertical" margin={{ top: 10, right: 30, left: 100, bottom: 20 }}>
@@ -87,17 +100,19 @@ export const RankingBarChart = ({ data, metric, title, color }) => {
 
 export const TendenciaLineChart = ({ data, metricKey, metricName, color }) => {
   const title = `Evolución Temporal: ${metricName}`;
+  const description = `Muestra cómo cambia ${metricName.toLowerCase()} mes a mes. Los picos señalan periodos de mayor intensidad y el área facilita reconocer la tendencia general.`;
   const gradientId = `metric-gradient-${metricKey.replace(/[^a-z0-9_-]/gi, '-')}`;
   const chartData = (data || []).map(item => ({
     name: `${item.nombre_mes} ${item.anio}`,
     valor: toNumber(item[metricKey])
   }));
 
-  if (!chartData.some(item => item.valor > 0)) return <EmptyChart title={title} />;
+  if (!chartData.some(item => item.valor > 0)) return <EmptyChart title={title} description={description} />;
 
   return (
     <div className="panel chart-panel">
       <h2>{title}</h2>
+      <ChartDescription>{description}</ChartDescription>
       <div className="chart-body">
         <ResponsiveContainer>
           <AreaChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 50 }}>
@@ -121,17 +136,19 @@ export const TendenciaLineChart = ({ data, metricKey, metricName, color }) => {
 
 export const ComparadorAgentesChart = ({ data }) => {
   const title = 'Comparativa de Líderes (Adopción vs Popularidad)';
+  const description = 'Contrasta adopción en azul con popularidad en violeta para los líderes. Cada métrica usa su propio eje, por lo que debe compararse la posición relativa de cada agente.';
   const chartData = (data || []).map(item => ({
     ...item,
     adopcion: toNumber(item.adopcion),
     popularidad: toNumber(item.popularidad)
   }));
 
-  if (!chartData.some(item => item.adopcion > 0 || item.popularidad > 0)) return <EmptyChart title={title} />;
+  if (!chartData.some(item => item.adopcion > 0 || item.popularidad > 0)) return <EmptyChart title={title} description={description} />;
 
   return (
     <div className="panel chart-panel">
       <h2>{title}</h2>
+      <ChartDescription>{description}</ChartDescription>
       <div className="chart-body">
         <ResponsiveContainer>
           <BarChart data={chartData} margin={{ top: 20, right: 10, left: 10, bottom: 50 }}>
@@ -152,16 +169,18 @@ export const ComparadorAgentesChart = ({ data }) => {
 
 export const FuenteBarChart = ({ data }) => {
   const title = 'Participación por Fuente';
+  const description = 'Distribuye las observaciones según su fuente de origen. Una barra más larga indica que esa fuente aporta mayor volumen al análisis.';
   const chartData = (data || [])
     .map(item => ({ ...item, total_observaciones: toNumber(item.total_observaciones) }))
     .filter(item => item.total_observaciones > 0)
     .sort((a, b) => b.total_observaciones - a.total_observaciones);
 
-  if (chartData.length === 0) return <EmptyChart title={title} />;
+  if (chartData.length === 0) return <EmptyChart title={title} description={description} />;
 
   return (
     <div className="panel chart-panel">
       <h2>{title}</h2>
+      <ChartDescription>{description}</ChartDescription>
       <div className="chart-body">
         <ResponsiveContainer>
           <BarChart data={chartData} layout="vertical" margin={{ top: 20, right: 30, left: 120, bottom: 20 }}>
@@ -194,13 +213,14 @@ const ScatterTooltip = ({ active, payload }) => {
 
 export const PosicionamientoScatterChart = ({ data }) => {
   const title = 'Posicionamiento: Adopción vs Popularidad';
+  const description = 'Cada punto representa un agente: más a la derecha significa mayor adopción, más arriba mayor popularidad y un punto más grande mayor volumen de observaciones. Las líneas dividen los cuadrantes por mediana.';
   const validData = (data || []).map(item => ({
     ...item,
     adopcion: toNumber(item.adopcion),
     popularidad: toNumber(item.popularidad),
     total_observaciones: toNumber(item.total_observaciones)
   })).filter(item => item.adopcion > 0 || item.popularidad > 0);
-  if (validData.length === 0) return <EmptyChart title={title} large />;
+  if (validData.length === 0) return <EmptyChart title={title} description={description} large />;
   
   const sortedAdop = [...validData].sort((a,b) => a.adopcion - b.adopcion);
   const medAdop = sortedAdop[Math.floor(sortedAdop.length/2)]?.adopcion || 0;
@@ -211,6 +231,7 @@ export const PosicionamientoScatterChart = ({ data }) => {
   return (
     <div className="panel chart-panel-lg">
       <h2>{title}</h2>
+      <ChartDescription>{description}</ChartDescription>
       <div className="chart-body-lg">
         <ResponsiveContainer>
           <ScatterChart margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
@@ -231,6 +252,7 @@ export const PosicionamientoScatterChart = ({ data }) => {
 
 export const CategoriaPieChart = ({ data }) => {
   const title = 'Distribución por Categoría';
+  const description = 'Muestra qué proporción del score de adopción corresponde a cada categoría de agente. Un segmento mayor indica más peso dentro del total analizado.';
   const normalized = (data || []).map(item => ({
     ...item,
     adopcion: toNumber(item.adopcion),
@@ -247,11 +269,12 @@ export const CategoriaPieChart = ({ data }) => {
     ? [...topCategories, { categoria_agente: 'Otros', valor: otherValue }]
     : topCategories;
 
-  if (chartData.length === 0) return <EmptyChart title={title} />;
+  if (chartData.length === 0) return <EmptyChart title={title} description={description} />;
 
   return (
     <div className="panel chart-panel category-chart-panel">
       <h2>{title}</h2>
+      <ChartDescription>{description}</ChartDescription>
       <div className="category-chart-content">
         <div className="category-donut">
           <ResponsiveContainer>
@@ -281,16 +304,18 @@ export const CategoriaPieChart = ({ data }) => {
 
 export const TecnologiaBarChart = ({ data }) => {
   const title = 'Adopción por Dominio Tecnológico';
+  const description = 'Agrupa la adopción por dominio tecnológico. Una barra más larga señala los ámbitos donde se concentra una mayor señal de uso.';
   const chartData = (data || [])
     .map(item => ({ ...item, adopcion: toNumber(item.adopcion) }))
     .filter(item => item.adopcion > 0)
     .sort((a, b) => b.adopcion - a.adopcion);
 
-  if (chartData.length === 0) return <EmptyChart title={title} />;
+  if (chartData.length === 0) return <EmptyChart title={title} description={description} />;
 
   return (
     <div className="panel chart-panel">
       <h2>{title}</h2>
+      <ChartDescription>{description}</ChartDescription>
       <div className="chart-body">
         <ResponsiveContainer>
           <BarChart data={chartData} layout="vertical" margin={{ top: 20, right: 30, left: 155, bottom: 20 }}>
@@ -314,11 +339,13 @@ export const QualitySummaryPieChart = ({ data }) => {
   ];
 
   const title = 'Completitud de la carga';
-  if (!chartData.some(item => item.value > 0)) return <EmptyChart title={title} />;
+  const description = 'Contrasta el porcentaje de registros aptos en Staging con la merma provocada por las reglas de limpieza. Un porcentaje verde mayor implica mejor aprovechamiento de la carga.';
+  if (!chartData.some(item => item.value > 0)) return <EmptyChart title={title} description={description} />;
 
   return (
     <div className="panel chart-panel quality-chart-panel">
       <h2>{title}</h2>
+      <ChartDescription>{description}</ChartDescription>
       <div className="chart-body">
         <ResponsiveContainer>
           <PieChart>
@@ -338,6 +365,7 @@ export const QualitySummaryPieChart = ({ data }) => {
 
 export const QualityDedupBarChart = ({ data }) => {
   const title = 'Tasa de depuración por fuente';
+  const description = 'Indica qué porcentaje de registros fue removido por duplicidad en cada fuente. Una barra más larga señala mayor repetición y necesidad de depuración.';
   const chartData = (data || [])
     .map(item => {
       const removed = toNumber(item.total_removed);
@@ -351,11 +379,12 @@ export const QualityDedupBarChart = ({ data }) => {
     })
     .sort((a, b) => a.duplicate_rate - b.duplicate_rate);
 
-  if (chartData.length === 0) return <EmptyChart title={title} />;
+  if (chartData.length === 0) return <EmptyChart title={title} description={description} />;
 
   return (
     <div className="panel chart-panel quality-chart-panel">
       <h2>{title}</h2>
+      <ChartDescription>{description}</ChartDescription>
       <div className="chart-body">
         <ResponsiveContainer>
           <BarChart data={chartData} layout="vertical" margin={{ top: 12, right: 24, left: 8, bottom: 12 }}>
@@ -372,10 +401,12 @@ export const QualityDedupBarChart = ({ data }) => {
 };
 
 export const AgenteMesHeatMap = ({ data }) => {
+  const description = 'Cruza agentes y meses mediante intensidad de color. Las celdas más oscuras representan una mayor adopción del agente en ese periodo.';
   if (!data || data.length === 0) {
     return (
       <div className="panel chart-panel-lg">
         <h2>Mapa de Calor: Agentes × Meses</h2>
+        <ChartDescription>{description}</ChartDescription>
         <p className="no-data-message">No hay datos de matriz de cobertura disponibles.</p>
       </div>
     );
@@ -424,6 +455,7 @@ export const AgenteMesHeatMap = ({ data }) => {
   return (
     <div className="panel chart-panel-lg">
       <h2>Mapa de Calor: Agentes × Meses (Adopción)</h2>
+      <ChartDescription>{description}</ChartDescription>
       <div className="heatmap-wrapper">
         <div className="heatmap-grid" style={{ gridTemplateColumns: `140px repeat(${months.length}, 1fr)` }}>
           <div className="heatmap-corner">Agente \ Mes</div>

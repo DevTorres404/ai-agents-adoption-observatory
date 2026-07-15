@@ -17,16 +17,16 @@ const NAV_GROUPS = [
   {
     label: 'Análisis',
     items: [
-      { id: 'ejecutivo', label: 'Radar de mercado', icon: Activity },
-      { id: 'analytics', label: 'Analítica general', icon: LayoutDashboard },
-      { id: 'dimensiones', label: 'Dimensiones', icon: Layers },
-      { id: 'tendencias', label: 'Tendencias', icon: BarChart3 }
+      { id: 'ejecutivo', label: 'Radar de mercado', description: 'Liderazgo y posicionamiento competitivo.', icon: Activity },
+      { id: 'analytics', label: 'Analítica general', description: 'KPIs, comparativas y detalle por agente.', icon: LayoutDashboard },
+      { id: 'dimensiones', label: 'Dimensiones', description: 'Categorías, tecnología y señales de adopción.', icon: Layers },
+      { id: 'tendencias', label: 'Tendencias', description: 'Evolución temporal y fuentes que explican los cambios.', icon: BarChart3 }
     ]
   },
   {
     label: 'Operaciones',
     items: [
-      { id: 'quality', label: 'Calidad de datos', icon: ShieldCheck }
+      { id: 'quality', label: 'Calidad de datos', description: 'Confiabilidad, depuración y trazabilidad de la carga.', icon: ShieldCheck }
     ]
   }
 ];
@@ -89,6 +89,8 @@ export default function Sidebar({
                     className={`sidebar-link ${isActive ? 'active' : ''}`}
                     onClick={() => onNavigate(item.id)}
                     aria-current={isActive ? 'page' : undefined}
+                    aria-label={`${item.label}: ${item.description}`}
+                    title={item.description}
                   >
                     <span className="sidebar-link-icon"><Icon size={19} /></span>
                     <span>{item.label}</span>
