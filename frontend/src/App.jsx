@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Activity, Users, Database, TrendingUp, Cpu, ShieldCheck, AlertCircle, CalendarClock, CopyCheck } from 'lucide-react';
+import { Activity, Users, Database, TrendingUp, Cpu, ShieldCheck, AlertCircle, CalendarClock, CopyCheck, Info } from 'lucide-react';
 import { fetchKpiData } from './services/api';
 import GlobalFilters from './components/GlobalFilters';
 import Sidebar from './components/Sidebar';
@@ -23,11 +23,36 @@ import './index.css';
 const TAB_MAP = { '/': 'analytics', '/dimensiones': 'dimensiones', '/calidad': 'quality', '/tendencias': 'tendencias', '/ejecutivo': 'ejecutivo' };
 const REV_TAB_MAP = { analytics: '/', dimensiones: '/dimensiones', quality: '/calidad', tendencias: '/tendencias', ejecutivo: '/ejecutivo' };
 const PAGE_META = {
-  ejecutivo: { eyebrow: 'Visión ejecutiva', title: 'Radar de mercado', description: 'Señales clave de presencia, adopción e innovación en el ecosistema de agentes de IA.' },
-  analytics: { eyebrow: 'Análisis principal', title: 'Analítica general', description: 'Desempeño agregado, comparativas y detalle de los agentes identificados.' },
-  dimensiones: { eyebrow: 'Modelo analítico', title: 'Dimensiones', description: 'Explora categorías, tecnologías, comunidad, innovación y actividad.' },
-  tendencias: { eyebrow: 'Evolución temporal', title: 'Tendencias', description: 'Explica cambios mensuales, fuentes dominantes y comportamiento por agente.' },
-  quality: { eyebrow: 'Gobierno de datos', title: 'Calidad de datos', description: 'Trazabilidad del procesamiento, duplicados y registros aptos para análisis.' }
+  ejecutivo: {
+    eyebrow: 'Visión ejecutiva',
+    title: 'Radar de mercado',
+    description: 'Resume liderazgo, alcance y posicionamiento competitivo de los agentes de IA.',
+    purpose: 'Identifica quién lidera el mercado y dónde se concentra la oportunidad.'
+  },
+  analytics: {
+    eyebrow: 'Análisis principal',
+    title: 'Analítica general',
+    description: 'Compara adopción, popularidad, participación y detalle de cada agente.',
+    purpose: 'Permite pasar del indicador general a las causas y registros que explican el desempeño.'
+  },
+  dimensiones: {
+    eyebrow: 'Modelo analítico',
+    title: 'Dimensiones',
+    description: 'Desglosa categorías, tecnologías, comunidad, innovación y actividad.',
+    purpose: 'Explica qué capacidades y señales del ecosistema impulsan la adopción.'
+  },
+  tendencias: {
+    eyebrow: 'Evolución temporal',
+    title: 'Tendencias',
+    description: 'Muestra cambios mensuales, fuentes dominantes y comportamiento por agente.',
+    purpose: 'Distingue crecimiento sostenido de picos provocados por una fuente o carga puntual.'
+  },
+  quality: {
+    eyebrow: 'Gobierno de datos',
+    title: 'Calidad de datos',
+    description: 'Audita la carga Raw–Staging, los duplicados y los registros aptos para análisis.',
+    purpose: 'Confirma si la información es confiable y cuánto volumen fue depurado o descartado.'
+  }
 };
 
 const SOURCE_LABELS = {
@@ -211,6 +236,7 @@ function App() {
               <span className="page-eyebrow">{pageMeta.eyebrow}</span>
               <h1>{pageMeta.title}</h1>
               <p>{pageMeta.description}</p>
+              <div className="page-purpose"><Info size={14} /><span><strong>Lectura clave:</strong> {pageMeta.purpose}</span></div>
             </div>
             <div className="refresh-status"><span className="spinner spinner-small" /> Preparando datos</div>
           </header>
@@ -243,6 +269,7 @@ function App() {
             <span className="page-eyebrow">{pageMeta.eyebrow}</span>
             <h1>{pageMeta.title}</h1>
             <p>{pageMeta.description}</p>
+            <div className="page-purpose"><Info size={14} /><span><strong>Lectura clave:</strong> {pageMeta.purpose}</span></div>
           </div>
           <div className={`refresh-status ${apiErrors.length ? 'has-errors' : ''}`}>
             {refreshing ? <span className="spinner spinner-small" /> : <span className="refresh-dot" />}

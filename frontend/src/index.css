@@ -43,13 +43,18 @@
   --no-data: #94a3b8;
 
   /* Navegación */
-  --sidebar-bg: #ffffff;
-  --sidebar-surface: #f8fafc;
-  --sidebar-active: #e6efff;
-  --sidebar-border: #d8e0e8;
-  --sidebar-text: #1e293b;
-  --sidebar-text-muted: #64748b;
+  --sidebar-bg: #eef3fb;
+  --sidebar-surface: #f8fbff;
+  --sidebar-active: #d9e6ff;
+  --sidebar-border: #c7d3e3;
+  --sidebar-text: #14213d;
+  --sidebar-text-muted: #52657f;
   --sidebar-muted: var(--sidebar-text-muted);
+  --sidebar-hover: #e1e9f5;
+  --sidebar-active-text: #214fae;
+  --sidebar-active-icon: #356ae6;
+  --sidebar-active-border: #356ae6;
+  --sidebar-shadow: rgba(20,33,61,0.12);
   --primary-blue: #356ae6;
   --primary-violet: #7c3aed;
   --status-green: #16a36a;
@@ -112,6 +117,11 @@
   --sidebar-text: #e7edf8;
   --sidebar-text-muted: #9fb0cc;
   --sidebar-muted: var(--sidebar-text-muted);
+  --sidebar-hover: rgba(255,255,255,0.06);
+  --sidebar-active-text: #ffffff;
+  --sidebar-active-icon: #ffffff;
+  --sidebar-active-border: #5b8def;
+  --sidebar-shadow: rgba(0,0,0,0.28);
 
   /* Utilidades */
   --heatmap-empty: #1e293b;
@@ -180,6 +190,19 @@ h2 { font-size: 1.25rem; border-bottom: 1px solid var(--border-primary); padding
   max-width: 680px;
 }
 
+.page-purpose {
+  max-width: 780px;
+  margin-top: 0.48rem;
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+  color: var(--primary-dark);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+.page-purpose svg { flex-shrink: 0; color: var(--primary); }
+.page-purpose strong { font-weight: 800; }
+
 .page-eyebrow {
   color: var(--primary);
   font-size: 0.7rem;
@@ -232,16 +255,16 @@ h2 { font-size: 1.25rem; border-bottom: 1px solid var(--border-primary); padding
   padding: 1.25rem 1rem;
   color: var(--sidebar-text);
   background:
-    radial-gradient(circle at 15% 0%, rgba(53, 106, 230, 0.13), transparent 32%),
+    radial-gradient(circle at 15% 0%, color-mix(in srgb, var(--primary-blue) 18%, transparent), transparent 35%),
     var(--sidebar-bg);
   border-right: 1px solid var(--sidebar-border);
-  box-shadow: 10px 0 30px rgba(15, 23, 42, 0.08);
+  box-shadow: 10px 0 30px var(--sidebar-shadow);
 }
 
 .sidebar-top { display: flex; align-items: center; justify-content: space-between; }
 .sidebar-brand { display: flex; align-items: center; gap: 0.75rem; padding: 0.25rem 0.45rem; }
 .sidebar-brand > div:last-child { display: flex; flex-direction: column; min-width: 0; }
-.sidebar-brand strong { color: #fff; font-size: 0.95rem; letter-spacing: -0.01em; }
+.sidebar-brand strong { color: var(--sidebar-text); font-size: 0.95rem; letter-spacing: -0.01em; }
 .sidebar-brand span { color: var(--sidebar-muted); font-size: 0.65rem; letter-spacing: 0.06em; text-transform: uppercase; }
 .brand-mark {
   width: 40px;
@@ -285,16 +308,16 @@ h2 { font-size: 1.25rem; border-bottom: 1px solid var(--border-primary); padding
   text-align: left;
   transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
 }
-.sidebar-link:hover { color: var(--sidebar-text); background: rgba(255,255,255,0.06); }
+.sidebar-link:hover { color: var(--sidebar-text); background: var(--sidebar-hover); }
 .sidebar-link.active {
-  color: #fff;
-  background: linear-gradient(90deg, rgba(53,106,230,0.28), rgba(124,58,237,0.14));
-  border-left-color: #5b8def;
-  box-shadow: inset 0 0 0 1px rgba(91,141,239,0.18);
+  color: var(--sidebar-active-text);
+  background: linear-gradient(90deg, var(--sidebar-active), color-mix(in srgb, var(--sidebar-active) 72%, var(--sidebar-surface)));
+  border-left-color: var(--sidebar-active-border);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--sidebar-active-border) 24%, transparent), 0 4px 12px color-mix(in srgb, var(--sidebar-active-border) 10%, transparent);
 }
 .sidebar-link-icon { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; flex-shrink: 0; color: var(--sidebar-text-muted); }
-.sidebar-link.active .sidebar-link-icon { color: #fff; background: rgba(91,141,239,0.13); }
-.sidebar-link-arrow { margin-left: auto; color: #5b8def; }
+.sidebar-link.active .sidebar-link-icon { color: var(--sidebar-active-icon); background: color-mix(in srgb, var(--sidebar-active-border) 13%, transparent); }
+.sidebar-link-arrow { margin-left: auto; color: var(--sidebar-active-border); }
 
 .sidebar-footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--sidebar-border); display: grid; gap: 0.65rem; }
 .sync-status { display: flex; align-items: center; gap: 0.65rem; padding: 0.65rem; }
@@ -317,7 +340,7 @@ h2 { font-size: 1.25rem; border-bottom: 1px solid var(--border-primary); padding
   font: inherit;
   font-size: 0.8rem;
 }
-.theme-control:hover { color: #fff; border-color: var(--sidebar-border); background: rgba(255,255,255,0.06); }
+.theme-control:hover { color: var(--sidebar-text); border-color: var(--sidebar-border); background: var(--sidebar-hover); }
 
 .mobile-header, .sidebar-close, .sidebar-overlay { display: none; }
 .icon-button {
@@ -749,10 +772,20 @@ h2 { font-size: 1.25rem; border-bottom: 1px solid var(--border-primary); padding
 .skeleton-table-row { height: 2rem; width: 100%; margin-bottom: 0.5rem; }
 .skeleton-kpi-value { height: 2.5rem; width: 6rem; margin-bottom: 0.5rem; }
 
+.chart-panel,
+.chart-panel-lg { display: flex; flex-direction: column; overflow: hidden; }
 .chart-panel { height: 450px; }
 .chart-panel-lg { height: 500px; }
-.chart-body { height: 380px; width: 100%; }
-.chart-body-lg { height: 430px; width: 100%; }
+.chart-body,
+.chart-body-lg { min-height: 0; height: auto; width: 100%; flex: 1; }
+.chart-description {
+  margin: -0.55rem 0 0.55rem;
+  color: var(--text-secondary);
+  font-size: 0.68rem;
+  line-height: 1.45;
+}
+.chart-panel .chart-empty-state,
+.chart-panel-lg .chart-empty-state { min-height: 0; flex: 1; }
 
 .category-chart-panel {
   overflow: hidden;
@@ -1046,7 +1079,7 @@ h2 { font-size: 1.25rem; border-bottom: 1px solid var(--border-primary); padding
   .filter-data-status { order: 2; }
   .pending-label { margin-right: auto; }
   .chart-panel { height: 400px; }
-  .chart-body { height: 330px; }
+  .chart-body { height: auto; }
   h1 { font-size: 1.5rem; }
 }
 

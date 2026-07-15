@@ -100,13 +100,14 @@ function TrendTooltip({ active, payload }) {
 }
 
 function AdoptionTrendChart({ data, communityOnly, onToggleCommunity, loadingCommunity }) {
+  const description = 'La línea azul muestra el índice de adopción mensual y la línea violeta su promedio móvil de tres meses. Los picos representan aumentos de señal; usa la escala logarítmica para apreciar variaciones pequeñas.';
   const [scaleMode, setScaleMode] = useState('linear');
   const chartData = useMemo(() => buildTrendData(data, scaleMode), [data, scaleMode]);
   const peak = useMemo(() => chartData.reduce((maximum, item) => item.valor > (maximum?.valor || 0) ? item : maximum, null), [chartData]);
   const peakSource = peak ? (SOURCE_LABELS[peak.fuente_predominante] || peak.fuente_predominante || 'las fuentes activas') : '';
 
   if (chartData.length === 0) {
-    return <section className="panel trend-primary-panel"><h2>Índice mensual de adopción</h2><div className="chart-empty-state">No hay tendencia para los filtros seleccionados.</div></section>;
+    return <section className="panel trend-primary-panel"><h2>Índice mensual de adopción</h2><p className="chart-description">{description}</p><div className="chart-empty-state">No hay tendencia para los filtros seleccionados.</div></section>;
   }
 
   return (
@@ -124,7 +125,7 @@ function AdoptionTrendChart({ data, communityOnly, onToggleCommunity, loadingCom
               <Info size={15} />
             </button>
           </div>
-          <p>Índice agregado y promedio móvil de tres meses.</p>
+          <p>{description}</p>
         </div>
         <div className="trend-chart-controls" aria-label="Controles del gráfico">
           <div className="segmented-control">
@@ -180,6 +181,7 @@ function AdoptionTrendChart({ data, communityOnly, onToggleCommunity, loadingCom
 }
 
 function SourceContributionChart({ data, communityOnly }) {
+  const description = 'Muestra qué porcentaje de las observaciones del periodo aporta cada fuente. Una barra más larga indica mayor influencia de esa fuente sobre los resultados.';
   const chartData = useMemo(() => {
     const filtered = (data || []).filter(item => !communityOnly || item.tipo_fuente !== 'catalogo');
     const total = filtered.reduce((sum, item) => sum + toNumber(item.total_observaciones), 0);
@@ -195,13 +197,13 @@ function SourceContributionChart({ data, communityOnly }) {
   }, [communityOnly, data]);
 
   if (chartData.length === 0) {
-    return <section className="panel trend-source-panel"><h2>Contribución por fuente</h2><div className="chart-empty-state">No hay fuentes para el periodo seleccionado.</div></section>;
+    return <section className="panel trend-source-panel"><h2>Contribución por fuente</h2><p className="chart-description">{description}</p><div className="chart-empty-state">No hay fuentes para el periodo seleccionado.</div></section>;
   }
 
   return (
     <section className="panel trend-source-panel">
       <div className="trend-panel-header compact">
-        <div><h2>Contribución por fuente</h2><p>Participación en el periodo seleccionado.</p></div>
+        <div><h2>Contribución por fuente</h2><p>{description}</p></div>
       </div>
       <div className="source-chart-body">
         <ResponsiveContainer>
@@ -219,6 +221,7 @@ function SourceContributionChart({ data, communityOnly }) {
 }
 
 function TrendHeatmap({ data }) {
+  const description = 'Cruza agentes y meses para mostrar intensidad de adopción, observaciones o interacciones. Un color más oscuro indica mayor valor y el borde resalta el máximo de cada agente.';
   const [metric, setMetric] = useState('adopcion');
   const metricConfig = METRICS[metric];
 
@@ -262,13 +265,13 @@ function TrendHeatmap({ data }) {
     : `rgba(53, 106, 230, ${(0.12 + (value / globalMax) * 0.78).toFixed(2)})`;
 
   if (months.length === 0) {
-    return <section className="panel trend-heatmap-panel"><h2>Mapa de calor: agentes × meses</h2><div className="chart-empty-state">No hay datos mensuales por agente.</div></section>;
+    return <section className="panel trend-heatmap-panel"><h2>Mapa de calor: agentes × meses</h2><p className="chart-description">{description}</p><div className="chart-empty-state">No hay datos mensuales por agente.</div></section>;
   }
 
   return (
     <section className="panel trend-heatmap-panel">
       <div className="trend-panel-header heatmap-panel-header">
-        <div><h2>Mapa de calor: agentes × meses</h2><p>Últimos 18 meses, agentes ordenados por acumulado.</p></div>
+        <div><h2>Mapa de calor: agentes × meses</h2><p>{description}</p></div>
         <div className="heatmap-toolbar">
           <label htmlFor="heatmap-metric">Métrica</label>
           <select id="heatmap-metric" value={metric} onChange={event => setMetric(event.target.value)}>
