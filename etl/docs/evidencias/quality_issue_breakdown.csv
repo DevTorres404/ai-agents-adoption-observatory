@@ -1,10 +1,10 @@
 metric_name,metric_value,evidence_basis,academic_interpretation
-raw_records,399900,COUNT(*) FROM raw.raw_records,Universo Raw cargado en PostgreSQL.
-staging_records,127364,COUNT(*) FROM staging.stg_actividad_agente_ia,Registros consolidados en el contrato Staging.
-real_duplicate_records_removed,264211,Clave compuesta fuente/plataforma/id/agente/fecha sobre candidatos Staging.,Duplicados reales detectados por la regla de deduplicacion.
-key_conflicts_or_preexisting_records,8325,Diferencia Raw-Staging no explicada por duplicados o nulos criticos.,"Registros no insertados por conflicto de clave, carga previa o consolidacion historica."
+raw_records,253527,COUNT(*) FROM raw.raw_records,Universo Raw cargado en PostgreSQL.
+staging_records,122382,COUNT(*) FROM staging.stg_actividad_agente_ia,Registros consolidados en el contrato Staging.
+real_duplicate_records_removed,124161,Clave compuesta fuente/plataforma/id/agente/fecha sobre candidatos Staging.,Duplicados reales detectados por la regla de deduplicacion.
+key_conflicts_or_preexisting_records,6984,Diferencia Raw-Staging no explicada por duplicados o nulos criticos.,"Registros no insertados por conflicto de clave, carga previa o consolidacion historica."
 http_errors_logged,0,audit.pipeline_errors con errores HTTP/rate limit.,"Fallos de extraccion documentados, no tratados como exitos."
 unmapped_agent_records,0,nombre_agente = 'Otro Agente IA' en Staging.,"Registros validos, pero no homologados a un agente conocido."
 critical_null_records,0,Nulos en columnas criticas de Staging.,Registros con incumplimiento estructural critico.
 casting_or_transformation_errors,0,Conversion numerica sobre columnas metricas del candidato Staging.,Valores no convertibles durante transformacion.
-google_forms_survey_records,36,COUNT(*) Raw para fuente_propia.,Encuesta Google Forms consolidada como fuente propia academica.
+google_forms_survey_records,24,COUNT(*) Raw para fuente_propia.,Encuesta Google Forms consolidada como fuente propia academica.

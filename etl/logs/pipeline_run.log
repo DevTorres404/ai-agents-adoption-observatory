@@ -21020,3 +21020,725 @@ LINE 1: SELECT * FROM audit.quality_summary ORDER BY id DESC LIMIT 1
 2026-07-13 20:38:58,321 - pipeline_logger - INFO - Calidad Gold - Fecha Maxima Disponible: 2026-07-13
 2026-07-13 20:38:58,371 - pipeline_logger - INFO - Calidad Gold validada exitosamente. El Data Warehouse es consistente y apto para BI.
 2026-07-13 20:38:58,400 - pipeline_logger - INFO - >>> PIPELINE UNIFICADO COMPLETADO EXITOSAMENTE (Run ID: 34) <<<
+2026-08-26 16:06:14,737 - pipeline_logger - INFO - >>> INICIANDO PIPELINE UNIFICADO (Fecha Objetivo: 2026-08-26) <<<
+2026-08-26 16:06:14,772 - pipeline_logger - INFO - === FASE 1: EXTRACCIÓN MÚLTIPLE ===
+2026-08-26 16:06:14,773 - pipeline_logger - WARNING - Ejecutando GitHub sin token. Sujeto a rate limit anonimo.
+2026-08-26 16:06:14,773 - pipeline_logger - INFO - Buscando repositorios para: 'Cursor'
+2026-08-26 16:06:19,285 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1
+2026-08-26 16:06:19,294 - pipeline_logger - INFO - Pagina 1 obtenida (100 repositorios)
+2026-08-26 16:06:23,548 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=2
+2026-08-26 16:06:23,556 - pipeline_logger - INFO - Pagina 2 obtenida (100 repositorios)
+2026-08-26 16:06:27,966 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=3
+2026-08-26 16:06:27,972 - pipeline_logger - INFO - Pagina 3 obtenida (100 repositorios)
+2026-08-26 16:06:31,943 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=4
+2026-08-26 16:06:31,950 - pipeline_logger - INFO - Pagina 4 obtenida (100 repositorios)
+2026-08-26 16:06:36,050 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=5
+2026-08-26 16:06:36,058 - pipeline_logger - INFO - Pagina 5 obtenida (100 repositorios)
+2026-08-26 16:06:40,280 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=6
+2026-08-26 16:06:40,287 - pipeline_logger - INFO - Pagina 6 obtenida (100 repositorios)
+2026-08-26 16:06:40,287 - pipeline_logger - WARNING - Rate limit casi agotado (4 restantes).
+2026-08-26 16:06:44,988 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=7
+2026-08-26 16:06:44,993 - pipeline_logger - INFO - Pagina 7 obtenida (100 repositorios)
+2026-08-26 16:06:44,994 - pipeline_logger - WARNING - Rate limit casi agotado (3 restantes).
+2026-08-26 16:06:49,111 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=8
+2026-08-26 16:06:49,116 - pipeline_logger - INFO - Pagina 8 obtenida (100 repositorios)
+2026-08-26 16:06:49,117 - pipeline_logger - WARNING - Rate limit casi agotado (2 restantes).
+2026-08-26 16:06:53,041 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=9
+2026-08-26 16:06:53,046 - pipeline_logger - INFO - Pagina 9 obtenida (100 repositorios)
+2026-08-26 16:06:53,046 - pipeline_logger - WARNING - Rate limit casi agotado (1 restantes).
+2026-08-26 16:06:57,252 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=10
+2026-08-26 16:06:57,256 - pipeline_logger - INFO - Pagina 10 obtenida (100 repositorios)
+2026-08-26 16:06:57,257 - pipeline_logger - WARNING - Rate limit casi agotado (0 restantes).
+2026-08-26 16:06:59,354 - pipeline_logger - ERROR - Error 403 Forbidden en https://api.github.com/search/repositories. Probablemente bloqueado por anti-scraping.
+2026-08-26 16:06:59,449 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=1000, http=403
+2026-08-26 16:06:59,449 - pipeline_logger - INFO - Buscando repositorios para: 'Claude Code'
+2026-08-26 16:07:01,549 - pipeline_logger - ERROR - Error 403 Forbidden en https://api.github.com/search/repositories. Probablemente bloqueado por anti-scraping.
+2026-08-26 16:07:01,574 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=1000, http=403
+2026-08-26 16:07:01,575 - pipeline_logger - INFO - Buscando repositorios para: 'Codex'
+2026-08-26 16:07:03,675 - pipeline_logger - ERROR - Error 403 Forbidden en https://api.github.com/search/repositories. Probablemente bloqueado por anti-scraping.
+2026-08-26 16:07:03,689 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=1000, http=403
+2026-08-26 16:07:03,690 - pipeline_logger - INFO - Buscando repositorios para: 'GitHub Copilot'
+2026-08-26 16:07:05,789 - pipeline_logger - ERROR - Error 403 Forbidden en https://api.github.com/search/repositories. Probablemente bloqueado por anti-scraping.
+2026-08-26 16:07:05,816 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=1000, http=403
+2026-08-26 16:07:05,817 - pipeline_logger - INFO - Buscando repositorios para: 'Cline'
+2026-08-26 16:07:07,917 - pipeline_logger - ERROR - Error 403 Forbidden en https://api.github.com/search/repositories. Probablemente bloqueado por anti-scraping.
+2026-08-26 16:07:07,945 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=1000, http=403
+2026-08-26 16:07:07,946 - pipeline_logger - INFO - Buscando repositorios para: 'RooCode'
+2026-08-26 16:07:10,046 - pipeline_logger - ERROR - Error 403 Forbidden en https://api.github.com/search/repositories. Probablemente bloqueado por anti-scraping.
+2026-08-26 16:07:10,082 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=1000, http=403
+2026-08-26 16:07:10,084 - pipeline_logger - INFO - Buscando repositorios para: 'Windsurf'
+2026-08-26 16:07:12,183 - pipeline_logger - ERROR - Error 403 Forbidden en https://api.github.com/search/repositories. Probablemente bloqueado por anti-scraping.
+2026-08-26 16:07:12,224 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=1000, http=403
+2026-08-26 16:07:12,225 - pipeline_logger - INFO - Buscando repositorios para: 'Aider'
+2026-08-26 16:07:14,324 - pipeline_logger - ERROR - Error 403 Forbidden en https://api.github.com/search/repositories. Probablemente bloqueado por anti-scraping.
+2026-08-26 16:07:14,344 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=1000, http=403
+2026-08-26 16:07:14,345 - pipeline_logger - INFO - Buscando repositorios para: 'Augment'
+2026-08-26 16:07:16,444 - pipeline_logger - ERROR - Error 403 Forbidden en https://api.github.com/search/repositories. Probablemente bloqueado por anti-scraping.
+2026-08-26 16:07:16,472 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=1000, http=403
+2026-08-26 16:07:16,474 - pipeline_logger - INFO - Buscando repositorios para: 'JetBrains Junie'
+2026-08-26 16:07:19,944 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=JetBrains+Junie+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1
+2026-08-26 16:07:19,950 - pipeline_logger - INFO - Pagina 1 obtenida (69 repositorios)
+2026-08-26 16:07:22,153 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=JetBrains+Junie+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=2
+2026-08-26 16:07:22,154 - pipeline_logger - INFO - Paginacion agotada en pagina 2 para 'JetBrains Junie'
+2026-08-26 16:07:22,155 - pipeline_logger - INFO - Buscando repositorios para: 'Gemini CLI'
+2026-08-26 16:07:26,053 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Gemini+CLI+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1
+2026-08-26 16:07:26,061 - pipeline_logger - INFO - Pagina 1 obtenida (100 repositorios)
+2026-08-26 16:07:30,151 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Gemini+CLI+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=2
+2026-08-26 16:07:30,157 - pipeline_logger - INFO - Pagina 2 obtenida (100 repositorios)
+2026-08-26 16:07:34,348 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Gemini+CLI+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=3
+2026-08-26 16:07:34,354 - pipeline_logger - INFO - Pagina 3 obtenida (100 repositorios)
+2026-08-26 16:07:38,853 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Gemini+CLI+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=4
+2026-08-26 16:07:38,859 - pipeline_logger - INFO - Pagina 4 obtenida (100 repositorios)
+2026-08-26 16:07:38,859 - pipeline_logger - WARNING - Rate limit casi agotado (4 restantes).
+2026-08-26 16:07:42,948 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Gemini+CLI+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=5
+2026-08-26 16:07:42,952 - pipeline_logger - INFO - Pagina 5 obtenida (100 repositorios)
+2026-08-26 16:07:42,952 - pipeline_logger - WARNING - Rate limit casi agotado (3 restantes).
+2026-08-26 16:07:47,013 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Gemini+CLI+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=6
+2026-08-26 16:07:47,020 - pipeline_logger - INFO - Pagina 6 obtenida (100 repositorios)
+2026-08-26 16:07:47,020 - pipeline_logger - WARNING - Rate limit casi agotado (2 restantes).
+2026-08-26 16:07:51,253 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Gemini+CLI+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=7
+2026-08-26 16:07:51,259 - pipeline_logger - INFO - Pagina 7 obtenida (100 repositorios)
+2026-08-26 16:07:51,260 - pipeline_logger - WARNING - Rate limit casi agotado (1 restantes).
+2026-08-26 16:07:55,709 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Gemini+CLI+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=8
+2026-08-26 16:07:55,715 - pipeline_logger - INFO - Pagina 8 obtenida (100 repositorios)
+2026-08-26 16:07:55,716 - pipeline_logger - WARNING - Rate limit casi agotado (0 restantes).
+2026-08-26 16:07:57,816 - pipeline_logger - ERROR - Error 403 Forbidden en https://api.github.com/search/repositories. Probablemente bloqueado por anti-scraping.
+2026-08-26 16:07:57,834 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=1869, http=403
+2026-08-26 16:07:57,835 - pipeline_logger - INFO - Buscando repositorios para: 'AWS Kiro'
+2026-08-26 16:07:59,939 - pipeline_logger - ERROR - Error 403 Forbidden en https://api.github.com/search/repositories. Probablemente bloqueado por anti-scraping.
+2026-08-26 16:07:59,966 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=1869, http=403
+2026-08-26 16:07:59,969 - pipeline_logger - INFO - Buscando repositorios para: 'Kilo Code'
+2026-08-26 16:08:02,069 - pipeline_logger - ERROR - Error 403 Forbidden en https://api.github.com/search/repositories. Probablemente bloqueado por anti-scraping.
+2026-08-26 16:08:02,107 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=1869, http=403
+2026-08-26 16:08:02,107 - pipeline_logger - INFO - Buscando repositorios para: 'Zencoder'
+2026-08-26 16:08:04,208 - pipeline_logger - ERROR - Error 403 Forbidden en https://api.github.com/search/repositories. Probablemente bloqueado por anti-scraping.
+2026-08-26 16:08:04,227 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=1869, http=403
+2026-08-26 16:08:04,835 - pipeline_logger - INFO - Evidencia fuente github: status=success, records=1869, http=200
+2026-08-26 16:08:04,835 - pipeline_logger - INFO - Extraccion GitHub completada: 1869 registros guardados en github_2026-08-26.json
+2026-08-26 16:08:04,844 - pipeline_logger - INFO - Iniciando scraping estatico en HackerNews...
+2026-08-26 16:08:07,725 - pipeline_logger - INFO - hackernews: HTTP 200 GET https://news.ycombinator.com/front
+2026-08-26 16:08:07,778 - pipeline_logger - INFO - HackerNews scraping completado. 30 registros guardados en hackernews_2026-08-26.json
+2026-08-26 16:08:07,802 - pipeline_logger - INFO - Evidencia fuente hackernews: status=success, records=30, http=200
+2026-08-26 16:08:07,805 - pipeline_logger - INFO - Iniciando extraccion relevante en Dev.to...
+2026-08-26 16:08:10,496 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/search?q=AI%20coding%20agent
+2026-08-26 16:08:10,512 - pipeline_logger - WARNING - Dev.to: articulo HTML omitido por parseo: 'NoneType' object has no attribute 'find'
+2026-08-26 16:08:12,868 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=1
+2026-08-26 16:08:15,188 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=2
+2026-08-26 16:08:17,532 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=3
+2026-08-26 16:08:19,798 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=1
+2026-08-26 16:08:22,061 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=2
+2026-08-26 16:08:24,097 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=3
+2026-08-26 16:08:26,372 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=webdev&per_page=30&page=1
+2026-08-26 16:08:28,406 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=webdev&per_page=30&page=2
+2026-08-26 16:08:30,439 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=webdev&per_page=30&page=3
+2026-08-26 16:08:32,898 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=python&per_page=30&page=1
+2026-08-26 16:08:35,175 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=python&per_page=30&page=2
+2026-08-26 16:08:37,207 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=python&per_page=30&page=3
+2026-08-26 16:08:39,550 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=javascript&per_page=30&page=1
+2026-08-26 16:08:41,883 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=javascript&per_page=30&page=2
+2026-08-26 16:08:43,913 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=javascript&per_page=30&page=3
+2026-08-26 16:08:46,240 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=opensource&per_page=30&page=1
+2026-08-26 16:08:48,275 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=opensource&per_page=30&page=2
+2026-08-26 16:08:50,307 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=opensource&per_page=30&page=3
+2026-08-26 16:08:50,322 - pipeline_logger - INFO - Dev.to extraccion completada. 105 registros relevantes guardados en devto_2026-08-26.json
+2026-08-26 16:08:50,344 - pipeline_logger - INFO - Evidencia fuente devto: status=success, records=105, http=200
+2026-08-26 16:08:50,346 - pipeline_logger - INFO - Iniciando scraping dinamico relevante en Reddit (Playwright)...
+2026-08-26 16:09:54,254 - pipeline_logger - INFO - Evidencia fuente reddit: status=success, records=190, http=200
+2026-08-26 16:09:54,255 - pipeline_logger - INFO - Reddit scraping completado. 190 registros relevantes guardados.
+2026-08-26 16:09:54,256 - pipeline_logger - INFO - Iniciando extraccion de Google Trends (pytrends)...
+2026-08-26 16:09:55,586 - pipeline_logger - INFO - Pausa de 60s antes del siguiente chunk de Google Trends...
+2026-08-26 16:10:56,354 - pipeline_logger - WARNING - Error fetching chunk ['Roo Code', 'Windsurf AI', 'Aider AI', 'Augment Code', 'JetBrains Junie'] from trends: The request failed: Google returned a response with code 429
+2026-08-26 16:10:56,356 - pipeline_logger - INFO - Pausa de 60s antes del siguiente chunk de Google Trends...
+2026-08-26 16:11:57,104 - pipeline_logger - WARNING - Error fetching chunk ['Gemini CLI', 'AWS Kiro', 'Kilo Code', 'Zencoder'] from trends: The request failed: Google returned a response with code 429
+2026-08-26 16:11:57,106 - pipeline_logger - INFO - Pausa de 60s antes del siguiente chunk de Google Trends...
+2026-08-26 16:12:57,132 - pipeline_logger - INFO - Google Trends extraido: 955 data points guardados.
+2026-08-26 16:12:57,140 - pipeline_logger - INFO - Evidencia fuente google_trends: status=success, records=955, http=200
+2026-08-26 16:12:57,141 - pipeline_logger - INFO - Iniciando extraccion estructurada AIDev Dataset: AI Coding...
+2026-08-26 16:12:57,142 - pipeline_logger - WARNING - ⚠️ Archivo faltante: all_pull_request.parquet. Iniciando descarga automática...
+2026-08-26 16:12:57,142 - pipeline_logger - INFO - Descargando all_pull_request.parquet desde Zenodo (puede tardar por el tamaño)...
+2026-08-26 16:16:21,890 - pipeline_logger - INFO - ✅ all_pull_request.parquet descargado exitosamente.
+2026-08-26 16:16:21,902 - pipeline_logger - WARNING - ⚠️ Archivo faltante: all_repository.parquet. Iniciando descarga automática...
+2026-08-26 16:16:21,905 - pipeline_logger - INFO - Descargando all_repository.parquet desde Zenodo (puede tardar por el tamaño)...
+2026-08-26 16:16:57,732 - pipeline_logger - INFO - ✅ all_repository.parquet descargado exitosamente.
+2026-08-26 16:16:57,743 - pipeline_logger - WARNING - ⚠️ Archivo faltante: all_user.parquet. Iniciando descarga automática...
+2026-08-26 16:16:57,744 - pipeline_logger - INFO - Descargando all_user.parquet desde Zenodo (puede tardar por el tamaño)...
+2026-08-26 16:17:10,665 - pipeline_logger - INFO - ✅ all_user.parquet descargado exitosamente.
+2026-08-26 16:17:10,676 - pipeline_logger - WARNING - ⚠️ Archivo faltante: data_table.md. Iniciando descarga automática...
+2026-08-26 16:17:10,680 - pipeline_logger - INFO - Descargando data_table.md desde Zenodo (puede tardar por el tamaño)...
+2026-08-26 16:17:15,385 - pipeline_logger - INFO - ✅ data_table.md descargado exitosamente.
+2026-08-26 16:17:15,387 - pipeline_logger - INFO - Leyendo AIDev Dataset: AI Coding desde Parquet...
+2026-08-26 16:17:28,074 - pipeline_logger - INFO - AIDev catalog generado: 118557 registros en aidedev_2026-08-26.json
+2026-08-26 16:17:28,080 - pipeline_logger - INFO - Evidencia fuente catalogo: status=success, records=118557, http=None
+2026-08-26 16:17:28,167 - pipeline_logger - INFO - Iniciando extraccion local de encuesta Google Forms...
+2026-08-26 16:17:28,216 - pipeline_logger - INFO - Evidencia fuente fuente_propia: status=success, records=12, http=None
+2026-08-26 16:17:28,217 - pipeline_logger - INFO - Encuesta Google Forms guardada en Raw: fuente_propia_2026-08-26.json
+2026-08-26 16:17:28,217 - pipeline_logger - INFO - Iniciando extracción en StackOverflow API...
+2026-08-26 16:17:30,827 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Cursor+AI&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:17:30,832 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Cursor AI'.
+2026-08-26 16:17:34,607 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Cursor+AI&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:17:34,611 - pipeline_logger - INFO - StackOverflow: obteniendo página 2 para 'Cursor AI'.
+2026-08-26 16:17:38,301 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Cursor+AI&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=3&filter=%219_bDDxJY5
+2026-08-26 16:17:40,866 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Claude+Code&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:17:40,873 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Claude Code'.
+2026-08-26 16:17:44,871 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Claude+Code&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:17:44,875 - pipeline_logger - INFO - StackOverflow: obteniendo página 2 para 'Claude Code'.
+2026-08-26 16:17:49,131 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Claude+Code&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=3&filter=%219_bDDxJY5
+2026-08-26 16:17:49,134 - pipeline_logger - INFO - StackOverflow: obteniendo página 3 para 'Claude Code'.
+2026-08-26 16:17:52,842 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Claude+Code&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=4&filter=%219_bDDxJY5
+2026-08-26 16:17:55,080 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=OpenAI+Codex&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:17:55,083 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'OpenAI Codex'.
+2026-08-26 16:17:58,760 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=OpenAI+Codex&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:18:01,188 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=GitHub+Copilot&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:18:01,191 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'GitHub Copilot'.
+2026-08-26 16:18:05,280 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=GitHub+Copilot&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:18:05,283 - pipeline_logger - INFO - StackOverflow: obteniendo página 2 para 'GitHub Copilot'.
+2026-08-26 16:18:09,387 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=GitHub+Copilot&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=3&filter=%219_bDDxJY5
+2026-08-26 16:18:09,390 - pipeline_logger - INFO - StackOverflow: obteniendo página 3 para 'GitHub Copilot'.
+2026-08-26 16:18:13,335 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=GitHub+Copilot&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=4&filter=%219_bDDxJY5
+2026-08-26 16:18:13,338 - pipeline_logger - INFO - StackOverflow: obteniendo página 4 para 'GitHub Copilot'.
+2026-08-26 16:18:17,208 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=GitHub+Copilot&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=5&filter=%219_bDDxJY5
+2026-08-26 16:18:17,210 - pipeline_logger - INFO - StackOverflow: obteniendo página 5 para 'GitHub Copilot'.
+2026-08-26 16:18:20,883 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Cline+agent&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:18:23,127 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Roo+Code&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:18:23,128 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Roo Code'.
+2026-08-26 16:18:26,799 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Roo+Code&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:18:28,980 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Windsurf+AI&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:18:28,981 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Windsurf AI'.
+2026-08-26 16:18:32,647 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Windsurf+AI&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:18:34,826 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Aider+AI&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:18:34,828 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Aider AI'.
+2026-08-26 16:18:38,490 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Aider+AI&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:18:40,956 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Augment+Code&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:18:40,959 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Augment Code'.
+2026-08-26 16:18:44,999 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Augment+Code&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:18:45,004 - pipeline_logger - INFO - StackOverflow: obteniendo página 2 para 'Augment Code'.
+2026-08-26 16:18:48,772 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Augment+Code&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=3&filter=%219_bDDxJY5
+2026-08-26 16:18:48,774 - pipeline_logger - INFO - StackOverflow: obteniendo página 3 para 'Augment Code'.
+2026-08-26 16:18:52,445 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Augment+Code&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=4&filter=%219_bDDxJY5
+2026-08-26 16:18:54,621 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=JetBrains+Junie&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:18:54,623 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'JetBrains Junie'.
+2026-08-26 16:18:58,291 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=JetBrains+Junie&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:19:00,523 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Gemini+CLI&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:19:00,525 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Gemini CLI'.
+2026-08-26 16:19:04,196 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Gemini+CLI&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:19:06,415 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=AWS+Kiro&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:19:08,650 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Kilo+Code&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:19:08,651 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Kilo Code'.
+2026-08-26 16:19:12,318 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Kilo+Code&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:19:14,502 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Zencoder&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:19:14,503 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Zencoder'.
+2026-08-26 16:19:18,166 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Zencoder&site=stackoverflow&fromdate=1672531200&todate=1787761048&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:19:18,331 - pipeline_logger - INFO - StackOverflow extracción completada. 1159 registros guardados.
+2026-08-26 16:19:18,354 - pipeline_logger - INFO - Evidencia fuente api_stackoverflow: status=success, records=1159, http=200
+2026-08-26 16:19:18,358 - pipeline_logger - INFO - Iniciando extracción en arXiv API...
+2026-08-26 16:19:20,542 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Cursor%20AI%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:19:20,543 - pipeline_logger - INFO - arXiv: 2 papers para 'Cursor AI'.
+2026-08-26 16:19:26,111 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Claude%20Code%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:19:26,127 - pipeline_logger - INFO - arXiv: 306 papers para 'Claude Code'.
+2026-08-26 16:19:31,670 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22OpenAI%20Codex%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:19:31,679 - pipeline_logger - INFO - arXiv: 77 papers para 'OpenAI Codex'.
+2026-08-26 16:19:37,129 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22GitHub%20Copilot%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:19:37,142 - pipeline_logger - INFO - arXiv: 237 papers para 'GitHub Copilot'.
+2026-08-26 16:19:42,240 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Cline%20agent%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:19:42,242 - pipeline_logger - INFO - arXiv: 0 papers para 'Cline agent'.
+2026-08-26 16:19:47,358 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Roo%20Code%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:19:47,358 - pipeline_logger - INFO - arXiv: 0 papers para 'Roo Code'.
+2026-08-26 16:19:53,508 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Windsurf%20AI%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:19:53,509 - pipeline_logger - INFO - arXiv: 0 papers para 'Windsurf AI'.
+2026-08-26 16:19:58,635 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Aider%20AI%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:19:58,635 - pipeline_logger - INFO - arXiv: 0 papers para 'Aider AI'.
+2026-08-26 16:20:03,892 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Augment%20Code%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:20:03,899 - pipeline_logger - INFO - arXiv: 96 papers para 'Augment Code'.
+2026-08-26 16:20:09,010 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22JetBrains%20Junie%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:20:09,013 - pipeline_logger - INFO - arXiv: 0 papers para 'JetBrains Junie'.
+2026-08-26 16:20:14,161 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Gemini%20CLI%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:20:14,164 - pipeline_logger - INFO - arXiv: 25 papers para 'Gemini CLI'.
+2026-08-26 16:20:19,265 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22AWS%20Kiro%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:20:19,267 - pipeline_logger - INFO - arXiv: 1 papers para 'AWS Kiro'.
+2026-08-26 16:20:24,389 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Kilo%20Code%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:20:24,390 - pipeline_logger - INFO - arXiv: 0 papers para 'Kilo Code'.
+2026-08-26 16:20:29,489 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Zencoder%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:20:29,490 - pipeline_logger - INFO - arXiv: 0 papers para 'Zencoder'.
+2026-08-26 16:20:32,552 - pipeline_logger - INFO - arXiv extracción completada. 744 registros guardados.
+2026-08-26 16:20:32,574 - pipeline_logger - INFO - Evidencia fuente api_arxiv: status=success, records=744, http=200
+2026-08-26 16:20:32,577 - pipeline_logger - INFO - Iniciando extracción en Google News RSS...
+2026-08-26 16:20:35,592 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Cursor%20AI%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:20:35,596 - pipeline_logger - INFO - Google News: 100 noticias para 'Cursor AI'.
+2026-08-26 16:20:40,336 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Claude%20Code%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:20:40,338 - pipeline_logger - INFO - Google News: 100 noticias para 'Claude Code'.
+2026-08-26 16:20:44,936 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22OpenAI%20Codex%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:20:44,938 - pipeline_logger - INFO - Google News: 100 noticias para 'OpenAI Codex'.
+2026-08-26 16:20:49,586 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22GitHub%20Copilot%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:20:49,589 - pipeline_logger - INFO - Google News: 100 noticias para 'GitHub Copilot'.
+2026-08-26 16:20:53,928 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Cline%20agent%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:20:53,944 - pipeline_logger - INFO - Google News: 10 noticias para 'Cline agent'.
+2026-08-26 16:20:58,396 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Roo%20Code%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:20:58,399 - pipeline_logger - INFO - Google News: 17 noticias para 'Roo Code'.
+2026-08-26 16:21:03,000 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Windsurf%20AI%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:21:03,003 - pipeline_logger - INFO - Google News: 67 noticias para 'Windsurf AI'.
+2026-08-26 16:21:07,427 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Aider%20AI%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:21:07,429 - pipeline_logger - INFO - Google News: 12 noticias para 'Aider AI'.
+2026-08-26 16:21:11,951 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Augment%20Code%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:21:11,955 - pipeline_logger - INFO - Google News: 100 noticias para 'Augment Code'.
+2026-08-26 16:21:16,334 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22JetBrains%20Junie%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:21:16,336 - pipeline_logger - INFO - Google News: 19 noticias para 'JetBrains Junie'.
+2026-08-26 16:21:21,040 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Gemini%20CLI%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:21:21,043 - pipeline_logger - INFO - Google News: 100 noticias para 'Gemini CLI'.
+2026-08-26 16:21:25,581 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22AWS%20Kiro%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:21:25,582 - pipeline_logger - INFO - Google News: 73 noticias para 'AWS Kiro'.
+2026-08-26 16:21:30,027 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Kilo%20Code%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:21:30,030 - pipeline_logger - INFO - Google News: 47 noticias para 'Kilo Code'.
+2026-08-26 16:21:34,543 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Zencoder%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:21:34,548 - pipeline_logger - INFO - Google News: 100 noticias para 'Zencoder'.
+2026-08-26 16:21:36,592 - pipeline_logger - INFO - Google News extracción completada. 945 registros guardados.
+2026-08-26 16:21:36,603 - pipeline_logger - INFO - Evidencia fuente rss_gnews: status=success, records=945, http=200
+2026-08-26 16:21:36,606 - pipeline_logger - INFO - === FASE 2: CARGA RAW A BD ===
+2026-08-26 16:21:36,607 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-08-26 16:21:37,011 - pipeline_logger - INFO - Cargado exitosamente: arxiv_2026-08-26.json (744 registros)
+2026-08-26 16:22:01,363 - pipeline_logger - INFO - Cargado exitosamente: aidedev_2026-08-26.json (118557 registros)
+2026-08-26 16:22:01,490 - pipeline_logger - INFO - Cargado exitosamente: devto_2026-08-26.json (105 registros)
+2026-08-26 16:22:01,509 - pipeline_logger - INFO - Cargado exitosamente: fuente_propia_2026-08-26.json (12 registros)
+2026-08-26 16:22:02,595 - pipeline_logger - INFO - Cargado exitosamente: github_2026-08-26.json (1869 registros)
+2026-08-26 16:22:02,868 - pipeline_logger - INFO - Cargado exitosamente: gnews_2026-08-26.json (945 registros)
+2026-08-26 16:22:03,088 - pipeline_logger - INFO - Cargado exitosamente: google_trends_2026-08-26.json (955 registros)
+2026-08-26 16:22:03,116 - pipeline_logger - INFO - Cargado exitosamente: hackernews_2026-08-26.json (30 registros)
+2026-08-26 16:22:03,186 - pipeline_logger - INFO - Cargado exitosamente: reddit_2026-08-26.json (190 registros)
+2026-08-26 16:22:03,854 - pipeline_logger - INFO - Cargado exitosamente: stackoverflow_2026-08-26.json (1159 registros)
+2026-08-26 16:22:03,884 - pipeline_logger - INFO - Carga completada. Nuevos: 10. Ignorados: 0
+2026-08-26 16:22:03,909 - pipeline_logger - INFO - Inventario CSV exportado a docs/evidencias/inventario_raw.csv
+2026-08-26 16:22:03,995 - pipeline_logger - INFO - Inventario Raw completo exportado a docs/evidencias/inventario_raw_completo.csv
+2026-08-26 16:22:03,996 - pipeline_logger - INFO - === FASE 3: STAGING ===
+2026-08-26 16:22:03,997 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-08-26 16:22:05,619 - pipeline_logger - INFO - Leídos 124566 registros crudos desde BD.
+2026-08-26 16:22:06,978 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-08-26 16:22:07,654 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-08-26 16:22:09,420 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-08-26 16:22:09,455 - pipeline_logger - INFO - Paso 3.1: Exclusión de ruido aplicada. Descartados 5970 registros genéricos.
+2026-08-26 16:22:09,901 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-08-26 16:22:09,902 - pipeline_logger - INFO - Iniciando enriquecimiento semántico con Llama 3.2 (Ollama)...
+2026-08-26 16:22:09,914 - pipeline_logger - WARNING - Ollama no está disponible en localhost:11434. Se omitirá el enriquecimiento semántico.
+2026-08-26 16:22:13,627 - pipeline_logger - INFO - Dimensiones semánticas enriquecidas: plataforma con evidencia 16.91%; tecnología con evidencia 71.07% (metadata estructurada 68.79%).
+2026-08-26 16:22:13,632 - pipeline_logger - INFO - Paso 4.6: Plataforma, tecnología y comunidad enriquecidas con reglas trazables.
+2026-08-26 16:22:14,030 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 407 registros.
+2026-08-26 16:22:14,816 - pipeline_logger - INFO - Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.
+2026-08-26 16:22:24,461 - pipeline_logger - INFO - Carga a BD completada. Insertados: 118138. Conflictos omitidos: 0
+2026-08-26 16:22:27,580 - pipeline_logger - INFO - Data final exportada para evidencia en /app/docs/evidencias/staging_stats.csv
+2026-08-26 16:22:27,820 - pipeline_logger - INFO - === FASE 4: CALIDAD DE DATOS ===
+2026-08-26 16:22:27,820 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-08-26 16:22:38,062 - pipeline_logger - INFO - Dimensiones semánticas enriquecidas: plataforma con evidencia 16.54%; tecnología con evidencia 71.27% (metadata estructurada 68.80%).
+2026-08-26 16:22:38,912 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs/evidencias
+2026-08-26 16:22:38,913 - pipeline_logger - INFO - === FASE 5: CARGA DATA WAREHOUSE GOLD ===
+2026-08-26 16:22:38,914 - pipeline_logger - INFO - Ejecutando /app/sql/07_add_semantic_staging_columns.sql...
+2026-08-26 16:22:39,223 - pipeline_logger - INFO - Ejecutando /app/sql/02_load_gold_dimensions.sql...
+2026-08-26 16:22:40,726 - pipeline_logger - INFO - Ejecutando /app/sql/03_load_gold_fact.sql...
+2026-08-26 16:22:49,631 - pipeline_logger - INFO - Ejecutando /app/sql/04_create_kpi_views.sql...
+2026-08-26 16:22:49,661 - pipeline_logger - INFO - === FASE 6: CALIDAD GOLD ===
+2026-08-26 16:22:49,696 - pipeline_logger - INFO - Calidad Gold - Filas Staging: 118138, Filas Gold: 118138
+2026-08-26 16:22:49,759 - pipeline_logger - INFO - Calidad Gold - Fecha Maxima Disponible: 2026-08-26
+2026-08-26 16:22:49,817 - pipeline_logger - INFO - Calidad Gold validada exitosamente. El Data Warehouse es consistente y apto para BI.
+2026-08-26 16:22:49,839 - pipeline_logger - INFO - >>> PIPELINE UNIFICADO COMPLETADO EXITOSAMENTE (Run ID: 1) <<<
+2026-08-26 16:31:28,076 - pipeline_logger - INFO - >>> INICIANDO PIPELINE UNIFICADO (Fecha Objetivo: 2026-08-26) <<<
+2026-08-26 16:31:28,111 - pipeline_logger - INFO - === FASE 1: EXTRACCIÓN MÚLTIPLE ===
+2026-08-26 16:31:28,112 - pipeline_logger - INFO - Usando autenticacion GITHUB_TOKEN.
+2026-08-26 16:31:28,113 - pipeline_logger - INFO - Buscando repositorios para: 'Cursor'
+2026-08-26 16:31:33,688 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1
+2026-08-26 16:31:33,699 - pipeline_logger - INFO - Pagina 1 obtenida (100 repositorios)
+2026-08-26 16:31:38,403 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=2
+2026-08-26 16:31:38,414 - pipeline_logger - INFO - Pagina 2 obtenida (100 repositorios)
+2026-08-26 16:31:43,465 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=3
+2026-08-26 16:31:43,480 - pipeline_logger - INFO - Pagina 3 obtenida (100 repositorios)
+2026-08-26 16:31:48,048 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=4
+2026-08-26 16:31:48,059 - pipeline_logger - INFO - Pagina 4 obtenida (100 repositorios)
+2026-08-26 16:31:52,734 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=5
+2026-08-26 16:31:52,744 - pipeline_logger - INFO - Pagina 5 obtenida (100 repositorios)
+2026-08-26 16:31:57,552 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=6
+2026-08-26 16:31:57,561 - pipeline_logger - INFO - Pagina 6 obtenida (100 repositorios)
+2026-08-26 16:32:02,600 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=7
+2026-08-26 16:32:02,610 - pipeline_logger - INFO - Pagina 7 obtenida (100 repositorios)
+2026-08-26 16:32:07,662 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=8
+2026-08-26 16:32:07,671 - pipeline_logger - INFO - Pagina 8 obtenida (100 repositorios)
+2026-08-26 16:32:13,028 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=9
+2026-08-26 16:32:13,040 - pipeline_logger - INFO - Pagina 9 obtenida (100 repositorios)
+2026-08-26 16:32:17,882 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=10
+2026-08-26 16:32:17,890 - pipeline_logger - INFO - Pagina 10 obtenida (100 repositorios)
+2026-08-26 16:32:20,182 - pipeline_logger - ERROR - Error HTTP 422 en https://api.github.com/search/repositories: 422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11
+2026-08-26 16:32:20,207 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=1000, http=422
+2026-08-26 16:32:20,208 - pipeline_logger - INFO - Buscando repositorios para: 'Claude Code'
+2026-08-26 16:32:25,105 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Claude+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1
+2026-08-26 16:32:25,119 - pipeline_logger - INFO - Pagina 1 obtenida (100 repositorios)
+2026-08-26 16:32:29,808 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Claude+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=2
+2026-08-26 16:32:29,818 - pipeline_logger - INFO - Pagina 2 obtenida (100 repositorios)
+2026-08-26 16:32:34,446 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Claude+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=3
+2026-08-26 16:32:34,457 - pipeline_logger - INFO - Pagina 3 obtenida (100 repositorios)
+2026-08-26 16:32:39,256 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Claude+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=4
+2026-08-26 16:32:39,261 - pipeline_logger - INFO - Pagina 4 obtenida (100 repositorios)
+2026-08-26 16:32:43,924 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Claude+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=5
+2026-08-26 16:32:43,933 - pipeline_logger - INFO - Pagina 5 obtenida (100 repositorios)
+2026-08-26 16:32:48,653 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Claude+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=6
+2026-08-26 16:32:48,662 - pipeline_logger - INFO - Pagina 6 obtenida (100 repositorios)
+2026-08-26 16:32:53,401 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Claude+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=7
+2026-08-26 16:32:53,410 - pipeline_logger - INFO - Pagina 7 obtenida (100 repositorios)
+2026-08-26 16:32:58,270 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Claude+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=8
+2026-08-26 16:32:58,278 - pipeline_logger - INFO - Pagina 8 obtenida (100 repositorios)
+2026-08-26 16:33:02,881 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Claude+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=9
+2026-08-26 16:33:02,890 - pipeline_logger - INFO - Pagina 9 obtenida (100 repositorios)
+2026-08-26 16:33:07,862 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Claude+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=10
+2026-08-26 16:33:07,872 - pipeline_logger - INFO - Pagina 10 obtenida (100 repositorios)
+2026-08-26 16:33:10,092 - pipeline_logger - ERROR - Error HTTP 422 en https://api.github.com/search/repositories: 422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Claude+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11
+2026-08-26 16:33:10,142 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=2000, http=422
+2026-08-26 16:33:10,144 - pipeline_logger - INFO - Buscando repositorios para: 'Codex'
+2026-08-26 16:33:15,179 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Codex+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1
+2026-08-26 16:33:15,189 - pipeline_logger - INFO - Pagina 1 obtenida (100 repositorios)
+2026-08-26 16:33:20,087 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Codex+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=2
+2026-08-26 16:33:20,095 - pipeline_logger - INFO - Pagina 2 obtenida (100 repositorios)
+2026-08-26 16:33:24,956 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Codex+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=3
+2026-08-26 16:33:24,969 - pipeline_logger - INFO - Pagina 3 obtenida (100 repositorios)
+2026-08-26 16:33:30,003 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Codex+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=4
+2026-08-26 16:33:30,015 - pipeline_logger - INFO - Pagina 4 obtenida (100 repositorios)
+2026-08-26 16:33:34,490 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Codex+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=5
+2026-08-26 16:33:34,499 - pipeline_logger - INFO - Pagina 5 obtenida (100 repositorios)
+2026-08-26 16:33:38,815 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Codex+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=6
+2026-08-26 16:33:38,824 - pipeline_logger - INFO - Pagina 6 obtenida (100 repositorios)
+2026-08-26 16:33:43,558 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Codex+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=7
+2026-08-26 16:33:43,567 - pipeline_logger - INFO - Pagina 7 obtenida (100 repositorios)
+2026-08-26 16:33:48,052 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Codex+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=8
+2026-08-26 16:33:48,062 - pipeline_logger - INFO - Pagina 8 obtenida (100 repositorios)
+2026-08-26 16:33:52,879 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Codex+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=9
+2026-08-26 16:33:52,891 - pipeline_logger - INFO - Pagina 9 obtenida (100 repositorios)
+2026-08-26 16:33:57,684 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Codex+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=10
+2026-08-26 16:33:57,694 - pipeline_logger - INFO - Pagina 10 obtenida (100 repositorios)
+2026-08-26 16:33:59,913 - pipeline_logger - ERROR - Error HTTP 422 en https://api.github.com/search/repositories: 422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Codex+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11
+2026-08-26 16:33:59,929 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=3000, http=422
+2026-08-26 16:33:59,929 - pipeline_logger - INFO - Buscando repositorios para: 'GitHub Copilot'
+2026-08-26 16:34:04,969 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=GitHub+Copilot+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1
+2026-08-26 16:34:04,977 - pipeline_logger - INFO - Pagina 1 obtenida (100 repositorios)
+2026-08-26 16:34:09,870 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=GitHub+Copilot+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=2
+2026-08-26 16:34:09,879 - pipeline_logger - INFO - Pagina 2 obtenida (100 repositorios)
+2026-08-26 16:34:15,167 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=GitHub+Copilot+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=3
+2026-08-26 16:34:15,180 - pipeline_logger - INFO - Pagina 3 obtenida (100 repositorios)
+2026-08-26 16:34:20,849 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=GitHub+Copilot+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=4
+2026-08-26 16:34:20,865 - pipeline_logger - INFO - Pagina 4 obtenida (100 repositorios)
+2026-08-26 16:34:26,426 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=GitHub+Copilot+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=5
+2026-08-26 16:34:26,449 - pipeline_logger - INFO - Pagina 5 obtenida (100 repositorios)
+2026-08-26 16:34:31,378 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=GitHub+Copilot+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=6
+2026-08-26 16:34:31,387 - pipeline_logger - INFO - Pagina 6 obtenida (100 repositorios)
+2026-08-26 16:34:36,784 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=GitHub+Copilot+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=7
+2026-08-26 16:34:36,803 - pipeline_logger - INFO - Pagina 7 obtenida (100 repositorios)
+2026-08-26 16:34:41,874 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=GitHub+Copilot+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=8
+2026-08-26 16:34:41,882 - pipeline_logger - INFO - Pagina 8 obtenida (100 repositorios)
+2026-08-26 16:34:46,845 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=GitHub+Copilot+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=9
+2026-08-26 16:34:46,852 - pipeline_logger - INFO - Pagina 9 obtenida (100 repositorios)
+2026-08-26 16:34:51,531 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=GitHub+Copilot+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=10
+2026-08-26 16:34:51,535 - pipeline_logger - INFO - Pagina 10 obtenida (100 repositorios)
+2026-08-26 16:34:53,742 - pipeline_logger - ERROR - Error HTTP 422 en https://api.github.com/search/repositories: 422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=GitHub+Copilot+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11
+2026-08-26 16:34:53,752 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=4000, http=422
+2026-08-26 16:34:53,752 - pipeline_logger - INFO - Buscando repositorios para: 'Cline'
+2026-08-26 16:34:58,659 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cline+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1
+2026-08-26 16:34:58,665 - pipeline_logger - INFO - Pagina 1 obtenida (100 repositorios)
+2026-08-26 16:35:03,551 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cline+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=2
+2026-08-26 16:35:03,557 - pipeline_logger - INFO - Pagina 2 obtenida (100 repositorios)
+2026-08-26 16:35:08,245 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cline+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=3
+2026-08-26 16:35:08,252 - pipeline_logger - INFO - Pagina 3 obtenida (100 repositorios)
+2026-08-26 16:35:13,082 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cline+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=4
+2026-08-26 16:35:13,087 - pipeline_logger - INFO - Pagina 4 obtenida (100 repositorios)
+2026-08-26 16:35:17,904 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cline+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=5
+2026-08-26 16:35:17,911 - pipeline_logger - INFO - Pagina 5 obtenida (100 repositorios)
+2026-08-26 16:35:22,413 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cline+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=6
+2026-08-26 16:35:22,420 - pipeline_logger - INFO - Pagina 6 obtenida (100 repositorios)
+2026-08-26 16:35:27,407 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cline+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=7
+2026-08-26 16:35:27,412 - pipeline_logger - INFO - Pagina 7 obtenida (100 repositorios)
+2026-08-26 16:35:32,563 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cline+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=8
+2026-08-26 16:35:32,568 - pipeline_logger - INFO - Pagina 8 obtenida (100 repositorios)
+2026-08-26 16:35:37,811 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cline+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=9
+2026-08-26 16:35:37,816 - pipeline_logger - INFO - Pagina 9 obtenida (100 repositorios)
+2026-08-26 16:35:43,306 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cline+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=10
+2026-08-26 16:35:43,309 - pipeline_logger - INFO - Pagina 10 obtenida (100 repositorios)
+2026-08-26 16:35:45,520 - pipeline_logger - ERROR - Error HTTP 422 en https://api.github.com/search/repositories: 422 Client Error: Unprocessable Entity for url: https://api.github.com/search/repositories?q=Cline+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=11
+2026-08-26 16:35:45,535 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=5000, http=422
+2026-08-26 16:35:45,536 - pipeline_logger - INFO - Buscando repositorios para: 'RooCode'
+2026-08-26 16:35:50,680 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=RooCode+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1
+2026-08-26 16:35:50,686 - pipeline_logger - INFO - Pagina 1 obtenida (100 repositorios)
+2026-08-26 16:35:56,569 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=RooCode+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=2
+2026-08-26 16:35:56,574 - pipeline_logger - INFO - Pagina 2 obtenida (100 repositorios)
+2026-08-26 16:36:01,068 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=RooCode+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=3
+2026-08-26 16:36:01,071 - pipeline_logger - INFO - Pagina 3 obtenida (68 repositorios)
+2026-08-26 16:36:03,349 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=RooCode+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=4
+2026-08-26 16:36:03,349 - pipeline_logger - INFO - Paginacion agotada en pagina 4 para 'RooCode'
+2026-08-26 16:36:03,350 - pipeline_logger - INFO - Buscando repositorios para: 'Windsurf'
+2026-08-26 16:36:07,882 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Windsurf+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1
+2026-08-26 16:36:07,887 - pipeline_logger - INFO - Pagina 1 obtenida (100 repositorios)
+2026-08-26 16:36:12,472 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Windsurf+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=2
+2026-08-26 16:36:12,477 - pipeline_logger - INFO - Pagina 2 obtenida (100 repositorios)
+2026-08-26 16:36:17,373 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Windsurf+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=3
+2026-08-26 16:36:17,380 - pipeline_logger - INFO - Pagina 3 obtenida (100 repositorios)
+2026-08-26 16:36:22,390 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Windsurf+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=4
+2026-08-26 16:36:22,395 - pipeline_logger - INFO - Pagina 4 obtenida (100 repositorios)
+2026-08-26 16:36:27,677 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Windsurf+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=5
+2026-08-26 16:36:27,693 - pipeline_logger - INFO - Pagina 5 obtenida (100 repositorios)
+2026-08-26 16:36:32,351 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Windsurf+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=6
+2026-08-26 16:36:32,365 - pipeline_logger - INFO - Pagina 6 obtenida (100 repositorios)
+2026-08-26 16:36:37,504 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Windsurf+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=7
+2026-08-26 16:36:37,511 - pipeline_logger - INFO - Pagina 7 obtenida (100 repositorios)
+2026-08-26 16:36:54,529 - pipeline_logger - ERROR - Timeout al conectar con https://api.github.com/search/repositories
+2026-08-26 16:36:54,557 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=5968, http=200
+2026-08-26 16:36:54,559 - pipeline_logger - INFO - Buscando repositorios para: 'Aider'
+2026-08-26 16:36:56,686 - pipeline_logger - ERROR - Error de conexión con https://api.github.com/search/repositories: HTTPSConnectionPool(host='api.github.com', port=443): Max retries exceeded with url: /search/repositories?q=Aider+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1 (Caused by NameResolutionError("HTTPSConnection(host='api.github.com', port=443): Failed to resolve 'api.github.com' ([Errno -2] Name or service not known)"))
+2026-08-26 16:36:56,695 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=5968, http=200
+2026-08-26 16:36:56,695 - pipeline_logger - INFO - Buscando repositorios para: 'Augment'
+2026-08-26 16:36:58,734 - pipeline_logger - ERROR - Error de conexión con https://api.github.com/search/repositories: HTTPSConnectionPool(host='api.github.com', port=443): Max retries exceeded with url: /search/repositories?q=Augment+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1 (Caused by NameResolutionError("HTTPSConnection(host='api.github.com', port=443): Failed to resolve 'api.github.com' ([Errno -5] No address associated with hostname)"))
+2026-08-26 16:36:58,760 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=5968, http=200
+2026-08-26 16:36:58,761 - pipeline_logger - INFO - Buscando repositorios para: 'JetBrains Junie'
+2026-08-26 16:37:00,768 - pipeline_logger - ERROR - Error de conexión con https://api.github.com/search/repositories: HTTPSConnectionPool(host='api.github.com', port=443): Max retries exceeded with url: /search/repositories?q=JetBrains+Junie+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1 (Caused by NameResolutionError("HTTPSConnection(host='api.github.com', port=443): Failed to resolve 'api.github.com' ([Errno -2] Name or service not known)"))
+2026-08-26 16:37:00,796 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=5968, http=200
+2026-08-26 16:37:00,797 - pipeline_logger - INFO - Buscando repositorios para: 'Gemini CLI'
+2026-08-26 16:37:02,807 - pipeline_logger - ERROR - Error de conexión con https://api.github.com/search/repositories: HTTPSConnectionPool(host='api.github.com', port=443): Max retries exceeded with url: /search/repositories?q=Gemini+CLI+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1 (Caused by NameResolutionError("HTTPSConnection(host='api.github.com', port=443): Failed to resolve 'api.github.com' ([Errno -2] Name or service not known)"))
+2026-08-26 16:37:02,821 - pipeline_logger - INFO - Evidencia fuente github: status=failed, records=5968, http=200
+2026-08-26 16:37:02,823 - pipeline_logger - INFO - Buscando repositorios para: 'AWS Kiro'
+2026-08-26 16:37:08,239 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=AWS+Kiro+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1
+2026-08-26 16:37:08,248 - pipeline_logger - INFO - Pagina 1 obtenida (100 repositorios)
+2026-08-26 16:37:13,114 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=AWS+Kiro+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=2
+2026-08-26 16:37:13,119 - pipeline_logger - INFO - Pagina 2 obtenida (100 repositorios)
+2026-08-26 16:37:18,841 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=AWS+Kiro+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=3
+2026-08-26 16:37:18,847 - pipeline_logger - INFO - Pagina 3 obtenida (100 repositorios)
+2026-08-26 16:37:24,528 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=AWS+Kiro+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=4
+2026-08-26 16:37:24,536 - pipeline_logger - INFO - Pagina 4 obtenida (100 repositorios)
+2026-08-26 16:37:29,766 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=AWS+Kiro+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=5
+2026-08-26 16:37:29,771 - pipeline_logger - INFO - Pagina 5 obtenida (100 repositorios)
+2026-08-26 16:37:35,558 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=AWS+Kiro+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=6
+2026-08-26 16:37:35,563 - pipeline_logger - INFO - Pagina 6 obtenida (100 repositorios)
+2026-08-26 16:37:40,993 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=AWS+Kiro+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=7
+2026-08-26 16:37:41,001 - pipeline_logger - INFO - Pagina 7 obtenida (100 repositorios)
+2026-08-26 16:37:46,307 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=AWS+Kiro+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=8
+2026-08-26 16:37:46,314 - pipeline_logger - INFO - Pagina 8 obtenida (92 repositorios)
+2026-08-26 16:37:48,605 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=AWS+Kiro+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=9
+2026-08-26 16:37:48,606 - pipeline_logger - INFO - Paginacion agotada en pagina 9 para 'AWS Kiro'
+2026-08-26 16:37:48,607 - pipeline_logger - INFO - Buscando repositorios para: 'Kilo Code'
+2026-08-26 16:37:53,557 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Kilo+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1
+2026-08-26 16:37:53,562 - pipeline_logger - INFO - Pagina 1 obtenida (100 repositorios)
+2026-08-26 16:37:58,245 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Kilo+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=2
+2026-08-26 16:37:58,250 - pipeline_logger - INFO - Pagina 2 obtenida (100 repositorios)
+2026-08-26 16:38:02,791 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Kilo+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=3
+2026-08-26 16:38:02,795 - pipeline_logger - INFO - Pagina 3 obtenida (100 repositorios)
+2026-08-26 16:38:07,277 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Kilo+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=4
+2026-08-26 16:38:07,282 - pipeline_logger - INFO - Pagina 4 obtenida (100 repositorios)
+2026-08-26 16:38:11,841 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Kilo+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=5
+2026-08-26 16:38:11,845 - pipeline_logger - INFO - Pagina 5 obtenida (85 repositorios)
+2026-08-26 16:38:14,103 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Kilo+Code+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=6
+2026-08-26 16:38:14,103 - pipeline_logger - INFO - Paginacion agotada en pagina 6 para 'Kilo Code'
+2026-08-26 16:38:14,104 - pipeline_logger - INFO - Buscando repositorios para: 'Zencoder'
+2026-08-26 16:38:18,940 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Zencoder+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=1
+2026-08-26 16:38:18,944 - pipeline_logger - INFO - Pagina 1 obtenida (75 repositorios)
+2026-08-26 16:38:21,222 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Zencoder+created%3A2023-01-01..2026-12-31&sort=stars&order=desc&per_page=100&page=2
+2026-08-26 16:38:21,223 - pipeline_logger - INFO - Paginacion agotada en pagina 2 para 'Zencoder'
+2026-08-26 16:38:23,079 - pipeline_logger - INFO - Evidencia fuente github: status=success, records=7320, http=200
+2026-08-26 16:38:23,079 - pipeline_logger - INFO - Extraccion GitHub completada: 7320 registros guardados en github_2026-08-26.json
+2026-08-26 16:38:23,081 - pipeline_logger - INFO - Iniciando scraping estatico en HackerNews...
+2026-08-26 16:38:25,758 - pipeline_logger - INFO - hackernews: HTTP 200 GET https://news.ycombinator.com/front
+2026-08-26 16:38:25,818 - pipeline_logger - INFO - HackerNews scraping completado. 30 registros guardados en hackernews_2026-08-26.json
+2026-08-26 16:38:25,826 - pipeline_logger - INFO - Evidencia fuente hackernews: status=success, records=30, http=200
+2026-08-26 16:38:25,828 - pipeline_logger - INFO - Iniciando extraccion relevante en Dev.to...
+2026-08-26 16:38:28,184 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/search?q=AI%20coding%20agent
+2026-08-26 16:38:28,199 - pipeline_logger - WARNING - Dev.to: articulo HTML omitido por parseo: 'NoneType' object has no attribute 'find'
+2026-08-26 16:38:30,476 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=1
+2026-08-26 16:38:32,633 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=2
+2026-08-26 16:38:34,669 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=3
+2026-08-26 16:38:37,141 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=1
+2026-08-26 16:38:39,187 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=2
+2026-08-26 16:38:41,333 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=3
+2026-08-26 16:38:43,370 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=webdev&per_page=30&page=1
+2026-08-26 16:38:45,407 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=webdev&per_page=30&page=2
+2026-08-26 16:38:47,442 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=webdev&per_page=30&page=3
+2026-08-26 16:38:49,480 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=python&per_page=30&page=1
+2026-08-26 16:38:51,517 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=python&per_page=30&page=2
+2026-08-26 16:38:53,552 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=python&per_page=30&page=3
+2026-08-26 16:38:55,587 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=javascript&per_page=30&page=1
+2026-08-26 16:38:57,626 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=javascript&per_page=30&page=2
+2026-08-26 16:38:59,666 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=javascript&per_page=30&page=3
+2026-08-26 16:39:01,993 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=opensource&per_page=30&page=1
+2026-08-26 16:39:04,027 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=opensource&per_page=30&page=2
+2026-08-26 16:39:06,064 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=opensource&per_page=30&page=3
+2026-08-26 16:39:06,099 - pipeline_logger - INFO - Dev.to extraccion completada. 106 registros relevantes guardados en devto_2026-08-26.json
+2026-08-26 16:39:06,117 - pipeline_logger - INFO - Evidencia fuente devto: status=success, records=106, http=200
+2026-08-26 16:39:06,119 - pipeline_logger - INFO - Iniciando scraping dinamico relevante en Reddit (Playwright)...
+2026-08-26 16:40:12,000 - pipeline_logger - INFO - Evidencia fuente reddit: status=success, records=192, http=200
+2026-08-26 16:40:12,002 - pipeline_logger - INFO - Reddit scraping completado. 192 registros relevantes guardados.
+2026-08-26 16:40:12,003 - pipeline_logger - INFO - Iniciando extraccion de Google Trends (pytrends)...
+2026-08-26 16:40:13,162 - pipeline_logger - WARNING - Error fetching chunk ['Cursor AI', 'Claude Code', 'OpenAI Codex', 'GitHub Copilot', 'Cline agent'] from trends: The request failed: Google returned a response with code 429
+2026-08-26 16:40:13,164 - pipeline_logger - INFO - Pausa de 60s antes del siguiente chunk de Google Trends...
+2026-08-26 16:41:13,929 - pipeline_logger - WARNING - Error fetching chunk ['Roo Code', 'Windsurf AI', 'Aider AI', 'Augment Code', 'JetBrains Junie'] from trends: The request failed: Google returned a response with code 429
+2026-08-26 16:41:13,931 - pipeline_logger - INFO - Pausa de 60s antes del siguiente chunk de Google Trends...
+2026-08-26 16:42:14,672 - pipeline_logger - WARNING - Error fetching chunk ['Gemini CLI', 'AWS Kiro', 'Kilo Code', 'Zencoder'] from trends: The request failed: Google returned a response with code 429
+2026-08-26 16:42:14,674 - pipeline_logger - INFO - Pausa de 60s antes del siguiente chunk de Google Trends...
+2026-08-26 16:43:14,682 - pipeline_logger - INFO - Evidencia fuente google_trends: status=empty, records=0, http=200
+2026-08-26 16:43:14,684 - pipeline_logger - INFO - Iniciando extraccion estructurada AIDev Dataset: AI Coding...
+2026-08-26 16:43:14,721 - pipeline_logger - INFO - Leyendo AIDev Dataset: AI Coding desde Parquet...
+2026-08-26 16:43:27,940 - pipeline_logger - INFO - AIDev catalog generado: 118557 registros en aidedev_2026-08-26.json
+2026-08-26 16:43:27,973 - pipeline_logger - INFO - Evidencia fuente catalogo: status=success, records=118557, http=None
+2026-08-26 16:43:28,078 - pipeline_logger - INFO - Iniciando extraccion local de encuesta Google Forms...
+2026-08-26 16:43:28,124 - pipeline_logger - INFO - Evidencia fuente fuente_propia: status=success, records=12, http=None
+2026-08-26 16:43:28,125 - pipeline_logger - INFO - Encuesta Google Forms guardada en Raw: fuente_propia_2026-08-26.json
+2026-08-26 16:43:28,126 - pipeline_logger - INFO - Iniciando extracción en StackOverflow API...
+2026-08-26 16:43:30,978 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Cursor+AI&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:43:30,982 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Cursor AI'.
+2026-08-26 16:43:35,077 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Cursor+AI&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:43:35,079 - pipeline_logger - INFO - StackOverflow: obteniendo página 2 para 'Cursor AI'.
+2026-08-26 16:43:38,739 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Cursor+AI&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=3&filter=%219_bDDxJY5
+2026-08-26 16:43:41,157 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Claude+Code&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:43:41,161 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Claude Code'.
+2026-08-26 16:43:45,160 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Claude+Code&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:43:45,163 - pipeline_logger - INFO - StackOverflow: obteniendo página 2 para 'Claude Code'.
+2026-08-26 16:43:49,004 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Claude+Code&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=3&filter=%219_bDDxJY5
+2026-08-26 16:43:49,006 - pipeline_logger - INFO - StackOverflow: obteniendo página 3 para 'Claude Code'.
+2026-08-26 16:43:52,666 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Claude+Code&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=4&filter=%219_bDDxJY5
+2026-08-26 16:43:54,893 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=OpenAI+Codex&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:43:54,894 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'OpenAI Codex'.
+2026-08-26 16:43:58,554 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=OpenAI+Codex&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:44:00,949 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=GitHub+Copilot&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:44:00,952 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'GitHub Copilot'.
+2026-08-26 16:44:05,033 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=GitHub+Copilot&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:44:05,036 - pipeline_logger - INFO - StackOverflow: obteniendo página 2 para 'GitHub Copilot'.
+2026-08-26 16:44:08,947 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=GitHub+Copilot&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=3&filter=%219_bDDxJY5
+2026-08-26 16:44:08,949 - pipeline_logger - INFO - StackOverflow: obteniendo página 3 para 'GitHub Copilot'.
+2026-08-26 16:44:12,857 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=GitHub+Copilot&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=4&filter=%219_bDDxJY5
+2026-08-26 16:44:12,860 - pipeline_logger - INFO - StackOverflow: obteniendo página 4 para 'GitHub Copilot'.
+2026-08-26 16:44:16,728 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=GitHub+Copilot&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=5&filter=%219_bDDxJY5
+2026-08-26 16:44:16,730 - pipeline_logger - INFO - StackOverflow: obteniendo página 5 para 'GitHub Copilot'.
+2026-08-26 16:44:20,391 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Cline+agent&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:44:22,655 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Roo+Code&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:44:22,656 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Roo Code'.
+2026-08-26 16:44:26,316 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Roo+Code&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:44:28,478 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Windsurf+AI&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:44:28,479 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Windsurf AI'.
+2026-08-26 16:44:32,148 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Windsurf+AI&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:44:34,315 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Aider+AI&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:44:34,316 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Aider AI'.
+2026-08-26 16:44:37,972 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Aider+AI&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:44:40,462 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Augment+Code&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:44:40,464 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Augment Code'.
+2026-08-26 16:44:44,462 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Augment+Code&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:44:44,466 - pipeline_logger - INFO - StackOverflow: obteniendo página 2 para 'Augment Code'.
+2026-08-26 16:44:48,241 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Augment+Code&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=3&filter=%219_bDDxJY5
+2026-08-26 16:44:48,243 - pipeline_logger - INFO - StackOverflow: obteniendo página 3 para 'Augment Code'.
+2026-08-26 16:44:51,907 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Augment+Code&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=4&filter=%219_bDDxJY5
+2026-08-26 16:44:54,081 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=JetBrains+Junie&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:44:54,081 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'JetBrains Junie'.
+2026-08-26 16:44:57,738 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=JetBrains+Junie&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:44:59,966 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Gemini+CLI&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:44:59,967 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Gemini CLI'.
+2026-08-26 16:45:03,631 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Gemini+CLI&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:45:05,791 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=AWS+Kiro&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:45:08,011 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Kilo+Code&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:45:08,012 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Kilo Code'.
+2026-08-26 16:45:11,678 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Kilo+Code&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:45:13,846 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Zencoder&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=1&filter=%219_bDDxJY5
+2026-08-26 16:45:13,847 - pipeline_logger - INFO - StackOverflow: obteniendo página 1 para 'Zencoder'.
+2026-08-26 16:45:17,506 - pipeline_logger - INFO - stackoverflow: HTTP 200 GET https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation&q=Zencoder&site=stackoverflow&fromdate=1672531200&todate=1787762608&pagesize=100&page=2&filter=%219_bDDxJY5
+2026-08-26 16:45:17,670 - pipeline_logger - INFO - StackOverflow extracción completada. 1155 registros guardados.
+2026-08-26 16:45:17,675 - pipeline_logger - INFO - Evidencia fuente api_stackoverflow: status=success, records=1155, http=200
+2026-08-26 16:45:17,678 - pipeline_logger - INFO - Iniciando extracción en arXiv API...
+2026-08-26 16:45:20,136 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Cursor%20AI%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:45:20,142 - pipeline_logger - INFO - arXiv: 2 papers para 'Cursor AI'.
+2026-08-26 16:45:27,261 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Claude%20Code%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:45:27,277 - pipeline_logger - INFO - arXiv: 306 papers para 'Claude Code'.
+2026-08-26 16:45:33,073 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22OpenAI%20Codex%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:45:33,081 - pipeline_logger - INFO - arXiv: 77 papers para 'OpenAI Codex'.
+2026-08-26 16:45:40,144 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22GitHub%20Copilot%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:45:40,158 - pipeline_logger - INFO - arXiv: 237 papers para 'GitHub Copilot'.
+2026-08-26 16:45:45,585 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Cline%20agent%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:45:45,590 - pipeline_logger - INFO - arXiv: 0 papers para 'Cline agent'.
+2026-08-26 16:45:50,940 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Roo%20Code%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:45:50,941 - pipeline_logger - INFO - arXiv: 0 papers para 'Roo Code'.
+2026-08-26 16:45:56,255 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Windsurf%20AI%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:45:56,256 - pipeline_logger - INFO - arXiv: 0 papers para 'Windsurf AI'.
+2026-08-26 16:46:01,587 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Aider%20AI%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:46:01,588 - pipeline_logger - INFO - arXiv: 0 papers para 'Aider AI'.
+2026-08-26 16:46:08,009 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Augment%20Code%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:46:08,016 - pipeline_logger - INFO - arXiv: 96 papers para 'Augment Code'.
+2026-08-26 16:46:13,379 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22JetBrains%20Junie%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:46:13,382 - pipeline_logger - INFO - arXiv: 0 papers para 'JetBrains Junie'.
+2026-08-26 16:46:20,438 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Gemini%20CLI%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:46:20,440 - pipeline_logger - INFO - arXiv: 25 papers para 'Gemini CLI'.
+2026-08-26 16:46:25,770 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22AWS%20Kiro%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:46:25,772 - pipeline_logger - INFO - arXiv: 1 papers para 'AWS Kiro'.
+2026-08-26 16:46:31,091 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Kilo%20Code%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:46:31,092 - pipeline_logger - INFO - arXiv: 0 papers para 'Kilo Code'.
+2026-08-26 16:46:36,489 - pipeline_logger - INFO - arxiv: HTTP 200 GET https://export.arxiv.org/api/query?search_query=all%3A%22Zencoder%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending
+2026-08-26 16:46:36,490 - pipeline_logger - INFO - arXiv: 0 papers para 'Zencoder'.
+2026-08-26 16:46:39,561 - pipeline_logger - INFO - arXiv extracción completada. 744 registros guardados.
+2026-08-26 16:46:39,583 - pipeline_logger - INFO - Evidencia fuente api_arxiv: status=success, records=744, http=200
+2026-08-26 16:46:39,586 - pipeline_logger - INFO - Iniciando extracción en Google News RSS...
+2026-08-26 16:46:41,607 - pipeline_logger - ERROR - Error de conexión con https://news.google.com/rss/search?q=%22Cursor%20AI%22&hl=en-US&gl=US&ceid=US:en: HTTPSConnectionPool(host='news.google.com', port=443): Max retries exceeded with url: /rss/search?q=%22Cursor%20AI%22&hl=en-US&gl=US&ceid=US:en (Caused by NewConnectionError("HTTPSConnection(host='news.google.com', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable"))
+2026-08-26 16:46:41,607 - pipeline_logger - ERROR - Error consultando GNews para Cursor AI: HTTPSConnectionPool(host='news.google.com', port=443): Max retries exceeded with url: /rss/search?q=%22Cursor%20AI%22&hl=en-US&gl=US&ceid=US:en (Caused by NewConnectionError("HTTPSConnection(host='news.google.com', port=443): Failed to establish a new connection: [Errno 101] Network is unreachable"))
+2026-08-26 16:46:44,763 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Claude%20Code%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:46:44,769 - pipeline_logger - INFO - Google News: 100 noticias para 'Claude Code'.
+2026-08-26 16:46:49,336 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22OpenAI%20Codex%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:46:49,339 - pipeline_logger - INFO - Google News: 100 noticias para 'OpenAI Codex'.
+2026-08-26 16:46:54,077 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22GitHub%20Copilot%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:46:54,079 - pipeline_logger - INFO - Google News: 100 noticias para 'GitHub Copilot'.
+2026-08-26 16:46:58,456 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Cline%20agent%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:46:58,457 - pipeline_logger - INFO - Google News: 10 noticias para 'Cline agent'.
+2026-08-26 16:47:02,868 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Roo%20Code%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:47:02,870 - pipeline_logger - INFO - Google News: 17 noticias para 'Roo Code'.
+2026-08-26 16:47:07,366 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Windsurf%20AI%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:47:07,369 - pipeline_logger - INFO - Google News: 67 noticias para 'Windsurf AI'.
+2026-08-26 16:47:11,760 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Aider%20AI%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:47:11,761 - pipeline_logger - INFO - Google News: 12 noticias para 'Aider AI'.
+2026-08-26 16:47:16,311 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Augment%20Code%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:47:16,315 - pipeline_logger - INFO - Google News: 100 noticias para 'Augment Code'.
+2026-08-26 16:47:20,678 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22JetBrains%20Junie%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:47:20,680 - pipeline_logger - INFO - Google News: 19 noticias para 'JetBrains Junie'.
+2026-08-26 16:47:25,238 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Gemini%20CLI%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:47:25,242 - pipeline_logger - INFO - Google News: 100 noticias para 'Gemini CLI'.
+2026-08-26 16:47:29,721 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22AWS%20Kiro%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:47:29,724 - pipeline_logger - INFO - Google News: 73 noticias para 'AWS Kiro'.
+2026-08-26 16:47:34,175 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Kilo%20Code%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:47:34,180 - pipeline_logger - INFO - Google News: 47 noticias para 'Kilo Code'.
+2026-08-26 16:47:38,663 - pipeline_logger - INFO - gnews: HTTP 200 GET https://news.google.com/rss/search?q=%22Zencoder%22&hl=en-US&gl=US&ceid=US:en
+2026-08-26 16:47:38,666 - pipeline_logger - INFO - Google News: 100 noticias para 'Zencoder'.
+2026-08-26 16:47:40,712 - pipeline_logger - INFO - Google News extracción completada. 845 registros guardados.
+2026-08-26 16:47:40,720 - pipeline_logger - INFO - Evidencia fuente rss_gnews: status=success, records=845, http=200
+2026-08-26 16:47:40,723 - pipeline_logger - INFO - === FASE 2: CARGA RAW A BD ===
+2026-08-26 16:47:40,723 - pipeline_logger - INFO - >>> INICIANDO CARGA RAW A POSTGRESQL <<<
+2026-08-26 16:47:41,095 - pipeline_logger - INFO - Cargado exitosamente: arxiv_2026-08-26.json (744 registros)
+2026-08-26 16:48:02,494 - pipeline_logger - INFO - Cargado exitosamente: aidedev_2026-08-26.json (118557 registros)
+2026-08-26 16:48:02,594 - pipeline_logger - INFO - Cargado exitosamente: devto_2026-08-26.json (106 registros)
+2026-08-26 16:48:02,625 - pipeline_logger - INFO - Cargado exitosamente: fuente_propia_2026-08-26.json (12 registros)
+2026-08-26 16:48:07,026 - pipeline_logger - INFO - Cargado exitosamente: github_2026-08-26.json (7320 registros)
+2026-08-26 16:48:07,290 - pipeline_logger - INFO - Cargado exitosamente: gnews_2026-08-26.json (845 registros)
+2026-08-26 16:48:07,313 - pipeline_logger - INFO - Omitido (Duplicado): google_trends_2026-08-26.json
+2026-08-26 16:48:07,341 - pipeline_logger - INFO - Cargado exitosamente: hackernews_2026-08-26.json (30 registros)
+2026-08-26 16:48:07,407 - pipeline_logger - INFO - Cargado exitosamente: reddit_2026-08-26.json (192 registros)
+2026-08-26 16:48:07,927 - pipeline_logger - INFO - Cargado exitosamente: stackoverflow_2026-08-26.json (1155 registros)
+2026-08-26 16:48:07,957 - pipeline_logger - INFO - Carga completada. Nuevos: 9. Ignorados: 1
+2026-08-26 16:48:07,976 - pipeline_logger - INFO - Inventario CSV exportado a docs/evidencias/inventario_raw.csv
+2026-08-26 16:48:08,087 - pipeline_logger - INFO - Inventario Raw completo exportado a docs/evidencias/inventario_raw_completo.csv
+2026-08-26 16:48:08,089 - pipeline_logger - INFO - === FASE 3: STAGING ===
+2026-08-26 16:48:08,089 - pipeline_logger - INFO - >>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<
+2026-08-26 16:48:11,378 - pipeline_logger - INFO - Leídos 253527 registros crudos desde BD.
+2026-08-26 16:48:14,449 - pipeline_logger - INFO - Paso 1: Normalización de columnas completada.
+2026-08-26 16:48:15,482 - pipeline_logger - INFO - Paso 2: Fechas estandarizadas a YYYY-MM-DD.
+2026-08-26 16:48:19,141 - pipeline_logger - INFO - Paso 3: Identidad de Agentes procesada.
+2026-08-26 16:48:19,218 - pipeline_logger - INFO - Paso 3.1: Exclusión de ruido aplicada. Descartados 12804 registros genéricos.
+2026-08-26 16:48:20,189 - pipeline_logger - INFO - Paso 4: Categorías asignadas.
+2026-08-26 16:48:20,189 - pipeline_logger - INFO - Iniciando enriquecimiento semántico con Llama 3.2 (Ollama)...
+2026-08-26 16:48:20,211 - pipeline_logger - WARNING - Ollama no está disponible en localhost:11434. Se omitirá el enriquecimiento semántico.
+2026-08-26 16:48:27,039 - pipeline_logger - INFO - Dimensiones semánticas enriquecidas: plataforma con evidencia 17.89%; tecnología con evidencia 71.59% (metadata estructurada 69.12%).
+2026-08-26 16:48:27,047 - pipeline_logger - INFO - Paso 4.6: Plataforma, tecnología y comunidad enriquecidas con reglas trazables.
+2026-08-26 16:48:27,712 - pipeline_logger - INFO - Paso 5: Deduplicación completada. Se descartaron 118239 registros.
+2026-08-26 16:48:28,656 - pipeline_logger - INFO - Tabla staging.stg_actividad_agente_ia reiniciada para reconstrucciÃ³n reproducible.
+2026-08-26 16:48:36,189 - pipeline_logger - INFO - Carga a BD completada. Insertados: 122382. Conflictos omitidos: 0
+2026-08-26 16:48:38,848 - pipeline_logger - INFO - Data final exportada para evidencia en /app/docs/evidencias/staging_stats.csv
+2026-08-26 16:48:39,704 - pipeline_logger - INFO - === FASE 4: CALIDAD DE DATOS ===
+2026-08-26 16:48:39,705 - pipeline_logger - INFO - >>> INICIANDO FRAMEWORK DE CALIDAD DE DATOS (E3) <<<
+2026-08-26 16:49:00,174 - pipeline_logger - INFO - Dimensiones semánticas enriquecidas: plataforma con evidencia 17.43%; tecnología con evidencia 71.79% (metadata estructurada 69.14%).
+2026-08-26 16:49:01,641 - pipeline_logger - INFO - Métricas insertadas en BD y exportadas en CSV a docs/evidencias
+2026-08-26 16:49:01,642 - pipeline_logger - INFO - === FASE 5: CARGA DATA WAREHOUSE GOLD ===
+2026-08-26 16:49:01,642 - pipeline_logger - INFO - Ejecutando /app/sql/07_add_semantic_staging_columns.sql...
+2026-08-26 16:49:02,098 - pipeline_logger - INFO - Ejecutando /app/sql/02_load_gold_dimensions.sql...
+2026-08-26 16:49:03,566 - pipeline_logger - INFO - Ejecutando /app/sql/03_load_gold_fact.sql...
+2026-08-26 16:49:13,972 - pipeline_logger - INFO - Ejecutando /app/sql/04_create_kpi_views.sql...
+2026-08-26 16:49:13,997 - pipeline_logger - INFO - === FASE 6: CALIDAD GOLD ===
+2026-08-26 16:49:14,023 - pipeline_logger - INFO - Calidad Gold - Filas Staging: 122382, Filas Gold: 122382
+2026-08-26 16:49:14,058 - pipeline_logger - INFO - Calidad Gold - Fecha Maxima Disponible: 2026-08-26
+2026-08-26 16:49:14,109 - pipeline_logger - INFO - Calidad Gold validada exitosamente. El Data Warehouse es consistente y apto para BI.
+2026-08-26 16:49:14,136 - pipeline_logger - INFO - >>> PIPELINE UNIFICADO COMPLETADO EXITOSAMENTE (Run ID: 2) <<<
