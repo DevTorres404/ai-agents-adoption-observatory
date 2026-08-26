@@ -1,52 +1,128 @@
-# Observatorio IA - Arquitectura Medallion BI
+# Observatorio de Adopción de Agentes de IA en Desarrollo de Software
 
-🚀 **Enlace de Producción:** [https://bi.labtorres.me/](https://bi.labtorres.me/)
+[![Producción](https://img.shields.io/badge/Producción-bi.labtorres.me-blue)](https://bi.labtorres.me/)
+![Arquitectura](https://img.shields.io/badge/Arquitectura-Medallion-green)
+![Stack](https://img.shields.io/badge/Stack-FastAPI%20%7C%20React%20%7C%20PostgreSQL-lightgrey)
 
-Proyecto de Inteligencia de Negocios: **Observatorio sobre el Nivel de Adopcion de Agentes de IA en el Desarrollo de Software**.
+Plataforma de **Inteligencia de Negocios** que mide, consolida y visualiza el nivel de adopción de agentes de IA en el ecosistema de desarrollo de software. Integra 10 fuentes de datos heterogéneas mediante una pipeline ETL con arquitectura **Medallion** (Bronze → Silver → Gold) y expone un dashboard interactivo con KPIs de analítica y calidad.
 
-El proyecto implementa una arquitectura **Medallion** completa para integrar fuentes heterogeneas, conservar evidencia cruda, consolidar datos analiticos y poblar un Data Warehouse dimensional en PostgreSQL.
+---
 
-## Arquitectura
+## Visión General
 
-El flujo sigue una arquitectura Medallion y se complementa con un Frontend interactivo:
+| Capa | Tecnología | Descripción |
+|------|-----------|-------------|
+| **Extracción** | Python (APIs, scrapers, RSS) | 10 fuentes: GitHub, HackerNews, Dev.to, Reddit, Google Trends, AIDev Dataset, Google Forms, StackOverflow, arXiv, Google News |
+| **Bronze (Raw)** | PostgreSQL | Archivos JSON crudos en `raw.raw_files` / `raw.raw_records` — evidencia inmutable de cada carga |
+| **Silver (Staging)** | PostgreSQL | Tabla `stg_actividad_agente_ia` — deduplicación estricta, reconstruible desde Raw |
+| **Quality (E3)** | Python + PostgreSQL | Framework de validación: completitud, duplicados, nulos críticos, formato. KPIs en esquema `audit` |
+| **Gold (DWH)** | PostgreSQL | Dimensiones, tabla de hechos y vistas KPI pre-calculadas en esquema `gold` |
+| **API** | FastAPI | Expone datos de `gold` y métricas de `audit` |
+| **Dashboard** | React + Vite | SPA que grafica KPIs analíticos (E4) y calidad ETL (E3) |
 
-1. **Extraction**: GitHub REST API, HackerNews, Dev.to, Reddit, Google Trends, AIDev Dataset: AI Coding, encuesta Google Forms como fuente propia, StackOverflow, arXiv y Google News.
-2. **Raw/Bronze**: archivos JSON en `etl/data/raw/` y carga en PostgreSQL bajo `raw.raw_files` y `raw.raw_records`.
-3. **Staging/Silver**: tabla `staging.stg_actividad_agente_ia`, reconstruible desde Raw.
-4. **Quality (E3)**: framework que valida completitud, duplicados reales, nulos criticos, formato y emite los KPIs de calidad del pipeline en el esquema `audit`.
-5. **Gold/Data Warehouse (E4)**: esquema `gold` con dimensiones, tabla de hechos y vistas KPI pre-calculadas.
-6. **API (Backend)**: aplicacion en `FastAPI` que expone los datos de `gold` y las metricas de `audit` hacia la web.
-7. **Dashboard (Frontend)**: SPA en `React + Vite` que consume la API para graficar KPIs de analitica (E4) y calidad ETL (E3).
+---
 
-## Ejecución en Local (Docker)
+## Métricas del Pipeline
 
-El proyecto completo (Base de datos, Backend, Frontend y ETL) está completamente contenerizado. Para levantarlo:
+_Ultima corrida verificada (Run ID: 27) con deduplicación estricta por origen._
 
-### 1. Construir e Iniciar los Servicios
+| Métrica | Valor |
+|---------|-------|
+| Raw / Bronze acumulado | **399,900** registros |
+| Staging / Silver consolidado | **127,364** registros |
+| Gold — hechos finales | **127,364** (sin merma contra Staging) |
+| Completitud Raw → Staging | 31.85% |
+| Merma por deduplicación histórica | 68.15% |
+| Duplicados reales descartados | 264,211 registros |
+| Nulos críticos | **0** registros |
+| Fuente propia (Google Forms) | 12 respuestas reales |
+
+**Clave de deduplicación:**
+
+```
+fuente + plataforma + id_origen_registro + nombre_agente + fecha_evento
+```
+
+---
+
+## Contrato Staging
+
+| Concepto | Cantidad |
+|----------|----------|
+| Columnas físicas en PostgreSQL | 23 |
+| Columnas analíticas exportadas (`staging_stats.csv`) | 21 |
+| Columnas técnicas en BD (`id`, `fecha_carga`) | 2 |
+
+Evidencia del contrato:
+- `etl/docs/evidencias/staging_contract_columns.csv`
+- `etl/docs/evidencias/staging_stats.csv`
+
+---
+
+## Fuentes de Datos
+
+| Fuente | Método | Notas |
+|--------|--------|-------|
+| **GitHub** | REST API | Genera Raw y evidencia HTTP |
+| **HackerNews** | Scraping (BeautifulSoup) | Genera Raw y evidencia HTTP |
+| **Dev.to** | API pública | Filtro: `agent term OR (AI term AND software-development term)` |
+| **Reddit** | Scraping (Playwright) | Búsquedas múltiples relevantes |
+| **Google Trends** | pytrends | Rate limit 429 registrado como fallo documentado |
+| **AIDev Dataset** | Parquet → JSON | Descarga automática desde Zenodo (Record 16919272) |
+| **Fuente propia** | Google Forms → JSON | `etl/data/encuesta/encuesta.json` — integrada como adopción académica |
+| **StackOverflow** | StackExchange API | Búsqueda por agente |
+| **arXiv** | arXiv API | Rate limits respetados (3s entre consultas) |
+| **Google News** | RSS | Búsqueda por agente |
+
+---
+
+## Evidencias de Auditoría
+
+| Archivo | Descripción |
+|---------|-------------|
+| `source_execution_evidence.csv` | Estado de ejecución por fuente, cantidad extraída, HTTP status |
+| `inventario_raw.csv` | Archivos nuevos cargados en la última ejecución |
+| `inventario_raw_completo.csv` | Universo completo de Raw en PostgreSQL |
+| `staging_stats.csv` | Dataset Staging reconstruido |
+| `quality_summary.csv` | Resumen global Raw/Staging |
+| `quality_issue_breakdown.csv` | Métricas por tipo de incidencia |
+| `aidedev_agent_summary.csv` | Resumen analítico del AIDev Dataset por agente |
+| `dedup_report.csv` | Duplicados reales por fuente |
+| `nulls_matrix.csv` | Nulos por fuente y columna crítica |
+| `casting_report.csv` | Errores de conversión por fuente/campo |
+| `homologation_map.csv` | Reglas de homologación |
+| `staging_contract_columns.csv` | Contrato físico y analítico de Staging |
+
+---
+
+## Inicio Rápido
+
+El proyecto está completamente contenerizado. Para levantar el entorno local:
 
 ```bash
 docker compose up -d --build
 ```
 
-Esto desplegará:
-- **PostgreSQL** (`observatorio_db`)
-- **Backend FastAPI** (`observatorio_api`) 
-- **Frontend React** (`observatorio_frontend`) accesible en tu navegador
-- **ETL Worker** (`observatorio_etl`) que corre a demanda
+Esto despliega:
 
-### 2. Acceder al Dashboard y correr el ETL
+| Servicio | Contenedor | Puerto |
+|----------|-----------|--------|
+| PostgreSQL | `observatorio_db` | 5432 |
+| Backend API | `observatorio_api` | 8000 |
+| Frontend | `observatorio_frontend` | 8080 |
+| ETL Worker | `observatorio_etl` | — |
 
-Abre tu navegador y entra a:
-**[http://localhost:8080](http://localhost:8080)**
+Accedé al dashboard en: **[http://localhost:8080](http://localhost:8080)**
 
-Desde la interfaz web podrás navegar a la pestaña **Control de Extracción (ETL)** y presionar el botón **Iniciar Extracción** para que el pipeline se ejecute completamente en segundo plano.
+Desde la pestaña **Control de Extracción (ETL)** podés ejecutar el pipeline completo con un clic.
 
-*(Opcional)* Si prefieres correr el pipeline manualmente por terminal:
+### Ejecución manual del pipeline
+
 ```bash
 docker exec observatorio_etl python -m src.scripts.run_pipeline
 ```
 
-Comandos por fase (Opcional):
+### Ejecución por fase individual
 
 ```bash
 cd etl && python -m src.extractors.github
@@ -62,90 +138,32 @@ cd etl && python -m src.extractors.gnews
 cd etl && python -m src.loaders.load_raw_to_db
 cd etl && python -m src.staging.stg_build_unified
 cd etl && python -m src.quality.quality_metrics
-
-```text
-etl/data/manual/aidedev_ai_coding/
 ```
 
-**Si los archivos no se encuentran, el extractor se conecta automáticamente a la API de Zenodo (Record 16919272), los descarga en su totalidad y los ubica en la carpeta correspondiente** antes de comenzar a procesarlos. No se requiere intervención manual para preparar el dataset.
+> **Nota — AIDev Dataset:** Si los archivos Parquet no se encuentran en `etl/data/manual/aidedev_ai_coding/`, el extractor se conecta automáticamente a la API de Zenodo, los descarga y los ubica en la carpeta correspondiente. No se requiere intervención manual.
 
-El extractor que depende de estos archivos es:
+---
 
-```bash
-cd etl && python -m src.extractors.aidedev
+## Limitaciones Conocidas
+
+| Limitación | Impacto | Mitigación |
+|-----------|---------|------------|
+| Fuentes web: cambios HTML, anti-scraping, rate limits | Extractores pueden fallar parcialmente | Pipeline registra fallos sin detener la corrida |
+| Google Trends: HTTP 429 | Extracción no disponible | Registrado como fallo documentado en evidencia |
+| Dev.to: HTML variable | Artículos pueden no ser parseables | Fallback a API documentado en metadata Raw |
+| Raw/Bronze: historico de cargas | Duplicados acumulados | Depurados en Silver/Staging sin alterar evidencia original |
+
+---
+
+## Stack Tecnológico
+
+```
+Python 3.x        FastAPI         PostgreSQL
+React + Vite       Docker          BeautifulSoup
+Playwright         pytrends        StackExchange API
+arXiv API          Google News RSS Zenodo API
 ```
 
-Este extractor transforma los Parquet originales en Raw JSON dentro de:
+---
 
-```text
-etl/data/raw/catalogo/
-```
-
-## Contrato Staging
-
-El contrato real queda definido asi:
-
-- **23 columnas fisicas en PostgreSQL**.
-- **21 columnas analiticas exportadas en `staging_stats.csv`**.
-- **2 columnas tecnicas en BD**: `id` y `fecha_carga`.
-
-La evidencia exacta del contrato se genera en:
-
-- `etl/docs/evidencias/staging_contract_columns.csv`
-- `etl/docs/evidencias/staging_stats.csv`
-
-## Metricas verificadas
-
-Última corrida verificada (Run ID: 27) con deduplicación estricta por origen:
-
-- Raw/Bronze acumulado en PostgreSQL: **399900 registros**.
-- Staging/Silver consolidado: **127364 registros**.
-- Completitud Raw acumulado vs Staging: **31.85%**.
-- Merma controlada por deduplicacion historica: **68.15%**.
-- Duplicados reales y registros genéricos descartados: **264211 registros**.
-- Nulos criticos: **0 registros**.
-- Fuente propia Google Forms: **12 respuestas reales**.
-- Gold Fact: **127364 hechos**, sin merma contra Staging.
-
-La clave de deduplicacion es:
-
-```text
-fuente + plataforma + id_origen_registro + nombre_agente + fecha_evento
-```
-
-## Evidencias generadas
-
-Los archivos principales de auditoria son:
-
-- `source_execution_evidence.csv`: estado de ejecucion por fuente, cantidad extraida, HTTP status y ruta Raw.
-- `inventario_raw.csv`: archivos nuevos cargados en la ultima ejecucion del loader.
-- `inventario_raw_completo.csv`: universo completo de Raw en PostgreSQL.
-- `staging_stats.csv`: dataset Staging reconstruido.
-- `quality_summary.csv`: resumen global Raw/Staging.
-- `quality_issue_breakdown.csv`: metricas separadas por tipo de incidencia.
-- `aidedev_agent_summary.csv`: resumen analitico del AIDev Dataset por agente homologado.
-- `dedup_report.csv`: duplicados reales por fuente.
-- `nulls_matrix.csv`: nulos por fuente y columna critica.
-- `casting_report.csv`: errores de conversion por fuente/campo.
-- `homologation_map.csv`: reglas de homologacion.
-- `staging_contract_columns.csv`: contrato fisico y analitico de Staging.
-
-## Estado de fuentes
-
-- **GitHub**: extractor REST API funcional; genera Raw y evidencia HTTP.
-- **HackerNews**: scraper BeautifulSoup funcional; genera Raw y evidencia HTTP.
-- **Dev.to**: extractor relevante con API publica y filtro `agent term OR (AI term AND software-development term)`; genera Raw y evidencia HTTP.
-- **Reddit**: scraper Playwright funcional con busquedas multiples relevantes; genera Raw y evidencia HTTP.
-- **Google Trends**: extractor pytrends funcional en la corrida final; si aparece rate limit 429, se registra como fallo y no se reporta como extraccion exitosa.
-- **Catalogo / AIDev Dataset**: fuente estructurada en Parquet transformada a Raw JSON analitico; reemplaza el catalogo manual como dataset principal.
-- **Fuente propia / Google Forms**: `etl/data/encuesta/encuesta.json` se normaliza como Raw en `etl/data/raw/fuente_propia/` y se integra a Staging/Gold como adopcion academica.
-- **StackOverflow**: extractor via StackExchange API con busqueda por agente; genera Raw y evidencia HTTP.
-- **arXiv**: extractor via arXiv API con busqueda por agente; respeta rate limits (3s entre consultas); genera Raw XML parseado.
-- **Google News**: extractor via RSS de Google News con busqueda por agente; genera Raw XML parseado.
-
-## Limitaciones conocidas
-
-- Las fuentes web pueden variar por cambios HTML, bloqueo anti-scraping o rate limits.
-- Google Trends puede devolver 429; el pipeline lo registra como fallo documentado.
-- Dev.to puede no exponer articulos parseables en HTML; el fallback API queda documentado en metadata Raw y en `source_execution_evidence.csv`.
-- Raw/Bronze conserva historico de cargas; por eso los duplicados acumulados se depuran en Silver/Staging sin alterar la evidencia original.
+_Proyecto de Investigación — Observatorio sobre Adopción de Agentes de IA en Desarrollo de Software_
