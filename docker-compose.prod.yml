@@ -73,5 +73,26 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  etl:
+    build:
+      context: ./etl
+      dockerfile: Dockerfile.etl
+    container_name: observatorio_etl_prod
+    environment:
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: ${DB_NAME:-observatorio_ia}
+      DB_HOST: postgres
+      DB_PORT: "5432"
+    volumes:
+      - ./etl/data:/app/data
+      - ./etl/logs:/app/logs
+      - ./etl/docs:/app/docs
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - etl
+
 volumes:
   postgres_prod_data:
