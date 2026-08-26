@@ -1,10 +1,19 @@
 import argparse
 import datetime
 import os
+from contextlib import nullcontext
 from sqlalchemy import text
 from src.utils.db import db_connector
 from src.utils.logger import global_logger
 from src.utils.error_log import log_error
+from src.utils.extraction_evidence import (
+    EvidenceRun,
+    ExtractionStatus,
+    aggregate_status,
+    evidence_context,
+    log_source_execution,
+    new_local_run_id,
+)
 
 from src.extractors.github import extract_github_repos
 from src.extractors.hackernews import extract_hackernews
@@ -82,72 +91,94 @@ def end_pipeline_audit(run_id, status="completed", error_msg=None):
     except Exception as e:
         global_logger.error(f"Fallo al registrar fin de auditoría: {e}")
 
+
+def derive_pipeline_status(source_results, critical_failure=False):
+    if critical_failure:
+        return ExtractionStatus.FAILED.value
+    return aggregate_status(source_results).value
+
+
+def _record_extractor_exception(source, exc, run_id):
+    log_error(
+        source,
+        type(exc).__name__,
+        str(exc),
+        "Continúa con siguiente extractor",
+        run_id=run_id,
+    )
+    log_source_execution(
+        source,
+        ExtractionStatus.FAILED,
+        notes=str(exc),
+        run_id=run_id,
+    )
+
 def run_extraction_phase(run_id):
     global_logger.info("=== FASE 1: EXTRACCIÓN MÚLTIPLE ===")
     
     # 1. GitHub API
     try:
-        extract_github_repos(pages=15, per_page=100)
+        extract_github_repos(pages=15, per_page=100, run_id=run_id)
     except Exception as e:
-        log_error("github", type(e).__name__, str(e), "Continúa con siguiente extractor", run_id=run_id)
+        _record_extractor_exception("github", e, run_id)
 
     # 2. HackerNews (BS4)
     try:
         extract_hackernews()
     except Exception as e:
-        log_error("hackernews", type(e).__name__, str(e), "Continúa con siguiente extractor", run_id=run_id)
+        _record_extractor_exception("hackernews", e, run_id)
 
     # 3. DevTo (BS4)
     try:
         extract_devto(max_records=2000)
     except Exception as e:
-        log_error("devto", type(e).__name__, str(e), "Continúa con siguiente extractor", run_id=run_id)
+        _record_extractor_exception("devto", e, run_id)
         
     # 4. Reddit (Playwright)
     try:
         extract_reddit(max_records=1000)
     except Exception as e:
-        log_error("reddit", type(e).__name__, str(e), "Continúa con siguiente extractor", run_id=run_id)
+        _record_extractor_exception("reddit", e, run_id)
         
     # 5. Google Trends (pytrends)
     try:
         extract_trends()
     except Exception as e:
-        log_error("google_trends", type(e).__name__, str(e), "Continúa con siguiente extractor", run_id=run_id)
+        _record_extractor_exception("google_trends", e, run_id)
 
     # 6. Catálogo estructurado AIDev (con respaldo manual)
     try:
         extract_aidedev_catalog()
     except Exception as e:
-        log_error("aidedev", type(e).__name__, str(e), "Se intenta catálogo manual como respaldo", run_id=run_id)
+        _record_extractor_exception("aidedev", e, run_id)
         try:
             extract_and_validate_catalog()
         except Exception as fallback_error:
-            log_error("file_catalog", type(fallback_error).__name__, str(fallback_error), "Continúa sin catálogo", run_id=run_id)
+            _record_extractor_exception("file_catalog", fallback_error, run_id)
 
     # 7. Fuente propia: encuesta Google Forms
     try:
         extract_google_forms_survey()
     except Exception as e:
-        log_error("fuente_propia", type(e).__name__, str(e), "Continua sin encuesta Google Forms", run_id=run_id)
+        _record_extractor_exception("fuente_propia", e, run_id)
 
     # 8. StackOverflow
     try:
         extract_stackoverflow(max_per_agent=500)
     except Exception as e:
-        log_error("stackoverflow", type(e).__name__, str(e), "Continúa con siguiente extractor", run_id=run_id)
+        _record_extractor_exception("stackoverflow", e, run_id)
 
     # 9. arXiv
     try:
         extract_arxiv(max_per_agent=1000)
     except Exception as e:
-        log_error("arxiv", type(e).__name__, str(e), "Continúa con siguiente extractor", run_id=run_id)
+        _record_extractor_exception("arxiv", e, run_id)
 
     # 10. Google News
     try:
-        extract_gnews()
+        extract_gnews(run_id=run_id)
     except Exception as e:
-        log_error("gnews", type(e).__name__, str(e), "Continúa con siguiente extractor", run_id=run_id)
+        _record_extractor_exception("gnews", e, run_id)
 
 def run_gold_phase(run_id):
     global_logger.info("=== FASE 5: CARGA DATA WAREHOUSE GOLD ===")
@@ -267,36 +298,51 @@ def main():
     
     global_logger.info(f">>> INICIANDO PIPELINE UNIFICADO (Fecha Objetivo: {args.date}) <<<")
     run_id = start_pipeline_audit()
-    
-    try:
-        if args.phase in ["all", "extract"]:
-            run_extraction_phase(run_id)
-        
-        if args.phase in ["all", "load"]:
-            global_logger.info("=== FASE 2: CARGA RAW A BD ===")
-            run_loader()
-            
-        if args.phase in ["all", "staging"]:
-            global_logger.info("=== FASE 3: STAGING ===")
-            run_staging_pipeline()
-            
-        if args.phase in ["all", "quality"]:
-            global_logger.info("=== FASE 4: CALIDAD DE DATOS ===")
-            run_quality_framework()
-            
-        if args.phase in ["all", "gold"]:
-            run_gold_phase(run_id)
-            run_gold_quality(run_id)
-        
-        # Cierre Exitoso
-        end_pipeline_audit(run_id, status="completed")
-        global_logger.info(f">>> PIPELINE UNIFICADO COMPLETADO EXITOSAMENTE (Run ID: {run_id}) <<<")
-        
-    except Exception as e:
-        error_str = f"Fallo Crítico: {str(e)}"
-        global_logger.error(error_str)
-        end_pipeline_audit(run_id, status="failed", error_msg=error_str)
-        raise
+    includes_extraction = args.phase in ["all", "extract"]
+    evidence_run = EvidenceRun(run_id or new_local_run_id()) if includes_extraction else None
+    evidence_scope = evidence_context(evidence_run) if evidence_run else nullcontext()
+
+    with evidence_scope:
+        try:
+            if includes_extraction:
+                run_extraction_phase(run_id)
+
+            if args.phase in ["all", "load"]:
+                global_logger.info("=== FASE 2: CARGA RAW A BD ===")
+                run_loader()
+
+            if args.phase in ["all", "staging"]:
+                global_logger.info("=== FASE 3: STAGING ===")
+                run_staging_pipeline()
+
+            if args.phase in ["all", "quality"]:
+                global_logger.info("=== FASE 4: CALIDAD DE DATOS ===")
+                run_quality_framework()
+
+            if args.phase in ["all", "gold"]:
+                run_gold_phase(run_id)
+                run_gold_quality(run_id)
+
+            status = (
+                derive_pipeline_status(evidence_run.results)
+                if evidence_run
+                else ExtractionStatus.SUCCESS.value
+            )
+            error_msg = "Una o más fuentes tuvieron incidentes" if status == "partial_success" else None
+            end_pipeline_audit(run_id, status=status, error_msg=error_msg)
+            if evidence_run:
+                evidence_run.publish(status)
+            global_logger.info(
+                f">>> PIPELINE UNIFICADO FINALIZADO status={status} (Run ID: {run_id}) <<<"
+            )
+
+        except Exception as e:
+            error_str = f"Fallo Crítico: {str(e)}"
+            global_logger.error(error_str)
+            end_pipeline_audit(run_id, status="failed", error_msg=error_str)
+            if evidence_run:
+                evidence_run.publish(ExtractionStatus.FAILED)
+            raise
 
 if __name__ == "__main__":
     main()

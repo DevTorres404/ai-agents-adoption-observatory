@@ -34,7 +34,7 @@ services:
       DB_NAME: ${DB_NAME:-observatorio_ia}
       DB_HOST: postgres
       DB_PORT: "5432"
-      CORS_ORIGINS: ${CORS_ORIGINS:-https://ai.labtorres.me}
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://biai.labtorres.me}
       SWAGGER_ENABLED: "false" # Deshabilitado en producción por seguridad
     depends_on:
       postgres:

@@ -4,7 +4,7 @@ import json
 from bs4 import BeautifulSoup
 
 from src.utils.error_log import log_error
-from src.utils.extraction_evidence import log_source_execution
+from src.utils.extraction_evidence import log_source_execution, raw_output_path
 from src.utils.http_client import HttpClient
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
@@ -14,7 +14,7 @@ SOURCE_START_DATE = "2023-01-01"
 SOURCE_END_DATE = "2026-12-31"
 
 
-def extract_hackernews():
+def extract_hackernews(run_id=None):
     """Scrapea HTML de HackerNews y guarda evidencia Raw verificable."""
     global_logger.info("Iniciando scraping estatico en HackerNews...")
     client = HttpClient(source_name="hackernews")
@@ -23,14 +23,12 @@ def extract_hackernews():
     try:
         html = client.get(url, is_json=False)
     except Exception as exc:
-        log_error("hackernews", type(exc).__name__, str(exc), "Scraping abortado")
-        log_source_execution("hackernews", "failed", 0, client.last_status_code, url, notes=str(exc))
-        return
+        log_error("hackernews", type(exc).__name__, str(exc), "Scraping abortado", run_id=run_id)
+        return log_source_execution("hackernews", "failed", 0, client.last_status_code, url, notes=str(exc), run_id=run_id)
 
     if not html:
         global_logger.warning("HackerNews devolvio HTML vacio.")
-        log_source_execution("hackernews", "failed", 0, client.last_status_code, url, notes="HTML vacio")
-        return
+        return log_source_execution("hackernews", "failed", 0, client.last_status_code, url, notes="HTML vacio", run_id=run_id)
 
     soup = BeautifulSoup(html, "html.parser")
     items = soup.find_all("tr", class_="athing")
@@ -65,13 +63,9 @@ def extract_hackernews():
 
     if not records:
         global_logger.warning("HackerNews no arrojo registros parseables.")
-        log_source_execution("hackernews", "empty", 0, client.last_status_code, url, notes="Sin registros parseables")
-        return
+        return log_source_execution("hackernews", "empty", 0, client.last_status_code, url, notes="Sin registros parseables", run_id=run_id)
 
-    date_stamp = datetime.datetime.now().strftime("%Y-%m-%d")
-    out_dir = RAW_DIR / "hackernews"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"hackernews_{date_stamp}.json"
+    out_path = raw_output_path("hackernews", run_id=run_id, raw_dir=RAW_DIR)
 
     payload = {
         "metadata": {
@@ -90,7 +84,7 @@ def extract_hackernews():
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
     global_logger.info(f"HackerNews scraping completado. {len(records)} registros guardados en {out_path.name}")
-    log_source_execution("hackernews", "success", len(records), client.last_status_code, url, out_path)
+    return log_source_execution("hackernews", "success", len(records), client.last_status_code, url, out_path, run_id=run_id)
 
 
 if __name__ == "__main__":

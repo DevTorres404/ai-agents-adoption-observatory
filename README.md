@@ -1,6 +1,6 @@
 # Observatorio de Adopción de Agentes de IA en Desarrollo de Software
 
-[![Producción](https://img.shields.io/badge/Producción-ai.labtorres.me-blue)](https://ai.labtorres.me/)
+[![Producción](https://img.shields.io/badge/Producción-biai.labtorres.me-blue)](https://biai.labtorres.me/)
 ![Arquitectura](https://img.shields.io/badge/Arquitectura-Medallion-green)
 ![Stack](https://img.shields.io/badge/Stack-FastAPI%20%7C%20React%20%7C%20PostgreSQL-lightgrey)
 

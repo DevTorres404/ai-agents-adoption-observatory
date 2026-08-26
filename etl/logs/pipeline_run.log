@@ -21742,3 +21742,38 @@ LINE 1: SELECT * FROM audit.quality_summary ORDER BY id DESC LIMIT 1
 2026-08-26 16:49:14,058 - pipeline_logger - INFO - Calidad Gold - Fecha Maxima Disponible: 2026-08-26
 2026-08-26 16:49:14,109 - pipeline_logger - INFO - Calidad Gold validada exitosamente. El Data Warehouse es consistente y apto para BI.
 2026-08-26 16:49:14,136 - pipeline_logger - INFO - >>> PIPELINE UNIFICADO COMPLETADO EXITOSAMENTE (Run ID: 2) <<<
+2026-08-26 17:53:23,467 - pipeline_logger - INFO - Iniciando extracción en Google News RSS...
+2026-08-26 17:53:23,480 - pipeline_logger - INFO - Google News: 1 noticias para 'Cursor AI'.
+2026-08-26 17:53:23,481 - pipeline_logger - INFO - Evidencia fuente gnews: run_id=78, query=Cursor AI, status=success, records=1, http=200
+2026-08-26 17:53:23,483 - pipeline_logger - ERROR - Error consultando GNews para Codex: unavailable
+2026-08-26 17:53:23,486 - pipeline_logger - INFO - Evidencia fuente gnews: run_id=78, query=Codex, status=failed, records=0, http=503
+2026-08-26 17:53:23,489 - pipeline_logger - INFO - Google News extracción completada. 1 registros guardados.
+2026-08-26 17:53:23,490 - pipeline_logger - INFO - Evidencia fuente gnews: run_id=78, query=None, status=partial_success, records=1, http=503
+2026-08-26 17:53:23,492 - pipeline_logger - INFO - Usando autenticacion GITHUB_TOKEN.
+2026-08-26 17:53:23,493 - pipeline_logger - INFO - Buscando repositorios para: 'Cursor'
+2026-08-26 17:53:23,495 - pipeline_logger - INFO - Pagina 1 obtenida (1 repositorios)
+2026-08-26 17:53:23,495 - pipeline_logger - INFO - Pagina 2 obtenida (1 repositorios)
+2026-08-26 17:53:23,496 - pipeline_logger - INFO - Pagina 3 obtenida (1 repositorios)
+2026-08-26 17:53:23,497 - pipeline_logger - INFO - Pagina 4 obtenida (1 repositorios)
+2026-08-26 17:53:23,498 - pipeline_logger - INFO - Pagina 5 obtenida (1 repositorios)
+2026-08-26 17:53:23,499 - pipeline_logger - INFO - Pagina 6 obtenida (1 repositorios)
+2026-08-26 17:53:23,499 - pipeline_logger - INFO - Pagina 7 obtenida (1 repositorios)
+2026-08-26 17:53:23,500 - pipeline_logger - INFO - Pagina 8 obtenida (1 repositorios)
+2026-08-26 17:53:23,501 - pipeline_logger - INFO - Pagina 9 obtenida (1 repositorios)
+2026-08-26 17:53:23,502 - pipeline_logger - INFO - Pagina 10 obtenida (1 repositorios)
+2026-08-26 17:53:23,503 - pipeline_logger - INFO - Pagina 11 obtenida (1 repositorios)
+2026-08-26 17:53:23,503 - pipeline_logger - INFO - Pagina 12 obtenida (1 repositorios)
+2026-08-26 17:53:23,504 - pipeline_logger - INFO - Pagina 13 obtenida (1 repositorios)
+2026-08-26 17:53:23,505 - pipeline_logger - INFO - Pagina 14 obtenida (1 repositorios)
+2026-08-26 17:53:23,505 - pipeline_logger - INFO - Pagina 15 obtenida (1 repositorios)
+2026-08-26 17:53:23,506 - pipeline_logger - INFO - Evidencia fuente github: run_id=79, query=Cursor, status=success, records=15, http=200
+2026-08-26 17:53:23,509 - pipeline_logger - INFO - Evidencia fuente github: run_id=79, query=None, status=success, records=15, http=200
+2026-08-26 17:53:23,510 - pipeline_logger - INFO - Extraccion GitHub completada: 15 registros guardados en github_2026-08-26.json
+2026-08-26 17:53:23,521 - pipeline_logger - INFO - Usando autenticacion GITHUB_TOKEN.
+2026-08-26 17:53:23,521 - pipeline_logger - INFO - Buscando repositorios para: 'Cursor'
+2026-08-26 17:53:23,522 - pipeline_logger - INFO - Pagina 1 obtenida (1 repositorios)
+2026-08-26 17:53:23,522 - pipeline_logger - INFO - Evidencia fuente github: run_id=77, query=Cursor, status=success, records=1, http=200
+2026-08-26 17:53:23,523 - pipeline_logger - INFO - Buscando repositorios para: 'Codex'
+2026-08-26 17:53:23,524 - pipeline_logger - INFO - Evidencia fuente github: run_id=77, query=Codex, status=failed, records=0, http=403
+2026-08-26 17:53:23,527 - pipeline_logger - INFO - Evidencia fuente github: run_id=77, query=None, status=partial_success, records=1, http=403
+2026-08-26 17:53:23,527 - pipeline_logger - INFO - Extraccion GitHub completada: 1 registros guardados en github_2026-08-26.json
