@@ -17,7 +17,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.getenv("CORS_ORIGINS", "https://bi.labtorres.me").split(","),
+    allow_origins=os.getenv("CORS_ORIGINS", "https://ai.labtorres.me").split(","),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

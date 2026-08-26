@@ -9,6 +9,7 @@ services:
       POSTGRES_DB: ${DB_NAME:-observatorio_ia}
     volumes:
       - postgres_prod_data:/var/lib/postgresql/data
+      - ./etl/initdb:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-observatorio_ia}"]
       interval: 10s
@@ -33,7 +34,7 @@ services:
       DB_NAME: ${DB_NAME:-observatorio_ia}
       DB_HOST: postgres
       DB_PORT: "5432"
-      CORS_ORIGINS: ${CORS_ORIGINS:-https://bi.labtorres.me}
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://ai.labtorres.me}
       SWAGGER_ENABLED: "false" # Deshabilitado en producción por seguridad
     depends_on:
       postgres:
@@ -84,6 +85,7 @@ services:
       DB_NAME: ${DB_NAME:-observatorio_ia}
       DB_HOST: postgres
       DB_PORT: "5432"
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
     volumes:
       - ./etl/data:/app/data
       - ./etl/logs:/app/logs
