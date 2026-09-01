@@ -39,7 +39,7 @@ Este comando levantará los siguientes componentes:
 * **postgres (observatorio_db):** Base de datos relacional (Puerto 5433 local). Inicializa automáticamente todos los esquemas (raw, staging, gold, audit).
 * **backend (observatorio_api):** API REST en FastAPI que expone los datos del Data Warehouse (Puerto interno 8000).
 * **frontend (observatorio_frontend):** Aplicación web en React + Vite (Accesible en `http://localhost:8080`).
-* **etl_runner (etl):** Proceso batch bajo demanda para extraer y transformar la información. Al estar en un profile, se debe ejecutar manualmente con: `docker compose run --rm etl python -m src.scripts.run_pipeline`
+* **etl_runner (etl):** Proceso batch bajo demanda para extraer y transformar la información. Al estar en un profile, se debe ejecutar manualmente con: `docker compose run --rm etl`
 
 ---
 
