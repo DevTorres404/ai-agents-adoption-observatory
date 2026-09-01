@@ -17,7 +17,12 @@ def parse_dates(df):
     df['is_imputed_date'] = False
 
     # Pandas homologa fechas ISO, timestamps web y fechas de encuesta.
-    parsed_dates = pd.to_datetime(df['fecha_evento_raw'], errors='coerce', utc=True)
+    # Force one resolution before fallback assignment. Pandas can infer seconds
+    # for an all-NaT source series and microseconds for PostgreSQL timestamps;
+    # assigning between those dtypes otherwise raises on recent Pandas versions.
+    parsed_dates = pd.to_datetime(
+        df['fecha_evento_raw'], errors='coerce', utc=True
+    ).astype('datetime64[ns, UTC]')
 
     # Si la fuente no aporta fecha, la carga del archivo Raw es un sustituto
     # estable y trazable. Si tampoco existe, la fila queda nula y el filtro de
@@ -28,7 +33,7 @@ def parse_dates(df):
             df.get('fecha_carga_raw', pd.Series(pd.NaT, index=df.index)),
             errors='coerce',
             utc=True,
-        )
+        ).astype('datetime64[ns, UTC]')
         has_fallback = mask_nat & raw_load_dates.notna()
         parsed_dates.loc[has_fallback] = raw_load_dates.loc[has_fallback]
         df.loc[has_fallback, 'is_imputed_date'] = True

@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from src.extractors import github, gnews
+from src.extractors import devto, github, gnews
 from src.utils.extraction_evidence import (
     EvidenceRun,
     ExtractionStatus,
@@ -96,13 +96,44 @@ class GithubOutcomeTest(unittest.TestCase):
         self.assertEqual(result.status, ExtractionStatus.PARTIAL_SUCCESS)
         query_results = [item for item in run.results if item.query]
         self.assertEqual(
-            [(item.query, item.status) for item in query_results],
+            [(item.query.split("|", 1)[0], item.status) for item in query_results],
             [
                 ("Cursor", ExtractionStatus.SUCCESS),
                 ("Codex", ExtractionStatus.FAILED),
             ],
         )
         self.assertEqual(run.results[-1].status, ExtractionStatus.PARTIAL_SUCCESS)
+
+
+class DevToOutcomeTest(unittest.TestCase):
+    def test_api_failure_preserves_html_records_as_partial_success(self):
+        class FakeClient:
+            last_status_code = 503
+
+            def __init__(self, *args, **kwargs):
+                pass
+
+        html_record = {
+            "id": "https://dev.to/article",
+            "title": "Codex article",
+            "url": "https://dev.to/article",
+            "created_at": "2025-01-01",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            run = EvidenceRun("80", Path(directory) / "evidence", Path(directory) / "legacy.csv")
+            with (
+                patch.object(devto, "HttpClient", FakeClient),
+                patch.object(devto, "RAW_DIR", Path(directory) / "raw"),
+                patch.object(devto, "extract_from_html", return_value=[html_record]),
+                patch.object(devto, "extract_from_public_api", side_effect=RuntimeError("api down")),
+                patch.object(devto, "log_error"),
+                evidence_context(run),
+            ):
+                result = devto.extract_devto(run_id="80")
+
+        self.assertEqual(result.status, ExtractionStatus.PARTIAL_SUCCESS)
+        self.assertEqual(result.records_extracted, 1)
+        self.assertIn("80", Path(result.raw_path).name)
 
 
 class GNewsOutcomeTest(unittest.TestCase):
@@ -130,11 +161,10 @@ class GNewsOutcomeTest(unittest.TestCase):
                 patch.object(gnews, "HttpClient", FakeClient),
                 patch.object(gnews, "RAW_DIR", Path(directory) / "raw"),
                 patch.object(gnews, "AGENT_QUERIES", ["Cursor AI", "Codex"]),
-                patch.object(gnews.time, "sleep", return_value=None),
                 patch.object(gnews, "log_error"),
                 evidence_context(run),
             ):
-                result = gnews.extract_gnews(run_id="78")
+                result = gnews.extract_gnews(run_id="78", sleeper=lambda _: None)
 
         self.assertEqual(result.status, ExtractionStatus.PARTIAL_SUCCESS)
         self.assertEqual(run.results[-1].status, ExtractionStatus.PARTIAL_SUCCESS)

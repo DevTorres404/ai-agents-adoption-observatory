@@ -1,4 +1,5 @@
 import unittest
+from datetime import datetime, timezone
 
 import pandas as pd
 
@@ -54,6 +55,18 @@ class DatesTest(unittest.TestCase):
         self.assertEqual(first.loc[0, "fecha_evento"], "2026-07-14")
         self.assertTrue(bool(first.loc[0, "is_imputed_date"]))
         pd.testing.assert_frame_equal(first, second)
+
+    def test_postgres_microsecond_fallback_uses_compatible_datetime_resolution(self):
+        frame = pd.DataFrame([{
+            "fuente": "github",
+            "fecha_evento_raw": None,
+            "fecha_carga_raw": datetime(2026, 8, 27, 12, 1, 2, 345678, tzinfo=timezone.utc),
+        }])
+
+        result = parse_dates(frame)
+
+        self.assertEqual(result.loc[0, "fecha_evento"], "2026-08-27")
+        self.assertTrue(bool(result.loc[0, "is_imputed_date"]))
 
 
 if __name__ == "__main__":

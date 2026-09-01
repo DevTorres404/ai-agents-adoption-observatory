@@ -1,0 +1,39 @@
+execution_timestamp,run_id,source,query,status,records_extracted,http_status,url,raw_path,notes
+2026-08-27T23:24:39,1,github,Cursor,partial_success,1000,422,https://api.github.com/search/repositories,,Paginacion incompleta
+2026-08-27T23:25:28,1,github,Claude Code,partial_success,1000,422,https://api.github.com/search/repositories,,Paginacion incompleta
+2026-08-27T23:26:20,1,github,Codex,partial_success,1000,422,https://api.github.com/search/repositories,,Paginacion incompleta
+2026-08-27T23:27:12,1,github,GitHub Copilot,partial_success,1000,422,https://api.github.com/search/repositories,,Paginacion incompleta
+2026-08-27T23:28:02,1,github,Cline,partial_success,1000,422,https://api.github.com/search/repositories,,Paginacion incompleta
+2026-08-27T23:28:18,1,github,RooCode,success,267,200,https://api.github.com/search/repositories,,
+2026-08-27T23:29:08,1,github,Windsurf,partial_success,1000,422,https://api.github.com/search/repositories,,Paginacion incompleta
+2026-08-27T23:29:59,1,github,Aider,partial_success,1000,422,https://api.github.com/search/repositories,,Paginacion incompleta
+2026-08-27T23:30:52,1,github,Augment,partial_success,1000,422,https://api.github.com/search/repositories,,Paginacion incompleta
+2026-08-27T23:30:58,1,github,JetBrains Junie,success,69,200,https://api.github.com/search/repositories,,
+2026-08-27T23:31:49,1,github,Gemini CLI,partial_success,1000,422,https://api.github.com/search/repositories,,Paginacion incompleta
+2026-08-27T23:32:32,1,github,AWS Kiro,success,793,200,https://api.github.com/search/repositories,,
+2026-08-27T23:32:58,1,github,Kilo Code,success,485,200,https://api.github.com/search/repositories,,
+2026-08-27T23:33:05,1,github,Zencoder,success,75,200,https://api.github.com/search/repositories,,
+2026-08-27T23:33:11,1,github,,partial_success,10689,200,https://api.github.com/search/repositories,/app/data/raw/github/github_2026-08-27.json,9 consultas con incidentes
+2026-08-27T23:33:15,1,hackernews,,success,30,200,https://news.ycombinator.com/front,/app/data/raw/hackernews/hackernews_2026-08-27.json,
+2026-08-27T23:34:02,1,devto,,success,109,200,https://dev.to/search?q=AI%20coding%20agent,/app/data/raw/devto/devto_2026-08-27.json,
+2026-08-27T23:35:13,1,reddit,,success,191,200,https://www.reddit.com/search/?q=Cursor&sort=relevance&t=all;https://www.reddit.com/search/?q=Claude+Code&sort=relevance&t=all;https://www.reddit.com/search/?q=Codex&sort=relevance&t=all;https://www.reddit.com/search/?q=GitHub+Copilot&sort=relevance&t=all;https://www.reddit.com/search/?q=Cline&sort=relevance&t=all;https://www.reddit.com/search/?q=RooCode&sort=relevance&t=all;https://www.reddit.com/search/?q=Windsurf&sort=relevance&t=all;https://www.reddit.com/search/?q=Aider&sort=relevance&t=all;https://www.reddit.com/search/?q=Augment&sort=relevance&t=all;https://www.reddit.com/search/?q=JetBrains+Junie&sort=relevance&t=all;https://www.reddit.com/search/?q=Gemini+CLI&sort=relevance&t=all;https://www.reddit.com/search/?q=AWS+Kiro&sort=relevance&t=all;https://www.reddit.com/search/?q=Kilo+Code&sort=relevance&t=all;https://www.reddit.com/search/?q=Zencoder&sort=relevance&t=all,/app/data/raw/reddit/reddit_2026-08-27.json,
+2026-08-27T23:38:19,1,google_trends,,success,1910,200,https://trends.google.com/trends/explore,/app/data/raw/google_trends/google_trends_2026-08-27.json,
+2026-08-27T23:38:43,1,catalogo,,success,118557,,/app/data/manual/aidedev_ai_coding,/app/data/raw/catalogo/aidedev_2026-08-27.json,AIDev Dataset: AI Coding
+2026-08-27T23:38:43,1,fuente_propia,,success,12,,/app/data/encuesta/encuesta.json,/app/data/raw/fuente_propia/fuente_propia_2026-08-27.json,Encuesta Google Forms normalizada desde data/encuesta/encuesta.json
+2026-08-27T23:40:35,1,api_stackoverflow,,success,1156,200,https://api.stackexchange.com/2.3/search/advanced,/app/data/raw/stackoverflow/stackoverflow_2026-08-27.json,
+2026-08-27T23:41:53,1,api_arxiv,,success,747,200,http://export.arxiv.org/api/query?search_query=all%3A%22Zencoder%22&start=0&max_results=1000&sortBy=submittedDate&sortOrder=descending,/app/data/raw/arxiv/arxiv_2026-08-27.json,
+2026-08-27T23:41:56,1,gnews,Cursor AI,success,100,200,https://news.google.com/rss/search?q=%22Cursor%20AI%22&hl=en-US&gl=US&ceid=US:en,,
+2026-08-27T23:42:01,1,gnews,Claude Code,success,100,200,https://news.google.com/rss/search?q=%22Claude%20Code%22&hl=en-US&gl=US&ceid=US:en,,
+2026-08-27T23:42:05,1,gnews,OpenAI Codex,success,100,200,https://news.google.com/rss/search?q=%22OpenAI%20Codex%22&hl=en-US&gl=US&ceid=US:en,,
+2026-08-27T23:42:10,1,gnews,GitHub Copilot,success,100,200,https://news.google.com/rss/search?q=%22GitHub%20Copilot%22&hl=en-US&gl=US&ceid=US:en,,
+2026-08-27T23:42:15,1,gnews,Cline agent,success,10,200,https://news.google.com/rss/search?q=%22Cline%20agent%22&hl=en-US&gl=US&ceid=US:en,,
+2026-08-27T23:42:19,1,gnews,Roo Code,success,17,200,https://news.google.com/rss/search?q=%22Roo%20Code%22&hl=en-US&gl=US&ceid=US:en,,
+2026-08-27T23:42:27,1,gnews,Windsurf AI,empty,0,200,https://news.google.com/rss/search?q=%22Windsurf%20AI%22&hl=en-US&gl=US&ceid=US:en,,
+2026-08-27T23:42:32,1,gnews,Aider AI,success,13,200,https://news.google.com/rss/search?q=%22Aider%20AI%22&hl=en-US&gl=US&ceid=US:en,,
+2026-08-27T23:42:36,1,gnews,Augment Code,success,100,200,https://news.google.com/rss/search?q=%22Augment%20Code%22&hl=en-US&gl=US&ceid=US:en,,
+2026-08-27T23:42:41,1,gnews,JetBrains Junie,success,22,200,https://news.google.com/rss/search?q=%22JetBrains%20Junie%22&hl=en-US&gl=US&ceid=US:en,,
+2026-08-27T23:42:46,1,gnews,Gemini CLI,success,100,200,https://news.google.com/rss/search?q=%22Gemini%20CLI%22&hl=en-US&gl=US&ceid=US:en,,
+2026-08-27T23:42:50,1,gnews,AWS Kiro,success,73,200,https://news.google.com/rss/search?q=%22AWS%20Kiro%22&hl=en-US&gl=US&ceid=US:en,,
+2026-08-27T23:42:55,1,gnews,Kilo Code,success,49,200,https://news.google.com/rss/search?q=%22Kilo%20Code%22&hl=en-US&gl=US&ceid=US:en,,
+2026-08-27T23:42:59,1,gnews,Zencoder,success,100,200,https://news.google.com/rss/search?q=%22Zencoder%22&hl=en-US&gl=US&ceid=US:en,,
+2026-08-27T23:43:01,1,gnews,,success,884,200,https://news.google.com/rss/search?q=%22Zencoder%22&hl=en-US&gl=US&ceid=US:en,/app/data/raw/gnews/gnews_2026-08-27.json,0 consultas con incidentes

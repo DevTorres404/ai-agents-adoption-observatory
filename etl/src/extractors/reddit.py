@@ -5,7 +5,7 @@ from urllib.parse import quote_plus
 from playwright.sync_api import sync_playwright
 
 from src.utils.error_log import log_error
-from src.utils.extraction_evidence import log_source_execution
+from src.utils.extraction_evidence import aggregate_status, log_source_execution, raw_output_path
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
 
@@ -77,12 +77,14 @@ def collect_posts_for_query(page, query, max_per_query=15):
     return records, http_status, url
 
 
-def extract_reddit(max_records=60):
+def extract_reddit(max_records=60, run_id=None):
     """Scrapea Reddit con Playwright y filtra posts relevantes sobre IA aplicada al desarrollo."""
     global_logger.info("Iniciando scraping dinamico relevante en Reddit (Playwright)...")
     records_by_id = {}
     status_codes = []
     visited_urls = []
+    query_results = []
+    fatal_failure = None
 
     try:
         with sync_playwright() as p:
@@ -95,30 +97,59 @@ def extract_reddit(max_records=60):
             for query in SEARCH_QUERIES:
                 if len(records_by_id) >= max_records:
                     break
-                query_records, http_status, url = collect_posts_for_query(page, query)
+                try:
+                    query_records, http_status, url = collect_posts_for_query(page, query)
+                except Exception as exc:
+                    log_error("reddit", type(exc).__name__, str(exc), f"Consulta: {query}", run_id=run_id)
+                    query_results.append(
+                        log_source_execution(
+                            "reddit", "failed", 0, None,
+                            query=query, notes=str(exc), run_id=run_id,
+                        )
+                    )
+                    continue
                 status_codes.append(http_status)
                 visited_urls.append(url)
                 for record in query_records:
                     records_by_id[record["id"]] = record
+                request_failed = http_status is not None and http_status >= 400
+                query_results.append(
+                    log_source_execution(
+                        "reddit",
+                        ("partial_success" if query_records else "failed")
+                        if request_failed else ("success" if query_records else "empty"),
+                        len(query_records),
+                        http_status,
+                        url,
+                        run_id=run_id,
+                        query=query,
+                    )
+                )
 
             browser.close()
 
     except Exception as exc:
-        log_error("reddit", type(exc).__name__, str(exc), "Scraping abortado")
-        log_source_execution("reddit", "failed", len(records_by_id), None, ";".join(visited_urls), notes=str(exc))
+        fatal_failure = exc
+        log_error("reddit", type(exc).__name__, str(exc), "Scraping abortado", run_id=run_id)
+        query_results.append(
+            log_source_execution(
+                "reddit", "failed", 0, None, ";".join(visited_urls),
+                notes=str(exc), run_id=run_id, query="browser_session",
+            )
+        )
         global_logger.error(f"Fallo en scraper dinamico Reddit: {exc}")
-        return
 
     records = list(records_by_id.values())[:max_records]
+    status = aggregate_status(query_results)
     if not records:
         global_logger.warning("Reddit no arrojo resultados relevantes.")
-        log_source_execution("reddit", "empty", 0, status_codes[-1] if status_codes else None, ";".join(visited_urls))
-        return
+        return log_source_execution(
+            "reddit", status, 0, status_codes[-1] if status_codes else None,
+            ";".join(visited_urls), notes=str(fatal_failure) if fatal_failure else None,
+            run_id=run_id,
+        )
 
-    date_stamp = datetime.datetime.now().strftime("%Y-%m-%d")
-    out_dir = RAW_DIR / "reddit"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"reddit_{date_stamp}.json"
+    out_path = raw_output_path("reddit", run_id=run_id, raw_dir=RAW_DIR)
 
     payload = {
         "metadata": {
@@ -126,6 +157,7 @@ def extract_reddit(max_records=60):
             "urls": visited_urls,
             "http_statuses": status_codes,
             "records_extracted": len(records),
+            "status": status.value,
             "search_queries": SEARCH_QUERIES,
             "relevance_rule": "agent term OR (AI term AND software-development term)",
             "date_range_start": SOURCE_START_DATE,
@@ -140,8 +172,11 @@ def extract_reddit(max_records=60):
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
-    log_source_execution("reddit", "success", len(records), status_codes[-1] if status_codes else None, ";".join(visited_urls), out_path)
     global_logger.info(f"Reddit scraping completado. {len(records)} registros relevantes guardados.")
+    return log_source_execution(
+        "reddit", status, len(records), status_codes[-1] if status_codes else None,
+        ";".join(visited_urls), out_path, run_id=run_id,
+    )
 
 
 if __name__ == "__main__":

@@ -192,7 +192,7 @@ class EvidenceRun:
         # summary.json is the publication marker and is replaced last.
         _write_json_atomic(summary_file, summary)
 
-        if final_status is not ExtractionStatus.FAILED:
+        if final_status in {ExtractionStatus.SUCCESS, ExtractionStatus.PARTIAL_SUCCESS}:
             _write_csv_atomic(self.legacy_file, rows)
             _write_json_atomic(
                 self.legacy_file.with_name("source_execution_evidence_latest.json"),
@@ -235,7 +235,10 @@ def new_local_run_id():
 
 def raw_output_path(source, prefix=None, run_id=None, now=None, raw_dir=None):
     active_run = current_evidence_run()
-    effective_run_id = run_id or (active_run.run_id if active_run else new_local_run_id())
+    effective_run_id = (
+        run_id if run_id is not None
+        else (active_run.run_id if active_run else new_local_run_id())
+    )
     safe_run_id = re.sub(r"[^A-Za-z0-9_.-]+", "_", str(effective_run_id))
     timestamp = (now or datetime.datetime.now()).strftime("%Y-%m-%dT%H%M%S%f")
     source_dir = Path(raw_dir or (ROOT_DIR / "data" / "raw")) / source

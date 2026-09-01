@@ -3,7 +3,7 @@ import json
 import time
 
 from src.utils.error_log import log_error
-from src.utils.extraction_evidence import log_source_execution
+from src.utils.extraction_evidence import aggregate_status, log_source_execution, raw_output_path
 from src.utils.http_client import HttpClient
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
@@ -18,10 +18,11 @@ AGENT_QUERIES = [
     "Gemini CLI", "AWS Kiro", "Kilo Code", "Zencoder"
 ]
 
-def extract_stackoverflow(max_per_agent=50):
+def extract_stackoverflow(max_per_agent=50, run_id=None, sleeper=time.sleep):
     global_logger.info("Iniciando extracción en StackOverflow API...")
     client = HttpClient(source_name="stackoverflow")
     records = []
+    query_results = []
     
     start_ts = int(datetime.datetime(2023, 1, 1).timestamp())
     end_ts = int(datetime.datetime.now().timestamp())
@@ -30,6 +31,7 @@ def extract_stackoverflow(max_per_agent=50):
         url = "https://api.stackexchange.com/2.3/search/advanced"
         records_for_agent = 0
         pages_needed = (max_per_agent // 100) + (1 if max_per_agent % 100 > 0 else 0)
+        query_failed = None
         
         for page in range(1, pages_needed + 1):
             if records_for_agent >= max_per_agent:
@@ -76,26 +78,47 @@ def extract_stackoverflow(max_per_agent=50):
                     records_for_agent += 1
                 
                 global_logger.info(f"StackOverflow: obteniendo página {page} para '{agent_query}'.")
-                time.sleep(1.5) # Respetar rate limits
+                sleeper(float(data.get("backoff", 1.5)))
                 
             except Exception as exc:
                 global_logger.error(f"Error consultando StackOverflow para {agent_query}: {exc}")
-                log_error("stackoverflow", type(exc).__name__, str(exc), f"Agente: {agent_query}")
+                query_failed = exc
+                log_error("stackoverflow", type(exc).__name__, str(exc), f"Agente: {agent_query}", run_id=run_id)
                 break
 
+        if query_failed:
+            query_status = "partial_success" if records_for_agent else "failed"
+        else:
+            query_status = "success" if records_for_agent else "empty"
+        query_results.append(
+            log_source_execution(
+                "stackoverflow",
+                query_status,
+                records_for_agent,
+                client.last_status_code,
+                url,
+                notes=str(query_failed) if query_failed else None,
+                run_id=run_id,
+                query=agent_query,
+            )
+        )
+
+    records = list({record["id"]: record for record in records}.values())
+    status = aggregate_status(query_results)
     if not records:
         global_logger.warning("StackOverflow no arrojó resultados.")
-        return
+        return log_source_execution(
+            "stackoverflow", status, 0, client.last_status_code, url,
+            notes="Sin datos; consulte resultados por query", run_id=run_id,
+        )
 
-    date_stamp = datetime.datetime.now().strftime("%Y-%m-%d")
-    out_dir = RAW_DIR / "stackoverflow"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"stackoverflow_{date_stamp}.json"
+    out_path = raw_output_path("stackoverflow", run_id=run_id, raw_dir=RAW_DIR)
 
     payload = {
         "metadata": {
             "source": "api_stackoverflow",
             "records_extracted": len(records),
+            "status": status.value,
             "date_range_start": SOURCE_START_DATE.isoformat(),
             "extracted_at": datetime.datetime.now().isoformat(),
         },
@@ -106,7 +129,10 @@ def extract_stackoverflow(max_per_agent=50):
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
     global_logger.info(f"StackOverflow extracción completada. {len(records)} registros guardados.")
-    log_source_execution("api_stackoverflow", "success", len(records), client.last_status_code, url, out_path)
+    return log_source_execution(
+        "stackoverflow", status, len(records), client.last_status_code, url,
+        out_path, run_id=run_id,
+    )
 
 if __name__ == "__main__":
     extract_stackoverflow()

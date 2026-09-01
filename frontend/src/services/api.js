@@ -18,7 +18,12 @@ const endpoints = {
   qualityDedup: '/calidad/dedup',
   qualityNulls: '/calidad/nulls',
   categorias: '/categorias',
-  tecnologias: '/tecnologias'
+  tecnologias: '/tecnologias',
+  governanceFreshness: '/governance/freshness',
+  governanceCoverage: '/governance/coverage',
+  governanceMetrics: '/governance/metrics',
+  governanceSample: '/governance/sample',
+  governanceReconciliation: '/governance/reconciliation',
 };
 
 function buildQuery(filters = {}) {
@@ -89,6 +94,14 @@ async function fetchAllEndpoints(filters) {
     nulls: output.qualityNulls
   };
 
+  output.governance = {
+    freshness: output.governanceFreshness,
+    coverage: output.governanceCoverage,
+    metrics: output.governanceMetrics,
+    sample: output.governanceSample,
+    reconciliation: output.governanceReconciliation,
+  };
+
   return output;
 }
 
@@ -138,5 +151,26 @@ export async function fetchQualityDedup(filters = {}) {
 export async function fetchFilterOptions() {
   return apiCache.fetch('filterOptions', () =>
     fetchEndpoint('/filtros_opciones', '')
+  );
+}
+
+export async function fetchGovernanceFreshness(runId) {
+  const qs = runId ? `?run_id=${encodeURIComponent(runId)}` : '';
+  return apiCache.fetch(`governance_freshness${runId || 'latest'}`, () =>
+    fetchEndpoint('/governance/freshness', qs)
+  );
+}
+
+export async function fetchGovernanceCoverage(runId) {
+  const qs = runId ? `?run_id=${encodeURIComponent(runId)}` : '';
+  return apiCache.fetch(`governance_coverage${runId || 'latest'}`, () =>
+    fetchEndpoint('/governance/coverage', qs)
+  );
+}
+
+export async function fetchGovernanceReconciliation(runId) {
+  const qs = runId ? `?run_id=${encodeURIComponent(runId)}` : '';
+  return apiCache.fetch(`governance_reconciliation${runId || 'latest'}`, () =>
+    fetchEndpoint('/governance/reconciliation', qs)
   );
 }

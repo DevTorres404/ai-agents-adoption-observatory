@@ -8,6 +8,8 @@ from src.staging.stg_categories import assign_categories
 from src.staging.stg_dates import parse_dates
 from src.staging.stg_normalize_columns import normalize_dataframe
 from src.staging.stg_semantic_dimensions import enrich_semantic_dimensions
+from src.staging.stg_dedup import DEDUP_KEY, deduplication_stats
+from src.quality.governance import reconcile_quality_counts
 from src.utils.db import db_connector
 
 
@@ -46,9 +48,9 @@ STAGING_CONTRACT_COLUMNS = [
     "dim_region_comunidad",
     "dim_comunidad_metodo",
     "raw_file_id",
+    "raw_record_id",
 ]
 
-DEDUP_KEY = ["fuente", "plataforma", "id_origen_registro", "nombre_agente"]
 CRITICAL_COLUMNS = [
     "id_origen_registro", "fuente", "plataforma", "fecha_evento",
     "nombre_agente", "categoria", "dim_nombre_plataforma",
@@ -68,39 +70,43 @@ NUMERIC_COLUMNS = [
 ]
 
 
-def _fetch_raw_rows():
+def _fetch_raw_rows(run_id=None):
     query = text("""
-        SELECT r.raw_data, f.fuente, f.tipo_fuente, f.id AS file_id,
+        SELECT r.id AS raw_record_id, r.raw_data, f.fuente, f.tipo_fuente, f.id AS file_id,
                f.fecha_carga AS file_load_date
         FROM raw.raw_records r
         JOIN raw.raw_files f ON r.file_id = f.id
+        WHERE (:run_id IS NULL OR COALESCE(r.run_id, f.run_id) = :run_id)
     """)
     with db_connector.engine.connect() as conn:
-        return conn.execute(query).fetchall()
+        return conn.execute(query, {"run_id": run_id}).fetchall()
 
 
-@lru_cache(maxsize=1)
-def build_candidate_staging_frame():
+@lru_cache(maxsize=16)
+def build_candidate_staging_frame(run_id=None):
     """Construye una vez por ejecución el candidato usado por todos los reportes."""
-    rows = _fetch_raw_rows()
+    rows = _fetch_raw_rows(run_id)
     if not rows:
         return pd.DataFrame(columns=STAGING_CONTRACT_COLUMNS)
 
     grouped = {}
     for row in rows:
         key = (row.fuente, row.tipo_fuente, row.file_id, row.file_load_date)
-        grouped.setdefault(key, []).append(row.raw_data)
+        grouped.setdefault(key, []).append((row.raw_record_id, row.raw_data))
 
     frames = []
     for (fuente, tipo_fuente, file_id, file_load_date), records in grouped.items():
-        raw_df = pd.DataFrame(records)
+        raw_record_ids, raw_payloads = zip(*records)
+        raw_df = pd.DataFrame(raw_payloads)
         meta = {
             "fuente": fuente,
             "tipo_fuente": tipo_fuente,
             "id": file_id,
             "fecha_carga": file_load_date,
         }
-        frames.append(normalize_dataframe(raw_df, meta))
+        normalized = normalize_dataframe(raw_df, meta)
+        normalized["raw_record_id"] = list(raw_record_ids)
+        frames.append(normalized)
 
     df = pd.concat(frames, ignore_index=True)
     df = parse_dates(df)
@@ -115,48 +121,46 @@ def build_candidate_staging_frame():
     return df
 
 
-def get_overall_metrics():
-    """Obtiene conteos globales sin clasificar toda la merma como duplicidad."""
-    metrics = {
-        "total_raw_records": 0,
-        "total_staging_records": 0,
-        "completion_rate": 0.0,
-        "total_duplicates_removed": 0,
-        "total_nulls_removed": 0,
-        "overall_error_rate": 0.0,
-    }
-
+def get_overall_metrics(run_id=None):
+    """Reconcile only rows associated with this run's immutable Raw snapshot."""
     with db_connector.engine.connect() as conn:
-        metrics["total_raw_records"] = conn.execute(text("SELECT COUNT(*) FROM raw.raw_records")).scalar() or 0
-        metrics["total_staging_records"] = conn.execute(text("SELECT COUNT(*) FROM staging.stg_actividad_agente_ia")).scalar() or 0
+        raw_total = conn.execute(text("""
+            SELECT COUNT(*) FROM raw.raw_records r
+            JOIN raw.raw_files f ON f.id = r.file_id
+            WHERE (:run_id IS NULL OR COALESCE(r.run_id, f.run_id) = :run_id)
+        """), {"run_id": run_id}).scalar() or 0
+        staging_total = conn.execute(text("""
+            SELECT COUNT(*) FROM staging.stg_actividad_agente_ia s
+            LEFT JOIN raw.raw_files f ON f.id = s.raw_file_id
+            WHERE (:run_id IS NULL OR f.run_id = :run_id)
+        """), {"run_id": run_id}).scalar() or 0
 
-    if metrics["total_raw_records"] > 0:
-        candidate_df = build_candidate_staging_frame()
-        duplicate_count = candidate_df.duplicated(subset=DEDUP_KEY, keep="first").sum() if not candidate_df.empty else 0
-        metrics["completion_rate"] = round((metrics["total_staging_records"] / metrics["total_raw_records"]) * 100, 2)
-        metrics["total_duplicates_removed"] = int(duplicate_count)
-        metrics["total_nulls_removed"] = get_critical_null_count()
-        metrics["overall_error_rate"] = round(100.0 - metrics["completion_rate"], 2)
-
+    candidate_df = build_candidate_staging_frame(run_id)
+    eligible_df = candidate_df[candidate_df["nombre_agente"] != "Otro Agente IA"] if not candidate_df.empty else candidate_df
+    _, duplicate_count = deduplication_stats(eligible_df) if not eligible_df.empty else (eligible_df, 0)
+    metrics = reconcile_quality_counts(raw_total, len(eligible_df), duplicate_count, staging_total)
+    metrics["total_nulls_removed"] = get_critical_null_count(run_id)
     return metrics
 
 
-def get_nulls_matrix():
+def get_nulls_matrix(run_id=None):
     """Analiza nulos por fuente y campo clave en Staging."""
     query = text("""
         SELECT
-            fuente,
+            s.fuente,
             COUNT(*) AS total_count,
             SUM(CASE WHEN nombre_agente IS NULL THEN 1 ELSE 0 END) AS null_agente,
             SUM(CASE WHEN fecha_evento IS NULL THEN 1 ELSE 0 END) AS null_fecha,
             SUM(CASE WHEN categoria IS NULL THEN 1 ELSE 0 END) AS null_categoria
-        FROM staging.stg_actividad_agente_ia
-        GROUP BY fuente
+        FROM staging.stg_actividad_agente_ia s
+        LEFT JOIN raw.raw_files f ON f.id = s.raw_file_id
+        WHERE (:run_id IS NULL OR f.run_id = :run_id)
+        GROUP BY s.fuente
     """)
 
     matrix = []
     with db_connector.engine.connect() as conn:
-        results = conn.execute(query).fetchall()
+        results = conn.execute(query, {"run_id": run_id}).fetchall()
         for row in results:
             for field in ["agente", "fecha", "categoria"]:
                 null_count = getattr(row, f"null_{field}")
@@ -172,17 +176,22 @@ def get_nulls_matrix():
     return matrix
 
 
-def get_critical_null_count():
-    clauses = " OR ".join([f"{column} IS NULL" for column in CRITICAL_COLUMNS])
+def get_critical_null_count(run_id=None):
+    clauses = " OR ".join([f"s.{column} IS NULL" for column in CRITICAL_COLUMNS])
     with db_connector.engine.connect() as conn:
-        return conn.execute(text(f"SELECT COUNT(*) FROM staging.stg_actividad_agente_ia WHERE {clauses}")).scalar() or 0
+        return conn.execute(text(f"""
+            SELECT COUNT(*) FROM staging.stg_actividad_agente_ia s
+            LEFT JOIN raw.raw_files f ON f.id = s.raw_file_id
+            WHERE (:run_id IS NULL OR f.run_id = :run_id) AND ({clauses})
+        """), {"run_id": run_id}).scalar() or 0
 
 
-def get_dedup_report():
+def get_dedup_report(run_id=None):
     """Reporta duplicados reales segun la misma clave compuesta usada en Staging."""
-    candidate_df = build_candidate_staging_frame()
+    candidate_df = build_candidate_staging_frame(run_id)
     if candidate_df.empty:
         return []
+    candidate_df = candidate_df[candidate_df["nombre_agente"] != "Otro Agente IA"]
 
     grouped = (
         candidate_df
@@ -217,7 +226,7 @@ def get_quality_issue_breakdown():
         http_errors = conn.execute(text("SELECT COUNT(*) FROM audit.pipeline_errors WHERE error_type ILIKE '%HTTP%' OR description ILIKE '%429%' OR description ILIKE '%403%'")).scalar() or 0
         survey_records = conn.execute(text("SELECT COUNT(*) FROM raw.raw_records r JOIN raw.raw_files f ON r.file_id = f.id WHERE f.fuente = 'fuente_propia'")).scalar() or 0
 
-    duplicate_real = int(candidate_df.duplicated(subset=DEDUP_KEY, keep="first").sum()) if not candidate_df.empty else 0
+    _, duplicate_real = deduplication_stats(candidate_df) if not candidate_df.empty else (candidate_df, 0)
     critical_nulls = get_critical_null_count()
     unmapped = get_unmapped_agent_count()
     casting_errors = get_casting_report()
@@ -288,8 +297,8 @@ def get_unmapped_agent_count():
         return conn.execute(text("SELECT COUNT(*) FROM staging.stg_actividad_agente_ia WHERE nombre_agente = 'Otro Agente IA'")).scalar() or 0
 
 
-def get_casting_report():
-    candidate_df = build_candidate_staging_frame()
+def get_casting_report(run_id=None):
+    candidate_df = build_candidate_staging_frame(run_id)
     report = []
     if candidate_df.empty:
         return report

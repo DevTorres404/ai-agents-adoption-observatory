@@ -2,7 +2,7 @@ import datetime
 import json
 
 from src.utils.error_log import log_error
-from src.utils.extraction_evidence import log_source_execution
+from src.utils.extraction_evidence import log_source_execution, raw_output_path
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR, ROOT_DIR
 
@@ -37,7 +37,7 @@ def _normalize_response(row):
     return normalized
 
 
-def extract_google_forms_survey():
+def extract_google_forms_survey(run_id=None):
     """
     Convierte la exportacion JSON de Google Forms en un archivo Raw inmutable.
     No simula respuestas: solo normaliza encabezados para facilitar Staging.
@@ -46,9 +46,8 @@ def extract_google_forms_survey():
 
     if not SOURCE_PATH.exists():
         message = f"No existe el archivo fuente: {SOURCE_PATH}"
-        log_error("fuente_propia", "FileNotFoundError", message, "Extractor omitido")
-        log_source_execution("fuente_propia", "failed", 0, None, str(SOURCE_PATH), notes=message)
-        return
+        log_error("fuente_propia", "FileNotFoundError", message, "Extractor omitido", run_id=run_id)
+        return log_source_execution("fuente_propia", "failed", 0, None, str(SOURCE_PATH), notes=message, run_id=run_id)
 
     try:
         with open(SOURCE_PATH, "r", encoding="utf-8") as f:
@@ -58,10 +57,7 @@ def extract_google_forms_survey():
             raise ValueError("encuesta.json debe contener una lista de respuestas")
 
         records = [_normalize_response(row) for row in data if isinstance(row, dict)]
-        date_stamp = datetime.datetime.now().strftime("%Y-%m-%d")
-        out_dir = RAW_DIR / "fuente_propia"
-        out_dir.mkdir(parents=True, exist_ok=True)
-        out_path = out_dir / f"fuente_propia_{date_stamp}.json"
+        out_path = raw_output_path("fuente_propia", run_id=run_id, raw_dir=RAW_DIR)
 
         payload = {
             "metadata": {
@@ -79,21 +75,23 @@ def extract_google_forms_survey():
         with open(out_path, "w", encoding="utf-8") as f:
             json.dump(payload, f, ensure_ascii=False, indent=2)
 
-        log_source_execution(
+        result = log_source_execution(
             "fuente_propia",
-            "success",
+            "success" if records else "empty",
             len(records),
             None,
             str(SOURCE_PATH),
             out_path,
             notes="Encuesta Google Forms normalizada desde data/encuesta/encuesta.json",
+            run_id=run_id,
         )
         global_logger.info(f"Encuesta Google Forms guardada en Raw: {out_path.name}")
+        return result
 
     except Exception as exc:
-        log_error("fuente_propia", type(exc).__name__, str(exc), "Extractor abortado")
-        log_source_execution("fuente_propia", "failed", 0, None, str(SOURCE_PATH), notes=str(exc))
+        log_error("fuente_propia", type(exc).__name__, str(exc), "Extractor abortado", run_id=run_id)
         global_logger.error(f"Fallo en extractor Google Forms: {exc}")
+        return log_source_execution("fuente_propia", "failed", 0, None, str(SOURCE_PATH), notes=str(exc), run_id=run_id)
 
 
 if __name__ == "__main__":

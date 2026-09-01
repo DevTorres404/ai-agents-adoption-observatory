@@ -4,7 +4,7 @@ import json
 from bs4 import BeautifulSoup
 
 from src.utils.error_log import log_error
-from src.utils.extraction_evidence import log_source_execution
+from src.utils.extraction_evidence import aggregate_status, log_source_execution, raw_output_path
 from src.utils.http_client import HttpClient
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
@@ -138,34 +138,64 @@ def extract_from_public_api(client, max_records=80):
     return list(records_by_id.values())[:max_records]
 
 
-def extract_devto(max_records=80):
+def extract_devto(max_records=80, run_id=None):
     """Extrae articulos Dev.to relevantes para agentes de IA en desarrollo."""
     global_logger.info("Iniciando extraccion relevante en Dev.to...")
     client = HttpClient(source_name="devto")
     url = "https://dev.to/search?q=AI%20coding%20agent"
     records = []
+    query_results = []
     extraction_method = "beautifulsoup_html+public_api"
 
     try:
-        records.extend(extract_from_html(client, url))
+        html_records = extract_from_html(client, url)
+        records.extend(html_records)
+        query_results.append(
+            log_source_execution(
+                "devto", "success" if html_records else "empty", len(html_records),
+                client.last_status_code, url, run_id=run_id, query="html:AI coding agent",
+            )
+        )
+    except Exception as exc:
+        log_error("devto", type(exc).__name__, str(exc), "Consulta HTML omitida", run_id=run_id)
+        query_results.append(
+            log_source_execution(
+                "devto", "failed", 0, client.last_status_code, url,
+                notes=str(exc), run_id=run_id, query="html:AI coding agent",
+            )
+        )
+
+    try:
         api_records = extract_from_public_api(client, max_records=max_records)
+        query_results.append(
+            log_source_execution(
+                "devto", "success" if api_records else "empty", len(api_records),
+                client.last_status_code, "https://dev.to/api/articles",
+                run_id=run_id, query="api:configured-tags",
+            )
+        )
         by_id = {record["id"]: record for record in records}
         by_id.update({record["id"]: record for record in api_records})
         records = [record for record in by_id.values() if is_in_date_range(record.get("created_at"))][:max_records]
     except Exception as exc:
-        log_error("devto", type(exc).__name__, str(exc), "Extraccion Dev.to abortada")
-        log_source_execution("devto", "failed", len(records), client.last_status_code, url, notes=str(exc))
-        return
+        log_error("devto", type(exc).__name__, str(exc), "Consulta API omitida", run_id=run_id)
+        query_results.append(
+            log_source_execution(
+                "devto", "failed", 0, client.last_status_code,
+                "https://dev.to/api/articles", notes=str(exc),
+                run_id=run_id, query="api:configured-tags",
+            )
+        )
 
+    status = aggregate_status(query_results)
     if not records:
         global_logger.warning("Dev.to no arrojo articulos relevantes.")
-        log_source_execution("devto", "empty", 0, client.last_status_code, url, notes="Sin articulos relevantes")
-        return
+        return log_source_execution(
+            "devto", status, 0, client.last_status_code, url,
+            notes="Sin articulos relevantes", run_id=run_id,
+        )
 
-    date_stamp = datetime.datetime.now().strftime("%Y-%m-%d")
-    out_dir = RAW_DIR / "devto"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"devto_{date_stamp}.json"
+    out_path = raw_output_path("devto", run_id=run_id, raw_dir=RAW_DIR)
 
     payload = {
         "metadata": {
@@ -187,7 +217,15 @@ def extract_devto(max_records=80):
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
     global_logger.info(f"Dev.to extraccion completada. {len(records)} registros relevantes guardados en {out_path.name}")
-    log_source_execution("devto", "success", len(records), client.last_status_code, url, out_path)
+    return log_source_execution(
+        "devto",
+        status,
+        len(records),
+        client.last_status_code,
+        url,
+        out_path,
+        run_id=run_id,
+    )
 
 
 if __name__ == "__main__":

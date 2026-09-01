@@ -95,7 +95,7 @@ class HttpClient:
             request_headers.update(headers)
 
         for attempt in range(self.max_rate_limit_retries + 1):
-            if self.default_delay > 0:
+            if self.default_delay > 0 and attempt == 0:
                 self.sleeper(self.default_delay)
             try:
                 response = self.session.get(
@@ -127,11 +127,15 @@ class HttpClient:
                         if bounded_wait > 0:
                             self.sleeper(bounded_wait)
                         continue
+                    try:
+                        parsed_reset_at = float(reset_at) if reset_at else None
+                    except ValueError:
+                        parsed_reset_at = None
                     raise RateLimitError(
                         f"Rate limit agotado en {url}",
                         response=response,
                         retry_after=retry_after,
-                        reset_at=float(reset_at) if reset_at else None,
+                        reset_at=parsed_reset_at,
                     ) from exc
                 if status_code == 403:
                     global_logger.error(f"Error 403 Forbidden anti-scraping en {url}.")

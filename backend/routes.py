@@ -419,3 +419,143 @@ async def get_etl_logs():
             return {"logs": "".join(last_lines)}
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": "Error al leer logs", "detail": str(e)})
+
+# --- Governance / Quality Endpoints ---
+
+@router.get("/governance/freshness")
+async def get_governance_freshness(
+    run_id: Optional[str] = None,
+    db: AsyncSession = Depends(get_db)
+):
+    """Per-source freshness as-of the latest (or a specific) run."""
+    try:
+        if run_id:
+            query = """
+                SELECT * FROM audit.source_freshness
+                WHERE run_id = :run_id
+                ORDER BY source ASC;
+            """
+            return await fetch_all(db, query, {"run_id": run_id})
+        return await fetch_all(db, """
+            SELECT DISTINCT ON (source) *
+            FROM audit.source_freshness
+            ORDER BY source ASC, last_attempt_at DESC;
+        """)
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": "Error al consultar frescura", "detail": str(e)})
+
+
+@router.get("/governance/coverage")
+async def get_governance_coverage(
+    run_id: Optional[str] = None,
+    db: AsyncSession = Depends(get_db)
+):
+    """Semantic dimension coverage per source for the latest (or a specific) run."""
+    try:
+        if run_id:
+            query = """
+                SELECT * FROM audit.semantic_coverage
+                WHERE run_id = :run_id
+                ORDER BY source ASC, dimension ASC;
+            """
+            return await fetch_all(db, query, {"run_id": run_id})
+        return await fetch_all(db, """
+            SELECT DISTINCT ON (source, dimension) *
+            FROM audit.semantic_coverage
+            ORDER BY source ASC, dimension ASC, run_id DESC;
+        """)
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": "Error al consultar cobertura semántica", "detail": str(e)})
+
+
+@router.get("/governance/metrics")
+async def get_governance_metrics(
+    run_id: Optional[str] = None,
+    source: Optional[str] = None,
+    db: AsyncSession = Depends(get_db)
+):
+    """Comparable normalized metrics per source and agent."""
+    try:
+        where_clauses = ["1=1"]
+        params: dict = {}
+        if run_id:
+            where_clauses.append("run_id = :run_id")
+            params["run_id"] = run_id
+        if source:
+            where_clauses.append("source = :source")
+            params["source"] = source
+        where_sql = " AND ".join(where_clauses)
+        # If no run_id, return the most recent snapshot per source+agent+metric
+        if not run_id:
+            query = f"""
+                SELECT DISTINCT ON (source, agent, metric_name) *
+                FROM audit.source_comparable_metrics
+                WHERE {where_sql}
+                ORDER BY source ASC, agent ASC, metric_name ASC, run_id DESC;
+            """
+        else:
+            query = f"""
+                SELECT * FROM audit.source_comparable_metrics
+                WHERE {where_sql}
+                ORDER BY source ASC, agent ASC, metric_name ASC;
+            """
+        return await fetch_all(db, query, params)
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": "Error al consultar métricas comparables", "detail": str(e)})
+
+
+@router.get("/governance/sample")
+async def get_governance_sample(
+    run_id: Optional[str] = None,
+    source: Optional[str] = None,
+    db: AsyncSession = Depends(get_db)
+):
+    """Stratified audit sample for the latest (or a specific) run."""
+    try:
+        where_clauses = ["1=1"]
+        params: dict = {}
+        if run_id:
+            where_clauses.append("run_id = :run_id")
+            params["run_id"] = run_id
+        if source:
+            where_clauses.append("source = :source")
+            params["source"] = source
+        where_sql = " AND ".join(where_clauses)
+        if not run_id:
+            query = f"""
+                SELECT DISTINCT ON (source, agent, sample_key) *
+                FROM audit.relevance_sample
+                WHERE {where_sql}
+                ORDER BY source ASC, agent ASC, sample_key ASC, run_id DESC;
+            """
+        else:
+            query = f"""
+                SELECT * FROM audit.relevance_sample
+                WHERE {where_sql}
+                ORDER BY source ASC, agent ASC;
+            """
+        return await fetch_all(db, query, params)
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": "Error al consultar muestra auditada", "detail": str(e)})
+
+
+@router.get("/governance/reconciliation")
+async def get_governance_reconciliation(
+    run_id: Optional[str] = None,
+    db: AsyncSession = Depends(get_db)
+):
+    """Quality count reconciliation: raw vs eligible vs deduplicated vs materialized."""
+    try:
+        if run_id:
+            query = """
+                SELECT * FROM audit.quality_summary
+                WHERE run_id = :run_id;
+            """
+            return await fetch_one(db, query, {"run_id": run_id})
+        return await fetch_one(db, """
+            SELECT * FROM audit.quality_summary
+            ORDER BY run_id DESC LIMIT 1;
+        """)
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": "Error al consultar reconciliación", "detail": str(e)})
+

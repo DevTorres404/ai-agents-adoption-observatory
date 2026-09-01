@@ -6,7 +6,7 @@ import requests
 import pandas as pd
 
 from src.utils.error_log import log_error
-from src.utils.extraction_evidence import log_source_execution
+from src.utils.extraction_evidence import log_source_execution, raw_output_path
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR, ROOT_DIR
 
@@ -159,20 +159,16 @@ def build_aidedev_catalog(max_pr_rows=None):
     }
 
 
-def extract_aidedev_catalog():
+def extract_aidedev_catalog(run_id=None):
     global_logger.info("Iniciando extraccion estructurada AIDev Dataset: AI Coding...")
     try:
         records, stats = build_aidedev_catalog()
     except Exception as exc:
-        log_error("aidedev", type(exc).__name__, str(exc), "Extractor abortado")
-        log_source_execution("catalogo", "failed", 0, None, str(SOURCE_DIR), notes=str(exc))
+        log_error("aidedev", type(exc).__name__, str(exc), "Extractor abortado", run_id=run_id)
         global_logger.error(f"Fallo en extractor AIDev: {exc}")
-        return
+        return log_source_execution("catalogo", "failed", 0, None, str(SOURCE_DIR), notes=str(exc), run_id=run_id)
 
-    date_stamp = datetime.datetime.now().strftime("%Y-%m-%d")
-    out_dir = RAW_DIR / "catalogo"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"aidedev_{date_stamp}.json"
+    out_path = raw_output_path("catalogo", prefix="aidedev", run_id=run_id, raw_dir=RAW_DIR)
 
     payload = {
         "metadata": {
@@ -195,7 +191,7 @@ def extract_aidedev_catalog():
         json.dump(payload, f, ensure_ascii=False, indent=2)
 
     global_logger.info(f"AIDev catalog generado: {len(records)} registros en {out_path.name}")
-    log_source_execution("catalogo", "success", len(records), None, str(SOURCE_DIR), out_path, notes="AIDev Dataset: AI Coding")
+    return log_source_execution("catalogo", "success" if records else "empty", len(records), None, str(SOURCE_DIR), out_path, notes="AIDev Dataset: AI Coding", run_id=run_id)
 
 
 if __name__ == "__main__":

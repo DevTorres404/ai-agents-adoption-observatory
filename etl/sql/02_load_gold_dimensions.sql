@@ -11,18 +11,8 @@
 -- o valor categorico no critico para completar el atributo dimensional.
 -- ==========================================================
 
--- Carga idempotente: al reiniciar dimensiones tambien se limpia la
--- tabla de hechos por dependencia FK. La fact se cargara en un script
--- posterior desde Staging.
-TRUNCATE TABLE
-    gold.fact_actividad_agente_ia,
-    gold.dim_tiempo,
-    gold.dim_agente,
-    gold.dim_fuente,
-    gold.dim_plataforma,
-    gold.dim_tecnologia,
-    gold.dim_comunidad
-RESTART IDENTITY CASCADE;
+-- El camino normal es incremental: cada dimensión conserva su surrogate key
+-- y actualiza atributos por su clave natural. La ausencia no elimina filas.
 
 
 -- ==========================================================
@@ -79,7 +69,18 @@ SELECT DISTINCT
     END AS nombre_dia,
     (EXTRACT(ISODOW FROM s.fecha_evento)::INT IN (6, 7)) AS es_fin_semana
 FROM staging.stg_actividad_agente_ia s
-WHERE s.fecha_evento IS NOT NULL;
+WHERE s.fecha_evento IS NOT NULL
+ON CONFLICT (fecha) DO UPDATE SET
+    anio = EXCLUDED.anio,
+    semestre = EXCLUDED.semestre,
+    trimestre = EXCLUDED.trimestre,
+    mes = EXCLUDED.mes,
+    nombre_mes = EXCLUDED.nombre_mes,
+    semana_anio = EXCLUDED.semana_anio,
+    dia_mes = EXCLUDED.dia_mes,
+    dia_semana = EXCLUDED.dia_semana,
+    nombre_dia = EXCLUDED.nombre_dia,
+    es_fin_semana = EXCLUDED.es_fin_semana;
 
 
 -- ==========================================================
@@ -196,7 +197,14 @@ SELECT
             THEN FALSE
         ELSE TRUE
     END AS es_agente_identificado
-FROM agentes_consolidados;
+FROM agentes_consolidados
+ON CONFLICT (nombre_agente) DO UPDATE SET
+    categoria_agente = EXCLUDED.categoria_agente,
+    tipo_agente = EXCLUDED.tipo_agente,
+    proveedor = EXCLUDED.proveedor,
+    caracteristica_clave = EXCLUDED.caracteristica_clave,
+    modelo_precios = EXCLUDED.modelo_precios,
+    es_agente_identificado = EXCLUDED.es_agente_identificado;
 
 
 -- ==========================================================
@@ -221,25 +229,35 @@ INSERT INTO gold.dim_fuente (
 )
 SELECT
     nombre_fuente,
-    MIN(tipo_fuente) AS tipo_fuente,
-    MIN(tipo_fuente) AS categoria_fuente,
+    tipo_fuente,
+    tipo_fuente AS categoria_fuente,
     'No especificado' AS confiabilidad_fuente,
-    BOOL_OR(es_fuente_propia) AS es_fuente_propia
+    es_fuente_propia
 FROM fuentes_distintas
-GROUP BY nombre_fuente;
+ON CONFLICT (nombre_fuente, tipo_fuente) DO UPDATE SET
+    categoria_fuente = EXCLUDED.categoria_fuente,
+    confiabilidad_fuente = EXCLUDED.confiabilidad_fuente,
+    es_fuente_propia = EXCLUDED.es_fuente_propia;
 
 
 -- ==========================================================
 -- 04. DIMENSION PLATAFORMA
 -- Fuente: atributos semánticos explícitos generados en Staging.
 -- ==========================================================
-WITH plataformas_distintas AS (
-    SELECT DISTINCT
+WITH plataformas_consolidadas AS (
+    SELECT DISTINCT ON (
+        COALESCE(NULLIF(BTRIM(s.dim_nombre_plataforma), ''), 'No determinada')
+    )
         COALESCE(NULLIF(BTRIM(s.dim_nombre_plataforma), ''), 'No determinada') AS nombre_plataforma,
         COALESCE(NULLIF(BTRIM(s.dim_tipo_plataforma), ''), 'No determinado') AS tipo_plataforma,
         COALESCE(NULLIF(BTRIM(s.dim_ecosistema), ''), 'No determinado') AS ecosistema
     FROM staging.stg_actividad_agente_ia s
     WHERE s.dim_nombre_plataforma IS NOT NULL
+    ORDER BY
+        COALESCE(NULLIF(BTRIM(s.dim_nombre_plataforma), ''), 'No determinada'),
+        s.fecha_evento DESC NULLS LAST,
+        s.raw_file_id DESC NULLS LAST,
+        s.raw_record_id DESC NULLS LAST
 )
 INSERT INTO gold.dim_plataforma (
     nombre_plataforma,
@@ -248,24 +266,35 @@ INSERT INTO gold.dim_plataforma (
 )
 SELECT
     nombre_plataforma,
-    MIN(tipo_plataforma) AS tipo_plataforma,
-    MIN(ecosistema) AS ecosistema
-FROM plataformas_distintas
-GROUP BY nombre_plataforma;
+    tipo_plataforma,
+    ecosistema
+FROM plataformas_consolidadas
+ON CONFLICT (nombre_plataforma) DO UPDATE SET
+    tipo_plataforma = EXCLUDED.tipo_plataforma,
+    ecosistema = EXCLUDED.ecosistema;
 
 
 -- ==========================================================
 -- 05. DIMENSION TECNOLOGIA
 -- Fuente: metadata estructurada o vocabulario contextual trazable de Staging.
 -- ==========================================================
-WITH tecnologias_distintas AS (
-    SELECT DISTINCT
+WITH tecnologias_consolidadas AS (
+    SELECT DISTINCT ON (
+        COALESCE(NULLIF(BTRIM(s.dim_nombre_tecnologia), ''), 'No determinada'),
+        COALESCE(NULLIF(BTRIM(s.dim_categoria_tecnologia), ''), 'No determinada')
+    )
         COALESCE(NULLIF(BTRIM(s.dim_nombre_tecnologia), ''), 'No determinada') AS nombre_tecnologia,
         COALESCE(NULLIF(BTRIM(s.dim_categoria_tecnologia), ''), 'No determinada') AS categoria_tecnologia,
         COALESCE(NULLIF(BTRIM(s.dim_dominio_tecnologico), ''), 'No determinado') AS dominio_tecnologico,
         COALESCE(NULLIF(BTRIM(s.dim_tipo_senal), ''), 'Observación digital') AS tipo_senal
     FROM staging.stg_actividad_agente_ia s
     WHERE s.dim_nombre_tecnologia IS NOT NULL
+    ORDER BY
+        COALESCE(NULLIF(BTRIM(s.dim_nombre_tecnologia), ''), 'No determinada'),
+        COALESCE(NULLIF(BTRIM(s.dim_categoria_tecnologia), ''), 'No determinada'),
+        s.fecha_evento DESC NULLS LAST,
+        s.raw_file_id DESC NULLS LAST,
+        s.raw_record_id DESC NULLS LAST
 )
 INSERT INTO gold.dim_tecnologia (
     nombre_tecnologia,
@@ -276,24 +305,37 @@ INSERT INTO gold.dim_tecnologia (
 SELECT
     nombre_tecnologia,
     categoria_tecnologia,
-    MIN(dominio_tecnologico) AS dominio_tecnologico,
-    MIN(tipo_senal) AS tipo_senal
-FROM tecnologias_distintas
-GROUP BY nombre_tecnologia, categoria_tecnologia;
+    dominio_tecnologico,
+    tipo_senal
+FROM tecnologias_consolidadas
+ON CONFLICT (nombre_tecnologia, categoria_tecnologia) DO UPDATE SET
+    dominio_tecnologico = EXCLUDED.dominio_tecnologico,
+    tipo_senal = EXCLUDED.tipo_senal;
 
 
 -- ==========================================================
 -- 06. DIMENSION COMUNIDAD
 -- Fuente: propietario, grupo, foro, institución o medio identificado en Staging.
 -- ==========================================================
-WITH comunidades_distintas AS (
-    SELECT DISTINCT
+WITH comunidades_consolidadas AS (
+    SELECT DISTINCT ON (
+        COALESCE(NULLIF(BTRIM(s.dim_nombre_comunidad), ''), 'Comunidad no determinada'),
+        COALESCE(NULLIF(BTRIM(s.dim_tipo_comunidad), ''), 'comunidad no determinada'),
+        COALESCE(NULLIF(BTRIM(s.dim_nombre_plataforma), ''), 'No determinada')
+    )
         COALESCE(NULLIF(BTRIM(s.dim_nombre_comunidad), ''), 'Comunidad no determinada') AS nombre_comunidad,
         COALESCE(NULLIF(BTRIM(s.dim_tipo_comunidad), ''), 'comunidad no determinada') AS tipo_comunidad,
         COALESCE(NULLIF(BTRIM(s.dim_region_comunidad), ''), 'No especificado') AS region,
         COALESCE(NULLIF(BTRIM(s.dim_nombre_plataforma), ''), 'No determinada') AS plataforma_comunidad
     FROM staging.stg_actividad_agente_ia s
     WHERE s.dim_nombre_comunidad IS NOT NULL
+    ORDER BY
+        COALESCE(NULLIF(BTRIM(s.dim_nombre_comunidad), ''), 'Comunidad no determinada'),
+        COALESCE(NULLIF(BTRIM(s.dim_tipo_comunidad), ''), 'comunidad no determinada'),
+        COALESCE(NULLIF(BTRIM(s.dim_nombre_plataforma), ''), 'No determinada'),
+        s.fecha_evento DESC NULLS LAST,
+        s.raw_file_id DESC NULLS LAST,
+        s.raw_record_id DESC NULLS LAST
 )
 INSERT INTO gold.dim_comunidad (
     nombre_comunidad,
@@ -304,13 +346,13 @@ INSERT INTO gold.dim_comunidad (
 SELECT
     nombre_comunidad,
     tipo_comunidad,
-    MIN(region) AS region,
+    region,
     plataforma_comunidad
-FROM comunidades_distintas
-GROUP BY nombre_comunidad, tipo_comunidad, plataforma_comunidad;
+FROM comunidades_consolidadas
+ON CONFLICT (nombre_comunidad, tipo_comunidad, plataforma_comunidad) DO UPDATE SET
+    region = EXCLUDED.region;
 
--- Las dimensiones se reconstruyen dentro de la misma transacción. Actualizar
--- sus estadísticas evita planes de nested-loop costosos al cargar la Fact.
+-- Actualizar estadísticas evita planes de nested-loop costosos al cargar Fact.
 ANALYZE gold.dim_tiempo;
 ANALYZE gold.dim_agente;
 ANALYZE gold.dim_fuente;

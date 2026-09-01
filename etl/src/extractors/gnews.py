@@ -5,7 +5,7 @@ import urllib.parse
 import xml.etree.ElementTree as ET
 
 from src.utils.error_log import log_error
-from src.utils.extraction_evidence import aggregate_status, log_source_execution
+from src.utils.extraction_evidence import aggregate_status, log_source_execution, raw_output_path
 from src.utils.http_client import HttpClient
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
@@ -20,7 +20,7 @@ AGENT_QUERIES = [
     "Gemini CLI", "AWS Kiro", "Kilo Code", "Zencoder"
 ]
 
-def extract_gnews(run_id=None):
+def extract_gnews(run_id=None, sleeper=time.sleep):
     global_logger.info("Iniciando extracción en Google News RSS...")
     client = HttpClient(source_name="gnews")
     records = []
@@ -78,7 +78,7 @@ def extract_gnews(run_id=None):
                 )
             )
             
-            time.sleep(2) # Respetar limites
+            sleeper(2)
             
         except Exception as exc:
             global_logger.error(f"Error consultando GNews para {agent_query}: {exc}")
@@ -115,10 +115,7 @@ def extract_gnews(run_id=None):
             run_id=run_id,
         )
 
-    date_stamp = datetime.datetime.now().strftime("%Y-%m-%d")
-    out_dir = RAW_DIR / "gnews"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    out_path = out_dir / f"gnews_{date_stamp}.json"
+    out_path = raw_output_path("gnews", run_id=run_id, raw_dir=RAW_DIR)
 
     payload = {
         "metadata": {

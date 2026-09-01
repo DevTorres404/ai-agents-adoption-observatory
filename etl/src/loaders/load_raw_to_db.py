@@ -21,23 +21,23 @@ def extract_metadata(filepath):
     partes = rel_path.parts
     fuente = partes[0] if len(partes) > 1 else "desconocido"
     tipo_fuente = fuente
-    
+
     cantidad_registros = 0
     cantidad_columnas = 0
     records = []
-    
+
     try:
         if filepath.suffix == '.json':
             with open(filepath, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-                
+
             if isinstance(data, dict) and 'items' in data:
                 records = data['items']
             elif isinstance(data, list):
                 records = data
             elif isinstance(data, dict):
                 records = [data]
-                
+
             cantidad_registros = len(records)
             cantidad_columnas = len(records[0].keys()) if cantidad_registros > 0 and isinstance(records[0], dict) else 0
 
@@ -46,20 +46,20 @@ def extract_metadata(filepath):
                 df = pd.read_csv(filepath)
             else:
                 df = pd.read_excel(filepath)
-                
+
             # Limpiar NaN/NaT para PostgreSQL JSONB
             df = df.where(pd.notnull(df), None)
             # Convertir fechas a string ISO
             for col in df.select_dtypes(include=['datetime64']).columns:
                 df[col] = df[col].dt.strftime('%Y-%m-%dT%H:%M:%S')
-                
+
             cantidad_registros = len(df)
             cantidad_columnas = len(df.columns)
             records = df.to_dict(orient="records")
-            
+
     except Exception as e:
         global_logger.warning(f"No se pudo procesar estructuralmente {filepath.name}: {e}")
-        
+
     return {
         "fuente": fuente,
         "tipo_fuente": tipo_fuente,
@@ -68,16 +68,16 @@ def extract_metadata(filepath):
         "tamano_bytes": filepath.stat().st_size,
         "cantidad_registros": cantidad_registros,
         "cantidad_columnas": cantidad_columnas,
-        "records": records 
+        "records": records
     }
 
-def run_loader():
+def run_loader(run_id=None):
     global_logger.info(">>> INICIANDO CARGA RAW A POSTGRESQL <<<")
-    
+
     if not db_connector.engine:
         global_logger.error("No hay conexión a BD. Saliendo...")
         return
-        
+
     archivos_procesados = 0
     archivos_ignorados = 0
     inventario = []
@@ -85,54 +85,57 @@ def run_loader():
     for filepath in RAW_DIR.rglob("*"):
         if filepath.is_file() and filepath.suffix in ['.json', '.csv', '.xlsx', '.xls']:
             file_hash = calculate_sha256(filepath)
-            
+
             try:
                 with db_connector.engine.connect() as conn:
                     query_check = text("SELECT id FROM raw.raw_files WHERE hash_sha256 = :hash")
                     result = conn.execute(query_check, {"hash": file_hash}).fetchone()
-                    
+
                     if result:
                         archivos_ignorados += 1
                         global_logger.info(f"Omitido (Duplicado): {filepath.name}")
                         continue
-                    
+
                     meta = extract_metadata(filepath)
                     records_to_insert = meta.pop("records", [])
                     meta["hash_sha256"] = file_hash
-                    
-                    query_insert_file = text("""
-                        INSERT INTO raw.raw_files 
-                        (fuente, tipo_fuente, ruta_relativa, nombre_archivo, cantidad_registros, cantidad_columnas, tamano_bytes, hash_sha256)
-                        VALUES (:fuente, :tipo_fuente, :ruta_relativa, :nombre_archivo, :cantidad_registros, :cantidad_columnas, :tamano_bytes, :hash_sha256)
-                        RETURNING id;
-                    """)
-                    file_id = conn.execute(query_insert_file, meta).scalar()
-                    conn.commit()
-                    
-                    if records_to_insert:
-                        query_insert_record = text("""
-                            INSERT INTO raw.raw_records (file_id, raw_data)
-                            VALUES (:file_id, :raw_data)
-                        """)
-                        
-                        for record in records_to_insert:
-                            conn.execute(query_insert_record, {
-                                "file_id": file_id,
-                                "raw_data": json.dumps(record, ensure_ascii=False)
-                            })
-                        conn.commit()
 
-                    
+                    # Metadata y records se insertan en una sola transacción atómica.
+                    # Si cualquier INSERT falla, la transacción se revierte completa
+                    # y el hash no queda huérfano en raw_files (poison pill fix).
+                    with conn.begin():
+                        query_insert_file = text("""
+                            INSERT INTO raw.raw_files
+                            (fuente, tipo_fuente, ruta_relativa, nombre_archivo, cantidad_registros, cantidad_columnas, tamano_bytes, hash_sha256, run_id)
+                            VALUES (:fuente, :tipo_fuente, :ruta_relativa, :nombre_archivo, :cantidad_registros, :cantidad_columnas, :tamano_bytes, :hash_sha256, :run_id)
+                            RETURNING id;
+                        """)
+                        meta["run_id"] = run_id
+                        file_id = conn.execute(query_insert_file, meta).scalar()
+
+                        if records_to_insert:
+                            query_insert_record = text("""
+                                INSERT INTO raw.raw_records (file_id, raw_data, run_id)
+                                VALUES (:file_id, :raw_data, :run_id)
+                            """)
+
+                            for record in records_to_insert:
+                                conn.execute(query_insert_record, {
+                                    "file_id": file_id,
+                                    "raw_data": json.dumps(record, ensure_ascii=False),
+                                    "run_id": run_id,
+                                })
+
                     archivos_procesados += 1
                     inventario.append(meta)
                     global_logger.info(f"Cargado exitosamente: {filepath.name} ({meta['cantidad_registros']} registros)")
-                    
+
             except Exception as e:
                 log_error("load_raw_to_db", type(e).__name__, str(e), f"Fallo al procesar {filepath.name}")
                 global_logger.error(f"Fallo al procesar {filepath.name}: {e}")
 
     global_logger.info(f"Carga completada. Nuevos: {archivos_procesados}. Ignorados: {archivos_ignorados}")
-    
+
     # Exportar inventario de archivos nuevos de la corrida
     if inventario:
         docs_dir = ROOT_DIR / "docs" / "evidencias"

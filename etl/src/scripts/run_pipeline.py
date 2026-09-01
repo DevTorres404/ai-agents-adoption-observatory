@@ -54,19 +54,26 @@ def end_pipeline_audit(run_id, status="completed", error_msg=None):
         
     try:
         with db_connector.engine.begin() as conn:
-            # Cada run debe reflejar el estado materializado de la BD al cerrar.
-            # quality_summary puede pertenecer a otra ejecución y no es una
-            # fuente válida para auditar el run actual.
             counts = conn.execute(text("""
                 SELECT
-                    (SELECT COUNT(*) FROM raw.raw_records) AS raw_records,
-                    (SELECT COUNT(*) FROM staging.stg_actividad_agente_ia) AS staging_records
-            """)).one()
+                    COALESCE((SELECT total_raw_records FROM audit.quality_summary
+                              WHERE run_id = :run_id ORDER BY id DESC LIMIT 1),
+                             (SELECT COUNT(*) FROM raw.raw_records r JOIN raw.raw_files f ON f.id=r.file_id
+                              WHERE COALESCE(r.run_id, f.run_id)=:run_id)) AS raw_records,
+                    COALESCE((SELECT total_staging_records FROM audit.quality_summary
+                              WHERE run_id = :run_id ORDER BY id DESC LIMIT 1),
+                             (SELECT COUNT(*) FROM staging.stg_actividad_agente_ia s JOIN raw.raw_files f ON f.id=s.raw_file_id
+                              WHERE f.run_id=:run_id)) AS staging_records,
+                    (SELECT load_error_records FROM audit.quality_summary
+                     WHERE run_id = :run_id ORDER BY id DESC LIMIT 1) AS load_errors,
+                    (SELECT completion_rate FROM audit.quality_summary
+                     WHERE run_id = :run_id ORDER BY id DESC LIMIT 1) AS quality_completion
+            """), {"run_id": run_id}).one()
 
             raw_recs = int(counts.raw_records or 0)
             stg_recs = int(counts.staging_records or 0)
-            dropped = max(raw_recs - stg_recs, 0)
-            comp_rate = round((stg_recs / raw_recs) * 100, 2) if raw_recs else 0.0
+            dropped = int(counts.load_errors or 0)
+            comp_rate = float(counts.quality_completion) if counts.quality_completion is not None else (round((stg_recs / raw_recs) * 100, 2) if raw_recs else 0.0)
             
             query = text("""
                 UPDATE audit.pipeline_runs
@@ -118,59 +125,61 @@ def run_extraction_phase(run_id):
     
     # 1. GitHub API
     try:
-        extract_github_repos(pages=15, per_page=100, run_id=run_id)
+        extract_github_repos(pages=10, per_page=100, run_id=run_id)
     except Exception as e:
         _record_extractor_exception("github", e, run_id)
 
     # 2. HackerNews (BS4)
     try:
-        extract_hackernews()
+        extract_hackernews(run_id=run_id)
     except Exception as e:
         _record_extractor_exception("hackernews", e, run_id)
 
     # 3. DevTo (BS4)
     try:
-        extract_devto(max_records=2000)
+        extract_devto(max_records=2000, run_id=run_id)
     except Exception as e:
         _record_extractor_exception("devto", e, run_id)
         
     # 4. Reddit (Playwright)
     try:
-        extract_reddit(max_records=1000)
+        extract_reddit(max_records=1000, run_id=run_id)
     except Exception as e:
         _record_extractor_exception("reddit", e, run_id)
         
     # 5. Google Trends (pytrends)
     try:
-        extract_trends()
+        extract_trends(run_id=run_id)
     except Exception as e:
         _record_extractor_exception("google_trends", e, run_id)
 
     # 6. Catálogo estructurado AIDev (con respaldo manual)
     try:
-        extract_aidedev_catalog()
+        catalog_result = extract_aidedev_catalog(run_id=run_id)
+        if catalog_result and catalog_result.status is ExtractionStatus.FAILED:
+            extract_and_validate_catalog(run_id=run_id)
     except Exception as e:
         _record_extractor_exception("aidedev", e, run_id)
         try:
-            extract_and_validate_catalog()
+            extract_and_validate_catalog(run_id=run_id)
         except Exception as fallback_error:
             _record_extractor_exception("file_catalog", fallback_error, run_id)
 
     # 7. Fuente propia: encuesta Google Forms
     try:
-        extract_google_forms_survey()
+        extract_google_forms_survey(run_id=run_id)
     except Exception as e:
         _record_extractor_exception("fuente_propia", e, run_id)
 
     # 8. StackOverflow
     try:
-        extract_stackoverflow(max_per_agent=500)
+        extract_stackoverflow(max_per_agent=500, run_id=run_id)
     except Exception as e:
         _record_extractor_exception("stackoverflow", e, run_id)
 
     # 9. arXiv
     try:
-        extract_arxiv(max_per_agent=1000)
+        extract_arxiv(max_per_agent=1000, run_id=run_id)
     except Exception as e:
         _record_extractor_exception("arxiv", e, run_id)
 
@@ -180,26 +189,47 @@ def run_extraction_phase(run_id):
     except Exception as e:
         _record_extractor_exception("gnews", e, run_id)
 
-def run_gold_phase(run_id):
+def run_gold_phase(run_id, rebuild=False):
+    global_logger.info("=== FASE 5: CARGA DATA WAREHOUSE GOLD ===")
+    if not db_connector.engine:
+        raise Exception("Sin conexión a BD para la fase Gold")
+        
     global_logger.info("=== FASE 5: CARGA DATA WAREHOUSE GOLD ===")
     if not db_connector.engine:
         raise Exception("Sin conexión a BD para la fase Gold")
         
     etl_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    migration_path = os.path.join(etl_dir, "sql", "07_add_semantic_staging_columns.sql")
+    migration_paths = [
+        os.path.join(etl_dir, "sql", "07_add_semantic_staging_columns.sql"),
+        os.path.join(etl_dir, "sql", "09_incremental_gold.sql"),
+    ]
     scripts = [
         os.path.join(etl_dir, "sql", "02_load_gold_dimensions.sql"),
-        os.path.join(etl_dir, "sql", "03_load_gold_fact.sql"),
-        os.path.join(etl_dir, "sql", "04_create_kpi_views.sql")
+        os.path.join(etl_dir, "sql", "03_load_gold_fact.sql")
     ]
     
     # Ejecutamos todo dentro de una transaccion
     with db_connector.engine.begin() as conn:
         raw_conn = conn.connection
         cursor = raw_conn.cursor()
-        global_logger.info(f"Ejecutando {migration_path}...")
-        with open(migration_path, 'r', encoding='utf-8') as migration_file:
-            cursor.execute(migration_file.read())
+        for migration_path in migration_paths:
+            global_logger.info(f"Ejecutando {migration_path}...")
+            with open(migration_path, 'r', encoding='utf-8') as migration_file:
+                cursor.execute(migration_file.read())
+
+        if rebuild:
+            global_logger.info("Gold rebuild explícito: reiniciando hechos y dimensiones.")
+            cursor.execute("""
+                TRUNCATE TABLE
+                    gold.fact_actividad_agente_ia,
+                    gold.dim_tiempo,
+                    gold.dim_agente,
+                    gold.dim_fuente,
+                    gold.dim_plataforma,
+                    gold.dim_tecnologia,
+                    gold.dim_comunidad
+                RESTART IDENTITY CASCADE
+            """)
 
         cursor.execute("""
             SELECT COUNT(*)
@@ -294,6 +324,18 @@ def main():
     parser = argparse.ArgumentParser(description="Orquestador Maestro del Pipeline ETL Observatorio IA")
     parser.add_argument("--date", type=str, help="Fecha de ejecución (YYYY-MM-DD)", default=datetime.date.today().strftime("%Y-%m-%d"))
     parser.add_argument("--phase", type=str, choices=["all", "extract", "load", "staging", "quality", "gold"], default="all", help="Ejecutar solo una fase específica")
+    parser.add_argument(
+        "--staging-mode",
+        choices=["incremental", "rebuild"],
+        default="incremental",
+        help="Use rebuild explicitly to discard and reconstruct all Staging rows.",
+    )
+    parser.add_argument(
+        "--gold-mode",
+        choices=["incremental", "rebuild"],
+        default="incremental",
+        help="Use rebuild explicitly to discard and reconstruct all Gold rows.",
+    )
     args = parser.parse_args()
     
     global_logger.info(f">>> INICIANDO PIPELINE UNIFICADO (Fecha Objetivo: {args.date}) <<<")
@@ -309,18 +351,29 @@ def main():
 
             if args.phase in ["all", "load"]:
                 global_logger.info("=== FASE 2: CARGA RAW A BD ===")
-                run_loader()
+                run_loader(run_id=run_id)
 
             if args.phase in ["all", "staging"]:
                 global_logger.info("=== FASE 3: STAGING ===")
-                run_staging_pipeline()
+                run_staging_pipeline(
+                    run_id=run_id,
+                    rebuild=args.staging_mode == "rebuild",
+                )
 
             if args.phase in ["all", "quality"]:
                 global_logger.info("=== FASE 4: CALIDAD DE DATOS ===")
-                run_quality_framework()
+                quality_status = (
+                    derive_pipeline_status(evidence_run.results)
+                    if evidence_run else ExtractionStatus.SUCCESS.value
+                )
+                run_quality_framework(
+                    run_id=run_id,
+                    source_results=evidence_run.results if evidence_run else None,
+                    publication_status=quality_status,
+                )
 
             if args.phase in ["all", "gold"]:
-                run_gold_phase(run_id)
+                run_gold_phase(run_id, rebuild=args.gold_mode == "rebuild")
                 run_gold_quality(run_id)
 
             status = (

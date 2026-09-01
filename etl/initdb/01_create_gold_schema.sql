@@ -32,7 +32,7 @@ DROP TABLE IF EXISTS gold.dim_tiempo CASCADE;
 -- ==========================================================
 CREATE TABLE gold.dim_tiempo (
     id_tiempo BIGSERIAL PRIMARY KEY,
-    fecha DATE NOT NULL UNIQUE,
+    fecha DATE NOT NULL,
     anio SMALLINT NOT NULL,
     semestre SMALLINT NOT NULL CHECK (semestre BETWEEN 1 AND 2),
     trimestre SMALLINT NOT NULL CHECK (trimestre BETWEEN 1 AND 4),
@@ -43,7 +43,8 @@ CREATE TABLE gold.dim_tiempo (
     dia_semana SMALLINT NOT NULL CHECK (dia_semana BETWEEN 1 AND 7),
     nombre_dia VARCHAR(20) NOT NULL,
     es_fin_semana BOOLEAN NOT NULL DEFAULT FALSE,
-    fecha_carga TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    fecha_carga TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_dim_tiempo_fecha UNIQUE (fecha)
 );
 
 
@@ -53,7 +54,7 @@ CREATE TABLE gold.dim_tiempo (
 -- ==========================================================
 CREATE TABLE gold.dim_agente (
     id_agente BIGSERIAL PRIMARY KEY,
-    nombre_agente VARCHAR(100) NOT NULL UNIQUE,
+    nombre_agente VARCHAR(100) NOT NULL,
     categoria_agente VARCHAR(100),
     tipo_agente VARCHAR(100) NOT NULL DEFAULT 'No especificado',
     familia_modelo VARCHAR(100),
@@ -62,7 +63,8 @@ CREATE TABLE gold.dim_agente (
     modelo_precios VARCHAR(100),
     es_agente_identificado BOOLEAN NOT NULL DEFAULT TRUE,
     descripcion TEXT,
-    fecha_carga TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    fecha_carga TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_dim_agente_nombre UNIQUE (nombre_agente)
 );
 
 
@@ -89,11 +91,12 @@ CREATE TABLE gold.dim_fuente (
 -- ==========================================================
 CREATE TABLE gold.dim_plataforma (
     id_plataforma BIGSERIAL PRIMARY KEY,
-    nombre_plataforma VARCHAR(100) NOT NULL UNIQUE,
+    nombre_plataforma VARCHAR(100) NOT NULL,
     tipo_plataforma VARCHAR(100),
     ecosistema VARCHAR(100),
     descripcion TEXT,
-    fecha_carga TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    fecha_carga TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_dim_plataforma_nombre UNIQUE (nombre_plataforma)
 );
 
 
@@ -150,6 +153,9 @@ CREATE TABLE gold.fact_actividad_agente_ia (
 
     id_origen_registro TEXT NOT NULL,
     raw_file_id INTEGER,
+    -- FK is added by 02_raw_tables.sql after Raw exists in initdb order.
+    raw_record_id INTEGER,
+    fact_lineage_key TEXT NOT NULL,
 
     cantidad_menciones INTEGER NOT NULL DEFAULT 0 CHECK (cantidad_menciones >= 0),
     cantidad_interacciones INTEGER NOT NULL DEFAULT 0 CHECK (cantidad_interacciones >= 0),
@@ -195,7 +201,8 @@ CREATE TABLE gold.fact_actividad_agente_ia (
             id_fuente,
             id_plataforma,
             id_origen_registro
-        )
+        ),
+    CONSTRAINT uq_fact_lineage_key UNIQUE (fact_lineage_key)
 );
 
 
@@ -267,6 +274,9 @@ CREATE INDEX idx_fact_origen_registro
 
 CREATE INDEX idx_fact_raw_file_id
     ON gold.fact_actividad_agente_ia (raw_file_id);
+
+CREATE INDEX idx_fact_raw_record_id
+    ON gold.fact_actividad_agente_ia (raw_record_id);
 
 CREATE INDEX idx_fact_scores
     ON gold.fact_actividad_agente_ia (

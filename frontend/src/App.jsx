@@ -459,6 +459,81 @@ function App() {
                   </table>
                 </div>
               </div>
+
+              {data.governance?.freshness?.length > 0 && (
+                <div className="panel quality-table-panel">
+                  <h2>Frescura por Fuente</h2>
+                  <div className="table-responsive">
+                    <table className="data-table">
+                      <thead>
+                        <tr>
+                          <th>Fuente</th>
+                          <th>Último intento</th>
+                          <th>Último éxito</th>
+                          <th>Antigüedad (h)</th>
+                          <th>Estado</th>
+                          <th>Registros extraídos</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.governance.freshness.map((item, i) => (
+                          <tr key={i}>
+                            <td style={{ fontWeight: 600 }}>{formatSourceLabel(item.source)}</td>
+                            <td>{item.last_attempt_at ? new Date(item.last_attempt_at).toLocaleString('es-EC') : '—'}</td>
+                            <td>{item.last_success_at ? new Date(item.last_success_at).toLocaleString('es-EC') : '—'}</td>
+                            <td>{item.age_hours != null ? Number(item.age_hours).toFixed(1) : '—'}</td>
+                            <td>
+                              <span className={item.is_stale ? 'quality-rate-badge status-warning' : 'quality-rate-badge status-success'}>
+                                {item.is_stale ? '⚠ Desactualizada' : '✓ Fresca'}
+                              </span>
+                            </td>
+                            <td className="status-info">{Number(item.records_extracted || 0).toLocaleString()}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {data.governance?.coverage?.length > 0 && (
+                <div className="panel quality-table-panel">
+                  <h2>Cobertura Semántica por Fuente</h2>
+                  <div className="table-responsive">
+                    <table className="data-table">
+                      <thead>
+                        <tr>
+                          <th>Fuente</th>
+                          <th>Dimensión</th>
+                          <th>Cubiertos</th>
+                          <th>Total</th>
+                          <th>Cobertura</th>
+                          <th>Umbral</th>
+                          <th>Estado</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.governance.coverage.map((item, i) => (
+                          <tr key={i}>
+                            <td style={{ fontWeight: 600 }}>{formatSourceLabel(item.source)}</td>
+                            <td style={{ textTransform: 'capitalize' }}>{item.dimension}</td>
+                            <td>{Number(item.covered_count || 0).toLocaleString()}</td>
+                            <td>{Number(item.total_count || 0).toLocaleString()}</td>
+                            <td>
+                              <span className={item.warning ? 'quality-rate-badge status-warning' : 'quality-rate-badge status-success'}>
+                                {Number(item.coverage_pct || 0).toFixed(1)} %
+                              </span>
+                            </td>
+                            <td>{Number(item.threshold_pct || 0).toFixed(0)} %</td>
+                            <td>{item.warning ? '⚠ Bajo umbral' : '✓ OK'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
           </div>
         )}
         </ErrorBoundary>

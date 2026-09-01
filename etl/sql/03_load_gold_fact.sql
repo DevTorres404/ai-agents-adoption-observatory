@@ -14,9 +14,6 @@
 -- de un agente de IA en una fuente, plataforma y fecha determinada.
 -- ==========================================================
 
-TRUNCATE TABLE gold.fact_actividad_agente_ia RESTART IDENTITY;
-
-
 -- ==========================================================
 -- CARGA DE HECHOS
 -- ==========================================================
@@ -51,6 +48,8 @@ INSERT INTO gold.fact_actividad_agente_ia (
     id_comunidad,
     id_origen_registro,
     raw_file_id,
+    raw_record_id,
+    fact_lineage_key,
     cantidad_menciones,
     cantidad_interacciones,
     score_popularidad,
@@ -77,6 +76,14 @@ SELECT
     dc.id_comunidad,
     s.id_origen_registro,
     s.raw_file_id,
+    s.raw_record_id,
+    CASE
+        WHEN s.raw_record_id IS NOT NULL THEN 'raw:' || s.raw_record_id::TEXT
+        ELSE 'legacy:' || MD5(CONCAT_WS(
+            E'\x1f', s.fuente, s.plataforma,
+            s.id_origen_registro, s.nombre_agente
+        ))
+    END AS fact_lineage_key,
 
     COALESCE(s.cantidad_menciones, 0) AS cantidad_menciones,
     COALESCE(s.cantidad_interacciones, 0) AS cantidad_interacciones,
@@ -125,6 +132,7 @@ INNER JOIN gold.dim_agente da
     ON da.nombre_agente = COALESCE(NULLIF(BTRIM(s.nombre_agente), ''), 'No especificado')
 INNER JOIN gold.dim_fuente df
     ON df.nombre_fuente = COALESCE(NULLIF(BTRIM(s.fuente), ''), 'No especificado')
+   AND df.tipo_fuente = COALESCE(NULLIF(BTRIM(s.tipo_fuente), ''), 'No especificado')
 INNER JOIN gold.dim_plataforma dp
     ON dp.nombre_plataforma = COALESCE(NULLIF(BTRIM(s.dim_nombre_plataforma), ''), 'No determinada')
 INNER JOIN gold.dim_tecnologia dtec
@@ -144,5 +152,27 @@ WHERE s.id_origen_registro IS NOT NULL
   AND s.dim_nombre_plataforma IS NOT NULL
   AND s.dim_nombre_tecnologia IS NOT NULL
   AND s.dim_nombre_comunidad IS NOT NULL
-ON CONFLICT ON CONSTRAINT uq_fact_granularidad DO NOTHING;
+ON CONFLICT ON CONSTRAINT uq_fact_granularidad DO UPDATE SET
+    id_tiempo = EXCLUDED.id_tiempo,
+    id_tecnologia = EXCLUDED.id_tecnologia,
+    id_comunidad = EXCLUDED.id_comunidad,
+    raw_file_id = EXCLUDED.raw_file_id,
+    raw_record_id = EXCLUDED.raw_record_id,
+    cantidad_menciones = EXCLUDED.cantidad_menciones,
+    cantidad_interacciones = EXCLUDED.cantidad_interacciones,
+    score_popularidad = EXCLUDED.score_popularidad,
+    score_actividad = EXCLUDED.score_actividad,
+    score_comunidad = EXCLUDED.score_comunidad,
+    score_adopcion = EXCLUDED.score_adopcion,
+    score_innovacion = EXCLUDED.score_innovacion,
+    valor_numerico_normalizado = EXCLUDED.valor_numerico_normalizado,
+    stars_github = EXCLUDED.stars_github,
+    forks_github = EXCLUDED.forks_github,
+    issues_abiertos = EXCLUDED.issues_abiertos,
+    releases = EXCLUDED.releases,
+    sentimiento_promedio = EXCLUDED.sentimiento_promedio,
+    titulo = EXCLUDED.titulo,
+    url = EXCLUDED.url,
+    is_imputed_date = EXCLUDED.is_imputed_date,
+    fecha_carga = CURRENT_TIMESTAMP;
 
