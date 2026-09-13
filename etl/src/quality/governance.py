@@ -60,7 +60,7 @@ def reconcile_quality_counts(raw_records, eligible_records, duplicates_removed, 
     expected = max(eligible_records - duplicates_removed, 0)
     materialized = max(int(materialized_records or 0), 0)
     load_errors = max(expected - materialized, 0)
-    completion = 100.0 if expected == 0 else min(materialized / expected * 100.0, 100.0)
+    completion = (100.0 if raw_records else 0.0) if expected == 0 else min(materialized / expected * 100.0, 100.0)
     error_rate = 0.0 if expected == 0 else load_errors / expected * 100.0
     dedup_rate = 0.0 if eligible_records == 0 else duplicates_removed / eligible_records * 100.0
     return {

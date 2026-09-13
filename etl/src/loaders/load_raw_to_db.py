@@ -58,7 +58,7 @@ def extract_metadata(filepath):
             records = df.to_dict(orient="records")
 
     except Exception as e:
-        global_logger.warning(f"No se pudo procesar estructuralmente {filepath.name}: {e}")
+        raise ValueError(f"No se pudo procesar estructuralmente {filepath.name}: {e}") from e
 
     return {
         "fuente": fuente,
@@ -75,19 +75,18 @@ def run_loader(run_id=None):
     global_logger.info(">>> INICIANDO CARGA RAW A POSTGRESQL <<<")
 
     if not db_connector.engine:
-        global_logger.error("No hay conexión a BD. Saliendo...")
-        return
+        raise RuntimeError("Raw requiere una conexión a BD")
 
     archivos_procesados = 0
     archivos_ignorados = 0
     inventario = []
+    failures = []
 
     for filepath in RAW_DIR.rglob("*"):
         if filepath.is_file() and filepath.suffix in ['.json', '.csv', '.xlsx', '.xls']:
-            file_hash = calculate_sha256(filepath)
-
             try:
-                with db_connector.engine.connect() as conn:
+                file_hash = calculate_sha256(filepath)
+                with db_connector.engine.connect() as conn, conn.begin():
                     query_check = text("SELECT id FROM raw.raw_files WHERE hash_sha256 = :hash")
                     result = conn.execute(query_check, {"hash": file_hash}).fetchone()
 
@@ -103,38 +102,42 @@ def run_loader(run_id=None):
                     # Metadata y records se insertan en una sola transacción atómica.
                     # Si cualquier INSERT falla, la transacción se revierte completa
                     # y el hash no queda huérfano en raw_files (poison pill fix).
-                    with conn.begin():
-                        query_insert_file = text("""
-                            INSERT INTO raw.raw_files
-                            (fuente, tipo_fuente, ruta_relativa, nombre_archivo, cantidad_registros, cantidad_columnas, tamano_bytes, hash_sha256, run_id)
-                            VALUES (:fuente, :tipo_fuente, :ruta_relativa, :nombre_archivo, :cantidad_registros, :cantidad_columnas, :tamano_bytes, :hash_sha256, :run_id)
-                            RETURNING id;
+                    query_insert_file = text("""
+                        INSERT INTO raw.raw_files
+                        (fuente, tipo_fuente, ruta_relativa, nombre_archivo, cantidad_registros, cantidad_columnas, tamano_bytes, hash_sha256, run_id)
+                        VALUES (:fuente, :tipo_fuente, :ruta_relativa, :nombre_archivo, :cantidad_registros, :cantidad_columnas, :tamano_bytes, :hash_sha256, :run_id)
+                        RETURNING id;
+                    """)
+                    meta["run_id"] = run_id
+                    file_id = conn.execute(query_insert_file, meta).scalar()
+
+                    if records_to_insert:
+                        query_insert_record = text("""
+                            INSERT INTO raw.raw_records (file_id, raw_data, run_id)
+                            VALUES (:file_id, :raw_data, :run_id)
                         """)
-                        meta["run_id"] = run_id
-                        file_id = conn.execute(query_insert_file, meta).scalar()
 
-                        if records_to_insert:
-                            query_insert_record = text("""
-                                INSERT INTO raw.raw_records (file_id, raw_data, run_id)
-                                VALUES (:file_id, :raw_data, :run_id)
-                            """)
+                        for start in range(0, len(records_to_insert), 1000):
+                            batch = [{
+                                "file_id": file_id,
+                                "raw_data": json.dumps(record, ensure_ascii=False),
+                                "run_id": run_id,
+                            } for record in records_to_insert[start:start + 1000]]
+                            conn.execute(query_insert_record, batch)
 
-                            for record in records_to_insert:
-                                conn.execute(query_insert_record, {
-                                    "file_id": file_id,
-                                    "raw_data": json.dumps(record, ensure_ascii=False),
-                                    "run_id": run_id,
-                                })
-
-                    archivos_procesados += 1
-                    inventario.append(meta)
-                    global_logger.info(f"Cargado exitosamente: {filepath.name} ({meta['cantidad_registros']} registros)")
+                archivos_procesados += 1
+                inventario.append(meta)
+                global_logger.info(f"Cargado exitosamente: {filepath.name} ({meta['cantidad_registros']} registros)")
 
             except Exception as e:
-                log_error("load_raw_to_db", type(e).__name__, str(e), f"Fallo al procesar {filepath.name}")
+                failures.append(filepath.name)
+                log_error("load_raw_to_db", type(e).__name__, str(e), f"Fallo al procesar {filepath.name}", run_id=run_id)
                 global_logger.error(f"Fallo al procesar {filepath.name}: {e}")
 
     global_logger.info(f"Carga completada. Nuevos: {archivos_procesados}. Ignorados: {archivos_ignorados}")
+
+    if failures:
+        raise RuntimeError(f"Carga Raw fallida: {len(failures)} archivo(s): {', '.join(failures)}")
 
     # Exportar inventario de archivos nuevos de la corrida
     if inventario:
@@ -145,10 +148,11 @@ def run_loader(run_id=None):
         inventario_df.to_csv(inventario_file, index=False)
         global_logger.info(f"Inventario CSV exportado a {inventario_file.relative_to(ROOT_DIR)}")
 
-    export_full_raw_inventory()
+    export_full_raw_inventory(run_id=run_id)
+    return {"loaded_files": archivos_procesados, "skipped_files": archivos_ignorados}
 
 
-def export_full_raw_inventory():
+def export_full_raw_inventory(run_id=None):
     """
     Exporta el inventario completo de Raw desde PostgreSQL. Esta evidencia representa
     el universo real cargado en BD, incluyendo archivos de corridas previas.
@@ -185,7 +189,8 @@ def export_full_raw_inventory():
         full_inventory.to_csv(out_file, index=False)
         global_logger.info(f"Inventario Raw completo exportado a {out_file.relative_to(ROOT_DIR)}")
     except Exception as e:
-        log_error("load_raw_to_db", type(e).__name__, str(e), "No se pudo exportar inventario Raw completo")
+        log_error("load_raw_to_db", type(e).__name__, str(e), "No se pudo exportar inventario Raw completo", run_id=run_id)
+        raise
 
 if __name__ == "__main__":
     run_loader()

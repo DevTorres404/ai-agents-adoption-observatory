@@ -49,7 +49,7 @@ def _execute_for_file_load(file_id_value=1):
             result.scalar.return_value = file_id_value
             return result
         else:
-            records_inserted.append(params)
+            records_inserted.extend(params if isinstance(params, list) else [params])
             return MagicMock()
 
     return mock_execute, records_inserted
@@ -102,14 +102,17 @@ class RawLoaderApprovalTest(unittest.TestCase):
                 }),
                 patch("src.loaders.load_raw_to_db.log_error"),
             ):
-                run_loader()
+                with self.assertRaisesRegex(RuntimeError, "Raw"):
+                    run_loader()
 
         # Post-fix: transacción revierta — NO se confirma commit
         self.assertEqual(len(committed), 0)
 
     def test_no_commit_when_metadata_extraction_fails(self):
         """Si extract_metadata falla, no se intenta commit."""
-        mock_conn, committed = _make_mock_conn(MagicMock())
+        execute = MagicMock()
+        execute.return_value.fetchone.return_value = None
+        mock_conn, committed = _make_mock_conn(execute)
 
         with tempfile.TemporaryDirectory() as tmpdir:
             raw_dir = Path(tmpdir) / "raw"
@@ -129,7 +132,8 @@ class RawLoaderApprovalTest(unittest.TestCase):
                        side_effect=RuntimeError("parse error")),
                 patch("src.loaders.load_raw_to_db.log_error"),
             ):
-                run_loader()
+                with self.assertRaisesRegex(RuntimeError, "Raw"):
+                    run_loader()
 
         self.assertEqual(len(committed), 0)
 
@@ -181,7 +185,8 @@ class RawLoaderAtomicityTest(unittest.TestCase):
                 }),
                 patch("src.loaders.load_raw_to_db.log_error"),
             ):
-                run_loader()
+                with self.assertRaisesRegex(RuntimeError, "Raw"):
+                    run_loader()
 
         # Post-fix: si records fallan, la transacción NO se confirma
         self.assertEqual(len(committed), 0)

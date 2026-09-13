@@ -116,8 +116,7 @@ def run_staging_pipeline(run_id=None, rebuild=False):
     global_logger.info(">>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<")
     
     if not db_connector.engine:
-        global_logger.error("Sin conexión a PostgreSQL.")
-        return
+        raise RuntimeError("Staging requiere una conexión a PostgreSQL")
 
     try:
         with db_connector.engine.begin() as conn:
@@ -349,7 +348,7 @@ def run_staging_pipeline(run_id=None, rebuild=False):
         }
 
     except Exception as e:
-        log_error("staging_pipeline", type(e).__name__, str(e), "Pipeline abortado")
+        log_error("staging_pipeline", type(e).__name__, str(e), "Pipeline abortado", run_id=run_id)
         global_logger.error(f"Fallo crítico en Staging: {e}")
         raise
 

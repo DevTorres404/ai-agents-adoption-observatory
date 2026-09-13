@@ -160,8 +160,12 @@ def _search_partition(
     return records, [outcome]
 
 
-def extract_github_repos(queries=None, pages=10, per_page=100, run_id=None):
+def extract_github_repos(queries=None, pages=10, per_page=100, run_id=None, start_date=None, end_date=None):
     """Extract repositories without crossing GitHub Search's 1,000-result window."""
+    start_date = start_date or SOURCE_START_DATE
+    end_date = end_date or SOURCE_END_DATE
+    if datetime.date.fromisoformat(start_date) > datetime.date.fromisoformat(end_date):
+        raise ValueError("GitHub start_date must not be after end_date")
     if queries is None:
         queries = [
             "Cursor", "Claude Code", "Codex", "GitHub Copilot", "Cline",
@@ -189,8 +193,8 @@ def extract_github_repos(queries=None, pages=10, per_page=100, run_id=None):
             endpoint,
             headers,
             query,
-            SOURCE_START_DATE,
-            SOURCE_END_DATE,
+            start_date,
+            end_date,
             pages,
             per_page,
             run_id,
@@ -208,8 +212,8 @@ def extract_github_repos(queries=None, pages=10, per_page=100, run_id=None):
             "url": endpoint,
             "http_status": client.last_status_code,
             "queries": queries,
-            "date_range_start": SOURCE_START_DATE,
-            "date_range_end": SOURCE_END_DATE,
+            "date_range_start": start_date,
+            "date_range_end": end_date,
             "max_pages_per_partition": pages,
             "per_page_limit": per_page,
             "total_count_extracted": len(all_items),

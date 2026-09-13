@@ -114,10 +114,10 @@ def _persist(conn, run_id, datasets):
 
     conn.execute(text("""
         INSERT INTO audit.quality_summary
-        (run_id, total_raw_records, eligible_records, expected_staging_records,
+        (run_id, data_run_id, total_raw_records, eligible_records, expected_staging_records,
          total_staging_records, load_error_records, completion_rate,
          total_duplicates_removed, deduplication_rate, total_nulls_removed, overall_error_rate)
-        VALUES (:run_id, :total_raw_records, :eligible_records, :expected_staging_records,
+        VALUES (:run_id, :data_run_id, :total_raw_records, :eligible_records, :expected_staging_records,
          :total_staging_records, :load_error_records, :completion_rate,
          :total_duplicates_removed, :deduplication_rate, :total_nulls_removed, :overall_error_rate)
     """), datasets["quality_summary"][0])
@@ -164,25 +164,48 @@ def _persist(conn, run_id, datasets):
         """), item)
 
 
-def run_quality_framework(run_id=None, source_results=None, publication_status=ExtractionStatus.SUCCESS):
+def resolve_data_run_id(data_run_id=None):
+    """Resolve a loaded data run, never an empty newly-created audit execution."""
+    if not db_connector.engine:
+        raise RuntimeError("Database connection is required to select a data run")
+    with db_connector.engine.connect() as conn:
+        selected = conn.execute(text("""
+            SELECT MAX(COALESCE(r.run_id, f.run_id))
+            FROM raw.raw_records r JOIN raw.raw_files f ON f.id = r.file_id
+            WHERE (CAST(:data_run_id AS INTEGER) IS NULL OR COALESCE(r.run_id, f.run_id) = :data_run_id)
+        """), {"data_run_id": data_run_id}).scalar()
+    if selected is None:
+        raise ValueError("No loaded Raw data for the requested run; use --data-run-id with an existing loaded run")
+    return int(selected)
+
+
+def quality_publication_status(summary, requested_status):
+    status = ExtractionStatus(requested_status)
+    if status is ExtractionStatus.FAILED or summary.get("load_error_records", 0) > 0:
+        return ExtractionStatus.FAILED.value
+    if summary["total_raw_records"] == 0:
+        return ExtractionStatus.EMPTY.value
+    return status.value
+
+
+def run_quality_framework(run_id=None, source_results=None, publication_status=ExtractionStatus.SUCCESS, data_run_id=None):
     """Persist and publish a coherent snapshot for exactly one pipeline run."""
     if not db_connector.engine:
         raise RuntimeError("Database connection is required for quality governance")
     if run_id is None:
-        with db_connector.engine.begin() as conn:
-            run_id = conn.execute(text(
-                "INSERT INTO audit.pipeline_runs(status) VALUES ('running') RETURNING run_id"
-            )).scalar_one()
+        raise ValueError("An audit run_id is required; use run_pipeline --phase quality")
+    data_run_id = run_id if data_run_id is None else data_run_id
 
     build_candidate_staging_frame.cache_clear()
-    candidate = build_candidate_staging_frame(run_id)
-    summary = get_overall_metrics(run_id)
-    nulls = [{"run_id": run_id, **row} for row in get_nulls_matrix(run_id)]
-    dedup = [{"run_id": run_id, **row} for row in get_dedup_report(run_id)]
-    casting = [{"run_id": run_id, **row} for row in get_casting_report(run_id)]
+    candidate = build_candidate_staging_frame(data_run_id)
+    summary = get_overall_metrics(data_run_id)
+    publication_status = quality_publication_status(summary, publication_status)
+    nulls = [{"run_id": run_id, **row} for row in get_nulls_matrix(data_run_id)]
+    dedup = [{"run_id": run_id, **row} for row in get_dedup_report(data_run_id)]
+    casting = [{"run_id": run_id, **row} for row in get_casting_report(data_run_id)]
 
     with db_connector.engine.begin() as conn:
-        staging = _staging_snapshot(conn, run_id)
+        staging = _staging_snapshot(conn, data_run_id)
         now = datetime.now(timezone.utc)
         stale_after_hours = float(os.getenv("QUALITY_STALE_AFTER_HOURS", "24"))
         freshness = build_source_freshness(
@@ -204,7 +227,7 @@ def run_quality_framework(run_id=None, source_results=None, publication_status=E
         )
         comparable = build_source_metrics(staging, run_id)
         datasets = {
-            "quality_summary": [{"run_id": run_id, **summary}],
+            "quality_summary": [{"run_id": run_id, "data_run_id": data_run_id, **summary}],
             "nulls_matrix": nulls,
             "dedup_report": dedup,
             "casting_report": casting,
@@ -230,4 +253,5 @@ def run_quality_framework(run_id=None, source_results=None, publication_status=E
 
 
 if __name__ == "__main__":
-    run_quality_framework()
+    from src.scripts.run_pipeline import main
+    main(["--phase", "quality"])
