@@ -83,3 +83,8 @@ Thumbs.db
 dump_gold_entregable4.sql
 dump_produccion.sql
 dump_produccion.backup
+# Documentos privados de tesis y planificación
+TESIS.tex
+ESTADO_ACTUAL_PROYECTO.tex
+cuestionario_preguntas.md
+planteamiento_problema.md

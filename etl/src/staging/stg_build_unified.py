@@ -5,6 +5,7 @@ from src.utils.db import db_connector
 from src.utils.logger import global_logger
 from src.utils.error_log import log_error
 from src.utils.paths import ROOT_DIR
+from src.utils.pipeline_scope import source_predicate
 
 # Importar los módulos del pipeline Staging
 from src.staging.stg_normalize_columns import normalize_dataframe
@@ -112,8 +113,11 @@ def _ensure_staging_schema(conn):
     """))
 
 
-def run_staging_pipeline(run_id=None, rebuild=False):
+def run_staging_pipeline(run_id=None, rebuild=False, pipeline="all"):
     global_logger.info(">>> INICIANDO PIPELINE DE STAGING (LIMPIEZA E INTEGRACIÓN) <<<")
+    predicate = source_predicate(pipeline)
+    if rebuild and pipeline != "all":
+        raise ValueError("Staging rebuild requires --pipeline all (global maintenance)")
     
     if not db_connector.engine:
         raise RuntimeError("Staging requiere una conexión a PostgreSQL")
@@ -121,15 +125,18 @@ def run_staging_pipeline(run_id=None, rebuild=False):
     try:
         with db_connector.engine.begin() as conn:
             _ensure_staging_schema(conn)
-            available_file_ids = conn.execute(text("""
+            available_file_ids = conn.execute(text(f"""
                 SELECT DISTINCT f.id
                 FROM raw.raw_files f
                 JOIN raw.raw_records r ON r.file_id = f.id
+                WHERE {predicate}
                 ORDER BY f.id
             """)).scalars().all()
-            processed_rows = conn.execute(text("""
-                SELECT file_id, transformation_version
-                FROM staging.processed_files
+            processed_rows = conn.execute(text(f"""
+                SELECT p.file_id, p.transformation_version
+                FROM staging.processed_files p
+                JOIN raw.raw_files f ON f.id = p.file_id
+                WHERE {predicate}
             """)).fetchall()
 
         file_ids = plan_staging_files(
@@ -337,6 +344,7 @@ def run_staging_pipeline(run_id=None, rebuild=False):
         
         # Exportar evidencia
         evidencia_path = ROOT_DIR / "docs" / "evidencias" / "staging_stats.csv"
+        evidencia_path.parent.mkdir(parents=True, exist_ok=True)
         df_final.to_csv(evidencia_path, index=False, encoding='utf-8')
         global_logger.info(f"Data final exportada para evidencia en {evidencia_path}")
         return {

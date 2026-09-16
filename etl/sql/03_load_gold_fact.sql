@@ -125,7 +125,14 @@ SELECT
     s.titulo,
     s.url,
     s.is_imputed_date
-FROM staging.stg_actividad_agente_ia s
+FROM (SELECT * FROM staging.stg_actividad_agente_ia
+        WHERE COALESCE(fuente, '') NOT IN ('fuente_propia', 'encuesta')
+          AND CASE COALESCE(NULLIF(current_setting('etl.pipeline', true), ''), 'all')
+            WHEN 'github' THEN fuente = 'github'
+            WHEN 'main' THEN COALESCE(fuente, '') <> 'github'
+            WHEN 'all' THEN TRUE
+            ELSE FALSE
+        END) s
 INNER JOIN gold.dim_tiempo dt
     ON dt.fecha = s.fecha_evento
 INNER JOIN gold.dim_agente da

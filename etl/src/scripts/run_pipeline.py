@@ -8,6 +8,7 @@ from sqlalchemy import text
 from src.utils.db import db_connector
 from src.utils.logger import global_logger
 from src.utils.error_log import log_error
+from src.utils.pipeline_scope import PIPELINES, processing_lock, source_predicate, validate_pipeline
 from src.utils.extraction_evidence import (
     EvidenceRun,
     ExtractionStatus,
@@ -24,7 +25,6 @@ from src.extractors.reddit import extract_reddit
 from src.extractors.google_trends import extract_trends
 from src.extractors.file_catalog import extract_and_validate_catalog
 from src.extractors.aidedev import extract_aidedev_catalog
-from src.extractors.fuente_propia import extract_google_forms_survey
 from src.extractors.stackoverflow import extract_stackoverflow
 from src.extractors.arxiv import extract_arxiv
 from src.extractors.gnews import extract_gnews
@@ -134,15 +134,19 @@ def _record_extractor_exception(source, exc, run_id):
         run_id=run_id,
     )
 
-def run_extraction_phase(run_id, github_start_date=None, github_end_date=None):
+def run_extraction_phase(run_id, github_start_date=None, github_end_date=None, pipeline="main"):
+    validate_pipeline(pipeline)
     global_logger.info("=== FASE 1: EXTRACCIÓN MÚLTIPLE ===")
     
     # 1. GitHub API
-    try:
-        extract_github_repos(pages=10, per_page=100, run_id=run_id,
-                             start_date=github_start_date, end_date=github_end_date)
-    except Exception as e:
-        _record_extractor_exception("github", e, run_id)
+    if pipeline in {"github", "all"}:
+        try:
+            extract_github_repos(pages=10, per_page=100, run_id=run_id,
+                                 start_date=github_start_date, end_date=github_end_date)
+        except Exception as e:
+            _record_extractor_exception("github", e, run_id)
+    if pipeline == "github":
+        return
 
     # 2. HackerNews (BS4)
     try:
@@ -180,35 +184,28 @@ def run_extraction_phase(run_id, github_start_date=None, github_end_date=None):
         except Exception as fallback_error:
             _record_extractor_exception("file_catalog", fallback_error, run_id)
 
-    # 7. Fuente propia: encuesta Google Forms
-    try:
-        extract_google_forms_survey(run_id=run_id)
-    except Exception as e:
-        _record_extractor_exception("fuente_propia", e, run_id)
-
-    # 8. StackOverflow
+    # 7. StackOverflow
     try:
         extract_stackoverflow(max_per_agent=500, run_id=run_id)
     except Exception as e:
         _record_extractor_exception("stackoverflow", e, run_id)
 
-    # 9. arXiv
+    # 8. arXiv
     try:
         extract_arxiv(max_per_agent=1000, run_id=run_id)
     except Exception as e:
         _record_extractor_exception("arxiv", e, run_id)
 
-    # 10. Google News
+    # 9. Google News
     try:
         extract_gnews(run_id=run_id)
     except Exception as e:
         _record_extractor_exception("gnews", e, run_id)
 
-def run_gold_phase(run_id, rebuild=False):
-    global_logger.info("=== FASE 5: CARGA DATA WAREHOUSE GOLD ===")
-    if not db_connector.engine:
-        raise Exception("Sin conexión a BD para la fase Gold")
-        
+def run_gold_phase(run_id, rebuild=False, pipeline="all"):
+    predicate = source_predicate(pipeline, "fuente")
+    if rebuild and pipeline != "all":
+        raise ValueError("Gold rebuild requires --pipeline all (global maintenance)")
     global_logger.info("=== FASE 5: CARGA DATA WAREHOUSE GOLD ===")
     if not db_connector.engine:
         raise Exception("Sin conexión a BD para la fase Gold")
@@ -227,6 +224,8 @@ def run_gold_phase(run_id, rebuild=False):
     with db_connector.engine.begin() as conn:
         raw_conn = conn.connection
         cursor = raw_conn.cursor()
+        # Transaction-local scope read by the shared, directly executable SQL.
+        cursor.execute("SELECT set_config('etl.pipeline', %s, true)", (pipeline,))
         for migration_path in migration_paths:
             global_logger.info(f"Ejecutando {migration_path}...")
             with open(migration_path, 'r', encoding='utf-8') as migration_file:
@@ -246,12 +245,12 @@ def run_gold_phase(run_id, rebuild=False):
                 RESTART IDENTITY CASCADE
             """)
 
-        cursor.execute("""
+        cursor.execute(f"""
             SELECT COUNT(*)
             FROM staging.stg_actividad_agente_ia
-            WHERE dim_nombre_plataforma IS NULL
+            WHERE ({predicate}) AND (dim_nombre_plataforma IS NULL
                OR dim_nombre_tecnologia IS NULL
-               OR dim_nombre_comunidad IS NULL
+               OR dim_nombre_comunidad IS NULL)
         """)
         pending_semantic_rows = cursor.fetchone()[0]
         if pending_semantic_rows > 0:
@@ -335,8 +334,10 @@ def run_gold_quality(run_id):
         log_error("gold_quality", "validaciones", str(e), "Error critico en calidad Gold", run_id=run_id)
         raise
 
-def main(argv=None):
+def main(argv=None, fixed_pipeline=None):
     parser = argparse.ArgumentParser(description="Orquestador Maestro del Pipeline ETL Observatorio IA")
+    parser.add_argument("--pipeline", choices=PIPELINES, default=fixed_pipeline or "main",
+                        help="main excluye GitHub; github lo aísla; all es mantenimiento global explícito")
     parser.add_argument("--date", type=datetime.date.fromisoformat, help="Fecha objetivo y límite superior de GitHub (YYYY-MM-DD)", default=datetime.date.today())
     parser.add_argument("--github-since", type=datetime.date.fromisoformat, help="Inicio explícito de created: para GitHub; no recupera actualizaciones de repos antiguos")
     parser.add_argument("--data-run-id", type=int, help="Corrida Raw a auditar con quality/process; por defecto la última cargada")
@@ -354,17 +355,21 @@ def main(argv=None):
         help="Use rebuild explicitly to discard and reconstruct all Gold rows.",
     )
     args = parser.parse_args(argv)
+    if fixed_pipeline and args.pipeline != fixed_pipeline:
+        parser.error(f"Este ejecutable solo permite --pipeline {fixed_pipeline}")
+    if args.pipeline != "all" and (args.staging_mode == "rebuild" or args.gold_mode == "rebuild"):
+        parser.error("rebuild requiere --pipeline all para no borrar datos del otro ETL")
     if args.data_run_id is not None and (args.phase not in {"quality", "process"} or args.data_run_id <= 0):
         parser.error("--data-run-id debe ser positivo y usarse con quality/process")
-    if args.github_since and (args.phase not in {"all", "extract"} or args.github_since > args.date):
-        parser.error("--github-since requiere all/extract y una fecha no posterior a --date")
+    if args.github_since and (args.pipeline == "main" or args.phase not in {"all", "extract"} or args.github_since > args.date):
+        parser.error("--github-since requiere pipeline github/all, fase all/extract y una fecha no posterior a --date")
     
-    global_logger.info(f">>> INICIANDO PIPELINE UNIFICADO (Fecha Objetivo: {args.date}) <<<")
-    data_run_id = resolve_data_run_id(args.data_run_id) if args.phase in {"quality", "process"} else None
+    global_logger.info(f">>> INICIANDO PIPELINE {args.pipeline} (Fecha Objetivo: {args.date}) <<<")
+    data_run_id = None
     run_id = start_pipeline_audit()
     datasets = None
     includes_extraction = args.phase in ["all", "extract"]
-    evidence_run = EvidenceRun(run_id or new_local_run_id()) if includes_extraction else None
+    evidence_run = EvidenceRun(run_id or new_local_run_id(), pipeline=args.pipeline) if includes_extraction else None
     evidence_scope = evidence_context(evidence_run) if evidence_run else nullcontext()
 
     with evidence_scope:
@@ -373,55 +378,65 @@ def main(argv=None):
                 with timed_phase("extract", run_id):
                     run_extraction_phase(run_id,
                         github_start_date=args.github_since.isoformat() if args.github_since else None,
-                        github_end_date=args.date.isoformat())
+                        github_end_date=args.date.isoformat(), pipeline=args.pipeline)
+                if derive_pipeline_status(evidence_run.results) == ExtractionStatus.FAILED.value:
+                    raise RuntimeError("Extraction failed; no downstream phases were executed")
 
-            if args.phase in ["all", "load"]:
-                global_logger.info("=== FASE 2: CARGA RAW A BD ===")
-                with timed_phase("load", run_id):
-                    run_loader(run_id=run_id)
+            # Slow extraction never owns the warehouse lock.
+            scope = processing_lock(run_id) if args.phase != "extract" else nullcontext()
+            with scope:
+                if args.phase in {"quality", "process"}:
+                    data_run_id = resolve_data_run_id(args.data_run_id, pipeline=args.pipeline)
+                if args.phase in ["all", "load"]:
+                    global_logger.info("=== FASE 2: CARGA RAW A BD ===")
+                    with timed_phase("load", run_id):
+                        run_loader(run_id=run_id, pipeline=args.pipeline,
+                                   file_paths=[r.raw_path for r in evidence_run.results if r.raw_path]
+                                   if evidence_run else None)
 
-            if args.phase in ["all", "staging", "process"]:
-                global_logger.info("=== FASE 3: STAGING ===")
-                with timed_phase("staging", run_id):
-                    run_staging_pipeline(
-                        run_id=run_id,
-                        rebuild=args.staging_mode == "rebuild",
+                if args.phase in ["all", "staging", "process"]:
+                    global_logger.info("=== FASE 3: STAGING ===")
+                    with timed_phase("staging", run_id):
+                        run_staging_pipeline(
+                            run_id=run_id,
+                            rebuild=args.staging_mode == "rebuild",
+                            pipeline=args.pipeline,
+                        )
+
+                if args.phase in ["all", "quality", "process"]:
+                    global_logger.info("=== FASE 4: CALIDAD DE DATOS ===")
+                    quality_status = (
+                        derive_pipeline_status(evidence_run.results)
+                        if evidence_run else ExtractionStatus.SUCCESS.value
                     )
+                    with timed_phase("quality", run_id):
+                        datasets = run_quality_framework(
+                            run_id=run_id, data_run_id=data_run_id,
+                            source_results=evidence_run.results if evidence_run else None,
+                            publication_status=quality_status,
+                        )
+                    if datasets["quality_summary"][0].get("load_error_records", 0) > 0:
+                        raise RuntimeError("Quality detected missing Staging records; Gold was not executed")
 
-            if args.phase in ["all", "quality", "process"]:
-                global_logger.info("=== FASE 4: CALIDAD DE DATOS ===")
-                quality_status = (
+                if args.phase in ["all", "gold", "process"]:
+                    with timed_phase("gold", run_id):
+                        run_gold_phase(run_id, rebuild=args.gold_mode == "rebuild", pipeline=args.pipeline)
+                        run_gold_quality(run_id)
+
+                status = (
                     derive_pipeline_status(evidence_run.results)
-                    if evidence_run else ExtractionStatus.SUCCESS.value
+                    if evidence_run
+                    else ExtractionStatus.SUCCESS.value
                 )
-                with timed_phase("quality", run_id):
-                    datasets = run_quality_framework(
-                        run_id=run_id, data_run_id=data_run_id,
-                        source_results=evidence_run.results if evidence_run else None,
-                        publication_status=quality_status,
-                    )
-                if datasets["quality_summary"][0].get("load_error_records", 0) > 0:
-                    raise RuntimeError("Quality detected missing Staging records; Gold was not executed")
-
-            if args.phase in ["all", "gold", "process"]:
-                with timed_phase("gold", run_id):
-                    run_gold_phase(run_id, rebuild=args.gold_mode == "rebuild")
-                    run_gold_quality(run_id)
-
-            status = (
-                derive_pipeline_status(evidence_run.results)
-                if evidence_run
-                else ExtractionStatus.SUCCESS.value
-            )
-            if datasets:
-                status = quality_publication_status(datasets["quality_summary"][0], status)
-            error_msg = "Una o más fuentes tuvieron incidentes" if status == "partial_success" else None
-            end_pipeline_audit(run_id, status=status, error_msg=error_msg)
-            if evidence_run:
-                evidence_run.publish(status)
-            global_logger.info(
-                f">>> PIPELINE UNIFICADO FINALIZADO status={status} (Run ID: {run_id}) <<<"
-            )
+                if datasets:
+                    status = quality_publication_status(datasets["quality_summary"][0], status)
+                error_msg = "Una o más fuentes tuvieron incidentes" if status == "partial_success" else None
+                end_pipeline_audit(run_id, status=status, error_msg=error_msg)
+                if evidence_run:
+                    evidence_run.publish(status)
+                global_logger.info(
+                    f">>> PIPELINE {args.pipeline} FINALIZADO status={status} (Run ID: {run_id}) <<<"
+                )
 
         except Exception as e:
             error_str = f"Fallo Crítico: {str(e)}"

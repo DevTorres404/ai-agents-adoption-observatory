@@ -3,8 +3,6 @@ import {
   Activity,
   BarChart3,
   ChevronRight,
-  Cpu,
-  LayoutDashboard,
   Layers,
   Menu,
   Moon,
@@ -18,8 +16,7 @@ const NAV_GROUPS = [
     label: 'Análisis',
     items: [
       { id: 'ejecutivo', label: 'Radar de mercado', description: 'Liderazgo y posicionamiento competitivo.', icon: Activity },
-      { id: 'analytics', label: 'Analítica general', description: 'KPIs, comparativas y detalle por agente.', icon: LayoutDashboard },
-      { id: 'dimensiones', label: 'Dimensiones', description: 'Categorías, tecnología y señales de adopción.', icon: Layers },
+      { id: 'dimensiones', label: 'Dimensiones y detalle', description: 'Categorías, fuentes, tecnología y tabla de agentes.', icon: Layers },
       { id: 'tendencias', label: 'Tendencias', description: 'Evolución temporal y fuentes que explican los cambios.', icon: BarChart3 }
     ]
   },

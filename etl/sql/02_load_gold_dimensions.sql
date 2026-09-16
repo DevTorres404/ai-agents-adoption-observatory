@@ -68,7 +68,14 @@ SELECT DISTINCT
         WHEN 7 THEN 'Domingo'
     END AS nombre_dia,
     (EXTRACT(ISODOW FROM s.fecha_evento)::INT IN (6, 7)) AS es_fin_semana
-FROM staging.stg_actividad_agente_ia s
+FROM (SELECT * FROM staging.stg_actividad_agente_ia
+        WHERE COALESCE(fuente, '') NOT IN ('fuente_propia', 'encuesta')
+          AND CASE COALESCE(NULLIF(current_setting('etl.pipeline', true), ''), 'all')
+            WHEN 'github' THEN fuente = 'github'
+            WHEN 'main' THEN COALESCE(fuente, '') <> 'github'
+            WHEN 'all' THEN TRUE
+            ELSE FALSE
+        END) s
 WHERE s.fecha_evento IS NOT NULL
 ON CONFLICT (fecha) DO UPDATE SET
     anio = EXCLUDED.anio,
@@ -92,7 +99,14 @@ WITH agentes_distintos AS (
     SELECT DISTINCT
         COALESCE(NULLIF(BTRIM(s.nombre_agente), ''), 'No especificado') AS nombre_agente,
         COALESCE(NULLIF(BTRIM(s.categoria), ''), 'No especificado') AS categoria_agente
-    FROM staging.stg_actividad_agente_ia s
+    FROM (SELECT * FROM staging.stg_actividad_agente_ia
+        WHERE COALESCE(fuente, '') NOT IN ('fuente_propia', 'encuesta')
+          AND CASE COALESCE(NULLIF(current_setting('etl.pipeline', true), ''), 'all')
+            WHEN 'github' THEN fuente = 'github'
+            WHEN 'main' THEN COALESCE(fuente, '') <> 'github'
+            WHEN 'all' THEN TRUE
+            ELSE FALSE
+        END) s
     WHERE s.nombre_agente IS NOT NULL
 ),
 agentes_consolidados AS (
@@ -215,29 +229,32 @@ ON CONFLICT (nombre_agente) DO UPDATE SET
 WITH fuentes_distintas AS (
     SELECT DISTINCT
         COALESCE(NULLIF(BTRIM(s.fuente), ''), 'No especificado') AS nombre_fuente,
-        COALESCE(NULLIF(BTRIM(s.tipo_fuente), ''), 'No especificado') AS tipo_fuente,
-        (COALESCE(NULLIF(BTRIM(s.fuente), ''), 'No especificado') = 'fuente_propia') AS es_fuente_propia
-    FROM staging.stg_actividad_agente_ia s
+        COALESCE(NULLIF(BTRIM(s.tipo_fuente), ''), 'No especificado') AS tipo_fuente
+    FROM (SELECT * FROM staging.stg_actividad_agente_ia
+        WHERE COALESCE(fuente, '') NOT IN ('fuente_propia', 'encuesta')
+          AND CASE COALESCE(NULLIF(current_setting('etl.pipeline', true), ''), 'all')
+            WHEN 'github' THEN fuente = 'github'
+            WHEN 'main' THEN COALESCE(fuente, '') <> 'github'
+            WHEN 'all' THEN TRUE
+            ELSE FALSE
+        END) s
     WHERE s.fuente IS NOT NULL
 )
 INSERT INTO gold.dim_fuente (
     nombre_fuente,
     tipo_fuente,
     categoria_fuente,
-    confiabilidad_fuente,
-    es_fuente_propia
+    confiabilidad_fuente
 )
 SELECT
     nombre_fuente,
     tipo_fuente,
     tipo_fuente AS categoria_fuente,
-    'No especificado' AS confiabilidad_fuente,
-    es_fuente_propia
+    'No especificado' AS confiabilidad_fuente
 FROM fuentes_distintas
 ON CONFLICT (nombre_fuente, tipo_fuente) DO UPDATE SET
     categoria_fuente = EXCLUDED.categoria_fuente,
-    confiabilidad_fuente = EXCLUDED.confiabilidad_fuente,
-    es_fuente_propia = EXCLUDED.es_fuente_propia;
+    confiabilidad_fuente = EXCLUDED.confiabilidad_fuente;
 
 
 -- ==========================================================
@@ -251,7 +268,14 @@ WITH plataformas_consolidadas AS (
         COALESCE(NULLIF(BTRIM(s.dim_nombre_plataforma), ''), 'No determinada') AS nombre_plataforma,
         COALESCE(NULLIF(BTRIM(s.dim_tipo_plataforma), ''), 'No determinado') AS tipo_plataforma,
         COALESCE(NULLIF(BTRIM(s.dim_ecosistema), ''), 'No determinado') AS ecosistema
-    FROM staging.stg_actividad_agente_ia s
+    FROM (SELECT * FROM staging.stg_actividad_agente_ia
+        WHERE COALESCE(fuente, '') NOT IN ('fuente_propia', 'encuesta')
+          AND CASE COALESCE(NULLIF(current_setting('etl.pipeline', true), ''), 'all')
+            WHEN 'github' THEN fuente = 'github'
+            WHEN 'main' THEN COALESCE(fuente, '') <> 'github'
+            WHEN 'all' THEN TRUE
+            ELSE FALSE
+        END) s
     WHERE s.dim_nombre_plataforma IS NOT NULL
     ORDER BY
         COALESCE(NULLIF(BTRIM(s.dim_nombre_plataforma), ''), 'No determinada'),
@@ -287,7 +311,14 @@ WITH tecnologias_consolidadas AS (
         COALESCE(NULLIF(BTRIM(s.dim_categoria_tecnologia), ''), 'No determinada') AS categoria_tecnologia,
         COALESCE(NULLIF(BTRIM(s.dim_dominio_tecnologico), ''), 'No determinado') AS dominio_tecnologico,
         COALESCE(NULLIF(BTRIM(s.dim_tipo_senal), ''), 'Observación digital') AS tipo_senal
-    FROM staging.stg_actividad_agente_ia s
+    FROM (SELECT * FROM staging.stg_actividad_agente_ia
+        WHERE COALESCE(fuente, '') NOT IN ('fuente_propia', 'encuesta')
+          AND CASE COALESCE(NULLIF(current_setting('etl.pipeline', true), ''), 'all')
+            WHEN 'github' THEN fuente = 'github'
+            WHEN 'main' THEN COALESCE(fuente, '') <> 'github'
+            WHEN 'all' THEN TRUE
+            ELSE FALSE
+        END) s
     WHERE s.dim_nombre_tecnologia IS NOT NULL
     ORDER BY
         COALESCE(NULLIF(BTRIM(s.dim_nombre_tecnologia), ''), 'No determinada'),
@@ -327,7 +358,14 @@ WITH comunidades_consolidadas AS (
         COALESCE(NULLIF(BTRIM(s.dim_tipo_comunidad), ''), 'comunidad no determinada') AS tipo_comunidad,
         COALESCE(NULLIF(BTRIM(s.dim_region_comunidad), ''), 'No especificado') AS region,
         COALESCE(NULLIF(BTRIM(s.dim_nombre_plataforma), ''), 'No determinada') AS plataforma_comunidad
-    FROM staging.stg_actividad_agente_ia s
+    FROM (SELECT * FROM staging.stg_actividad_agente_ia
+        WHERE COALESCE(fuente, '') NOT IN ('fuente_propia', 'encuesta')
+          AND CASE COALESCE(NULLIF(current_setting('etl.pipeline', true), ''), 'all')
+            WHEN 'github' THEN fuente = 'github'
+            WHEN 'main' THEN COALESCE(fuente, '') <> 'github'
+            WHEN 'all' THEN TRUE
+            ELSE FALSE
+        END) s
     WHERE s.dim_nombre_comunidad IS NOT NULL
     ORDER BY
         COALESCE(NULLIF(BTRIM(s.dim_nombre_comunidad), ''), 'Comunidad no determinada'),

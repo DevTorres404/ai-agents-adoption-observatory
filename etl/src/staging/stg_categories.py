@@ -20,10 +20,6 @@ def assign_categories(df):
             # Motivo: Google Trends representa demanda/interes de busqueda agregado.
             return 'popularidad'
 
-        if fuente in ['encuesta', 'fuente_propia']:
-            # Motivo: la encuesta Google Forms mide adopcion declarada en el contexto academico UPSE.
-            return 'adopcion_academica'
-
         # Motivo: fuentes tecnicas estructuradas o articulos quedan como actividad tecnica por defecto.
         return 'actividad_tecnica'
 

@@ -90,7 +90,6 @@ services:
       DB_NAME: ${DB_NAME:-observatorio_ia}
       DB_HOST: postgres
       DB_PORT: "5432"
-      GITHUB_TOKEN: ${GITHUB_TOKEN}
     volumes:
       - ./etl/data:/app/data
       - ./etl/logs:/app/logs
@@ -100,6 +99,29 @@ services:
         condition: service_healthy
     profiles:
       - etl
+
+  etl-github:
+    build:
+      context: ./etl
+      dockerfile: Dockerfile.etl
+    container_name: observatorio_etl_github
+    entrypoint: ["python", "-m", "src.scripts.run_github_pipeline"]
+    environment:
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: ${DB_NAME:-observatorio_ia}
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+    volumes:
+      - ./etl/data:/app/data
+      - ./etl/logs/github:/app/logs
+      - ./etl/docs/github:/app/docs
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - etl-github
 
 volumes:
   postgres_data:

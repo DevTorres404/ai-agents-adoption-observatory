@@ -10,7 +10,7 @@ const CHART_COLORS = [
 ];
 
 const QUALITY_SOURCE_LABELS = {
-  arxiv: 'arXiv', catalogo: 'Catálogo', devto: 'Dev.to', fuente_propia: 'Fuente propia',
+  arxiv: 'arXiv', catalogo: 'Catálogo', devto: 'Dev.to',
   github: 'GitHub', gnews: 'Google News', google_trends: 'Google Trends',
   hackernews: 'Hacker News', reddit: 'Reddit', stackoverflow: 'Stack Overflow'
 };

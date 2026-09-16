@@ -24279,3 +24279,912 @@ DETAIL:  Failing row contains (1, http://arxiv.org/abs/2511.04427v3, arxiv, arxi
 2026-08-28 02:10:53,246 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Claude+Code+created%3A2026-01-13..2026-01-23&sort=stars&order=desc&per_page=100&page=1
 2026-08-28 02:10:58,173 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Claude+Code+created%3A2026-01-13..2026-01-18&sort=stars&order=desc&per_page=100&page=1
 2026-08-28 02:11:02,397 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Claude+Code+created%3A2026-01-13..2026-01-15&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:45:09,389 - pipeline_logger - INFO - >>> INICIANDO PIPELINE UNIFICADO (Fecha Objetivo: 2026-09-13) <<<
+2026-09-13 20:45:09,436 - pipeline_logger - INFO - === FASE 1: EXTRACCIÓN MÚLTIPLE ===
+2026-09-13 20:45:09,438 - pipeline_logger - INFO - Usando autenticacion GITHUB_TOKEN.
+2026-09-13 20:45:09,438 - pipeline_logger - INFO - Buscando repositorios para: 'Cursor'
+2026-09-13 20:45:15,804 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2026-09-13&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:45:21,058 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2024-11-06&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:45:27,011 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2023-12-04&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:45:32,969 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2023-06-18&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:45:38,671 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2023-03-26&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:45:44,515 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2023-02-12&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:45:51,141 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2023-02-12&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:45:57,762 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2023-02-12&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:46:04,319 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2023-02-12&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:46:11,100 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2023-02-12&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:46:16,566 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-01-01..2023-02-12&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:46:16,579 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2023-01-01..2023-02-12, status=success, records=572, http=200
+2026-09-13 20:46:22,148 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-02-13..2023-03-26&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:46:28,735 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-02-13..2023-03-26&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:46:35,253 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-02-13..2023-03-26&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:46:42,001 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-02-13..2023-03-26&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:46:48,620 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-02-13..2023-03-26&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:46:55,261 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-02-13..2023-03-26&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:46:57,646 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-02-13..2023-03-26&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 20:46:57,647 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2023-02-13..2023-03-26, status=success, records=601, http=200
+2026-09-13 20:47:03,206 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-03-27..2023-06-18&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:47:08,731 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-03-27..2023-05-07&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:47:15,521 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-03-27..2023-05-07&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:47:21,998 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-03-27..2023-05-07&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:47:28,755 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-03-27..2023-05-07&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:47:36,323 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-03-27..2023-05-07&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:47:44,213 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-03-27..2023-05-07&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:47:44,219 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2023-03-27..2023-05-07, status=success, records=548, http=200
+2026-09-13 20:47:51,645 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-05-08..2023-06-18&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:47:59,256 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-05-08..2023-06-18&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:48:07,299 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-05-08..2023-06-18&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:48:14,843 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-05-08..2023-06-18&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:48:22,067 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-05-08..2023-06-18&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:48:24,979 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-05-08..2023-06-18&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:48:24,981 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2023-05-08..2023-06-18, status=success, records=514, http=200
+2026-09-13 20:48:31,199 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-06-19..2023-12-04&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:48:36,629 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-06-19..2023-09-11&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:48:42,386 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-06-19..2023-07-31&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:48:49,546 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-06-19..2023-07-31&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:48:57,077 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-06-19..2023-07-31&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:49:03,826 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-06-19..2023-07-31&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:49:11,334 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-06-19..2023-07-31&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:49:14,562 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-06-19..2023-07-31&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:49:14,567 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2023-06-19..2023-07-31, status=success, records=520, http=200
+2026-09-13 20:49:19,969 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-08-01..2023-09-11&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:49:26,810 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-08-01..2023-09-11&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:49:33,701 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-08-01..2023-09-11&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:49:41,357 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-08-01..2023-09-11&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:49:48,400 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-08-01..2023-09-11&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:49:53,300 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-08-01..2023-09-11&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:49:53,306 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2023-08-01..2023-09-11, status=success, records=552, http=200
+2026-09-13 20:49:59,300 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-09-12..2023-12-04&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:50:05,424 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-09-12..2023-10-23&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:50:12,219 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-09-12..2023-10-23&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:50:19,997 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-09-12..2023-10-23&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:50:27,309 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-09-12..2023-10-23&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:50:34,107 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-09-12..2023-10-23&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:50:40,879 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-09-12..2023-10-23&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:50:47,030 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-09-12..2023-10-23&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 20:50:47,047 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2023-09-12..2023-10-23, status=success, records=676, http=200
+2026-09-13 20:50:53,169 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-10-24..2023-12-04&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:50:59,918 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-10-24..2023-12-04&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:51:06,984 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-10-24..2023-12-04&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:51:14,849 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-10-24..2023-12-04&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:51:21,540 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-10-24..2023-12-04&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:51:29,669 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-10-24..2023-12-04&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:51:29,681 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2023-10-24..2023-12-04, status=success, records=584, http=200
+2026-09-13 20:51:35,110 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-12-05..2024-11-06&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:51:40,357 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-12-05..2024-05-21&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:51:47,039 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-12-05..2024-02-27&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:51:53,697 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-12-05..2024-01-16&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:52:01,651 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-12-05..2024-01-16&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:52:09,318 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-12-05..2024-01-16&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:52:16,740 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-12-05..2024-01-16&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:52:23,728 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-12-05..2024-01-16&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:52:26,671 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2023-12-05..2024-01-16&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:52:26,673 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2023-12-05..2024-01-16, status=success, records=515, http=200
+2026-09-13 20:52:32,266 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-01-17..2024-02-27&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:52:38,624 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-01-17..2024-02-27&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:52:45,262 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-01-17..2024-02-27&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:52:51,816 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-01-17..2024-02-27&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:52:58,323 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-01-17..2024-02-27&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:53:04,937 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-01-17..2024-02-27&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:53:08,625 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-01-17..2024-02-27&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 20:53:08,629 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2024-01-17..2024-02-27, status=success, records=629, http=200
+2026-09-13 20:53:15,926 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-02-28..2024-05-21&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:53:25,490 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-02-28..2024-04-09&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:53:32,002 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-02-28..2024-04-09&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:53:38,469 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-02-28..2024-04-09&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:53:44,999 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-02-28..2024-04-09&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:53:51,761 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-02-28..2024-04-09&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:53:58,389 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-02-28..2024-04-09&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:54:03,384 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-02-28..2024-04-09&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 20:54:03,389 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2024-02-28..2024-04-09, status=success, records=666, http=200
+2026-09-13 20:54:08,969 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-04-10..2024-05-21&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:54:15,747 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-04-10..2024-05-21&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:54:22,261 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-04-10..2024-05-21&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:54:28,750 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-04-10..2024-05-21&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:54:35,524 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-04-10..2024-05-21&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:54:42,766 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-04-10..2024-05-21&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:54:46,632 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-04-10..2024-05-21&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 20:54:46,639 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2024-04-10..2024-05-21, status=success, records=636, http=200
+2026-09-13 20:54:51,649 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-05-22..2024-11-06&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:54:57,337 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-05-22..2024-08-14&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:55:02,610 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-05-22..2024-07-03&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:55:08,888 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-05-22..2024-07-03&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:55:15,363 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-05-22..2024-07-03&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:55:21,826 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-05-22..2024-07-03&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:55:28,441 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-05-22..2024-07-03&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:55:34,757 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-05-22..2024-07-03&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:55:38,968 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-05-22..2024-07-03&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 20:55:38,971 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2024-05-22..2024-07-03, status=success, records=647, http=200
+2026-09-13 20:55:44,338 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-07-04..2024-08-14&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:55:50,727 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-07-04..2024-08-14&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:55:57,027 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-07-04..2024-08-14&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:56:03,547 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-07-04..2024-08-14&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:56:10,612 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-07-04..2024-08-14&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:56:17,483 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-07-04..2024-08-14&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:56:23,398 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-07-04..2024-08-14&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 20:56:23,400 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2024-07-04..2024-08-14, status=success, records=684, http=200
+2026-09-13 20:56:28,580 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-08-15..2024-11-06&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:56:33,490 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-08-15..2024-09-25&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:56:38,817 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-08-15..2024-09-04&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:56:45,497 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-08-15..2024-09-04&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:56:52,270 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-08-15..2024-09-04&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:56:59,012 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-08-15..2024-09-04&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:57:05,591 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-08-15..2024-09-04&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:57:05,595 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2024-08-15..2024-09-04, status=success, records=494, http=200
+2026-09-13 20:57:11,098 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-09-05..2024-09-25&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:57:17,628 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-09-05..2024-09-25&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:57:24,389 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-09-05..2024-09-25&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:57:30,767 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-09-05..2024-09-25&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:57:37,242 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-09-05..2024-09-25&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:57:43,224 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-09-05..2024-09-25&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:57:43,228 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2024-09-05..2024-09-25, status=success, records=591, http=200
+2026-09-13 20:57:49,217 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-09-26..2024-11-06&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:57:54,656 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-09-26..2024-10-16&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:58:01,199 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-09-26..2024-10-16&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:58:07,638 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-09-26..2024-10-16&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:58:14,379 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-09-26..2024-10-16&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:58:20,634 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-09-26..2024-10-16&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:58:20,637 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2024-09-26..2024-10-16, status=success, records=487, http=200
+2026-09-13 20:58:26,513 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-10-17..2024-11-06&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:58:34,466 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-10-17..2024-11-06&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:58:41,120 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-10-17..2024-11-06&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:58:47,779 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-10-17..2024-11-06&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:58:54,344 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-10-17..2024-11-06&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 20:58:58,790 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-10-17..2024-11-06&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 20:58:58,793 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2024-10-17..2024-11-06, status=success, records=550, http=200
+2026-09-13 20:59:03,506 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-07..2026-09-13&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:59:08,343 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-07..2025-10-10&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:59:13,181 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-07..2025-04-24&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:59:18,122 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-07..2025-01-30&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:59:23,663 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-07..2024-12-19&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:59:29,254 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-07..2024-11-28&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 20:59:35,748 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-07..2024-11-28&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 20:59:42,539 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-07..2024-11-28&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 20:59:48,793 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-07..2024-11-28&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 20:59:55,873 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-07..2024-11-28&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:00:02,849 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-07..2024-11-28&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:00:05,576 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-07..2024-11-28&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:00:05,577 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2024-11-07..2024-11-28, status=success, records=606, http=200
+2026-09-13 21:00:11,247 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-29..2024-12-19&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:00:18,013 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-29..2024-12-19&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:00:24,664 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-29..2024-12-19&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:00:31,474 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-29..2024-12-19&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:00:39,059 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-29..2024-12-19&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:00:46,068 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-29..2024-12-19&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:00:51,883 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-11-29..2024-12-19&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:00:51,886 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2024-11-29..2024-12-19, status=success, records=685, http=200
+2026-09-13 21:00:57,178 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-12-20..2025-01-30&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:01:03,014 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-12-20..2025-01-09&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:01:09,752 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-12-20..2025-01-09&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:01:16,257 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-12-20..2025-01-09&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:01:22,538 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-12-20..2025-01-09&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:01:29,179 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-12-20..2025-01-09&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:01:36,062 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-12-20..2025-01-09&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:01:42,550 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-12-20..2025-01-09&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:01:47,152 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2024-12-20..2025-01-09&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:01:47,156 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2024-12-20..2025-01-09, status=success, records=754, http=200
+2026-09-13 21:01:52,501 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-10..2025-01-30&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:01:58,920 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-10..2025-01-30&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:02:05,472 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-10..2025-01-30&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:02:12,343 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-10..2025-01-30&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:02:18,847 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-10..2025-01-30&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:02:25,400 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-10..2025-01-30&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:02:31,659 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-10..2025-01-30&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:02:38,720 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-10..2025-01-30&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:02:41,267 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-10..2025-01-30&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:02:41,268 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-01-10..2025-01-30, status=success, records=804, http=200
+2026-09-13 21:02:46,665 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-31..2025-04-24&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:02:51,242 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-31..2025-03-13&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:02:55,981 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-31..2025-02-20&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:03:02,407 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-31..2025-02-20&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:03:08,680 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-31..2025-02-20&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:03:15,180 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-31..2025-02-20&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:03:21,698 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-31..2025-02-20&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:03:29,022 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-31..2025-02-20&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:03:35,661 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-31..2025-02-20&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:03:41,969 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-31..2025-02-20&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:03:48,329 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-31..2025-02-20&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:03:54,889 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-01-31..2025-02-20&sort=stars&order=desc&per_page=100&page=10
+2026-09-13 21:03:54,893 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-01-31..2025-02-20, status=success, records=1000, http=200
+2026-09-13 21:03:59,976 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-02-21..2025-03-13&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:04:05,556 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-02-21..2025-03-03&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:04:12,203 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-02-21..2025-03-03&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:04:18,452 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-02-21..2025-03-03&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:04:25,051 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-02-21..2025-03-03&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:04:31,358 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-02-21..2025-03-03&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:04:37,881 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-02-21..2025-03-03&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:04:43,003 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-02-21..2025-03-03&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:04:43,007 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-02-21..2025-03-03, status=success, records=670, http=200
+2026-09-13 21:04:48,640 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-04..2025-03-13&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:04:55,186 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-04..2025-03-13&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:05:01,769 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-04..2025-03-13&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:05:08,481 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-04..2025-03-13&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:05:15,109 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-04..2025-03-13&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:05:21,655 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-04..2025-03-13&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:05:28,452 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-04..2025-03-13&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:05:34,948 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-04..2025-03-13&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:05:40,698 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-04..2025-03-13&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:05:40,702 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-03-04..2025-03-13, status=success, records=882, http=200
+2026-09-13 21:05:45,565 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-14..2025-04-24&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:05:50,087 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-14..2025-04-03&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:05:55,218 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-14..2025-03-24&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:06:00,376 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-14..2025-03-19&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:06:07,310 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-14..2025-03-19&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:06:13,771 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-14..2025-03-19&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:06:20,750 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-14..2025-03-19&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:06:27,466 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-14..2025-03-19&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:06:31,373 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-14..2025-03-19&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:06:31,375 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-03-14..2025-03-19, status=success, records=538, http=200
+2026-09-13 21:06:36,871 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-20..2025-03-24&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:06:43,503 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-20..2025-03-24&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:06:49,949 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-20..2025-03-24&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:06:56,561 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-20..2025-03-24&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:07:01,247 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-20..2025-03-24&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:07:01,251 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-03-20..2025-03-24, status=success, records=463, http=200
+2026-09-13 21:07:06,419 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-25..2025-04-03&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:07:13,015 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-25..2025-04-03&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:07:20,456 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-25..2025-04-03&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:07:27,575 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-25..2025-04-03&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:07:34,942 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-25..2025-04-03&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:07:41,534 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-25..2025-04-03&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:07:48,487 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-25..2025-04-03&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:07:55,584 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-25..2025-04-03&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:08:01,659 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-03-25..2025-04-03&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:08:01,664 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-03-25..2025-04-03, status=success, records=889, http=200
+2026-09-13 21:08:07,108 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-04..2025-04-24&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:08:12,116 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-04..2025-04-14&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:08:18,401 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-04..2025-04-14&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:08:25,431 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-04..2025-04-14&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:08:31,808 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-04..2025-04-14&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:08:38,621 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-04..2025-04-14&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:08:45,697 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-04..2025-04-14&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:08:52,811 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-04..2025-04-14&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:08:59,590 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-04..2025-04-14&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:09:06,336 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-04..2025-04-14&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:09:06,341 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-04-04..2025-04-14, status=success, records=896, http=200
+2026-09-13 21:09:12,606 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-15..2025-04-24&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:09:19,711 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-15..2025-04-24&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:09:26,758 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-15..2025-04-24&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:09:33,079 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-15..2025-04-24&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:09:40,111 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-15..2025-04-24&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:09:47,076 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-15..2025-04-24&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:09:53,899 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-15..2025-04-24&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:09:59,845 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-15..2025-04-24&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:09:59,849 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-04-15..2025-04-24, status=success, records=787, http=200
+2026-09-13 21:10:04,999 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-25..2025-10-10&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:10:10,030 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-25..2025-07-18&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:10:14,956 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-25..2025-06-06&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:10:20,220 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-25..2025-05-16&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:10:25,339 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-25..2025-05-05&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:10:31,923 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-25..2025-05-05&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:10:38,424 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-25..2025-05-05&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:10:45,165 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-25..2025-05-05&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:10:52,436 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-25..2025-05-05&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:10:59,399 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-25..2025-05-05&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:11:05,890 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-25..2025-05-05&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:11:10,344 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-04-25..2025-05-05&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:11:10,347 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-04-25..2025-05-05, status=success, records=751, http=200
+2026-09-13 21:11:15,984 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-06..2025-05-16&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:11:22,569 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-06..2025-05-16&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:11:29,151 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-06..2025-05-16&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:11:35,851 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-06..2025-05-16&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:11:42,586 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-06..2025-05-16&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:11:49,238 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-06..2025-05-16&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:11:56,204 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-06..2025-05-16&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:12:02,614 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-06..2025-05-16&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:12:05,780 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-06..2025-05-16&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:12:05,782 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-05-06..2025-05-16, status=success, records=821, http=200
+2026-09-13 21:12:10,870 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-17..2025-06-06&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:12:16,087 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-17..2025-05-27&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:12:22,798 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-17..2025-05-27&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:12:29,429 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-17..2025-05-27&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:12:36,211 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-17..2025-05-27&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:12:42,822 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-17..2025-05-27&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:12:49,281 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-17..2025-05-27&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:12:55,874 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-17..2025-05-27&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:13:03,207 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-17..2025-05-27&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:13:07,218 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-17..2025-05-27&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:13:07,221 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-05-17..2025-05-27, status=success, records=839, http=200
+2026-09-13 21:13:12,809 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-28..2025-06-06&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:13:18,917 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-28..2025-06-06&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:13:25,648 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-28..2025-06-06&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:13:32,371 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-28..2025-06-06&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:13:39,059 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-28..2025-06-06&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:13:45,728 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-28..2025-06-06&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:13:52,351 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-28..2025-06-06&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:13:59,688 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-28..2025-06-06&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:14:05,219 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-05-28..2025-06-06&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:14:05,228 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-05-28..2025-06-06, status=success, records=876, http=200
+2026-09-13 21:14:10,569 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-07..2025-07-18&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:14:15,512 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-07..2025-06-27&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:14:20,501 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-07..2025-06-17&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:14:26,944 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-07..2025-06-17&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:14:34,009 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-07..2025-06-17&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:14:40,488 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-07..2025-06-17&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:14:46,898 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-07..2025-06-17&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:14:53,520 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-07..2025-06-17&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:15:00,159 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-07..2025-06-17&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:15:06,751 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-07..2025-06-17&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:15:13,506 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-07..2025-06-17&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:15:18,669 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-07..2025-06-17&sort=stars&order=desc&per_page=100&page=10
+2026-09-13 21:15:18,672 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-06-07..2025-06-17, status=success, records=967, http=200
+2026-09-13 21:15:24,467 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-18..2025-06-27&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:15:30,829 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-18..2025-06-27&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:15:37,545 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-18..2025-06-27&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:15:43,825 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-18..2025-06-27&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:15:50,095 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-18..2025-06-27&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:15:56,614 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-18..2025-06-27&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:16:03,003 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-18..2025-06-27&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:16:09,516 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-18..2025-06-27&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:16:16,157 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-18..2025-06-27&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:16:20,023 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-18..2025-06-27&sort=stars&order=desc&per_page=100&page=10
+2026-09-13 21:16:20,025 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-06-18..2025-06-27, status=success, records=937, http=200
+2026-09-13 21:16:25,455 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-28..2025-07-18&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:16:30,679 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-28..2025-07-08&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:16:35,784 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-28..2025-07-03&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:16:42,191 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-28..2025-07-03&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:16:48,542 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-28..2025-07-03&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:16:54,897 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-28..2025-07-03&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:17:01,466 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-28..2025-07-03&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:17:08,134 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-28..2025-07-03&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:17:13,482 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-06-28..2025-07-03&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:17:13,486 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-06-28..2025-07-03, status=success, records=662, http=200
+2026-09-13 21:17:19,371 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-04..2025-07-08&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:17:25,812 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-04..2025-07-08&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:17:32,320 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-04..2025-07-08&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:17:38,980 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-04..2025-07-08&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:17:45,856 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-04..2025-07-08&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:17:50,243 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-04..2025-07-08&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:17:50,247 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-07-04..2025-07-08, status=success, records=550, http=200
+2026-09-13 21:17:55,960 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-09..2025-07-18&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:18:01,422 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-09..2025-07-13&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:18:08,637 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-09..2025-07-13&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:18:15,429 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-09..2025-07-13&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:18:22,264 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-09..2025-07-13&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:18:28,755 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-09..2025-07-13&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:18:33,547 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-09..2025-07-13&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:18:33,550 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-07-09..2025-07-13, status=success, records=551, http=200
+2026-09-13 21:18:39,099 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-14..2025-07-18&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:18:45,578 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-14..2025-07-18&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:18:53,000 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-14..2025-07-18&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:18:59,665 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-14..2025-07-18&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:19:06,529 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-14..2025-07-18&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:19:12,796 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-14..2025-07-18&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:19:12,804 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-07-14..2025-07-18, status=success, records=584, http=200
+2026-09-13 21:19:18,201 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-19..2025-10-10&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:19:23,200 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-19..2025-08-29&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:19:28,804 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-19..2025-08-08&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:19:34,297 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-19..2025-07-29&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:19:39,181 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-19..2025-07-24&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:19:46,266 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-19..2025-07-24&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:19:52,570 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-19..2025-07-24&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:19:58,705 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-19..2025-07-24&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:20:05,185 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-19..2025-07-24&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:20:11,909 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-19..2025-07-24&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:20:17,450 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-19..2025-07-24&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:20:17,453 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-07-19..2025-07-24, status=success, records=665, http=200
+2026-09-13 21:20:22,975 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-25..2025-07-29&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:20:29,830 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-25..2025-07-29&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:20:37,144 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-25..2025-07-29&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:20:43,759 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-25..2025-07-29&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:20:50,273 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-25..2025-07-29&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:20:57,440 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-25..2025-07-29&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:20:59,811 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-25..2025-07-29&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:20:59,813 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-07-25..2025-07-29, status=success, records=602, http=200
+2026-09-13 21:21:05,453 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-30..2025-08-08&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:21:11,224 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-30..2025-08-03&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:21:17,922 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-30..2025-08-03&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:21:24,442 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-30..2025-08-03&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:21:30,993 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-30..2025-08-03&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:21:37,703 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-30..2025-08-03&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:21:44,352 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-30..2025-08-03&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:21:48,956 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-07-30..2025-08-03&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:21:48,959 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-07-30..2025-08-03, status=success, records=655, http=200
+2026-09-13 21:21:54,445 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-04..2025-08-08&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:22:00,788 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-04..2025-08-08&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:22:08,388 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-04..2025-08-08&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:22:14,873 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-04..2025-08-08&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:22:21,286 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-04..2025-08-08&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:22:27,891 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-04..2025-08-08&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:22:34,191 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-04..2025-08-08&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:22:40,746 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-04..2025-08-08&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:22:47,238 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-04..2025-08-08&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:22:49,888 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-04..2025-08-08&sort=stars&order=desc&per_page=100&page=10
+2026-09-13 21:22:49,890 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-08-04..2025-08-08, status=success, records=909, http=200
+2026-09-13 21:22:55,955 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-09..2025-08-29&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:23:00,822 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-09..2025-08-19&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:23:05,700 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-09..2025-08-14&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:23:10,930 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-09..2025-08-11&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:23:17,382 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-09..2025-08-11&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:23:23,925 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-09..2025-08-11&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:23:30,595 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-09..2025-08-11&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:23:36,657 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-09..2025-08-11&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:23:39,098 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-09..2025-08-11&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:23:39,099 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-08-09..2025-08-11, status=success, records=504, http=200
+2026-09-13 21:23:44,186 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-12..2025-08-14&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:23:50,660 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-12..2025-08-14&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:23:57,299 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-12..2025-08-14&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:24:04,101 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-12..2025-08-14&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:24:10,701 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-12..2025-08-14&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:24:13,679 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-12..2025-08-14&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:24:13,681 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-08-12..2025-08-14, status=success, records=513, http=200
+2026-09-13 21:24:19,193 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-15..2025-08-19&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:24:25,574 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-15..2025-08-19&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:24:32,147 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-15..2025-08-19&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:24:38,976 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-15..2025-08-19&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:24:45,570 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-15..2025-08-19&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:24:51,640 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-15..2025-08-19&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:24:57,985 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-15..2025-08-19&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:25:03,014 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-15..2025-08-19&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:25:03,019 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-08-15..2025-08-19, status=success, records=754, http=200
+2026-09-13 21:25:08,386 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-20..2025-08-29&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:25:13,462 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-20..2025-08-24&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:25:19,899 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-20..2025-08-24&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:25:26,236 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-20..2025-08-24&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:25:34,178 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-20..2025-08-24&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:25:40,553 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-20..2025-08-24&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:25:47,096 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-20..2025-08-24&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:25:53,601 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-20..2025-08-24&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:25:57,569 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-20..2025-08-24&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:25:57,573 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-08-20..2025-08-24, status=success, records=741, http=200
+2026-09-13 21:26:03,523 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-25..2025-08-29&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:26:16,416 - pipeline_logger - ERROR - Error del servidor 502 en https://api.github.com/search/repositories.
+2026-09-13 21:26:16,508 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-08-25..2025-08-29, status=partial_success, records=100, http=502
+2026-09-13 21:26:22,523 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-30..2025-10-10&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:26:27,828 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-30..2025-09-19&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:26:33,117 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-30..2025-09-09&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:26:38,327 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-30..2025-09-04&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:26:44,810 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-30..2025-09-04&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:26:51,378 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-30..2025-09-04&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:26:57,604 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-30..2025-09-04&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:27:04,380 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-30..2025-09-04&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:27:11,336 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-30..2025-09-04&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:27:18,040 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-30..2025-09-04&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:27:21,184 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-08-30..2025-09-04&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:27:21,187 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-08-30..2025-09-04, status=success, records=720, http=200
+2026-09-13 21:27:26,815 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-05..2025-09-09&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:27:33,143 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-05..2025-09-09&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:27:39,476 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-05..2025-09-09&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:27:46,014 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-05..2025-09-09&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:27:52,492 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-05..2025-09-09&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:27:58,753 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-05..2025-09-09&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:28:02,343 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-05..2025-09-09&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:28:02,346 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-09-05..2025-09-09, status=success, records=631, http=200
+2026-09-13 21:28:08,360 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-10..2025-09-19&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:28:13,916 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-10..2025-09-14&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:28:20,309 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-10..2025-09-14&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:28:26,612 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-10..2025-09-14&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:28:33,008 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-10..2025-09-14&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:28:39,451 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-10..2025-09-14&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:28:46,987 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-10..2025-09-14&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:28:49,517 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-10..2025-09-14&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:28:49,519 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-09-10..2025-09-14, status=success, records=603, http=200
+2026-09-13 21:28:55,407 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-15..2025-09-19&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:29:01,734 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-15..2025-09-19&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:29:08,611 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-15..2025-09-19&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:29:15,836 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-15..2025-09-19&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:29:22,524 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-15..2025-09-19&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:29:29,505 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-15..2025-09-19&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:29:29,509 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-09-15..2025-09-19, status=success, records=587, http=200
+2026-09-13 21:29:35,317 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-20..2025-10-10&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:29:40,780 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-20..2025-09-30&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:29:46,447 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-20..2025-09-25&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:29:53,505 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-20..2025-09-25&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:30:00,583 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-20..2025-09-25&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:30:09,080 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-20..2025-09-25&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:30:16,658 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-20..2025-09-25&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:30:23,942 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-20..2025-09-25&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:30:29,990 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-20..2025-09-25&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:30:29,995 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-09-20..2025-09-25, status=success, records=656, http=200
+2026-09-13 21:30:35,746 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-26..2025-09-30&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:30:42,375 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-26..2025-09-30&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:30:49,522 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-26..2025-09-30&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:30:57,317 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-26..2025-09-30&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:31:04,285 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-26..2025-09-30&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:31:07,635 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-09-26..2025-09-30&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:31:07,638 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-09-26..2025-09-30, status=success, records=520, http=200
+2026-09-13 21:31:13,501 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-01..2025-10-10&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:31:19,493 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-01..2025-10-05&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:31:26,668 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-01..2025-10-05&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:31:34,056 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-01..2025-10-05&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:31:40,657 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-01..2025-10-05&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:31:47,738 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-01..2025-10-05&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:31:50,124 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-01..2025-10-05&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:31:50,126 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-10-01..2025-10-05, status=success, records=501, http=200
+2026-09-13 21:31:55,734 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-06..2025-10-10&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:32:02,333 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-06..2025-10-10&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:32:08,733 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-06..2025-10-10&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:32:15,958 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-06..2025-10-10&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:32:22,807 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-06..2025-10-10&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:32:28,360 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-06..2025-10-10&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:32:28,364 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-10-06..2025-10-10, status=success, records=576, http=200
+2026-09-13 21:32:33,470 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-11..2026-09-13&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:32:37,994 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-11..2026-03-28&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:32:43,220 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-11..2026-01-03&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:32:48,441 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-11..2025-11-22&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:32:53,539 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-11..2025-11-01&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:32:59,117 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-11..2025-10-21&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:33:04,870 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-11..2025-10-16&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:33:11,537 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-11..2025-10-16&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:33:18,193 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-11..2025-10-16&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:33:24,848 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-11..2025-10-16&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:33:31,199 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-11..2025-10-16&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:33:37,530 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-11..2025-10-16&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:33:41,482 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-11..2025-10-16&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:33:41,486 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-10-11..2025-10-16, status=success, records=637, http=200
+2026-09-13 21:33:47,094 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-17..2025-10-21&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:33:53,652 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-17..2025-10-21&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:34:00,562 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-17..2025-10-21&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:34:07,380 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-17..2025-10-21&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:34:13,989 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-17..2025-10-21&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:34:17,597 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-17..2025-10-21&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:34:17,600 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-10-17..2025-10-21, status=success, records=532, http=200
+2026-09-13 21:34:22,730 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-22..2025-11-01&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:34:28,018 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-22..2025-10-27&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:34:34,685 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-22..2025-10-27&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:34:41,049 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-22..2025-10-27&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:34:47,519 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-22..2025-10-27&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:34:54,204 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-22..2025-10-27&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:35:00,984 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-22..2025-10-27&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:35:03,947 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-22..2025-10-27&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:35:03,949 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-10-22..2025-10-27, status=success, records=614, http=200
+2026-09-13 21:35:09,466 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-28..2025-11-01&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:35:15,866 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-28..2025-11-01&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:35:22,199 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-28..2025-11-01&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:35:28,799 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-28..2025-11-01&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:35:35,228 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-28..2025-11-01&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:35:42,071 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-28..2025-11-01&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:35:45,944 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-10-28..2025-11-01&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:35:45,948 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-10-28..2025-11-01, status=success, records=641, http=200
+2026-09-13 21:35:51,346 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-02..2025-11-22&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:35:56,421 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-02..2025-11-12&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:36:02,289 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-02..2025-11-07&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:36:08,751 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-02..2025-11-07&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:36:15,300 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-02..2025-11-07&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:36:22,100 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-02..2025-11-07&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:36:28,679 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-02..2025-11-07&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:36:34,996 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-02..2025-11-07&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:36:41,685 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-02..2025-11-07&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:36:48,711 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-02..2025-11-07&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:36:52,865 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-02..2025-11-07&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:36:52,869 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-11-02..2025-11-07, status=success, records=847, http=200
+2026-09-13 21:36:58,522 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-08..2025-11-12&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:37:05,064 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-08..2025-11-12&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:37:11,345 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-08..2025-11-12&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:37:17,792 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-08..2025-11-12&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:37:24,567 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-08..2025-11-12&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:37:31,312 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-08..2025-11-12&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:37:34,258 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-08..2025-11-12&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:37:34,261 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-11-08..2025-11-12, status=success, records=617, http=200
+2026-09-13 21:37:39,841 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-13..2025-11-22&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:37:45,242 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-13..2025-11-17&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:37:51,925 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-13..2025-11-17&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:37:58,549 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-13..2025-11-17&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:38:04,856 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-13..2025-11-17&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:38:11,860 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-13..2025-11-17&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:38:18,329 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-13..2025-11-17&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:38:25,029 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-13..2025-11-17&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:38:30,140 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-13..2025-11-17&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:38:30,144 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-11-13..2025-11-17, status=success, records=761, http=200
+2026-09-13 21:38:35,978 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-18..2025-11-22&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:38:42,407 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-18..2025-11-22&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:38:49,637 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-18..2025-11-22&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:38:56,201 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-18..2025-11-22&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:39:02,901 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-18..2025-11-22&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:39:10,394 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-18..2025-11-22&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:39:15,903 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-18..2025-11-22&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:39:15,910 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-11-18..2025-11-22, status=success, records=681, http=200
+2026-09-13 21:39:20,731 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-23..2026-01-03&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:39:25,713 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-23..2025-12-13&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:39:30,602 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-23..2025-12-03&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:39:35,756 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-23..2025-11-28&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:39:41,860 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-23..2025-11-28&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:39:48,342 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-23..2025-11-28&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:39:55,265 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-23..2025-11-28&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:40:01,567 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-23..2025-11-28&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:40:07,936 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-23..2025-11-28&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:40:14,205 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-23..2025-11-28&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:40:18,760 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-23..2025-11-28&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:40:18,765 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-11-23..2025-11-28, status=success, records=757, http=200
+2026-09-13 21:40:24,466 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-29..2025-12-03&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:40:30,531 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-29..2025-12-03&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:40:36,799 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-29..2025-12-03&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:40:43,333 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-29..2025-12-03&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:40:49,902 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-29..2025-12-03&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:40:56,551 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-29..2025-12-03&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:40:59,144 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-11-29..2025-12-03&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:40:59,146 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-11-29..2025-12-03, status=success, records=607, http=200
+2026-09-13 21:41:04,943 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-04..2025-12-13&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:41:10,297 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-04..2025-12-08&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:41:16,639 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-04..2025-12-08&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:41:23,278 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-04..2025-12-08&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:41:29,829 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-04..2025-12-08&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:41:36,297 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-04..2025-12-08&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:41:43,034 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-04..2025-12-08&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:41:45,539 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-04..2025-12-08&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:41:45,541 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-12-04..2025-12-08, status=success, records=604, http=200
+2026-09-13 21:41:50,801 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-09..2025-12-13&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:41:57,123 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-09..2025-12-13&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:42:03,610 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-09..2025-12-13&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:42:10,635 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-09..2025-12-13&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:42:17,501 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-09..2025-12-13&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:42:23,739 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-09..2025-12-13&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:42:23,745 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-12-09..2025-12-13, status=success, records=583, http=200
+2026-09-13 21:42:29,167 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-14..2026-01-03&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:42:34,090 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-14..2025-12-24&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:42:39,242 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-14..2025-12-19&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:42:45,550 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-14..2025-12-19&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:42:52,243 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-14..2025-12-19&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:42:59,081 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-14..2025-12-19&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:43:05,751 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-14..2025-12-19&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:43:12,278 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-14..2025-12-19&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:43:19,109 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-14..2025-12-19&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:43:22,097 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-14..2025-12-19&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:43:22,098 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-12-14..2025-12-19, status=success, records=716, http=200
+2026-09-13 21:43:27,887 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-20..2025-12-24&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:43:34,635 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-20..2025-12-24&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:43:41,118 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-20..2025-12-24&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:43:47,711 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-20..2025-12-24&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:43:54,262 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-20..2025-12-24&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:43:54,269 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-12-20..2025-12-24, status=success, records=499, http=200
+2026-09-13 21:43:59,926 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-25..2026-01-03&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:44:06,541 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-25..2026-01-03&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:44:13,276 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-25..2026-01-03&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:44:19,544 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-25..2026-01-03&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:44:26,081 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-25..2026-01-03&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:44:32,862 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-25..2026-01-03&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:44:39,147 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-25..2026-01-03&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:44:45,674 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-25..2026-01-03&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:44:52,599 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-25..2026-01-03&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:44:56,631 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2025-12-25..2026-01-03&sort=stars&order=desc&per_page=100&page=10
+2026-09-13 21:44:56,636 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2025-12-25..2026-01-03, status=success, records=942, http=200
+2026-09-13 21:45:01,319 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-04..2026-03-28&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:45:05,991 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-04..2026-02-14&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:45:10,706 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-04..2026-01-24&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:45:15,886 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-04..2026-01-14&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:45:21,116 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-04..2026-01-09&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:45:27,326 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-04..2026-01-09&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:45:33,934 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-04..2026-01-09&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:45:40,458 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-04..2026-01-09&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:45:46,798 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-04..2026-01-09&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:45:53,646 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-04..2026-01-09&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:46:00,423 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-04..2026-01-09&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:46:05,091 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-04..2026-01-09&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:46:05,096 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2026-01-04..2026-01-09, status=success, records=752, http=200
+2026-09-13 21:46:10,398 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-10..2026-01-14&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:46:17,205 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-10..2026-01-14&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:46:24,210 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-10..2026-01-14&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:46:30,859 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-10..2026-01-14&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:46:37,364 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-10..2026-01-14&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:46:44,229 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-10..2026-01-14&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:46:50,638 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-10..2026-01-14&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:46:55,296 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-10..2026-01-14&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:46:55,299 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2026-01-10..2026-01-14, status=success, records=756, http=200
+2026-09-13 21:47:00,198 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-15..2026-01-24&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:47:05,090 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-15..2026-01-19&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:47:11,268 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-15..2026-01-19&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:47:17,618 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-15..2026-01-19&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:47:23,878 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-15..2026-01-19&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:47:30,930 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-15..2026-01-19&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:47:37,599 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-15..2026-01-19&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:47:43,409 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-15..2026-01-19&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:47:43,415 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2026-01-15..2026-01-19, status=success, records=688, http=200
+2026-09-13 21:47:49,103 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-20..2026-01-24&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:47:55,534 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-20..2026-01-24&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:48:02,762 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-20..2026-01-24&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:48:10,275 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-20..2026-01-24&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:48:16,910 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-20..2026-01-24&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:48:23,943 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-20..2026-01-24&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:48:30,810 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-20..2026-01-24&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:48:37,515 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-20..2026-01-24&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:48:41,499 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-20..2026-01-24&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:48:41,503 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2026-01-20..2026-01-24, status=success, records=842, http=200
+2026-09-13 21:48:46,374 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-25..2026-02-14&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:48:51,575 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-25..2026-02-04&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:48:57,019 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-25..2026-01-30&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:49:02,356 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-25..2026-01-27&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:49:08,940 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-25..2026-01-27&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:49:15,492 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-25..2026-01-27&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:49:22,435 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-25..2026-01-27&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:49:29,185 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-25..2026-01-27&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:49:32,898 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-25..2026-01-27&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:49:32,900 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2026-01-25..2026-01-27, status=success, records=527, http=200
+2026-09-13 21:49:38,139 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-28..2026-01-30&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:49:44,659 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-28..2026-01-30&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:49:51,174 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-28..2026-01-30&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:49:57,679 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-28..2026-01-30&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:50:04,562 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-28..2026-01-30&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:50:08,685 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-28..2026-01-30&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:50:08,688 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2026-01-28..2026-01-30, status=success, records=544, http=200
+2026-09-13 21:50:13,455 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-31..2026-02-04&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:50:18,572 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-31..2026-02-02&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:50:25,159 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-31..2026-02-02&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:50:31,761 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-31..2026-02-02&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:50:38,761 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-31..2026-02-02&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:50:45,202 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-31..2026-02-02&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:50:51,806 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-31..2026-02-02&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:50:54,342 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-01-31..2026-02-02&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:50:54,343 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2026-01-31..2026-02-02, status=success, records=606, http=200
+2026-09-13 21:51:00,413 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-03..2026-02-04&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:51:07,095 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-03..2026-02-04&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:51:13,990 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-03..2026-02-04&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:51:20,997 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-03..2026-02-04&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:51:26,934 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-03..2026-02-04&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:51:26,939 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2026-02-03..2026-02-04, status=success, records=485, http=200
+2026-09-13 21:51:31,956 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-05..2026-02-14&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:51:37,106 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-05..2026-02-09&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:51:42,195 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-05..2026-02-07&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:51:48,365 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-05..2026-02-07&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:51:54,859 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-05..2026-02-07&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:52:01,566 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-05..2026-02-07&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:52:08,119 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-05..2026-02-07&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:52:14,834 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-05..2026-02-07&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:52:21,296 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-05..2026-02-07&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:52:27,598 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-05..2026-02-07&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:52:34,083 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-05..2026-02-07&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:52:38,750 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-05..2026-02-07&sort=stars&order=desc&per_page=100&page=10
+2026-09-13 21:52:38,754 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2026-02-05..2026-02-07, status=success, records=946, http=200
+2026-09-13 21:52:44,239 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-08..2026-02-09&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:52:50,713 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-08..2026-02-09&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:52:57,323 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-08..2026-02-09&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:53:01,222 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-08..2026-02-09&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:53:01,224 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2026-02-08..2026-02-09, status=success, records=339, http=200
+2026-09-13 21:53:06,715 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-10..2026-02-14&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:53:12,944 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-10..2026-02-14&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:53:19,187 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-10..2026-02-14&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:53:25,434 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-10..2026-02-14&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:53:31,936 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-10..2026-02-14&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:53:38,670 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-10..2026-02-14&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:53:45,320 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-10..2026-02-14&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:53:51,433 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-10..2026-02-14&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:53:58,357 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-10..2026-02-14&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:54:02,518 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-10..2026-02-14&sort=stars&order=desc&per_page=100&page=10
+2026-09-13 21:54:02,521 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2026-02-10..2026-02-14, status=success, records=944, http=200
+2026-09-13 21:54:07,161 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-15..2026-03-28&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:54:11,721 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-15..2026-03-07&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:54:16,347 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-15..2026-02-25&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:54:20,860 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-15..2026-02-20&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:54:25,702 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-15..2026-02-17&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:54:32,067 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-15..2026-02-17&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:54:38,190 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-15..2026-02-17&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:54:44,931 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-15..2026-02-17&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:54:50,024 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-15..2026-02-17&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:54:50,030 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2026-02-15..2026-02-17, status=success, records=477, http=200
+2026-09-13 21:54:54,912 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-18..2026-02-20&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:55:01,043 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-18..2026-02-20&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:55:08,308 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-18..2026-02-20&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:55:14,996 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-18..2026-02-20&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:55:21,652 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-18..2026-02-20&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:55:28,495 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-18..2026-02-20&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:55:34,818 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-18..2026-02-20&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:55:37,494 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-18..2026-02-20&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:55:37,496 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2026-02-18..2026-02-20, status=success, records=709, http=200
+2026-09-13 21:55:42,830 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-21..2026-02-25&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:55:48,550 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-21..2026-02-25&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:55:54,932 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-21..2026-02-25&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:56:01,326 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-21..2026-02-25&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:56:08,142 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-21..2026-02-25&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:56:15,404 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-21..2026-02-25&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:56:22,072 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-21..2026-02-25&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:56:28,874 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-21..2026-02-25&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:56:36,418 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-21..2026-02-25&sort=stars&order=desc&per_page=100&page=9
+2026-09-13 21:56:42,529 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-21..2026-02-25&sort=stars&order=desc&per_page=100&page=10
+2026-09-13 21:56:42,537 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2026-02-21..2026-02-25, status=success, records=994, http=200
+2026-09-13 21:56:47,435 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-26..2026-03-07&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:56:52,119 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-26..2026-03-02&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:56:57,158 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-26..2026-02-28&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:57:03,447 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-26..2026-02-28&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:57:10,151 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-26..2026-02-28&sort=stars&order=desc&per_page=100&page=3
+2026-09-13 21:57:16,997 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-26..2026-02-28&sort=stars&order=desc&per_page=100&page=4
+2026-09-13 21:57:23,592 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-26..2026-02-28&sort=stars&order=desc&per_page=100&page=5
+2026-09-13 21:57:30,050 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-26..2026-02-28&sort=stars&order=desc&per_page=100&page=6
+2026-09-13 21:57:36,409 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-26..2026-02-28&sort=stars&order=desc&per_page=100&page=7
+2026-09-13 21:57:40,048 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-02-26..2026-02-28&sort=stars&order=desc&per_page=100&page=8
+2026-09-13 21:57:40,051 - pipeline_logger - INFO - Evidencia fuente github: run_id=2, query=Cursor|2026-02-26..2026-02-28, status=success, records=734, http=200
+2026-09-13 21:57:45,644 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-03-01..2026-03-02&sort=stars&order=desc&per_page=100&page=1
+2026-09-13 21:57:52,288 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-03-01..2026-03-02&sort=stars&order=desc&per_page=100&page=2
+2026-09-13 21:57:59,519 - pipeline_logger - INFO - github: HTTP 200 GET https://api.github.com/search/repositories?q=Cursor+created%3A2026-03-01..2026-03-02&sort=stars&order=desc&per_page=100&page=3
+2026-09-16 19:37:54,375 - pipeline_logger - INFO - >>> INICIANDO PIPELINE main (Fecha Objetivo: 2026-09-16) <<<
+2026-09-16 19:37:54,415 - pipeline_logger - INFO - === FASE 1: EXTRACCIÓN MÚLTIPLE ===
+2026-09-16 19:37:54,416 - pipeline_logger - INFO - Iniciando scraping estatico en HackerNews...
+2026-09-16 19:37:56,933 - pipeline_logger - INFO - hackernews: HTTP 200 GET https://news.ycombinator.com/front
+2026-09-16 19:37:56,985 - pipeline_logger - INFO - HackerNews scraping completado. 30 registros guardados en hackernews_2026-09-16T193756974701_3.json
+2026-09-16 19:37:56,986 - pipeline_logger - INFO - Evidencia fuente hackernews: run_id=3, query=None, status=success, records=30, http=200
+2026-09-16 19:37:56,988 - pipeline_logger - INFO - Iniciando extraccion relevante en Dev.to...
+2026-09-16 19:37:59,404 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/search?q=AI%20coding%20agent
+2026-09-16 19:37:59,414 - pipeline_logger - WARNING - Dev.to: articulo HTML omitido por parseo: 'NoneType' object has no attribute 'find'
+2026-09-16 19:37:59,415 - pipeline_logger - INFO - Evidencia fuente devto: run_id=3, query=html:AI coding agent, status=empty, records=0, http=200
+2026-09-16 19:38:01,982 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=1
+2026-09-16 19:38:04,496 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=2
+2026-09-16 19:38:06,809 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=3
+2026-09-16 19:38:09,314 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=1
+2026-09-16 19:38:11,648 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=2
+2026-09-16 19:38:14,000 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=3
+2026-09-16 19:38:16,541 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=webdev&per_page=30&page=1
+2026-09-16 19:38:19,068 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=webdev&per_page=30&page=2
+2026-09-16 19:38:21,367 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=webdev&per_page=30&page=3
+2026-09-16 19:38:24,025 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=python&per_page=30&page=1
+2026-09-16 19:38:26,554 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=python&per_page=30&page=2
+2026-09-16 19:38:29,091 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=python&per_page=30&page=3
+2026-09-16 19:38:31,649 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=javascript&per_page=30&page=1
+2026-09-16 19:38:34,172 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=javascript&per_page=30&page=2
+2026-09-16 19:38:36,496 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=javascript&per_page=30&page=3
+2026-09-16 19:38:39,039 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=opensource&per_page=30&page=1
+2026-09-16 19:38:41,342 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=opensource&per_page=30&page=2
+2026-09-16 19:38:43,688 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=opensource&per_page=30&page=3
+2026-09-16 19:38:43,690 - pipeline_logger - INFO - Evidencia fuente devto: run_id=3, query=api:configured-tags, status=success, records=116, http=200
+2026-09-16 19:38:43,712 - pipeline_logger - INFO - Dev.to extraccion completada. 116 registros relevantes guardados en devto_2026-09-16T193843691778_3.json
+2026-09-16 19:38:43,712 - pipeline_logger - INFO - Evidencia fuente devto: run_id=3, query=None, status=success, records=116, http=200
+2026-09-16 19:38:43,715 - pipeline_logger - INFO - Iniciando scraping dinamico relevante en Reddit (Playwright)...
+2026-09-16 19:38:51,790 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=3, query=Cursor, status=success, records=15, http=200
+2026-09-16 19:38:56,641 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=3, query=Claude Code, status=success, records=14, http=200
+2026-09-16 19:39:02,213 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=3, query=Codex, status=success, records=15, http=200
+2026-09-16 19:39:07,464 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=3, query=GitHub Copilot, status=success, records=15, http=200
+2026-09-16 19:39:12,566 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=3, query=Cline, status=success, records=15, http=200
+2026-09-16 19:39:17,639 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=3, query=RooCode, status=success, records=15, http=200
+2026-09-16 19:39:22,746 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=3, query=Windsurf, status=success, records=15, http=200
+2026-09-16 19:39:27,782 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=3, query=Aider, status=success, records=15, http=200
+2026-09-16 19:39:32,745 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=3, query=Augment, status=success, records=15, http=200
+2026-09-16 19:39:37,623 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=3, query=JetBrains Junie, status=success, records=15, http=200
+2026-09-16 19:39:42,715 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=3, query=Gemini CLI, status=success, records=15, http=200
+2026-09-16 19:39:47,671 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=3, query=AWS Kiro, status=success, records=5, http=200
+2026-09-16 19:39:52,449 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=3, query=Kilo Code, status=success, records=15, http=200
+2026-09-16 19:39:57,317 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=3, query=Zencoder, status=success, records=10, http=200
+2026-09-16 19:39:57,463 - pipeline_logger - INFO - Reddit scraping completado. 188 registros relevantes guardados.
+2026-09-16 19:39:57,464 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=3, query=None, status=success, records=188, http=200
+2026-09-16 19:39:57,465 - pipeline_logger - INFO - Iniciando extraccion de Google Trends (pytrends)...
+2026-09-16 19:39:59,193 - pipeline_logger - INFO - Evidencia fuente google_trends: run_id=3, query=Cursor AI|Claude Code|OpenAI Codex|GitHub Copilot|Cline agent, status=success, records=970, http=200
+2026-09-16 19:39:59,194 - pipeline_logger - INFO - Pausa de 60s antes del siguiente chunk de Google Trends...
+2026-09-16 19:41:00,422 - pipeline_logger - INFO - Evidencia fuente google_trends: run_id=3, query=Roo Code|Windsurf AI|Aider AI|Augment Code|JetBrains Junie, status=success, records=970, http=200
+2026-09-16 19:41:00,426 - pipeline_logger - INFO - Pausa de 60s antes del siguiente chunk de Google Trends...
+2026-09-16 19:44:27,739 - pipeline_logger - INFO - >>> INICIANDO PIPELINE main (Fecha Objetivo: 2026-09-16) <<<
+2026-09-16 19:44:27,875 - pipeline_logger - INFO - === FASE 1: EXTRACCIÓN MÚLTIPLE ===
+2026-09-16 19:44:27,877 - pipeline_logger - INFO - Iniciando scraping estatico en HackerNews...
+2026-09-16 19:44:30,468 - pipeline_logger - INFO - hackernews: HTTP 200 GET https://news.ycombinator.com/front
+2026-09-16 19:44:30,557 - pipeline_logger - INFO - HackerNews scraping completado. 30 registros guardados en hackernews_2026-09-16T194430543311_1.json
+2026-09-16 19:44:30,559 - pipeline_logger - INFO - Evidencia fuente hackernews: run_id=1, query=None, status=success, records=30, http=200
+2026-09-16 19:44:30,562 - pipeline_logger - INFO - Iniciando extraccion relevante en Dev.to...
+2026-09-16 19:44:33,473 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/search?q=AI%20coding%20agent
+2026-09-16 19:44:33,495 - pipeline_logger - WARNING - Dev.to: articulo HTML omitido por parseo: 'NoneType' object has no attribute 'find'
+2026-09-16 19:44:33,496 - pipeline_logger - INFO - Evidencia fuente devto: run_id=1, query=html:AI coding agent, status=empty, records=0, http=200
+2026-09-16 19:44:35,837 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=1
+2026-09-16 19:44:37,895 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=2
+2026-09-16 19:44:39,982 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=ai&per_page=30&page=3
+2026-09-16 19:44:42,031 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=1
+2026-09-16 19:44:44,208 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=2
+2026-09-16 19:44:46,337 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=programming&per_page=30&page=3
+2026-09-16 19:44:48,742 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=webdev&per_page=30&page=1
+2026-09-16 19:44:50,797 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=webdev&per_page=30&page=2
+2026-09-16 19:44:52,873 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=webdev&per_page=30&page=3
+2026-09-16 19:44:54,919 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=python&per_page=30&page=1
+2026-09-16 19:44:56,967 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=python&per_page=30&page=2
+2026-09-16 19:44:59,019 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=python&per_page=30&page=3
+2026-09-16 19:45:01,063 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=javascript&per_page=30&page=1
+2026-09-16 19:45:03,123 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=javascript&per_page=30&page=2
+2026-09-16 19:45:05,169 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=javascript&per_page=30&page=3
+2026-09-16 19:45:07,223 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=opensource&per_page=30&page=1
+2026-09-16 19:45:09,279 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=opensource&per_page=30&page=2
+2026-09-16 19:45:11,328 - pipeline_logger - INFO - devto: HTTP 200 GET https://dev.to/api/articles?tag=opensource&per_page=30&page=3
+2026-09-16 19:45:11,333 - pipeline_logger - INFO - Evidencia fuente devto: run_id=1, query=api:configured-tags, status=success, records=116, http=200
+2026-09-16 19:45:11,366 - pipeline_logger - INFO - Dev.to extraccion completada. 116 registros relevantes guardados en devto_2026-09-16T194511334896_1.json
+2026-09-16 19:45:11,369 - pipeline_logger - INFO - Evidencia fuente devto: run_id=1, query=None, status=success, records=116, http=200
+2026-09-16 19:45:11,371 - pipeline_logger - INFO - Iniciando scraping dinamico relevante en Reddit (Playwright)...
+2026-09-16 19:45:18,048 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=1, query=Cursor, status=success, records=15, http=200
+2026-09-16 19:45:23,176 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=1, query=Claude Code, status=success, records=14, http=200
+2026-09-16 19:45:27,713 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=1, query=Codex, status=success, records=15, http=200
+2026-09-16 19:45:32,085 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=1, query=GitHub Copilot, status=success, records=15, http=200
+2026-09-16 19:45:36,595 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=1, query=Cline, status=success, records=15, http=200
+2026-09-16 19:45:41,227 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=1, query=RooCode, status=success, records=15, http=200
+2026-09-16 19:45:45,982 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=1, query=Windsurf, status=success, records=15, http=200
+2026-09-16 19:45:50,663 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=1, query=Aider, status=success, records=15, http=200
+2026-09-16 19:45:55,248 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=1, query=Augment, status=success, records=15, http=200
+2026-09-16 19:45:59,882 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=1, query=JetBrains Junie, status=success, records=15, http=200
+2026-09-16 19:46:04,657 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=1, query=Gemini CLI, status=success, records=15, http=200
+2026-09-16 19:46:09,394 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=1, query=AWS Kiro, status=success, records=5, http=200
+2026-09-16 19:46:14,226 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=1, query=Kilo Code, status=success, records=15, http=200
+2026-09-16 19:46:18,909 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=1, query=Zencoder, status=success, records=10, http=200
+2026-09-16 19:46:19,060 - pipeline_logger - INFO - Reddit scraping completado. 188 registros relevantes guardados.
+2026-09-16 19:46:19,061 - pipeline_logger - INFO - Evidencia fuente reddit: run_id=1, query=None, status=success, records=188, http=200
+2026-09-16 19:46:19,062 - pipeline_logger - INFO - Iniciando extraccion de Google Trends (pytrends)...
+2026-09-16 19:46:20,549 - pipeline_logger - INFO - Evidencia fuente google_trends: run_id=1, query=Cursor AI|Claude Code|OpenAI Codex|GitHub Copilot|Cline agent, status=success, records=970, http=200
+2026-09-16 19:46:20,550 - pipeline_logger - INFO - Pausa de 60s antes del siguiente chunk de Google Trends...

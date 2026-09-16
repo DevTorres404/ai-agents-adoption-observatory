@@ -36,7 +36,6 @@ const SOURCE_LABELS = {
   devto: 'Dev.to',
   hackernews: 'Hacker News',
   google_trends: 'Google Trends',
-  fuente_propia: 'Encuesta UPSE',
   stackoverflow: 'Stack Overflow',
   gnews: 'Google News',
   arxiv: 'arXiv'

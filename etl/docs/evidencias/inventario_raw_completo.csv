@@ -5,8 +5,6 @@ raw_file_id,fuente,tipo_fuente,ruta_relativa,nombre_archivo,declared_records,loa
 4,catalogo,catalogo,catalogo/aidedev_2026-08-27.json,aidedev_2026-08-27.json,118557,118557,20,100777792,234c8a433935479d79fba3112cff0ea22df4743dfa4a3feb5f6596d15400f8ea,2026-08-27 23:44:21.148673
 5,devto,devto,devto/devto_2026-08-26.json,devto_2026-08-26.json,106,106,11,69816,4c331de963068e90730cb0c1f954173b737299dc6a44e0082024a01fffcc46cb,2026-08-27 23:45:07.163158
 6,devto,devto,devto/devto_2026-08-27.json,devto_2026-08-27.json,109,109,11,72101,3b1ccea2752dbcc72d4568537425f9a75c105f2babb4579966e8cfbf810854bb,2026-08-27 23:45:07.277877
-7,fuente_propia,fuente_propia,fuente_propia/fuente_propia_2026-08-26.json,fuente_propia_2026-08-26.json,12,12,10,6023,e4448a642b2bb9191459fc0033cbbb5eabe4e0e8f368a6ebe86984ca4bb29fde,2026-08-27 23:45:07.365774
-8,fuente_propia,fuente_propia,fuente_propia/fuente_propia_2026-08-27.json,fuente_propia_2026-08-27.json,12,12,10,6023,c97eca158bc0c4a462d48ba9d61fd764ee1d5de94cb7d4bea9a64ff8bf75d04d,2026-08-27 23:45:07.404051
 9,github,github,github/github_2026-08-26.json,github_2026-08-26.json,7320,7320,83,49720815,41ad6d18a5b49c370bf313f76ce9bb8ee2ed1f6d125adb260927e0dbfa7c1383,2026-08-27 23:45:13.625503
 10,github,github,github/github_2026-08-27.json,github_2026-08-27.json,10689,10689,83,72340059,cdf35defc612ab5414cccda8ac3227eaae0a1c82f4735dbe2caa2f39730814b7,2026-08-27 23:45:27.219212
 11,gnews,gnews,gnews/gnews_2026-08-26.json,gnews_2026-08-26.json,845,845,9,749591,a0ee68c84e6250f48bc3e9a7d16e1adc4256189b5aba938e5ec9275b9f8e997c,2026-08-27 23:45:39.780462

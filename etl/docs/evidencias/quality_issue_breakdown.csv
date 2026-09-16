@@ -7,4 +7,3 @@ http_errors_logged,0,audit.pipeline_errors con errores HTTP/rate limit.,"Fallos 
 unmapped_agent_records,0,nombre_agente = 'Otro Agente IA' en Staging.,"Registros validos, pero no homologados a un agente conocido."
 critical_null_records,0,Nulos en columnas criticas de Staging.,Registros con incumplimiento estructural critico.
 casting_or_transformation_errors,0,Conversion numerica sobre columnas metricas del candidato Staging.,Valores no convertibles durante transformacion.
-google_forms_survey_records,24,COUNT(*) Raw para fuente_propia.,Encuesta Google Forms consolidada como fuente propia academica.

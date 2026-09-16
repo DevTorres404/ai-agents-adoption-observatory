@@ -224,7 +224,6 @@ def get_quality_issue_breakdown():
         raw_total = conn.execute(text("SELECT COUNT(*) FROM raw.raw_records")).scalar() or 0
         staging_total = conn.execute(text("SELECT COUNT(*) FROM staging.stg_actividad_agente_ia")).scalar() or 0
         http_errors = conn.execute(text("SELECT COUNT(*) FROM audit.pipeline_errors WHERE error_type ILIKE '%HTTP%' OR description ILIKE '%429%' OR description ILIKE '%403%'")).scalar() or 0
-        survey_records = conn.execute(text("SELECT COUNT(*) FROM raw.raw_records r JOIN raw.raw_files f ON r.file_id = f.id WHERE f.fuente = 'fuente_propia'")).scalar() or 0
 
     _, duplicate_real = deduplication_stats(candidate_df) if not candidate_df.empty else (candidate_df, 0)
     critical_nulls = get_critical_null_count()
@@ -282,12 +281,6 @@ def get_quality_issue_breakdown():
             "metric_value": casting_total,
             "evidence_basis": "Conversion numerica sobre columnas metricas del candidato Staging.",
             "academic_interpretation": "Valores no convertibles durante transformacion.",
-        },
-        {
-            "metric_name": "google_forms_survey_records",
-            "metric_value": survey_records,
-            "evidence_basis": "COUNT(*) Raw para fuente_propia.",
-            "academic_interpretation": "Encuesta Google Forms consolidada como fuente propia academica.",
         },
     ]
 
@@ -361,5 +354,4 @@ def get_homologation_map():
         {"source": "devto", "source_field": "title/url/created_at", "staging_field": "titulo/url/fecha_evento", "transformation_rule": "Parse HTML con BeautifulSoup y normalizacion generica"},
         {"source": "reddit", "source_field": "title/url/created_at", "staging_field": "titulo/url/fecha_evento", "transformation_rule": "Scraping Playwright y normalizacion generica"},
         {"source": "google_trends", "source_field": "valor", "staging_field": "score_popularidad", "transformation_rule": "Mapeo numerico Float"},
-        {"source": "fuente_propia", "source_field": "encuesta.json / Google Forms", "staging_field": "adopcion_academica", "transformation_rule": "Respuestas reales normalizadas a fuente propia academica"},
     ]

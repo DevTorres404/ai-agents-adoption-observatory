@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from unittest.mock import MagicMock, patch
+from contextlib import nullcontext
 
 import pytest
 from sqlalchemy import create_engine, event, text
@@ -26,9 +27,11 @@ def raw_database(tmp_path, monkeypatch):
         conn.exec_driver_sql("""CREATE TABLE raw.raw_records (
             id INTEGER PRIMARY KEY, file_id INTEGER, raw_data TEXT, run_id INTEGER)""")
     monkeypatch.setattr(raw.db_connector, "engine", engine)
-    monkeypatch.setattr(raw, "RAW_DIR", tmp_path)
+    directory = tmp_path / "raw"
+    directory.mkdir()
+    monkeypatch.setattr(raw, "RAW_DIR", directory)
     monkeypatch.setattr(raw, "export_full_raw_inventory", lambda **kwargs: None)
-    yield engine, tmp_path
+    yield engine, directory
     engine.dispose()
 
 
@@ -83,12 +86,13 @@ def test_quality_cli_targets_existing_data_without_rewriting_original_run(monkey
     datasets = {"quality_summary": [{"total_raw_records": 10, "load_error_records": 0}]}
     with (
         patch.object(pipeline, "start_pipeline_audit", return_value=99),
+        patch.object(pipeline, "processing_lock", return_value=nullcontext()),
         patch.object(pipeline, "end_pipeline_audit") as end,
         patch.object(pipeline, "resolve_data_run_id", return_value=7) as resolve,
         patch.object(pipeline, "run_quality_framework", return_value=datasets) as run,
     ):
         pipeline.main()
-    resolve.assert_called_once_with(7)
+    resolve.assert_called_once_with(7, pipeline="main")
     assert run.call_args.kwargs["run_id"] == 99
     assert run.call_args.kwargs["data_run_id"] == 7
     assert end.call_args.args[0] == 99
@@ -99,6 +103,7 @@ def test_process_skips_extraction_and_raw_loading(monkeypatch):
     datasets = {"quality_summary": [{"total_raw_records": 10, "load_error_records": 0}]}
     with (
         patch.object(pipeline, "start_pipeline_audit", return_value=99),
+        patch.object(pipeline, "processing_lock", return_value=nullcontext()),
         patch.object(pipeline, "end_pipeline_audit"),
         patch.object(pipeline, "resolve_data_run_id", return_value=7),
         patch.object(pipeline, "run_quality_framework", return_value=datasets),
@@ -119,6 +124,7 @@ def test_raw_failure_marks_pipeline_failed(monkeypatch):
     monkeypatch.setattr("sys.argv", ["etl", "--phase", "load"])
     with (
         patch.object(pipeline, "start_pipeline_audit", return_value=99),
+        patch.object(pipeline, "processing_lock", return_value=nullcontext()),
         patch.object(pipeline, "end_pipeline_audit") as end,
         patch.object(pipeline, "run_loader", side_effect=RuntimeError("Raw failed")),
         pytest.raises(RuntimeError),
@@ -180,6 +186,7 @@ def test_quality_loss_stops_gold(monkeypatch):
     with (
         patch.object(pipeline, "resolve_data_run_id", return_value=7),
         patch.object(pipeline, "start_pipeline_audit", return_value=99),
+        patch.object(pipeline, "processing_lock", return_value=nullcontext()),
         patch.object(pipeline, "end_pipeline_audit") as end,
         patch.object(pipeline, "run_staging_pipeline"),
         patch.object(pipeline, "run_quality_framework", return_value={"quality_summary": [{"load_error_records": 2}]}),
@@ -222,3 +229,34 @@ def test_github_invalid_window_fails_before_http():
     with patch.object(github, "HttpClient") as http, pytest.raises(ValueError):
         github.extract_github_repos(start_date="2026-09-13", end_date="2026-09-01")
     http.assert_not_called()
+
+
+def test_micro_etls_load_disjoint_sources_and_resolve_owned_runs(raw_database):
+    engine, directory = raw_database
+    for source in ("github", "devto"):
+        (directory / source).mkdir()
+        (directory / source / "snapshot.json").write_text(json.dumps([{"id": source}]))
+    assert raw.run_loader(run_id=7, pipeline="github")["loaded_files"] == 1
+    assert raw.run_loader(run_id=8, pipeline="main")["loaded_files"] == 1
+    with engine.connect() as conn:
+        assert conn.execute(text("SELECT fuente, run_id FROM raw.raw_files ORDER BY id")).all() == [
+            ("github", 7), ("devto", 8),
+        ]
+    assert quality.resolve_data_run_id(pipeline="github") == 7
+    assert quality.resolve_data_run_id(pipeline="main") == 8
+    with pytest.raises(ValueError, match="No loaded Raw data"):
+        quality.resolve_data_run_id(7, pipeline="main")
+    with pytest.raises(ValueError, match="No loaded Raw data"):
+        quality.resolve_data_run_id(8, pipeline="github")
+
+
+def test_mixed_legacy_runs_require_explicit_global_maintenance(raw_database):
+    _, directory = raw_database
+    for source in ("github", "devto"):
+        (directory / source).mkdir()
+        (directory / source / "snapshot.json").write_text(json.dumps([{"id": source}]))
+    raw.run_loader(run_id=7)
+    for profile in ("main", "github"):
+        with pytest.raises(ValueError, match="Mixed historical"):
+            quality.resolve_data_run_id(7, pipeline=profile)
+    assert quality.resolve_data_run_id(7, pipeline="all") == 7

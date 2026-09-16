@@ -12,7 +12,7 @@ Plataforma de **Inteligencia de Negocios** que mide, consolida y visualiza el ni
 
 | Capa | Tecnología | Descripción |
 |------|-----------|-------------|
-| **Extracción** | Python (APIs, scrapers, RSS) | 10 fuentes: GitHub, HackerNews, Dev.to, Reddit, Google Trends, AIDev Dataset, Google Forms, StackOverflow, arXiv, Google News |
+| **Extracción** | Python (APIs, scrapers, RSS) | 9 fuentes: GitHub, HackerNews, Dev.to, Reddit, Google Trends, AIDev Dataset, StackOverflow, arXiv, Google News |
 | **Bronze (Raw)** | PostgreSQL | Archivos JSON crudos en `raw.raw_files` / `raw.raw_records` — evidencia inmutable de cada carga |
 | **Silver (Staging)** | PostgreSQL | Tabla `stg_actividad_agente_ia` — deduplicación estricta, reconstruible desde Raw |
 | **Quality (E3)** | Python + PostgreSQL | Framework de validación: completitud, duplicados, nulos críticos, formato. KPIs en esquema `audit` |
@@ -35,7 +35,6 @@ _Ultima corrida verificada (Run ID: 27) con deduplicación estricta por origen._
 | Merma por deduplicación histórica | 68.15% |
 | Duplicados reales descartados | 264,211 registros |
 | Nulos críticos | **0** registros |
-| Fuente propia (Google Forms) | 12 respuestas reales |
 
 **Clave de deduplicación:**
 
@@ -69,7 +68,6 @@ Evidencia del contrato:
 | **Reddit** | Scraping (Playwright) | Búsquedas múltiples relevantes |
 | **Google Trends** | pytrends | Rate limit 429 registrado como fallo documentado |
 | **AIDev Dataset** | Parquet → JSON | Descarga automática desde Zenodo (Record 16919272) |
-| **Fuente propia** | Google Forms → JSON | `etl/data/encuesta/encuesta.json` — integrada como adopción académica |
 | **StackOverflow** | StackExchange API | Búsqueda por agente |
 | **arXiv** | arXiv API | Rate limits respetados (3s entre consultas) |
 | **Google News** | RSS | Búsqueda por agente |
@@ -111,16 +109,22 @@ Esto despliega:
 | Backend API | `observatorio_api` | 8000 |
 | Frontend | `observatorio_frontend` | 8080 |
 | ETL Worker | `observatorio_etl` | — |
+| Micro ETL GitHub | `observatorio_etl_github` | — |
 
 Accedé al dashboard en: **[http://localhost:8080](http://localhost:8080)**
 
-Desde la pestaña **Control de Extracción (ETL)** podés ejecutar el pipeline completo con un clic.
+El ETL principal excluye GitHub. GitHub tiene un job independiente para que su
+extracción no retrase las demás fuentes; su ejecución se realiza por CLI.
 
 ### Ejecución manual del pipeline
 
 ```bash
-docker exec observatorio_etl python -m src.scripts.run_pipeline
+docker compose build etl etl-github
+docker compose run --rm etl         # Todas las fuentes excepto GitHub
+docker compose run --rm etl-github  # Solo GitHub; puede correr en otra terminal
 ```
+
+Ver [aislamiento, fases y recuperación del micro ETL](etl/docs/MICRO_ETL_GITHUB.md).
 
 ### Ejecución por fase individual
 
@@ -131,7 +135,6 @@ cd etl && python -m src.extractors.devto
 cd etl && python -m src.extractors.reddit
 cd etl && python -m src.extractors.google_trends
 cd etl && python -m src.extractors.aidedev
-cd etl && python -m src.extractors.fuente_propia
 cd etl && python -m src.extractors.stackoverflow
 cd etl && python -m src.extractors.arxiv
 cd etl && python -m src.extractors.gnews

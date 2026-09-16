@@ -29,16 +29,6 @@ devto,releases,numeric,0,,conversion_ok
 devto,indice_adopcion,numeric,0,,conversion_ok
 devto,indice_innovacion,numeric,0,,conversion_ok
 devto,sentimiento_promedio,numeric,0,,conversion_ok
-fuente_propia,cantidad_menciones,numeric,0,,conversion_ok
-fuente_propia,cantidad_interacciones,numeric,0,,conversion_ok
-fuente_propia,score_popularidad,numeric,0,,conversion_ok
-fuente_propia,stars_github,numeric,0,,conversion_ok
-fuente_propia,forks_github,numeric,0,,conversion_ok
-fuente_propia,issues_abiertos,numeric,0,,conversion_ok
-fuente_propia,releases,numeric,0,,conversion_ok
-fuente_propia,indice_adopcion,numeric,0,,conversion_ok
-fuente_propia,indice_innovacion,numeric,0,,conversion_ok
-fuente_propia,sentimiento_promedio,numeric,0,,conversion_ok
 github,cantidad_menciones,numeric,0,,conversion_ok
 github,cantidad_interacciones,numeric,0,,conversion_ok
 github,score_popularidad,numeric,0,,conversion_ok

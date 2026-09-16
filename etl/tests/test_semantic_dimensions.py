@@ -60,12 +60,12 @@ class SemanticDimensionsTest(unittest.TestCase):
                 "tipo_comunidad_raw": "medio o fuente editorial",
             },
             {
-                "fuente": "fuente_propia",
-                "plataforma": "encuesta_upse",
-                "categoria": "adopcion_academica",
-                "titulo": "Encuesta institucional",
-                "texto": "actividad=programación",
-                "comunidad_raw": "Comunidad UPSE",
+                "fuente": "arxiv",
+                "plataforma": "arxiv",
+                "categoria": "actividad_tecnica",
+                "titulo": "Publicación institucional",
+                "texto": "Investigación en programación",
+                "comunidad_raw": "Universidad de Guayaquil",
                 "tipo_comunidad_raw": "comunidad académica",
                 "region_comunidad_raw": "Ecuador",
             },
@@ -113,7 +113,7 @@ class SemanticDimensionsTest(unittest.TestCase):
         result = enrich_semantic_dimensions(self.frame)
 
         self.assertEqual(result.loc[4, "dim_nombre_plataforma"], "No determinada")
-        self.assertEqual(result.loc[4, "dim_nombre_comunidad"], "Comunidad UPSE")
+        self.assertEqual(result.loc[4, "dim_nombre_comunidad"], "Universidad de Guayaquil")
         self.assertEqual(result.loc[4, "dim_region_comunidad"], "Ecuador")
 
     def test_github_normalization_preserves_language_and_owner(self):

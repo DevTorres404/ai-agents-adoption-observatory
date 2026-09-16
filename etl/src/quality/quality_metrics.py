@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 
 import pandas as pd
 from sqlalchemy import text
+from src.utils.pipeline_scope import source_predicate
 
 from src.quality.governance import (
     build_source_freshness,
@@ -164,16 +165,29 @@ def _persist(conn, run_id, datasets):
         """), item)
 
 
-def resolve_data_run_id(data_run_id=None):
+def resolve_data_run_id(data_run_id=None, pipeline="all"):
     """Resolve a loaded data run, never an empty newly-created audit execution."""
     if not db_connector.engine:
         raise RuntimeError("Database connection is required to select a data run")
+    predicate = source_predicate(pipeline)
     with db_connector.engine.connect() as conn:
-        selected = conn.execute(text("""
+        selected = conn.execute(text(f"""
             SELECT MAX(COALESCE(r.run_id, f.run_id))
             FROM raw.raw_records r JOIN raw.raw_files f ON f.id = r.file_id
             WHERE (CAST(:data_run_id AS INTEGER) IS NULL OR COALESCE(r.run_id, f.run_id) = :data_run_id)
+                AND {predicate}
         """), {"data_run_id": data_run_id}).scalar()
+        if selected is not None:
+            foreign_records = conn.execute(text(f"""
+                SELECT COUNT(*) FROM raw.raw_records r
+                JOIN raw.raw_files f ON f.id = r.file_id
+                WHERE COALESCE(r.run_id, f.run_id) = :selected
+                    AND NOT ({predicate})
+            """), {"selected": selected}).scalar()
+            if foreign_records:
+                if pipeline == "all":
+                    raise ValueError("Raw run contains a retired source; apply sql/12_remove_own_survey.sql first")
+                raise ValueError("Mixed historical Raw run; use --pipeline all for quality/process")
     if selected is None:
         raise ValueError("No loaded Raw data for the requested run; use --data-run-id with an existing loaded run")
     return int(selected)

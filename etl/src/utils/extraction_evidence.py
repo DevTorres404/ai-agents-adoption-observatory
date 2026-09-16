@@ -147,13 +147,14 @@ def _write_json_atomic(destination: Path, payload):
 
 
 class EvidenceRun:
-    def __init__(self, run_id, evidence_root=EVIDENCE_RUNS_DIR, legacy_file=EVIDENCE_FILE):
+    def __init__(self, run_id, evidence_root=EVIDENCE_RUNS_DIR, legacy_file=EVIDENCE_FILE, pipeline=None):
         if run_id is None or str(run_id).strip() == "":
             raise ValueError("run_id is required for run-scoped evidence")
         self.run_id = str(run_id)
         self.evidence_root = Path(evidence_root)
         self.legacy_file = Path(legacy_file)
         self.results = []
+        self.pipeline = pipeline
 
     @property
     def run_directory(self):
@@ -187,6 +188,8 @@ class EvidenceRun:
             "event_count": len(self.results),
             "records_extracted": sum(item.records_extracted for item in summary_results),
         }
+        if self.pipeline:
+            summary["pipeline"] = self.pipeline
 
         _write_csv_atomic(evidence_file, rows)
         # summary.json is the publication marker and is replaced last.

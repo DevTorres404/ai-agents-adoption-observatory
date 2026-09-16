@@ -5,6 +5,7 @@ import { fetchKpiData } from './services/api';
 import GlobalFilters from './components/GlobalFilters';
 import Sidebar from './components/Sidebar';
 import TendenciasDashboard from './components/TendenciasDashboard';
+import EjecutivoDashboard from './components/EjecutivoDashboard';
 import { KPICard } from './components/KPI';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import {
@@ -20,8 +21,8 @@ import {
 } from './components/charts/Charts';
 import './index.css';
 
-const TAB_MAP = { '/': 'analytics', '/dimensiones': 'dimensiones', '/calidad': 'quality', '/tendencias': 'tendencias', '/ejecutivo': 'ejecutivo' };
-const REV_TAB_MAP = { analytics: '/', dimensiones: '/dimensiones', quality: '/calidad', tendencias: '/tendencias', ejecutivo: '/ejecutivo' };
+const TAB_MAP = { '/': 'ejecutivo', '/dimensiones': 'dimensiones', '/calidad': 'quality', '/tendencias': 'tendencias', '/ejecutivo': 'ejecutivo' };
+const REV_TAB_MAP = { ejecutivo: '/', dimensiones: '/dimensiones', quality: '/calidad', tendencias: '/tendencias' };
 const PAGE_META = {
   ejecutivo: {
     eyebrow: 'Visión ejecutiva',
@@ -29,17 +30,11 @@ const PAGE_META = {
     description: 'Resume liderazgo, alcance y posicionamiento competitivo de los agentes de IA.',
     purpose: 'Identifica quién lidera el mercado y dónde se concentra la oportunidad.'
   },
-  analytics: {
-    eyebrow: 'Análisis principal',
-    title: 'Analítica general',
-    description: 'Compara adopción, popularidad, participación y detalle de cada agente.',
-    purpose: 'Permite pasar del indicador general a las causas y registros que explican el desempeño.'
-  },
   dimensiones: {
     eyebrow: 'Modelo analítico',
-    title: 'Dimensiones',
-    description: 'Desglosa categorías, tecnologías, comunidad, innovación y actividad.',
-    purpose: 'Explica qué capacidades y señales del ecosistema impulsan la adopción.'
+    title: 'Dimensiones y detalle',
+    description: 'Desglose por categoría, tecnología, fuente, comunidad, innovación y tabla de agentes.',
+    purpose: 'Explica qué capacidades y señales del ecosistema impulsan la adopción, con acceso al registro individual.'
   },
   tendencias: {
     eyebrow: 'Evolución temporal',
@@ -59,7 +54,6 @@ const SOURCE_LABELS = {
   arxiv: 'arXiv',
   catalogo: 'Catálogo',
   devto: 'Dev.to',
-  fuente_propia: 'Fuente propia',
   github: 'GitHub',
   gnews: 'Google News',
   google_trends: 'Google Trends',
@@ -305,80 +299,52 @@ function App() {
 
         <ErrorBoundary name="Ejecutivo tab">
         {data && activeTab === 'ejecutivo' && (
-          <>
-            <div className="grid-cards">
-              <KPICard title="Total Menciones Globales" value={data.ranking?.reduce((sum, item) => sum + (item.total_menciones || 0), 0).toLocaleString() || 0} subtext="Impacto total en todas las fuentes" icon={TrendingUp} color="var(--mentions)" />
-              <KPICard title="Líder Absoluto" value={topAgente.nombre_agente} subtext={`Score Adopción: ${topAgente.adopcion?.toLocaleString()}`} icon={Activity} color="var(--primary)" />
-              <KPICard title="Innovador Destacado" value={data.ranking ? [...data.ranking].sort((a,b) => (b.innovacion||0) - (a.innovacion||0))[0]?.nombre_agente || '-' : '-'} subtext="Mayor puntaje de innovación" icon={Cpu} color="var(--accent)" />
-            </div>
-
-            <div className="grid-charts">
-              <PosicionamientoScatterChart data={data.ranking || []} />
-              <RankingBarChart data={data.ranking ? [...data.ranking].sort((a,b) => (b.popularidad||0) - (a.popularidad||0)).slice(0, 10).reverse() : []} metric="popularidad" title="Top 10 Agentes más Populares" color="var(--secondary)" />
-              <TendenciaLineChart data={data.tendencia || []} metricKey="suma_adopcion" metricName="Evolución del Share of Voice (Adopción)" color="var(--mentions)" />
-            </div>
-          </>
+          <EjecutivoDashboard data={data} />
         )}
         </ErrorBoundary>
 
-        <ErrorBoundary name="Analytics tab">
-        {data && activeTab === 'analytics' && (
-          <>
-            <div className="grid-cards">
-              <KPICard title="Total Observaciones" value={totalObservaciones.toLocaleString()} subtext="Datasets procesados en Gold" icon={Database} color="var(--observations)" trend={observacionesTrend} />
-              <KPICard title="Agentes Identificados" value={totalAgentes} subtext="Excluyendo no identificados" icon={Users} color="var(--secondary)" sparklineData={data.tendencia} sparklineDataKey="suma_adopcion" trend={adopcionTrend} />
-              <KPICard title="Líder Global (Adopción)" value={topAgente.nombre_agente} subtext={topAgente.categoria_agente} icon={Activity} color="var(--primary)" />
-            </div>
-
-            <div className="grid-charts">
-              <RankingBarChart data={[...rankedData].reverse()} metric="adopcion" title="Score de Adopción" color="var(--primary)" />
-              <TendenciaLineChart data={data.tendencia || []} metricKey="suma_adopcion" metricName="Score Adopción" color="var(--primary)" />
-              <ComparadorAgentesChart data={data.ranking?.slice(0, 5) || []} />
-              <FuenteBarChart data={data.participacion || []} />
-
-              <div id="dataset-table" className="panel" style={{ height: '450px', overflowY: 'auto' }}>
-                <h2>Tabla Analítica Detallada</h2>
-                <div className="table-responsive">
-                  <table className="data-table">
-                    <thead>
-                      <tr>
-                        <th>Agente</th>
-                        <th>Categoría</th>
-                        <th>Obs.</th>
-                        <th>Adopción</th>
-                        <th>Popularidad</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {rankedData.map((item, i) => (
-                        <tr key={i}>
-                          <td style={{ fontWeight: 600, color: 'var(--primary)' }}>{item.nombre_agente}</td>
-                          <td>{item.categoria_agente}</td>
-                          <td>{item.total_observaciones?.toLocaleString()}</td>
-                          <td>{item.adopcion?.toLocaleString()}</td>
-                          <td>{item.popularidad?.toLocaleString()}</td>
-                        </tr>
-                      ))}
-                      {rankedData.length === 0 && (
-                        <tr><td colSpan="5" style={{ textAlign: 'center', padding: '2rem' }}>No existen datos para los filtros seleccionados.</td></tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-        </ErrorBoundary>
 
         <ErrorBoundary name="Dimensiones tab">
         {data && activeTab === 'dimensiones' && (
           <div className="grid-charts">
             <CategoriaPieChart data={data.categorias || []} />
             <TecnologiaBarChart data={data.tecnologias || []} />
+            <FuenteBarChart data={data.participacion || []} />
+            <ComparadorAgentesChart data={data.ranking?.slice(0, 5) || []} />
             <RankingBarChart data={[...rankedData].sort((a, b) => (b.comunidad || 0) - (a.comunidad || 0)).reverse()} metric="comunidad" title="Score de Comunidad" color="var(--mentions)" />
             <RankingBarChart data={[...rankedData].sort((a, b) => (b.innovacion || 0) - (a.innovacion || 0)).reverse()} metric="innovacion" title="Score de Innovación" color="var(--accent)" />
             <RankingBarChart data={[...rankedData].sort((a, b) => (b.actividad || 0) - (a.actividad || 0)).reverse()} metric="actividad" title="Score de Actividad" color="var(--interactions)" />
+
+            <div id="dataset-table" className="panel" style={{ height: '450px', overflowY: 'auto' }}>
+              <h2>Tabla Analítica Detallada</h2>
+              <div className="table-responsive">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Agente</th>
+                      <th>Categoría</th>
+                      <th>Obs.</th>
+                      <th>Adopción</th>
+                      <th>Popularidad</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rankedData.map((item, i) => (
+                      <tr key={i}>
+                        <td style={{ fontWeight: 600, color: 'var(--primary)' }}>{item.nombre_agente}</td>
+                        <td>{item.categoria_agente}</td>
+                        <td>{item.total_observaciones?.toLocaleString()}</td>
+                        <td>{item.adopcion?.toLocaleString()}</td>
+                        <td>{item.popularidad?.toLocaleString()}</td>
+                      </tr>
+                    ))}
+                    {rankedData.length === 0 && (
+                      <tr><td colSpan="5" style={{ textAlign: 'center', padding: '2rem' }}>No existen datos para los filtros seleccionados.</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         )}
         </ErrorBoundary>

@@ -21,12 +21,13 @@ graph TD
         A5(StackOverflow):::source
         A6(ArXiv):::source
         A7(Google Trends):::source
-        A8(Catálogo y Formularios):::source
+        A8(Catálogo AIDev):::source
     end
 
     %% 2. Proceso ETL
     subgraph ETL ["2. Proceso ETL (Python)"]
-        B1(Extracción Multifuente <br/> Paginación y Rate-Limits):::etl
+        BG(Micro ETL GitHub <br/> Paginación y Rate-Limits):::etl
+        B1(ETL Principal <br/> Fuentes excepto GitHub):::etl
         B2(Limpieza y <br/> Homologación Raw):::etl
         B3(Enriquecimiento Semántico <br/> y Deduplicación):::etl
         B4(Controles de Calidad <br/> Governance):::etl
@@ -53,9 +54,11 @@ graph TD
     end
 
     %% Flujos de datos
-    A1 & A2 & A3 & A4 & A5 & A6 & A7 & A8 -->|HTTP Requests| B1
+    A1 -->|HTTP Requests| BG
+    A2 & A3 & A4 & A5 & A6 & A7 & A8 -->|HTTP Requests| B1
     
     B1 -->|Carga Cruda| C1
+    BG -->|Carga Cruda GitHub| C1
     C1 -->|Lectura Cruda| B2
     B2 -->|Normalización| C2
     C2 -->|Enriquecimiento| B3
@@ -71,7 +74,11 @@ graph TD
 ```
 
 ## Flujo del Pipeline
-1. **Extracción (Raw):** El ETL conecta simultáneamente con múltiples APIs. Los resultados se guardan en crudo para asegurar trazabilidad.
+1. **Extracción (Raw):** Dos jobs independientes: `etl` (resto de fuentes, secuenciales dentro del job) y `etl-github`. Sus extracciones pueden avanzar simultáneamente; cada uno carga solo sus archivos.
 2. **Transformación (Staging):** Los datos crudos se unifican bajo un esquema común, se mapean las entidades (agentes) y se detectan nulos.
 3. **Carga Analítica (Gold):** Creación del modelo en estrella (star-schema) para potenciar la rapidez de lectura en el dashboard.
 4. **Gobierno (Audit):** A lo largo del pipeline se generan métricas de reconciliación y calidad que se envían directamente a `audit`.
+
+Staging y Gold se filtran por perfil. Ambos workers comparten PostgreSQL y las
+dimensiones; un advisory lock serializa el procesamiento/publicación, no la
+extracción. Ver `etl/docs/MICRO_ETL_GITHUB.md` para operación y recuperación.

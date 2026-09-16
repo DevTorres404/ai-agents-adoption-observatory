@@ -16,7 +16,7 @@ def parse_dates(df):
     # Inicialmente todas las fechas se consideran observadas por la fuente.
     df['is_imputed_date'] = False
 
-    # Pandas homologa fechas ISO, timestamps web y fechas de encuesta.
+    # Pandas homologa fechas ISO y timestamps web.
     # Force one resolution before fallback assignment. Pandas can infer seconds
     # for an all-NaT source series and microseconds for PostgreSQL timestamps;
     # assigning between those dtypes otherwise raises on recent Pandas versions.

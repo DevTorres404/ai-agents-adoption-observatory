@@ -8,6 +8,7 @@ from src.utils.paths import RAW_DIR, ROOT_DIR
 from src.utils.db import db_connector
 from src.utils.logger import global_logger
 from src.utils.error_log import log_error
+from src.utils.pipeline_scope import includes_source, validate_pipeline
 
 def calculate_sha256(filepath):
     sha256_hash = hashlib.sha256()
@@ -71,7 +72,30 @@ def extract_metadata(filepath):
         "records": records
     }
 
-def run_loader(run_id=None):
+def select_raw_files(pipeline="all", file_paths=None):
+    """Select this worker's inputs; an empty manifest must not scan history."""
+    validate_pipeline(pipeline)
+    root = RAW_DIR.resolve()
+    candidates = RAW_DIR.rglob("*") if file_paths is None else map(Path, file_paths)
+    selected = set()
+    for candidate in candidates:
+        path = candidate.resolve()
+        if not path.is_relative_to(root):
+            raise ValueError(f"Raw path outside RAW_DIR: {candidate}")
+        relative = path.relative_to(root)
+        source = relative.parts[0] if len(relative.parts) > 1 else "desconocido"
+        if not includes_source(pipeline, source):
+            if file_paths is not None:
+                raise ValueError(f"Raw source {source} does not belong to {pipeline}")
+            continue
+        if path.is_file() and path.suffix in {".json", ".csv", ".xlsx", ".xls"}:
+            selected.add(path)
+        elif file_paths is not None:
+            raise ValueError(f"Missing or unsupported Raw file: {candidate}")
+    return sorted(selected)
+
+
+def run_loader(run_id=None, pipeline="all", file_paths=None):
     global_logger.info(">>> INICIANDO CARGA RAW A POSTGRESQL <<<")
 
     if not db_connector.engine:
@@ -82,7 +106,7 @@ def run_loader(run_id=None):
     inventario = []
     failures = []
 
-    for filepath in RAW_DIR.rglob("*"):
+    for filepath in select_raw_files(pipeline, file_paths):
         if filepath.is_file() and filepath.suffix in ['.json', '.csv', '.xlsx', '.xls']:
             try:
                 file_hash = calculate_sha256(filepath)

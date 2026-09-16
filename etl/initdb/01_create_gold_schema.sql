@@ -79,7 +79,6 @@ CREATE TABLE gold.dim_fuente (
     categoria_fuente VARCHAR(100),
     confiabilidad_fuente VARCHAR(100) NOT NULL DEFAULT 'No especificado',
     descripcion TEXT,
-    es_fuente_propia BOOLEAN NOT NULL DEFAULT FALSE,
     fecha_carga TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT uq_dim_fuente UNIQUE (nombre_fuente, tipo_fuente)
 );

@@ -1,5 +1,9 @@
 # Recuperación y validación del ETL
 
+> Desde la separación del 16 de septiembre, `etl` excluye GitHub y `etl-github`
+> lo procesa de forma independiente. Ver `MICRO_ETL_GITHUB.md` antes de recuperar
+> una corrida histórica multifuente.
+
 ## Cambios de septiembre de 2026
 
 - Raw revierte metadata y registros juntos, propaga errores al orquestador y
@@ -12,8 +16,8 @@
 - Sin registros Raw se publica `empty` y completitud 0%, no éxito al 100%.
   Pérdidas detectadas en Staging hacen fallar la ejecución antes de Gold.
 - `process` ejecuta Staging, Calidad y Gold sobre Raw existente, sin descargar
-  fuentes ni cargar archivos. Staging y Gold mantienen su alcance incremental
-  global; `--data-run-id` selecciona solamente la cohorte auditada por Calidad.
+  fuentes ni cargar archivos. Staging y Gold tienen alcance incremental por
+  perfil; `--data-run-id` selecciona solamente la cohorte auditada por Calidad.
 - `--date` controla el límite superior `created:` de GitHub; `--github-since`
   permite un límite inferior explícito. Las demás fuentes conservan sus rangos.
   Esto NO es extracción incremental por cambios: una ventana de creación omite
@@ -42,7 +46,8 @@ Para producción, agregar `-f docker-compose.prod.yml` después de `docker compo
 No se ejecutó esta migración sobre la base existente ni se desplegó la imagen.
 Se validó en un PostgreSQL 16 separado, temporal y sin datos de producción.
 
-`quality` y `process` seleccionan por defecto el mayor `run_id` con registros Raw.
+`quality` y `process` seleccionan por defecto el mayor `run_id` con registros Raw
+del mismo perfil. Las corridas históricas mixtas requieren `--pipeline all`.
 Se puede especificar `--data-run-id NUMERO` para auditar otra corrida cargada. Una
 corrida inexistente o sin Raw se rechaza. Datos legacy sin `run_id` necesitan una
 migración de procedencia explícita; no se atribuyen a una corrida inventada.
@@ -50,7 +55,7 @@ migración de procedencia explícita; no se atribuyen a una corrida inventada.
 Para una extracción deliberadamente acotada de GitHub:
 
 ```powershell
-docker compose --profile etl run --rm etl --phase all --github-since 2026-09-01 --date 2026-09-13
+docker compose run --rm etl-github --phase all --github-since 2026-09-01 --date 2026-09-13
 ```
 
 No usar `rebuild` para acelerar: reconstruye datos. Las incidencias externas

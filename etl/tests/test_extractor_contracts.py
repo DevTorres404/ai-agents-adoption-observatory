@@ -5,7 +5,6 @@ from src.extractors.aidedev import extract_aidedev_catalog
 from src.extractors.arxiv import extract_arxiv
 from src.extractors.devto import extract_devto
 from src.extractors.file_catalog import extract_and_validate_catalog
-from src.extractors.fuente_propia import extract_google_forms_survey
 from src.extractors.github import extract_github_repos
 from src.extractors.gnews import extract_gnews
 from src.extractors.google_trends import extract_trends
@@ -21,7 +20,6 @@ class ExtractorContractTest(unittest.TestCase):
             extract_arxiv,
             extract_devto,
             extract_and_validate_catalog,
-            extract_google_forms_survey,
             extract_github_repos,
             extract_gnews,
             extract_trends,

@@ -39,7 +39,8 @@ Este comando levantará los siguientes componentes:
 * **postgres (observatorio_db):** Base de datos relacional (Puerto 5433 local). Inicializa automáticamente todos los esquemas (raw, staging, gold, audit).
 * **backend (observatorio_api):** API REST en FastAPI que expone los datos del Data Warehouse (Puerto interno 8000).
 * **frontend (observatorio_frontend):** Aplicación web en React + Vite (Accesible en `http://localhost:8080`).
-* **etl_runner (etl):** Proceso batch bajo demanda para extraer y transformar la información. Al estar en un profile, se debe ejecutar manualmente con: `docker compose run --rm etl`
+* **etl:** Proceso batch de todas las fuentes excepto GitHub: `docker compose run --rm etl`.
+* **etl-github:** Micro ETL independiente de GitHub: `docker compose run --rm etl-github`.
 
 ---
 
@@ -52,27 +53,29 @@ El corazón de este observatorio es su pipeline de datos (ETL). ¿De dónde sale
 3. **Reddit (Percepción y Comunidad):** Analiza subreddits de programación para identificar menciones orgánicas, adopción real y sentimiento de la comunidad frente a estas herramientas.
 4. **Google Trends (Interés General):** Rastrea el volumen de búsquedas globales para entender cómo el hype y el interés de mercado sube o baja con el tiempo.
 5. **arXiv (Investigación Científica):** Mide qué agentes están siendo citados o utilizados en publicaciones académicas sobre IA.
-6. **Catálogos y Formulario Propio:** Datos estructurados provenientes de directorios de herramientas IA (como AIDev) y recolección de encuestas (Google Forms) de la propia comunidad.
+6. **Catálogos:** Datos estructurados provenientes de directorios de herramientas IA (como AIDev).
 
 ### Ejecución y Reproducibilidad del ETL
 
 El ETL está diseñado para ser **idempotente y reproducible**. 
 Dado que analiza años de historial (ej. todo 2025 y 2026) desde múltiples fuentes masivas (paginando para sortear límites de API), **el proceso de extracción inicial (Cold Start) puede tardar varias horas.**
 
-Para reiniciar completamente el observatorio y forzar una re-extracción de todos los datos históricos desde cero:
+Para actualizar las fuentes sin eliminar los datos existentes:
 
 ```bash
-# 1. Bajar los servicios y eliminar el volumen de persistencia de PostgreSQL
-docker compose down -v
+# 1. Construir ambos workers
+docker compose build etl etl-github
 
-# 2. Volver a levantar el entorno (esto dispara la creación de tablas y el ETL completo)
-docker compose up -d --build
+# 2. Ejecutar el ETL principal (no espera a GitHub)
+docker compose run --rm etl
 
-# 3. Monitorear el progreso de extracción (Fase 1)
-docker logs -f ai-agents-adoption-observatory-etl-run-1
+# 3. Ejecutar GitHub en otra terminal o con otra programación
+docker compose run --rm etl-github
 ```
 
-*(Nota: En la fase de Extracción, el ETL descarga cientos de páginas de la API de GitHub de a 100 resultados por vez. No interrumpas el proceso).*
+No borrar los volúmenes para reintentar. `docker compose up -d` sin perfiles no
+ejecuta estos jobs. Ver [micro ETL GitHub](etl/docs/MICRO_ETL_GITHUB.md) para
+concurrencia, logs, fases y recuperación de corridas históricas.
 
 ---
 

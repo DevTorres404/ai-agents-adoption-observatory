@@ -123,45 +123,6 @@ def normalize_dataframe(df, file_meta):
             stg_df["comunidad_raw"] = first_existing(df, ["empresa"], "Catálogo curado")
             stg_df["tipo_comunidad_raw"] = "proveedor de tecnología"
 
-    elif fuente == "fuente_propia":
-        # Motivo: la encuesta UPSE se modela como percepcion declarada; cada respuesta cuenta como mencion individual.
-        herramienta = first_existing(df, ["herramienta_principal", "herramienta_favorita"], "Ninguna")
-        usa_ia = first_existing(df, ["usa_agentes_ia", "usa_ia"], "No especificado")
-        perfil = first_existing(df, ["perfil_participante"], "No especificado")
-        frecuencia = first_existing(df, ["frecuencia_uso_ia"], "No especificado")
-        actividad = first_existing(df, ["actividad_uso_ia"], "No especificado")
-        barrera = first_existing(df, ["barrera_adopcion"], "No especificado")
-
-        stg_df["id_origen_registro"] = df.apply(hash_fallback, axis=1)
-        stg_df["plataforma"] = "encuesta_upse"
-        stg_df["titulo"] = "Encuesta UPSE - " + herramienta.astype(str)
-        stg_df["texto"] = (
-            "perfil=" + perfil.astype(str)
-            + "; usa_ia=" + usa_ia.astype(str)
-            + "; frecuencia=" + frecuencia.astype(str)
-            + "; actividad=" + actividad.astype(str)
-            + "; barrera=" + barrera.astype(str)
-        )
-        stg_df["url"] = ""
-        stg_df["fecha_evento_raw"] = first_existing(df, ["timestamp_respuesta", "Marca temporal", "created_at"], None)
-        stg_df["cantidad_menciones"] = 1
-        # Motivo: 1.0/0.5/0.0 separa adopcion activa, prueba exploratoria y no adopcion.
-        stg_df["indice_adopcion"] = usa_ia.astype(str).str.lower().map({
-            "si": 1.0,
-            "sí": 1.0,
-            "los he probado, pero no los uso regularmente": 0.5,
-            "los he probado pero no los uso regularmente": 0.5,
-            "no": 0.0,
-        })
-        stg_df["score_popularidad"] = pd.to_numeric(
-            first_existing(df, ["mejora_productividad"], None),
-            errors="coerce",
-        )
-        stg_df["tecnologia_raw"] = actividad
-        stg_df["comunidad_raw"] = "Comunidad UPSE"
-        stg_df["tipo_comunidad_raw"] = "comunidad académica"
-        stg_df["region_comunidad_raw"] = "Ecuador"
-
     elif fuente == "reddit":
         # Motivo: Reddit aporta discusión comunitaria; score y comentarios miden engagement real.
         stg_df["id_origen_registro"] = df["id"].astype(str) if "id" in df.columns else df.apply(hash_fallback, axis=1)
