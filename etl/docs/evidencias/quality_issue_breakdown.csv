@@ -1,8 +1,0 @@
-run_id,metric_name,metric_value,evidence_basis,academic_interpretation
-2,raw_records,24675,Raw rows for this run.,Run-scoped extraction denominator.
-2,eligible_records,22452,Candidates matching an explicitly supported agent.,Eligible denominator before deduplication.
-2,historical_duplicates_removed,38,Shared deterministic Staging deduplication rule.,Intentional consolidation; not an ETL error.
-2,expected_staging_records,22414,eligible_records - historical_duplicates_removed.,Completion/error denominator.
-2,materialized_staging_records,22414,Staging rows whose Raw file belongs to this run.,Materialized numerator.
-2,load_error_records,0,"MAX(expected - materialized, 0).",Unexplained loss; excludes deduplication.
-2,unmapped_agent_records,842,Candidate rows classified as Otro Agente IA.,"Out-of-scope noise, separate from errors."

@@ -1,2 +1,0 @@
-execution_timestamp,run_id,source,query,status,records_extracted,http_status,url,raw_path,notes
-2026-09-16T21:32:33,local-20260916T213233-aff4e8ce,reddit,GitHub Copilot,success,2,200,https://www.reddit.com/search/?q=GitHub+Copilot&sort=relevance&t=all,,

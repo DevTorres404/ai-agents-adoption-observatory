@@ -56,7 +56,7 @@ __pycache__/
 backup_*
 
 # Evidencias pesadas
-etl/docs/evidencias/staging_stats.csv
+etl/docs/evidencias/
 
 .atl/
 # ETL temporary data

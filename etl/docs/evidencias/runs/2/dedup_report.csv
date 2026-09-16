@@ -1,8 +1,0 @@
-run_id,source,total_detected,total_removed,total_kept
-2,arxiv,0,0,988
-2,catalogo,30,29,17417
-2,devto,0,0,16
-2,gnews,16,9,791
-2,google_trends,0,0,1940
-2,reddit,0,0,23
-2,stackoverflow,0,0,1239
