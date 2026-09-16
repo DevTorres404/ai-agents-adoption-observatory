@@ -4,6 +4,10 @@
 > lo procesa de forma independiente. Ver `MICRO_ETL_GITHUB.md` antes de recuperar
 > una corrida histórica multifuente.
 
+## Convención horaria
+
+Convención horaria: America/Guayaquil (UTC-5). Los timestamps naive del pipeline y BD representan hora de Ecuador.
+
 ## Cambios de septiembre de 2026
 
 - Raw revierte metadata y registros juntos, propaga errores al orquestador y

@@ -8,6 +8,7 @@ from src.utils.extraction_evidence import log_source_execution, raw_output_path
 from src.utils.http_client import HttpClient
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
+from src.utils.time_utils import now_local, to_ec_naive
 
 
 SOURCE_START_DATE = "2023-01-01"
@@ -52,7 +53,7 @@ def extract_hackernews(run_id=None):
                 "url": link,
                 "points": int(score_str) if score_str.isdigit() else 0,
                 "num_comments": int(comments_str) if comments_str.isdigit() else 0,
-                "created_at": datetime.datetime.now().isoformat(),
+                "created_at": to_ec_naive(now_local()).isoformat(),
                 "source": "hackernews",
                 "http_status": client.last_status_code,
                 "date_range_start": SOURCE_START_DATE,
@@ -75,7 +76,7 @@ def extract_hackernews(run_id=None):
             "date_range_start": SOURCE_START_DATE,
             "date_range_end": SOURCE_END_DATE,
             "records_extracted": len(records),
-            "extracted_at": datetime.datetime.now().isoformat(),
+            "extracted_at": to_ec_naive(now_local()).isoformat(),
         },
         "items": records,
     }

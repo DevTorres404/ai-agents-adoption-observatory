@@ -8,17 +8,16 @@ from src.utils.error_log import log_error
 from src.utils.extraction_evidence import aggregate_status, log_source_execution, raw_output_path
 from src.utils.http_client import HttpClient
 from src.utils.logger import global_logger
+from src.utils.http_client import HttpClient
+from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
+from src.utils.time_utils import now_local, to_ec_naive
 
 
 SOURCE_START_DATE = datetime.date(2023, 1, 1)
 SOURCE_END_DATE = datetime.date(2026, 12, 31)
 
-AGENT_QUERIES = [
-    "Cursor AI", "Claude Code", "OpenAI Codex", "GitHub Copilot", "Cline agent",
-    "Roo Code", "Windsurf AI", "Aider AI", "Augment Code", "JetBrains Junie",
-    "Gemini CLI", "AWS Kiro", "Kilo Code", "Zencoder"
-]
+AGENT_QUERIES = ["Codex", "GitHub Copilot", "Cursor", "Windsurf", "Devin", "OpenCode", "Aider", "Claude Code", "Cline", "Antigravity"]
 
 def extract_arxiv(max_per_agent=20, run_id=None, sleeper=time.sleep):
     global_logger.info("Iniciando extracción en arXiv API...")
@@ -100,7 +99,7 @@ def extract_arxiv(max_per_agent=20, run_id=None, sleeper=time.sleep):
             "records_extracted": len(records),
             "status": status.value,
             "date_range_start": SOURCE_START_DATE.isoformat(),
-            "extracted_at": datetime.datetime.now().isoformat(),
+            "extracted_at": to_ec_naive(now_local()).isoformat(),
         },
         "items": records,
     }

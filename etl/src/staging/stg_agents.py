@@ -28,46 +28,28 @@ AGENTES_ESTANDAR = {
     'cline agent': 'Cline',
     'cline': 'Cline',
 
-    # 6. Roo Code
-    'roo code': 'Roo Code',
-    'roocode': 'Roo Code',
-    'roo': 'Roo Code',
-
-    # 7. Windsurf
+    # 6. Windsurf
     'windsurf cascade': 'Windsurf',
+    'windsurf ai': 'Windsurf',
     'windsurf': 'Windsurf',
     'cascade': 'Windsurf',
 
-    # 8. Aider
+    # 7. Aider
     'aider chat': 'Aider',
+    'aider ai': 'Aider',
     'aider': 'Aider',
 
-    # 9. Augment
-    'augment code': 'Augment',
-    'augment ai': 'Augment',
-    'augment': 'Augment',
+    # 8. Devin
+    'devin ai': 'Devin',
+    'devin': 'Devin',
 
-    # 10. JetBrains Junie
-    'jetbrains junie': 'JetBrains Junie',
-    'junie cli': 'JetBrains Junie',
-    'junie': 'JetBrains Junie',
-    'jetbrains ai': 'JetBrains Junie',
+    # 9. OpenCode
+    'opencode ai': 'OpenCode',
+    'opencode': 'OpenCode',
 
-    # 11. Gemini CLI
-    'gemini code assist': 'Gemini CLI',
-    'gemini cli': 'Gemini CLI',
-
-    # 12. AWS Kiro
-    'kiro ide': 'AWS Kiro',
-    'kiro cli': 'AWS Kiro',
-    'kiro': 'AWS Kiro',
-
-    # 13. Kilo Code
-    'kilo code': 'Kilo Code',
-    'kilo': 'Kilo Code',
-
-    # 14. Zencoder
-    'zencoder': 'Zencoder',
+    # 10. Antigravity
+    'antigravity ai': 'Antigravity',
+    'antigravity': 'Antigravity'
 }
 
 # Precompilar patrones para rendimiento masivo

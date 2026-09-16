@@ -99,7 +99,7 @@ function TrendTooltip({ active, payload }) {
 }
 
 function AdoptionTrendChart({ data, communityOnly, onToggleCommunity, loadingCommunity }) {
-  const description = 'La línea azul muestra el índice de adopción mensual y la línea violeta su promedio móvil de tres meses. Los picos representan aumentos de señal; usa la escala logarítmica para apreciar variaciones pequeñas.';
+  const description = 'La línea azul muestra el índice de adopción mensual (suma de scores de adopción normalizados por registro; no es un porcentaje) y la línea violeta su promedio móvil de tres meses. Los picos representan aumentos de señal; usa la escala logarítmica para apreciar variaciones pequeñas.';
   const [scaleMode, setScaleMode] = useState('linear');
   const chartData = useMemo(() => buildTrendData(data, scaleMode), [data, scaleMode]);
   const peak = useMemo(() => chartData.reduce((maximum, item) => item.valor > (maximum?.valor || 0) ? item : maximum, null), [chartData]);
@@ -110,7 +110,7 @@ function AdoptionTrendChart({ data, communityOnly, onToggleCommunity, loadingCom
   }
 
   return (
-    <section className="panel trend-primary-panel">
+    <section className="panel trend-primary-panel panel-featured">
       <div className="trend-panel-header">
         <div>
           <div className="trend-title-line">
@@ -220,7 +220,7 @@ function SourceContributionChart({ data, communityOnly }) {
 }
 
 function TrendHeatmap({ data }) {
-  const description = 'Cruza agentes y meses para mostrar intensidad de adopción, observaciones o interacciones. Un color más oscuro indica mayor valor y el borde resalta el máximo de cada agente.';
+  const description = 'Cruza agentes y meses para mostrar el score acumulado del agente por período (adopción, observaciones o interacciones según la métrica elegida). Un color más oscuro indica mayor valor relativo y el borde resalta el máximo de cada agente.';
   const [metric, setMetric] = useState('adopcion');
   const metricConfig = METRICS[metric];
 
@@ -261,7 +261,7 @@ function TrendHeatmap({ data }) {
 
   const cellColor = value => value <= 0
     ? 'var(--heatmap-empty)'
-    : `rgba(53, 106, 230, ${(0.12 + (value / globalMax) * 0.78).toFixed(2)})`;
+    : `color-mix(in srgb, var(--primary) ${Math.round((0.12 + (value / globalMax) * 0.78) * 100)}%, transparent)`;
 
   if (months.length === 0) {
     return <section className="panel trend-heatmap-panel"><h2>Mapa de calor: agentes × meses</h2><p className="chart-description">{description}</p><div className="chart-empty-state">No hay datos mensuales por agente.</div></section>;
@@ -321,7 +321,11 @@ function InsightPanels({ tendencia, fuentes, ranking }) {
 
   const peak = useMemo(() => (tendencia || []).reduce((maximum, item) => toNumber(item.total_observaciones) > toNumber(maximum?.total_observaciones) ? item : maximum, null), [tendencia]);
   const topSource = fuentes?.[0];
-  const topAgent = ranking?.[0];
+  // El ranking del backend viene ordenado por defecto por observaciones; aquí se ordena por adopción para afirmar el líder de adopción con honestidad.
+  const topAgent = useMemo(
+    () => [...(ranking || [])].sort((a, b) => toNumber(b.adopcion) - toNumber(a.adopcion))[0],
+    [ranking]
+  );
 
   return (
     <div className="trend-insights-grid">
@@ -379,9 +383,9 @@ export default function TendenciasDashboard({ data, filters }) {
   return (
     <div className="trends-dashboard">
       <div className="trend-kpi-grid">
-        <KPICard title="Observaciones totales" value={formatNumber(totalObservations, 0)} subtext="Registros del periodo" icon={Database} color="var(--primary)" sparklineData={data.tendencia} sparklineDataKey="total_observaciones" />
-        <KPICard title="Score de adopción" value={formatNumber(adoptionScore, 2)} subtext="Índice acumulado" icon={Activity} color="var(--primary)" sparklineData={data.tendencia} sparklineDataKey="suma_adopcion" />
-        <KPICard title="Agentes analizados" value={(data.ranking || []).length} subtext="Con actividad identificada" icon={Users} color="var(--primary)" />
+        <KPICard title="Observaciones totales" value={formatNumber(totalObservations, 0)} subtext="Registros del periodo en todas las fuentes" icon={Database} color="var(--primary)" sparklineData={data.tendencia} sparklineDataKey="total_observaciones" />
+        <KPICard title="Score de adopción" value={formatNumber(adoptionScore, 2)} subtext="Suma sobre todos los agentes (score normalizado por fuente; no es un porcentaje)" icon={Activity} color="var(--primary)" sparklineData={data.tendencia} sparklineDataKey="suma_adopcion" />
+        <KPICard title="Agentes analizados" value={(data.ranking || []).length} subtext="Agentes con actividad identificada en las fuentes" icon={Users} color="var(--primary)" />
         <KPICard title="Crecimiento mensual" value={`${growthValue >= 0 ? '+' : ''}${formatNumber(growthValue)} %`} subtext={latestGrowth ? `${formatMonth(latestGrowth)} · último mes completo` : 'Sin comparación'} icon={TrendingUp} color={growthValue >= 0 ? 'var(--success)' : 'var(--danger)'} />
         <KPICard title="Última actualización" value={updateLabel} subtext="Carga validada del DW" icon={CalendarClock} color="var(--primary)" />
       </div>

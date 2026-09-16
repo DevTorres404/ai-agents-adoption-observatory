@@ -9,6 +9,7 @@ from src.utils.db import db_connector
 from src.utils.logger import global_logger
 from src.utils.error_log import log_error
 from src.utils.pipeline_scope import PIPELINES, processing_lock, source_predicate, validate_pipeline
+from src.utils.time_utils import today_local
 from src.utils.extraction_evidence import (
     EvidenceRun,
     ExtractionStatus,
@@ -338,7 +339,7 @@ def main(argv=None, fixed_pipeline=None):
     parser = argparse.ArgumentParser(description="Orquestador Maestro del Pipeline ETL Observatorio IA")
     parser.add_argument("--pipeline", choices=PIPELINES, default=fixed_pipeline or "main",
                         help="main excluye GitHub; github lo aísla; all es mantenimiento global explícito")
-    parser.add_argument("--date", type=datetime.date.fromisoformat, help="Fecha objetivo y límite superior de GitHub (YYYY-MM-DD)", default=datetime.date.today())
+    parser.add_argument("--date", type=datetime.date.fromisoformat, help="Fecha objetivo y límite superior de GitHub (YYYY-MM-DD)", default=today_local())
     parser.add_argument("--github-since", type=datetime.date.fromisoformat, help="Inicio explícito de created: para GitHub; no recupera actualizaciones de repos antiguos")
     parser.add_argument("--data-run-id", type=int, help="Corrida Raw a auditar con quality/process; por defecto la última cargada")
     parser.add_argument("--phase", type=str, choices=["all", "extract", "load", "staging", "quality", "gold", "process"], default="all", help="process reutiliza Raw: Staging + Calidad + Gold, sin extraer ni cargar archivos")

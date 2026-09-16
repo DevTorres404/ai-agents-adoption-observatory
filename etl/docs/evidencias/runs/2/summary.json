@@ -1,0 +1,8 @@
+{
+  "run_id": "2",
+  "status": "success",
+  "published_at": "2026-09-16T21:39:22",
+  "event_count": 52,
+  "records_extracted": 24675,
+  "pipeline": "main"
+}

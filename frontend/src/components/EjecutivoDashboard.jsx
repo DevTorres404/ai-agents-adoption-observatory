@@ -5,6 +5,7 @@ import {
   BarChart, Bar, Cell, Label
 } from 'recharts';
 import { TrendingUp, TrendingDown, Zap, Award, Target, BarChart2, Star } from 'lucide-react';
+import { CategoryAxisTick, CHART_PALETTE } from './charts/Charts';
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
@@ -92,10 +93,10 @@ function buildNarrative({ leader, runner, leaderGap, momGrowth, emergent, sorted
 function quadrantMeta(adopcion, popularidad, medAdop, medPop) {
   const high_a = adopcion >= medAdop;
   const high_p = popularidad >= medPop;
-  if (high_a && high_p) return { label: 'Líderes', color: '#16a36a' };
-  if (!high_a && high_p) return { label: 'Retadores', color: '#356ae6' };
-  if (high_a && !high_p) return { label: 'Especializados', color: '#b45309' };
-  return { label: 'Emergentes', color: '#7c3aed' };
+  if (high_a && high_p) return { label: 'Líderes', color: 'var(--success)' };
+  if (!high_a && high_p) return { label: 'Retadores', color: 'var(--primary)' };
+  if (high_a && !high_p) return { label: 'Especializados', color: 'var(--warning)' };
+  return { label: 'Emergentes', color: 'var(--accent)' };
 }
 
 // ─── ExecKPICard ─────────────────────────────────────────────────────────────
@@ -133,6 +134,7 @@ const QuadrantTooltip = ({ active, payload }) => {
       <p className="recharts-tooltip-label" style={{ fontWeight: 700 }}>{d.nombre_agente}</p>
       <p className="recharts-tooltip-item">Adopción: <span className="tooltip-value">{fmtCompact(d.adopcion)}</span></p>
       <p className="recharts-tooltip-item">Popularidad: <span className="tooltip-value">{fmtCompact(d.popularidad)}</span></p>
+      <p className="recharts-tooltip-item">Categoría: <span className="tooltip-value">{d.categoria_agente || '—'}</span></p>
       <p className="recharts-tooltip-item" style={{ color: d._q?.color, fontWeight: 600 }}>
         {d._q?.label ?? '—'}
       </p>
@@ -146,8 +148,8 @@ function QuadrantScatter({ data }) {
   const validData = (data || [])
     .map(item => ({
       ...item,
-      adopcion: toNum(item.adopcion),
-      popularidad: toNum(item.popularidad),
+      adopcion: Math.max(1, toNum(item.adopcion)),
+      popularidad: Math.max(1, toNum(item.popularidad)),
       total_observaciones: toNum(item.total_observaciones)
     }))
     .filter(item => item.adopcion > 0 || item.popularidad > 0);
@@ -206,17 +208,17 @@ function QuadrantScatter({ data }) {
   };
 
   const QUADRANTS = [
-    { label: 'Líderes', color: '#16a36a', desc: 'Alta adopción y popularidad' },
-    { label: 'Retadores', color: '#356ae6', desc: 'Alta popularidad, baja adopción' },
-    { label: 'Especializados', color: '#b45309', desc: 'Alta adopción, menor visibilidad' },
-    { label: 'Emergentes', color: '#7c3aed', desc: 'Por debajo de las medianas del mercado' },
+    { label: 'Líderes', color: 'var(--success)', desc: 'Alta adopción y popularidad' },
+    { label: 'Retadores', color: 'var(--primary)', desc: 'Alta popularidad, baja adopción' },
+    { label: 'Especializados', color: 'var(--warning)', desc: 'Alta adopción, menor visibilidad' },
+    { label: 'Emergentes', color: 'var(--accent)', desc: 'Por debajo de las medianas del mercado' },
   ];
 
   return (
-    <div className="panel chart-panel-lg exec-quadrant-panel">
+    <div className="panel chart-panel-lg exec-quadrant-panel panel-featured">
       <h2>Mapa de Posicionamiento Competitivo</h2>
       <p className="chart-description">
-        Cada punto es un agente de IA. Eje X = adopción acumulada · Eje Y = popularidad. Las líneas marcan la mediana del mercado.
+        Cada punto es un agente de IA. Eje X = score de adopción (suma de contribuciones observadas normalizadas por fuente; no es un porcentaje ni una escala fija 0-100). Eje Y = popularidad (visibilidad relativa acumulada: menciones e interacciones normalizadas por fuente). Las líneas marcan la mediana del mercado y el tamaño del punto, el volumen de observaciones.
       </p>
       <div className="exec-quadrant-legend">
         {QUADRANTS.map(q => (
@@ -231,11 +233,11 @@ function QuadrantScatter({ data }) {
         <ResponsiveContainer>
           <ScatterChart margin={{ top: 30, right: 30, left: 10, bottom: 30 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--border-primary)" />
-            <XAxis type="number" dataKey="adopcion" name="Adopción" tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} tickFormatter={fmtCompact}>
-              <Label value="Adopción →" offset={-12} position="insideBottom" fill="var(--text-muted)" fontSize={11} />
+            <XAxis type="number" dataKey="adopcion" name="Adopción" scale="log" domain={['auto', 'auto']} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} tickFormatter={fmtCompact}>
+              <Label value="Adopción (Log) →" offset={-12} position="insideBottom" fill="var(--text-muted)" fontSize={11} />
             </XAxis>
-            <YAxis type="number" dataKey="popularidad" name="Popularidad" tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} tickFormatter={fmtCompact}>
-              <Label value="Popularidad →" angle={-90} position="insideLeft" fill="var(--text-muted)" fontSize={11} dy={50} />
+            <YAxis type="number" dataKey="popularidad" name="Popularidad" scale="log" domain={['auto', 'auto']} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} tickFormatter={fmtCompact}>
+              <Label value="Popularidad (Log) →" angle={-90} position="insideLeft" fill="var(--text-muted)" fontSize={11} dy={50} />
             </YAxis>
             <ZAxis type="number" dataKey="total_observaciones" range={[40, 280]} />
             <RechartsTooltip content={<QuadrantTooltip />} />
@@ -253,17 +255,12 @@ function QuadrantScatter({ data }) {
 
 // ─── Top 10 Popularity bar chart ─────────────────────────────────────────────
 
-const TOP_COLORS = [
-  '#356ae6', '#5b8def', '#7c3aed', '#16a36a', '#b45309',
-  '#0ea5e9', '#a78bfa', '#34d399', '#f59e0b', '#64748b'
-];
-
 function TopPopularityChart({ data }) {
   const chartData = [...(data || [])]
     .sort((a, b) => toNum(b.popularidad) - toNum(a.popularidad))
     .slice(0, 10)
     .reverse()
-    .map((item, i) => ({ ...item, popularidad: toNum(item.popularidad), _color: TOP_COLORS[i % TOP_COLORS.length] }));
+    .map((item, i) => ({ ...item, popularidad: toNum(item.popularidad), _color: CHART_PALETTE[i % CHART_PALETTE.length] }));
 
   if (chartData.length === 0) {
     return (
@@ -278,7 +275,7 @@ function TopPopularityChart({ data }) {
     <div className="panel chart-panel">
       <h2>Top 10 por Popularidad</h2>
       <p className="chart-description">
-        Visibilidad relativa de cada agente en el ecosistema. Un score mayor indica mayor presencia y reconocimiento en las fuentes analizadas.
+        Top 10 del total de agentes analizados. Popularidad: visibilidad relativa acumulada (menciones e interacciones normalizadas por fuente); no es un porcentaje ni un conteo directo de seguidores.
       </p>
       <div className="chart-body">
         <ResponsiveContainer>
@@ -312,8 +309,8 @@ function TopPopularityChart({ data }) {
 }
 
 export default function EjecutivoDashboard({ data }) {
-  const ranking = data?.ranking || [];
-  const tendencia = data?.tendencia || [];
+  const ranking = useMemo(() => data?.ranking || [], [data?.ranking]);
+  const tendencia = useMemo(() => data?.tendencia || [], [data?.tendencia]);
 
   const { sorted, leader, runner, leaderGap, momGrowth, emergent } = useMemo(
     () => deriveMetrics(ranking, tendencia),
@@ -325,7 +322,11 @@ export default function EjecutivoDashboard({ data }) {
     [leader, runner, leaderGap, momGrowth, emergent, sorted]
   );
 
-  const totalMenciones = ranking.reduce((s, item) => s + toNum(item.total_menciones), 0);
+  // Suma sobre TODOS los agentes del agregado (el backend entrega el ranking completo).
+  const totalMenciones = useMemo(
+    () => ranking.reduce((s, item) => s + toNum(item.total_menciones), 0),
+    [ranking]
+  );
 
   return (
     <div className="exec-dashboard">
@@ -340,7 +341,7 @@ export default function EjecutivoDashboard({ data }) {
         <ExecKPICard
           title="Líder de Mercado"
           value={leader?.nombre_agente ?? '—'}
-          subtext={leader ? `Score: ${fmtCompact(leader.adopcion)}` : undefined}
+          subtext={leader ? `Score de adopción: ${fmtCompact(leader.adopcion)}` : undefined}
           icon={Award}
           color="var(--primary)"
         />
@@ -361,14 +362,14 @@ export default function EjecutivoDashboard({ data }) {
         <ExecKPICard
           title="Mayor Intensidad"
           value={emergent?.nombre_agente ?? '—'}
-          subtext="Adopción / observación más alta"
+          subtext="Mayor score de adopción por observación"
           icon={Zap}
           color="var(--accent)"
         />
         <ExecKPICard
           title="Menciones Totales"
           value={fmtCompact(totalMenciones)}
-          subtext="Impacto global en todas las fuentes"
+          subtext="Suma sobre todos los agentes y fuentes analizadas"
           icon={Star}
           color="var(--secondary)"
         />

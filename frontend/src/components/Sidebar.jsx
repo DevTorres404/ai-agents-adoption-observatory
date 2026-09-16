@@ -3,6 +3,7 @@ import {
   Activity,
   BarChart3,
   ChevronRight,
+  Cpu,
   Layers,
   Menu,
   Moon,

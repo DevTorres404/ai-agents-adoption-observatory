@@ -9,6 +9,7 @@ from src.utils.error_log import log_error
 from src.utils.extraction_evidence import log_source_execution, raw_output_path
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR, ROOT_DIR
+from src.utils.time_utils import now_local, to_ec_naive
 
 
 SOURCE_DIR = ROOT_DIR / "data" / "manual" / "aidedev_ai_coding"
@@ -98,6 +99,8 @@ def build_aidedev_catalog(max_pr_rows=None):
         (pull_requests["created_at"] >= start_date)
         & (pull_requests["created_at"] <= end_date)
     ]
+    valid_agents = ["Codex", "GitHub Copilot", "Cursor", "Windsurf", "Devin", "OpenCode", "Aider", "Claude Code", "Cline", "Antigravity"]
+    pull_requests = pull_requests[pull_requests["agent"].isin(valid_agents)]
     pull_requests["is_merged"] = pull_requests["merged_at"].notna().astype(int)
 
     grouped = (
@@ -182,7 +185,7 @@ def extract_aidedev_catalog(run_id=None):
             "stats": stats,
             "date_range_start": SOURCE_START_DATE,
             "date_range_end": SOURCE_END_DATE,
-            "extracted_at": datetime.datetime.now().isoformat(),
+            "extracted_at": to_ec_naive(now_local()).isoformat(),
         },
         "items": records,
     }

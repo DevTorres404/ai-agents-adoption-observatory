@@ -8,21 +8,16 @@ from src.utils.error_log import log_error
 from src.utils.extraction_evidence import aggregate_status, log_source_execution, raw_output_path
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
+from src.utils.time_utils import now_local, to_ec_naive
 
 
-AGENT_TERMS = [
-    "cursor", "claude code", "codex", "copilot", "cline",
-    "roocode", "windsurf", "aider", "augment", "junie",
-    "gemini cli", "aws kiro", "kilo code", "zencoder"
-]
+AGENT_TERMS = ["Codex", "GitHub Copilot", "Cursor", "Windsurf", "Devin", "OpenCode", "Aider", "Claude Code", "Cline", "Antigravity"]
 
 AI_TERMS = ["ai", "artificial intelligence", "llm", "generative ai", "agentic"]
 DEV_TERMS = ["code", "coding", "programming", "developer", "software", "debug", "ide", "github"]
 
 SEARCH_QUERIES = [
-    "Cursor", "Claude Code", "Codex", "GitHub Copilot", "Cline", 
-    "RooCode", "Windsurf", "Aider", "Augment", "JetBrains Junie", 
-    "Gemini CLI", "AWS Kiro", "Kilo Code", "Zencoder"
+    "Codex", "GitHub Copilot", "Cursor", "Windsurf", "Devin", "OpenCode", "Aider", "Claude Code", "Cline", "Antigravity"
 ]
 
 SOURCE_START_DATE = "2023-01-01"
@@ -71,7 +66,7 @@ def collect_posts_for_query(page, query, max_per_query=15):
             "search_query": query,
             "date_range_start": SOURCE_START_DATE,
             "date_range_end": SOURCE_END_DATE,
-            "created_at": datetime.datetime.now().isoformat(),
+            "created_at": to_ec_naive(now_local()).isoformat(),
         })
 
     return records, http_status, url
@@ -164,7 +159,7 @@ def extract_reddit(max_records=60, run_id=None):
             "date_range_end": SOURCE_END_DATE,
             "date_note": "Reddit UI no expone fecha historica estable en este scraper; Staging aplica filtro 2023-2026.",
             "max_records": max_records,
-            "extracted_at": datetime.datetime.now().isoformat(),
+            "extracted_at": to_ec_naive(now_local()).isoformat(),
         },
         "items": records,
     }

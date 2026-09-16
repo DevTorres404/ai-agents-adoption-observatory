@@ -1,9 +1,10 @@
 import os
-from datetime import datetime, timezone
 
 import pandas as pd
 from sqlalchemy import text
 from src.utils.pipeline_scope import source_predicate
+
+from src.utils.time_utils import now_local
 
 from src.quality.governance import (
     build_source_freshness,
@@ -220,7 +221,7 @@ def run_quality_framework(run_id=None, source_results=None, publication_status=E
 
     with db_connector.engine.begin() as conn:
         staging = _staging_snapshot(conn, data_run_id)
-        now = datetime.now(timezone.utc)
+        now = now_local()
         stale_after_hours = float(os.getenv("QUALITY_STALE_AFTER_HOURS", "24"))
         freshness = build_source_freshness(
             run_id, source_results or [], _previous_success(conn),

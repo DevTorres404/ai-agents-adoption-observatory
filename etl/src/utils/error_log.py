@@ -1,16 +1,16 @@
 import csv
-import datetime
 from sqlalchemy import text
 from src.utils.paths import LOGS_DIR
 from src.utils.db import db_connector
 from src.utils.logger import global_logger
+from src.utils.time_utils import now_local
 
 def log_error(source, error_type, description, action_taken, run_id=None):
     """
     Registra errores en logs/pipeline_errors.csv y opcionalmente en audit.pipeline_errors (BD).
     """
     log_file = LOGS_DIR / "pipeline_errors.csv"
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = now_local().strftime("%Y-%m-%d %H:%M:%S")
     
     # Escribir a CSV (Siempre)
     try:

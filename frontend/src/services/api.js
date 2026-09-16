@@ -4,6 +4,16 @@ import { apiCache } from '../utils/cache';
 const API_BASE_URL = '/api/kpi';
 const CACHE_KEY = 'dashboard_data';
 
+// El backend /ranking usa este límite por defecto para el SQL LIMIT :limit (sin tope real).
+// Se solicita el agregado completo para que los totales y el scatter sean globales y no un top-N.
+const RANKING_LIMIT = 1000;
+
+// Agrega el límite solo al endpoint de ranking sin alterar el query de filtros.
+function buildRankingQuery(filters) {
+  const qString = buildQuery(filters);
+  return qString ? `${qString}&limit=${RANKING_LIMIT}` : `?limit=${RANKING_LIMIT}`;
+}
+
 const endpoints = {
   adopcion: '/adopcion',
   participacion: '/participacion',
@@ -67,7 +77,8 @@ async function fetchAllEndpoints(filters) {
 
   const results = await Promise.allSettled(
     Object.entries(endpoints).map(([key, path]) =>
-      fetchEndpoint(path, qString).then(data => ({ key, data }))
+      fetchEndpoint(path, key === 'ranking' ? buildRankingQuery(filters) : qString)
+        .then(data => ({ key, data }))
     )
   );
 
@@ -113,7 +124,7 @@ export async function fetchAdopcion(filters = {}) {
 
 export async function fetchRanking(filters = {}) {
   return apiCache.fetch(`ranking${JSON.stringify(filters)}`, () =>
-    fetchEndpoint('/ranking', buildQuery(filters))
+    fetchEndpoint('/ranking', buildRankingQuery(filters))
   );
 }
 

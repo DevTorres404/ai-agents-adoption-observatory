@@ -1,25 +1,21 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Activity, Users, Database, TrendingUp, Cpu, ShieldCheck, AlertCircle, CalendarClock, CopyCheck, Info } from 'lucide-react';
+import { ShieldCheck, AlertCircle, CalendarClock, CopyCheck, Info, Activity, Database } from 'lucide-react';
 import { fetchKpiData } from './services/api';
 import GlobalFilters from './components/GlobalFilters';
 import Sidebar from './components/Sidebar';
 import TendenciasDashboard from './components/TendenciasDashboard';
 import EjecutivoDashboard from './components/EjecutivoDashboard';
-import { KPICard } from './components/KPI';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { KPICard } from './components/KPI';
 import {
   RankingBarChart,
-  TendenciaLineChart,
-  FuenteBarChart,
-  ComparadorAgentesChart,
-  PosicionamientoScatterChart,
   CategoriaPieChart,
   TecnologiaBarChart,
-  QualitySummaryPieChart,
-  QualityDedupBarChart
+  QualitySummaryPieChart
 } from './components/charts/Charts';
 import './index.css';
+
 
 const TAB_MAP = { '/': 'ejecutivo', '/dimensiones': 'dimensiones', '/calidad': 'quality', '/tendencias': 'tendencias', '/ejecutivo': 'ejecutivo' };
 const REV_TAB_MAP = { ejecutivo: '/', dimensiones: '/dimensiones', quality: '/calidad', tendencias: '/tendencias' };
@@ -63,22 +59,6 @@ const SOURCE_LABELS = {
 };
 
 const formatSourceLabel = source => SOURCE_LABELS[source] || source || 'Sin fuente';
-
-function computeTrend(data, metricKey) {
-  if (!data || data.length < 2) return null;
-  const sorted = [...data].sort((a, b) => a.anio - b.anio || a.mes - b.mes);
-  const last = sorted[sorted.length - 1];
-  const prev = sorted[sorted.length - 2];
-  if (!last || !prev) return null;
-  const lastVal = Number(last[metricKey]) || 0;
-  const prevVal = Number(prev[metricKey]) || 0;
-  if (prevVal === 0) return null;
-  return {
-    value: ((lastVal - prevVal) / prevVal) * 100,
-    isPositive: lastVal >= prevVal,
-    label: 'Variación vs mes anterior'
-  };
-}
 
 function SkeletonCards() {
   return (
@@ -169,23 +149,7 @@ function App() {
     window.setTimeout(() => document.getElementById('dataset-table')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
   }, [navigate]);
 
-  const totalAgentes = data?.ranking?.length || 0;
 
-  const totalObservaciones = useMemo(() => {
-    return data?.distribucion?.reduce((acc, curr) => acc + (Number(curr.total_observaciones) || 0), 0) || 0;
-  }, [data]);
-
-  const topAgente = data?.ranking?.[0] || { nombre_agente: 'Sin datos', categoria_agente: '-' };
-
-  const adopcionTrend = useMemo(() => {
-    if (!data?.tendencia) return null;
-    return computeTrend(data.tendencia, 'suma_adopcion');
-  }, [data]);
-
-  const observacionesTrend = useMemo(() => {
-    if (!data?.tendencia) return null;
-    return computeTrend(data.tendencia, 'total_observaciones');
-  }, [data]);
 
   const quality = data ? {
     summary: data.qualitySummary,
@@ -194,14 +158,20 @@ function App() {
   } : null;
 
   const executionDate = quality?.summary?.execution_date;
+  // Convención del proyecto: timestamps naive = America/Guayaquil (UTC-5, sin DST).
+  const parseExecutionDate = (value) => {
+    if (!value) return null;
+    if (/Z$|[+-]\d{2}:\d{2}$/.test(value)) return new Date(value);
+    return new Date(`${value}-05:00`);
+  };
   const headerUpdateLabel = executionDate
-    ? new Date(executionDate.endsWith('Z') ? executionDate : `${executionDate}Z`).toLocaleDateString('es-EC', {
+    ? parseExecutionDate(executionDate).toLocaleDateString('es-EC', {
         day: '2-digit', month: 'short', year: 'numeric', timeZone: 'America/Guayaquil'
       }).replace('.', '')
     : null;
 
   const qualityExecutionLabel = executionDate
-    ? new Date(executionDate.endsWith('Z') ? executionDate : `${executionDate}Z`).toLocaleString('es-EC', {
+    ? parseExecutionDate(executionDate).toLocaleString('es-EC', {
         day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'America/Guayaquil'
       }).replace('.', '')
     : 'Sin ejecución registrada';
@@ -309,14 +279,13 @@ function App() {
           <div className="grid-charts">
             <CategoriaPieChart data={data.categorias || []} />
             <TecnologiaBarChart data={data.tecnologias || []} />
-            <FuenteBarChart data={data.participacion || []} />
-            <ComparadorAgentesChart data={data.ranking?.slice(0, 5) || []} />
-            <RankingBarChart data={[...rankedData].sort((a, b) => (b.comunidad || 0) - (a.comunidad || 0)).reverse()} metric="comunidad" title="Score de Comunidad" color="var(--mentions)" />
-            <RankingBarChart data={[...rankedData].sort((a, b) => (b.innovacion || 0) - (a.innovacion || 0)).reverse()} metric="innovacion" title="Score de Innovación" color="var(--accent)" />
-            <RankingBarChart data={[...rankedData].sort((a, b) => (b.actividad || 0) - (a.actividad || 0)).reverse()} metric="actividad" title="Score de Actividad" color="var(--interactions)" />
+            <RankingBarChart data={[...rankedData].reverse()} metric="adopcion" title="Score de Adopción" color="var(--primary)" />
 
             <div id="dataset-table" className="panel" style={{ height: '450px', overflowY: 'auto' }}>
               <h2>Tabla Analítica Detallada</h2>
+              <p className="chart-description">
+                Registro individual del agregado completo de agentes (más de un top-N): observaciones, score de adopción y popularidad acumulados del período. El score de adopción es la suma de contribuciones normalizadas por fuente, no un porcentaje.
+              </p>
               <div className="table-responsive">
                 <table className="data-table">
                   <thead>
@@ -380,20 +349,20 @@ function App() {
             </section>
 
             <div className="quality-kpi-grid">
-              <KPICard title="Registros Raw Extraídos" value={quality?.summary?.total_raw_records?.toLocaleString() || 0} subtext="Datos crudos pre-limpieza" icon={Database} color="var(--info)" />
-              <KPICard title="Registros Staging Aptos" value={quality?.summary?.total_staging_records?.toLocaleString() || 0} subtext="Datos limpios insertados en Gold" icon={ShieldCheck} color="var(--success)" />
-              <KPICard title="Tasa de Completitud" value={`${Number(quality?.summary?.completion_rate || 0).toLocaleString('es-EC', { maximumFractionDigits: 2 })} %`} subtext="Porcentaje apto para análisis" icon={Activity} color="var(--primary)" />
-              <KPICard title="Duplicados Removidos" value={quality?.summary?.total_duplicates_removed?.toLocaleString() || 0} subtext="Registros depurados en la carga" icon={CopyCheck} color="var(--warning)" />
-              <KPICard title="Nulos Críticos" value={quality?.summary?.total_nulls_removed ?? 0} subtext="Descartados por campos críticos" icon={AlertCircle} color={(quality?.summary?.total_nulls_removed || 0) === 0 ? 'var(--success)' : 'var(--danger)'} />
+              <KPICard title="Registros Raw Extraídos" value={quality?.summary?.total_raw_records?.toLocaleString() || 0} subtext="Registros crudos antes de la limpieza ETL" icon={Database} color="var(--info)" />
+              <KPICard title="Registros Staging Aptos" value={quality?.summary?.total_staging_records?.toLocaleString() || 0} subtext="Registros que superaron limpieza y deduplicación" icon={ShieldCheck} color="var(--success)" />
+              <KPICard title="Tasa de Completitud" value={`${Number(quality?.summary?.completion_rate || 0).toLocaleString('es-EC', { maximumFractionDigits: 2 })} %`} subtext="Aptos sobre el total extraído; mide campos críticos, no calidad global" icon={Activity} color="var(--primary)" />
+              <KPICard title="Duplicados Removidos" value={quality?.summary?.total_duplicates_removed?.toLocaleString() || 0} subtext="Registros descartados por duplicidad en el ETL" icon={CopyCheck} color="var(--warning)" />
+              <KPICard title="Nulos Críticos" value={quality?.summary?.total_nulls_removed ?? 0} subtext="Descartados por campos críticos vacíos" icon={AlertCircle} color={(quality?.summary?.total_nulls_removed || 0) === 0 ? 'var(--success)' : 'var(--danger)'} />
             </div>
 
-            <div className="quality-visual-grid">
-              {quality?.summary && <QualitySummaryPieChart data={quality.summary} />}
-              {quality?.dedup && <QualityDedupBarChart data={quality.dedup} />}
-            </div>
+            {quality?.summary && <QualitySummaryPieChart data={quality.summary} />}
 
               <div className="panel quality-table-panel">
                 <h2>Auditoría de Duplicados por Fuente</h2>
+                <p className="chart-description">
+                  Detalle por fuente de los registros procesados, removidos por duplicidad y aprobados. La tasa de depuración es removidos / procesados, en porcentaje.
+                </p>
                 <div className="table-responsive">
                   <table className="data-table">
                     <thead>
@@ -429,6 +398,9 @@ function App() {
               {data.governance?.freshness?.length > 0 && (
                 <div className="panel quality-table-panel">
                   <h2>Frescura por Fuente</h2>
+                  <p className="chart-description">
+                    Antigüedad de la última extracción exitosa por fuente. Una fuente se marca desactualizada cuando supera el umbral de frescura configurado.
+                  </p>
                   <div className="table-responsive">
                     <table className="data-table">
                       <thead>
@@ -465,6 +437,9 @@ function App() {
               {data.governance?.coverage?.length > 0 && (
                 <div className="panel quality-table-panel">
                   <h2>Cobertura Semántica por Fuente</h2>
+                  <p className="chart-description">
+                    Porcentaje de registros con la dimensión semántica completa (categoría, tecnología o plataforma) frente al total por fuente. El umbral indica el mínimo aceptable.
+                  </p>
                   <div className="table-responsive">
                     <table className="data-table">
                       <thead>

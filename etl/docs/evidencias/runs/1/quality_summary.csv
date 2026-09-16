@@ -1,0 +1,2 @@
+run_id,data_run_id,total_raw_records,eligible_records,total_duplicates_removed,expected_staging_records,total_staging_records,load_error_records,completion_rate,overall_error_rate,deduplication_rate,total_nulls_removed
+1,1,24675,16888,38,16850,16850,0,100.0,0.0,0.23,0

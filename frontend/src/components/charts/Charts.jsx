@@ -9,6 +9,16 @@ const CHART_COLORS = [
   "var(--warning)", "var(--info)", "var(--neutral)"
 ];
 
+export { CHART_PALETTE } from './chartPalette';
+
+const RANKING_LABELS = {
+  adopcion: 'Score de adopción',
+  popularidad: 'Popularidad',
+  comunidad: 'Score de comunidad',
+  innovacion: 'Score de innovación',
+  actividad: 'Score de actividad'
+};
+
 const QUALITY_SOURCE_LABELS = {
   arxiv: 'arXiv', catalogo: 'Catálogo', devto: 'Dev.to',
   github: 'GitHub', gnews: 'Google News', google_trends: 'Google Trends',
@@ -16,8 +26,8 @@ const QUALITY_SOURCE_LABELS = {
 };
 
 const RANKING_DESCRIPTIONS = {
-  adopcion: 'Ordena los agentes por su score acumulado de adopción. Una barra más larga indica mayor presencia y uso observado en las fuentes analizadas.',
-  popularidad: 'Compara la visibilidad relativa de los agentes. Una barra más larga representa mayor señal agregada de popularidad.',
+  adopcion: 'Ordena los agentes por su score acumulado de adopción: suma de contribuciones observadas normalizadas por fuente. No es un porcentaje ni una escala fija 0-100. Una barra más larga indica mayor presencia y uso observado en las fuentes analizadas.',
+  popularidad: 'Compara la popularidad de los agentes: visibilidad relativa acumulada (menciones e interacciones normalizadas por fuente). No es un conteo directo de seguidores ni un porcentaje.',
   comunidad: 'Mide la señal comunitaria acumulada de cada agente. Una barra más larga indica mayor presencia e interacción en fuentes de comunidad.',
   innovacion: 'Resume señales asociadas con novedad y avance tecnológico. Una barra más larga indica mayor score de innovación dentro del periodo.',
   actividad: 'Compara la intensidad total de actividad registrada por agente. Una barra más larga representa mayor volumen de señales observadas.'
@@ -55,7 +65,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-const CategoryAxisTick = ({ x, y, payload, maxLength = 20, fontWeight = 500 }) => {
+export const CategoryAxisTick = ({ x, y, payload, maxLength = 20, fontWeight = 500 }) => {
   const label = String(payload?.value ?? '');
   const visibleLabel = label.length > maxLength
     ? `${label.slice(0, maxLength - 1).trimEnd()}…`
@@ -90,7 +100,7 @@ export const RankingBarChart = ({ data, metric, title, color }) => {
             <XAxis type="number" tick={{ fill: 'var(--text-secondary)', fontSize: 12 }} />
             <YAxis type="category" dataKey="nombre_agente" interval={0} tick={<CategoryAxisTick maxLength={18} fontWeight={600} />} width={110} />
             <RechartsTooltip content={<CustomTooltip />} />
-            <Bar dataKey={metric} name="Puntuación" fill={color || "var(--primary)"} radius={[0, 4, 4, 0]} />
+            <Bar dataKey={metric} name={RANKING_LABELS[metric] || 'Puntuación'} fill={color || "var(--primary)"} radius={[0, 4, 4, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
@@ -279,7 +289,7 @@ export const CategoriaPieChart = ({ data }) => {
         <div className="category-donut">
           <ResponsiveContainer>
             <PieChart>
-              <Pie data={chartData} cx="50%" cy="50%" innerRadius={62} outerRadius={98} paddingAngle={3} dataKey="valor" nameKey="categoria_agente" stroke="none">
+              <Pie data={chartData} cx="50%" cy="50%" innerRadius={62} outerRadius={98} paddingAngle={3} dataKey="valor" name={metric === 'adopcion' ? 'Score de adopción' : 'Observaciones'} nameKey="categoria_agente" stroke="none">
                 {chartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                 ))}
@@ -442,7 +452,7 @@ export const AgenteMesHeatMap = ({ data }) => {
   const getColor = (val) => {
     if (val <= 0) return 'var(--heatmap-empty)';
     const opacity = 0.14 + (val / maxVal) * 0.76;
-    return `rgba(53, 106, 230, ${opacity.toFixed(2)})`;
+    return `color-mix(in srgb, var(--primary) ${Math.round(opacity * 100)}%, transparent)`;
   };
 
   const getCellData = (agent, month) => {

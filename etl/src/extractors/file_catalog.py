@@ -8,6 +8,7 @@ from src.utils.error_log import log_error
 from src.utils.extraction_evidence import log_source_execution, raw_output_path
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR, ROOT_DIR
+from src.utils.time_utils import now_local, to_ec_naive
 
 
 SOURCE_START_DATE = "2023-01-01"
@@ -56,7 +57,7 @@ def extract_and_validate_catalog(run_id=None):
                     "date_range_start": SOURCE_START_DATE,
                     "date_range_end": SOURCE_END_DATE,
                     "records_extracted": len(valid_records),
-                    "extracted_at": datetime.datetime.now().isoformat(),
+                    "extracted_at": to_ec_naive(now_local()).isoformat(),
                 },
                 "items": valid_records,
             }

@@ -8,6 +8,7 @@ from src.utils.error_log import log_error
 from src.utils.extraction_evidence import aggregate_status, log_source_execution, raw_output_path
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
+from src.utils.time_utils import now_local, to_ec_naive
 
 
 SOURCE_START_DATE = "2023-01-01"
@@ -19,15 +20,14 @@ def extract_trends(run_id=None, sleeper=time.sleep):
     global_logger.info("Iniciando extraccion de Google Trends (pytrends)...")
     # Google Trends permite máximo 5 keywords por consulta.
     all_agents = [
-        "Cursor AI", "Claude Code", "OpenAI Codex", "GitHub Copilot", "Cline agent",
-        "Roo Code", "Windsurf AI", "Aider AI", "Augment Code", "JetBrains Junie",
-        "Gemini CLI", "AWS Kiro", "Kilo Code", "Zencoder"
+        "OpenAI Codex", "GitHub Copilot", "Cursor AI", "Windsurf AI", "Devin AI", 
+        "OpenCode", "Aider AI", "Claude Code", "Cline agent", "Antigravity"
     ]
     
     url = "https://trends.google.com/trends/explore"
     records = []
     query_results = []
-    extracted_at = datetime.datetime.now().isoformat()
+    extracted_at = to_ec_naive(now_local()).isoformat()
     
     try:
         pytrend = TrendReq(hl="en-US", tz=360)

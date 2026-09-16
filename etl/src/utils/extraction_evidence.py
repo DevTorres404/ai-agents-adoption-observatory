@@ -1,5 +1,4 @@
 import csv
-import datetime
 import json
 import os
 import re
@@ -14,6 +13,7 @@ from typing import Iterable, Optional
 
 from src.utils.logger import global_logger
 from src.utils.paths import ROOT_DIR
+from src.utils.time_utils import now_local, to_ec_naive
 
 
 EVIDENCE_FILE = ROOT_DIR / "docs" / "evidencias" / "source_execution_evidence.csv"
@@ -167,7 +167,7 @@ class EvidenceRun:
             raise ValueError(
                 f"Evidence result run_id {result_run_id!r} does not match active run {self.run_id!r}"
             )
-        timestamp = result.execution_timestamp or datetime.datetime.now().isoformat(timespec="seconds")
+        timestamp = result.execution_timestamp or to_ec_naive(now_local()).isoformat(timespec="seconds")
         scoped_result = replace(result, run_id=self.run_id, execution_timestamp=timestamp)
         self.results.append(scoped_result)
         return scoped_result
@@ -184,7 +184,7 @@ class EvidenceRun:
         summary = {
             "run_id": self.run_id,
             "status": final_status.value,
-            "published_at": datetime.datetime.now().isoformat(timespec="seconds"),
+            "published_at": to_ec_naive(now_local()).isoformat(timespec="seconds"),
             "event_count": len(self.results),
             "records_extracted": sum(item.records_extracted for item in summary_results),
         }
@@ -232,7 +232,7 @@ def evidence_context(run: EvidenceRun):
 
 
 def new_local_run_id():
-    timestamp = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
+    timestamp = now_local().strftime("%Y%m%dT%H%M%S")
     return f"local-{timestamp}-{uuid.uuid4().hex[:8]}"
 
 
@@ -243,7 +243,7 @@ def raw_output_path(source, prefix=None, run_id=None, now=None, raw_dir=None):
         else (active_run.run_id if active_run else new_local_run_id())
     )
     safe_run_id = re.sub(r"[^A-Za-z0-9_.-]+", "_", str(effective_run_id))
-    timestamp = (now or datetime.datetime.now()).strftime("%Y-%m-%dT%H%M%S%f")
+    timestamp = (now or now_local()).strftime("%Y-%m-%dT%H%M%S%f")
     source_dir = Path(raw_dir or (ROOT_DIR / "data" / "raw")) / source
     source_dir.mkdir(parents=True, exist_ok=True)
     return source_dir / f"{prefix or source}_{timestamp}_{safe_run_id}.json"
@@ -276,7 +276,7 @@ def log_source_execution(
         notes=notes,
         run_id=effective_run_id,
         query=query,
-        execution_timestamp=datetime.datetime.now().isoformat(timespec="seconds"),
+        execution_timestamp=to_ec_naive(now_local()).isoformat(timespec="seconds"),
     )
 
     if active_run is not None:

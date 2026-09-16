@@ -1,8 +1,8 @@
 {
   "run_id": "1",
-  "status": "invalidated_source_removal",
-  "published_at": "2026-08-27T23:46:48",
-  "event_count": null,
-  "records_extracted": null,
-  "notes": "Source removed; regenerate evidence from remaining data."
+  "status": "success",
+  "published_at": "2026-09-16T21:29:27",
+  "event_count": 52,
+  "records_extracted": 24675,
+  "pipeline": "main"
 }

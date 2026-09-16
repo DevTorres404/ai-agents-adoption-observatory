@@ -1,0 +1,8 @@
+run_id,source,dimension,message
+2,arxiv,llm,Coverage 0.0% is below warning threshold 50.0%.
+2,catalogo,llm,Coverage 0.0% is below warning threshold 50.0%.
+2,devto,llm,Coverage 0.0% is below warning threshold 50.0%.
+2,gnews,llm,Coverage 0.0% is below warning threshold 50.0%.
+2,google_trends,llm,Coverage 0.0% is below warning threshold 50.0%.
+2,reddit,llm,Coverage 0.0% is below warning threshold 50.0%.
+2,stackoverflow,llm,Coverage 0.0% is below warning threshold 50.0%.

@@ -8,31 +8,14 @@ from src.utils.extraction_evidence import aggregate_status, log_source_execution
 from src.utils.http_client import HttpClient
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
+from src.utils.time_utils import now_local, today_local, to_ec_naive
 
 
 SOURCE_START_DATE = datetime.date(2023, 1, 1)
 SOURCE_END_DATE = datetime.date(2026, 12, 31)
 
 
-AGENT_TERMS = [
-    "copilot", "github copilot",
-    "codex", "openai codex",
-    "cursor", "cursor ai", "cursor agent",
-    "claude code",
-    "devin", "devin ai", "devin cloud",
-    "codeium", "windsurf", "cascade", "devin desktop",
-    "gemini code assist", "duet ai for developers", "gemini cli",
-    "amazon q", "amazon q developer",
-    "kiro", "kiro ide", "kiro cli",
-    "replit agent", "replit ai", "replit general agent",
-    "junie", "jetbrains junie", "junie cli",
-    "tabnine", "tabnine agent", "tabnine cli",
-    "aider", "aider chat",
-    "cline", "cline agent",
-    "roo code", "roocode", "roo",
-    "continue", "continue dev", "continue cli",
-    "qodo", "qodo merge", "pr-agent", "qodo code review"
-]
+AGENT_TERMS = ["Codex", "GitHub Copilot", "Cursor", "Windsurf", "Devin", "OpenCode", "Aider", "Claude Code", "Cline", "Antigravity"]
 
 AI_TERMS = ["ai", "artificial intelligence", "llm", "generative ai", "agentic"]
 DEV_TERMS = [
@@ -95,7 +78,7 @@ def extract_from_html(client, url):
             href = title_tag["href"] if title_tag else ""
             link = href if href.startswith("http") else f"https://dev.to{href}"
             date_tag = article.find("time")
-            date_text = date_tag.get("datetime") if date_tag else datetime.datetime.now().date().isoformat()
+            date_text = date_tag.get("datetime") if date_tag else today_local().isoformat()
             candidate = {
                 "id": link,
                 "title": title,
@@ -208,7 +191,7 @@ def extract_devto(max_records=80, run_id=None):
             "date_range_start": SOURCE_START_DATE.isoformat(),
             "date_range_end": SOURCE_END_DATE.isoformat(),
             "max_records": max_records,
-            "extracted_at": datetime.datetime.now().isoformat(),
+            "extracted_at": to_ec_naive(now_local()).isoformat(),
         },
         "items": records,
     }

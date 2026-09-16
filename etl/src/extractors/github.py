@@ -13,6 +13,7 @@ from src.utils.extraction_evidence import (
 from src.utils.http_client import HttpClient
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
+from src.utils.time_utils import now_local, to_ec_naive
 
 
 SOURCE_START_DATE = "2023-01-01"
@@ -168,9 +169,7 @@ def extract_github_repos(queries=None, pages=10, per_page=100, run_id=None, star
         raise ValueError("GitHub start_date must not be after end_date")
     if queries is None:
         queries = [
-            "Cursor", "Claude Code", "Codex", "GitHub Copilot", "Cline",
-            "RooCode", "Windsurf", "Aider", "Augment", "JetBrains Junie",
-            "Gemini CLI", "AWS Kiro", "Kilo Code", "Zencoder",
+            "Codex", "GitHub Copilot", "Cursor", "Windsurf", "Devin", "OpenCode", "Aider", "Claude Code", "Cline", "Antigravity"
         ]
     pages = max(1, min(int(pages), MAX_PAGES_PER_PARTITION))
     per_page = max(1, min(int(per_page), 100))
@@ -228,7 +227,7 @@ def extract_github_repos(queries=None, pages=10, per_page=100, run_id=None, star
                 }
                 for result in query_results
             ],
-            "extracted_at": datetime.datetime.now().isoformat(),
+            "extracted_at": to_ec_naive(now_local()).isoformat(),
         },
         "items": all_items,
     }

@@ -9,7 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 
@@ -20,6 +20,7 @@ from src.utils.extraction_evidence import (
     ExtractionStatus,
     _write_json_atomic,
 )
+from src.utils.time_utils import ECUADOR_TZ, now_local
 
 
 SUCCESSFUL_ATTEMPTS = {
@@ -41,15 +42,21 @@ DEFAULT_NUMERIC_METRICS = (
 )
 
 
-def _as_utc(value) -> datetime:
+def _as_ec(value) -> datetime:
+    """Normaliza a America/Guayaquil (UTC-5, sin DST).
+
+    Convención del stack: un datetime NAIVE representa hora de Ecuador.
+    Un valor tz-aware (UTC desde la API o TIMESTAMPTZ de la BD) se
+    convierte a Ecuador preservando el instante.
+    """
     # Guard against pd.NaT and None — both must be rejected before parsing.
     # bool(pd.NaT) is True in Python, so an `if value:` check is NOT safe here.
     if value is None or value is pd.NaT:
-        raise ValueError(f"Cannot convert {value!r} to a UTC datetime")
+        raise ValueError(f"Cannot convert {value!r} to an Ecuador datetime")
     parsed = value if isinstance(value, datetime) else datetime.fromisoformat(str(value).replace("Z", "+00:00"))
     if parsed.tzinfo is None:
-        parsed = parsed.replace(tzinfo=timezone.utc)
-    return parsed.astimezone(timezone.utc)
+        parsed = parsed.replace(tzinfo=ECUADOR_TZ)
+    return parsed.astimezone(ECUADOR_TZ)
 
 
 def reconcile_quality_counts(raw_records, eligible_records, duplicates_removed, materialized_records):
@@ -88,7 +95,7 @@ def build_source_freshness(
     EMPTY is a completed successful attempt: it refreshes last_success_at while
     preserving records_extracted=0. A FAILED attempt retains prior success time.
     """
-    now = _as_utc(now or datetime.now(timezone.utc))
+    now = _as_ec(now or now_local())
     previous_success = previous_success or {}
     grouped: dict[str, list[ExtractionResult]] = {}
     for result in results:
@@ -96,18 +103,18 @@ def build_source_freshness(
 
     rows = []
     for source, source_results in sorted(grouped.items()):
-        ordered = sorted(source_results, key=lambda item: _as_utc(item.execution_timestamp or now))
+        ordered = sorted(source_results, key=lambda item: _as_ec(item.execution_timestamp or now))
         summaries = [item for item in ordered if item.query is None]
         latest = summaries[-1] if summaries else ordered[-1]
-        attempts = [_as_utc(item.execution_timestamp or now) for item in ordered]
+        attempts = [_as_ec(item.execution_timestamp or now) for item in ordered]
         successful = [
-            _as_utc(item.execution_timestamp or now)
+            _as_ec(item.execution_timestamp or now)
             for item in ordered
             if item.status in SUCCESSFUL_ATTEMPTS
         ]
         prior = previous_success.get(source)
         # Use explicit `is not None` — `if prior:` is unsafe because pd.NaT is truthy.
-        last_success = max(successful) if successful else (_as_utc(prior) if prior is not None else None)
+        last_success = max(successful) if successful else (_as_ec(prior) if prior is not None else None)
         age_hours = None if last_success is None else round(max((now - last_success).total_seconds(), 0) / 3600, 2)
         query_results = [item for item in ordered if item.query is not None]
         completed = sum(item.status in SUCCESSFUL_ATTEMPTS for item in query_results)
@@ -267,7 +274,7 @@ def publish_quality_evidence(run_id, tables: Mapping[str, pd.DataFrame], status,
     _write_json_atomic(marker, {
         "run_id": str(run_id),
         "status": final_status.value,
-        "published_at": datetime.now(timezone.utc).isoformat(),
+        "published_at": now_local().isoformat(),
         "files": published,
     })
 

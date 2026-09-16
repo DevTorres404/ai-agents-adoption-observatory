@@ -1,0 +1,386 @@
+run_id,source,agent,metric_name,raw_value,normalization_method,normalized_value
+2,arxiv,Aider,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,arxiv,Antigravity,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,arxiv,Claude Code,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,arxiv,Cline,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,arxiv,Codex,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,arxiv,Cursor,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,arxiv,Devin,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,arxiv,GitHub Copilot,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,arxiv,OpenCode,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,arxiv,Windsurf,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,arxiv,Aider,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,arxiv,Antigravity,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,arxiv,Claude Code,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,arxiv,Cline,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,arxiv,Codex,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,arxiv,Cursor,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,arxiv,Devin,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,arxiv,GitHub Copilot,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,arxiv,OpenCode,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,arxiv,Windsurf,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,arxiv,Aider,forks_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,Antigravity,forks_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,Claude Code,forks_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,Cline,forks_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,Codex,forks_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,Cursor,forks_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,Devin,forks_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,GitHub Copilot,forks_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,OpenCode,forks_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,Windsurf,forks_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,Aider,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,arxiv,Antigravity,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,arxiv,Claude Code,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,arxiv,Cline,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,arxiv,Codex,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,arxiv,Cursor,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,arxiv,Devin,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,arxiv,GitHub Copilot,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,arxiv,OpenCode,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,arxiv,Windsurf,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,arxiv,Aider,releases,0.0,min_max_within_source_metric,0.0
+2,arxiv,Antigravity,releases,0.0,min_max_within_source_metric,0.0
+2,arxiv,Claude Code,releases,0.0,min_max_within_source_metric,0.0
+2,arxiv,Cline,releases,0.0,min_max_within_source_metric,0.0
+2,arxiv,Codex,releases,0.0,min_max_within_source_metric,0.0
+2,arxiv,Cursor,releases,0.0,min_max_within_source_metric,0.0
+2,arxiv,Devin,releases,0.0,min_max_within_source_metric,0.0
+2,arxiv,GitHub Copilot,releases,0.0,min_max_within_source_metric,0.0
+2,arxiv,OpenCode,releases,0.0,min_max_within_source_metric,0.0
+2,arxiv,Windsurf,releases,0.0,min_max_within_source_metric,0.0
+2,arxiv,Aider,stars_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,Antigravity,stars_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,Claude Code,stars_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,Cline,stars_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,Codex,stars_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,Cursor,stars_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,Devin,stars_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,GitHub Copilot,stars_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,OpenCode,stars_github,0.0,min_max_within_source_metric,0.0
+2,arxiv,Windsurf,stars_github,0.0,min_max_within_source_metric,0.0
+2,catalogo,Aider,cantidad_interacciones,3.5,min_max_within_source_metric,0.087307
+2,catalogo,Cline,cantidad_interacciones,2.75,min_max_within_source_metric,0.0
+2,catalogo,Codex,cantidad_interacciones,7.4,min_max_within_source_metric,0.541301
+2,catalogo,Cursor,cantidad_interacciones,5.457199211045365,min_max_within_source_metric,0.315142
+2,catalogo,Devin,cantidad_interacciones,11.340407470288625,min_max_within_source_metric,1.0
+2,catalogo,GitHub Copilot,cantidad_interacciones,4.666666666666667,min_max_within_source_metric,0.223117
+2,catalogo,Windsurf,cantidad_interacciones,7.5,min_max_within_source_metric,0.552942
+2,catalogo,Aider,cantidad_menciones,2.5,min_max_within_source_metric,0.209199
+2,catalogo,Cline,cantidad_menciones,1.5,min_max_within_source_metric,0.0
+2,catalogo,Codex,cantidad_menciones,3.6,min_max_within_source_metric,0.439318
+2,catalogo,Cursor,cantidad_menciones,2.5876923076923077,min_max_within_source_metric,0.227544
+2,catalogo,Devin,cantidad_menciones,6.280135823429542,min_max_within_source_metric,1.0
+2,catalogo,GitHub Copilot,cantidad_menciones,2.6666666666666665,min_max_within_source_metric,0.244066
+2,catalogo,Windsurf,cantidad_menciones,5.875,min_max_within_source_metric,0.915246
+2,catalogo,Aider,forks_github,0.0,min_max_within_source_metric,0.0
+2,catalogo,Cline,forks_github,1616.75,min_max_within_source_metric,1.0
+2,catalogo,Codex,forks_github,0.0,min_max_within_source_metric,0.0
+2,catalogo,Cursor,forks_github,19.976331360946745,min_max_within_source_metric,0.012356
+2,catalogo,Devin,forks_github,38.2901103565365,min_max_within_source_metric,0.023683
+2,catalogo,GitHub Copilot,forks_github,2.0,min_max_within_source_metric,0.001237
+2,catalogo,Windsurf,forks_github,0.3125,min_max_within_source_metric,0.000193
+2,catalogo,Aider,indice_adopcion,0.255,min_max_within_source_metric,0.21587
+2,catalogo,Cline,indice_adopcion,0.15000000000000002,min_max_within_source_metric,0.0
+2,catalogo,Codex,indice_adopcion,0.364,min_max_within_source_metric,0.439963
+2,catalogo,Cursor,indice_adopcion,0.2611400394477318,min_max_within_source_metric,0.228493
+2,catalogo,Devin,indice_adopcion,0.6364049235993209,min_max_within_source_metric,1.0
+2,catalogo,GitHub Copilot,indice_adopcion,0.26999999999999996,min_max_within_source_metric,0.246708
+2,catalogo,Windsurf,indice_adopcion,0.5962500000000001,min_max_within_source_metric,0.917445
+2,catalogo,Aider,indice_innovacion,4.17,min_max_within_source_metric,0.0
+2,catalogo,Cline,indice_innovacion,4.17,min_max_within_source_metric,0.0
+2,catalogo,Codex,indice_innovacion,4.17,min_max_within_source_metric,0.0
+2,catalogo,Cursor,indice_innovacion,4.35974516765286,min_max_within_source_metric,1.0
+2,catalogo,Devin,indice_innovacion,4.17,min_max_within_source_metric,0.0
+2,catalogo,GitHub Copilot,indice_innovacion,4.17,min_max_within_source_metric,0.0
+2,catalogo,Windsurf,indice_innovacion,4.17,min_max_within_source_metric,0.0
+2,catalogo,Aider,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,catalogo,Cline,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,catalogo,Codex,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,catalogo,Cursor,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,catalogo,Devin,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,catalogo,GitHub Copilot,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,catalogo,Windsurf,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,catalogo,Aider,releases,0.0,min_max_within_source_metric,0.0
+2,catalogo,Cline,releases,0.0,min_max_within_source_metric,0.0
+2,catalogo,Codex,releases,0.0,min_max_within_source_metric,0.0
+2,catalogo,Cursor,releases,0.0,min_max_within_source_metric,0.0
+2,catalogo,Devin,releases,0.0,min_max_within_source_metric,0.0
+2,catalogo,GitHub Copilot,releases,0.0,min_max_within_source_metric,0.0
+2,catalogo,Windsurf,releases,0.0,min_max_within_source_metric,0.0
+2,catalogo,Aider,score_popularidad,0.0,min_max_within_source_metric,0.0
+2,catalogo,Cline,score_popularidad,0.125,min_max_within_source_metric,0.21485
+2,catalogo,Codex,score_popularidad,0.542,min_max_within_source_metric,0.93159
+2,catalogo,Cursor,score_popularidad,0.5818011834319526,min_max_within_source_metric,1.0
+2,catalogo,Devin,score_popularidad,0.5102313242784381,min_max_within_source_metric,0.876986
+2,catalogo,GitHub Copilot,score_popularidad,0.25,min_max_within_source_metric,0.4297
+2,catalogo,Windsurf,score_popularidad,0.10500000000000001,min_max_within_source_metric,0.180474
+2,catalogo,Aider,stars_github,0.0,min_max_within_source_metric,0.0
+2,catalogo,Cline,stars_github,12114.75,min_max_within_source_metric,1.0
+2,catalogo,Codex,stars_github,0.0,min_max_within_source_metric,0.0
+2,catalogo,Cursor,stars_github,148.99573964497043,min_max_within_source_metric,0.012299
+2,catalogo,Devin,stars_github,287.8692699490662,min_max_within_source_metric,0.023762
+2,catalogo,GitHub Copilot,stars_github,6.0,min_max_within_source_metric,0.000495
+2,catalogo,Windsurf,stars_github,0.3125,min_max_within_source_metric,2.6e-05
+2,devto,Claude Code,cantidad_interacciones,0.4,min_max_within_source_metric,0.0
+2,devto,Codex,cantidad_interacciones,3.0,min_max_within_source_metric,1.0
+2,devto,Cursor,cantidad_interacciones,0.5,min_max_within_source_metric,0.038462
+2,devto,OpenCode,cantidad_interacciones,1.0,min_max_within_source_metric,0.230769
+2,devto,Claude Code,cantidad_menciones,0.1,min_max_within_source_metric,0.066667
+2,devto,Codex,cantidad_menciones,1.3333333333333333,min_max_within_source_metric,0.888889
+2,devto,Cursor,cantidad_menciones,1.5,min_max_within_source_metric,1.0
+2,devto,OpenCode,cantidad_menciones,0.0,min_max_within_source_metric,0.0
+2,devto,Claude Code,forks_github,0.0,min_max_within_source_metric,0.0
+2,devto,Codex,forks_github,0.0,min_max_within_source_metric,0.0
+2,devto,Cursor,forks_github,0.0,min_max_within_source_metric,0.0
+2,devto,OpenCode,forks_github,0.0,min_max_within_source_metric,0.0
+2,devto,Claude Code,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,devto,Codex,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,devto,Cursor,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,devto,OpenCode,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,devto,Claude Code,releases,0.0,min_max_within_source_metric,0.0
+2,devto,Codex,releases,0.0,min_max_within_source_metric,0.0
+2,devto,Cursor,releases,0.0,min_max_within_source_metric,0.0
+2,devto,OpenCode,releases,0.0,min_max_within_source_metric,0.0
+2,devto,Claude Code,stars_github,0.0,min_max_within_source_metric,0.0
+2,devto,Codex,stars_github,0.0,min_max_within_source_metric,0.0
+2,devto,Cursor,stars_github,0.0,min_max_within_source_metric,0.0
+2,devto,OpenCode,stars_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Aider,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,gnews,Antigravity,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,gnews,Claude Code,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,gnews,Cline,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,gnews,Codex,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,gnews,Cursor,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,gnews,Devin,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,gnews,GitHub Copilot,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,gnews,OpenCode,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,gnews,Windsurf,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,gnews,Aider,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,gnews,Antigravity,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,gnews,Claude Code,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,gnews,Cline,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,gnews,Codex,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,gnews,Cursor,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,gnews,Devin,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,gnews,GitHub Copilot,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,gnews,OpenCode,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,gnews,Windsurf,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,gnews,Aider,forks_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Antigravity,forks_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Claude Code,forks_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Cline,forks_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Codex,forks_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Cursor,forks_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Devin,forks_github,0.0,min_max_within_source_metric,0.0
+2,gnews,GitHub Copilot,forks_github,0.0,min_max_within_source_metric,0.0
+2,gnews,OpenCode,forks_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Windsurf,forks_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Aider,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,gnews,Antigravity,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,gnews,Claude Code,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,gnews,Cline,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,gnews,Codex,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,gnews,Cursor,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,gnews,Devin,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,gnews,GitHub Copilot,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,gnews,OpenCode,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,gnews,Windsurf,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,gnews,Aider,releases,0.0,min_max_within_source_metric,0.0
+2,gnews,Antigravity,releases,0.0,min_max_within_source_metric,0.0
+2,gnews,Claude Code,releases,0.0,min_max_within_source_metric,0.0
+2,gnews,Cline,releases,0.0,min_max_within_source_metric,0.0
+2,gnews,Codex,releases,0.0,min_max_within_source_metric,0.0
+2,gnews,Cursor,releases,0.0,min_max_within_source_metric,0.0
+2,gnews,Devin,releases,0.0,min_max_within_source_metric,0.0
+2,gnews,GitHub Copilot,releases,0.0,min_max_within_source_metric,0.0
+2,gnews,OpenCode,releases,0.0,min_max_within_source_metric,0.0
+2,gnews,Windsurf,releases,0.0,min_max_within_source_metric,0.0
+2,gnews,Aider,stars_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Antigravity,stars_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Claude Code,stars_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Cline,stars_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Codex,stars_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Cursor,stars_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Devin,stars_github,0.0,min_max_within_source_metric,0.0
+2,gnews,GitHub Copilot,stars_github,0.0,min_max_within_source_metric,0.0
+2,gnews,OpenCode,stars_github,0.0,min_max_within_source_metric,0.0
+2,gnews,Windsurf,stars_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Aider,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Antigravity,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Claude Code,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Cline,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Codex,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Cursor,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Devin,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,GitHub Copilot,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,OpenCode,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Windsurf,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Aider,cantidad_menciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Antigravity,cantidad_menciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Claude Code,cantidad_menciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Cline,cantidad_menciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Codex,cantidad_menciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Cursor,cantidad_menciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Devin,cantidad_menciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,GitHub Copilot,cantidad_menciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,OpenCode,cantidad_menciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Windsurf,cantidad_menciones,0.0,min_max_within_source_metric,0.0
+2,google_trends,Aider,forks_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Antigravity,forks_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Claude Code,forks_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Cline,forks_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Codex,forks_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Cursor,forks_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Devin,forks_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,GitHub Copilot,forks_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,OpenCode,forks_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Windsurf,forks_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Aider,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,google_trends,Antigravity,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,google_trends,Claude Code,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,google_trends,Cline,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,google_trends,Codex,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,google_trends,Cursor,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,google_trends,Devin,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,google_trends,GitHub Copilot,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,google_trends,OpenCode,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,google_trends,Windsurf,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,google_trends,Aider,releases,0.0,min_max_within_source_metric,0.0
+2,google_trends,Antigravity,releases,0.0,min_max_within_source_metric,0.0
+2,google_trends,Claude Code,releases,0.0,min_max_within_source_metric,0.0
+2,google_trends,Cline,releases,0.0,min_max_within_source_metric,0.0
+2,google_trends,Codex,releases,0.0,min_max_within_source_metric,0.0
+2,google_trends,Cursor,releases,0.0,min_max_within_source_metric,0.0
+2,google_trends,Devin,releases,0.0,min_max_within_source_metric,0.0
+2,google_trends,GitHub Copilot,releases,0.0,min_max_within_source_metric,0.0
+2,google_trends,OpenCode,releases,0.0,min_max_within_source_metric,0.0
+2,google_trends,Windsurf,releases,0.0,min_max_within_source_metric,0.0
+2,google_trends,Aider,score_popularidad,0.05670103092783505,min_max_within_source_metric,0.004132
+2,google_trends,Antigravity,score_popularidad,3.3402061855670104,min_max_within_source_metric,0.243426
+2,google_trends,Claude Code,score_popularidad,12.958762886597938,min_max_within_source_metric,0.944403
+2,google_trends,Cline,score_popularidad,0.0,min_max_within_source_metric,0.0
+2,google_trends,Codex,score_popularidad,8.572164948453608,min_max_within_source_metric,0.624718
+2,google_trends,Cursor,score_popularidad,7.283505154639175,min_max_within_source_metric,0.530804
+2,google_trends,Devin,score_popularidad,1.231958762886598,min_max_within_source_metric,0.089782
+2,google_trends,GitHub Copilot,score_popularidad,13.721649484536082,min_max_within_source_metric,1.0
+2,google_trends,OpenCode,score_popularidad,2.268041237113402,min_max_within_source_metric,0.165289
+2,google_trends,Windsurf,score_popularidad,0.8556701030927835,min_max_within_source_metric,0.062359
+2,google_trends,Aider,stars_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Antigravity,stars_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Claude Code,stars_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Cline,stars_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Codex,stars_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Cursor,stars_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Devin,stars_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,GitHub Copilot,stars_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,OpenCode,stars_github,0.0,min_max_within_source_metric,0.0
+2,google_trends,Windsurf,stars_github,0.0,min_max_within_source_metric,0.0
+2,reddit,Aider,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,reddit,Antigravity,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,reddit,Claude Code,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,reddit,Cline,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,reddit,Codex,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,reddit,Cursor,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,reddit,Devin,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,reddit,GitHub Copilot,cantidad_interacciones,0.0,min_max_within_source_metric,0.0
+2,reddit,Aider,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,reddit,Antigravity,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,reddit,Claude Code,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,reddit,Cline,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,reddit,Codex,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,reddit,Cursor,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,reddit,Devin,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,reddit,GitHub Copilot,cantidad_menciones,1.0,min_max_within_source_metric,0.0
+2,reddit,Aider,forks_github,0.0,min_max_within_source_metric,0.0
+2,reddit,Antigravity,forks_github,0.0,min_max_within_source_metric,0.0
+2,reddit,Claude Code,forks_github,0.0,min_max_within_source_metric,0.0
+2,reddit,Cline,forks_github,0.0,min_max_within_source_metric,0.0
+2,reddit,Codex,forks_github,0.0,min_max_within_source_metric,0.0
+2,reddit,Cursor,forks_github,0.0,min_max_within_source_metric,0.0
+2,reddit,Devin,forks_github,0.0,min_max_within_source_metric,0.0
+2,reddit,GitHub Copilot,forks_github,0.0,min_max_within_source_metric,0.0
+2,reddit,Aider,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,reddit,Antigravity,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,reddit,Claude Code,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,reddit,Cline,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,reddit,Codex,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,reddit,Cursor,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,reddit,Devin,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,reddit,GitHub Copilot,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,reddit,Aider,releases,0.0,min_max_within_source_metric,0.0
+2,reddit,Antigravity,releases,0.0,min_max_within_source_metric,0.0
+2,reddit,Claude Code,releases,0.0,min_max_within_source_metric,0.0
+2,reddit,Cline,releases,0.0,min_max_within_source_metric,0.0
+2,reddit,Codex,releases,0.0,min_max_within_source_metric,0.0
+2,reddit,Cursor,releases,0.0,min_max_within_source_metric,0.0
+2,reddit,Devin,releases,0.0,min_max_within_source_metric,0.0
+2,reddit,GitHub Copilot,releases,0.0,min_max_within_source_metric,0.0
+2,reddit,Aider,stars_github,0.0,min_max_within_source_metric,0.0
+2,reddit,Antigravity,stars_github,0.0,min_max_within_source_metric,0.0
+2,reddit,Claude Code,stars_github,0.0,min_max_within_source_metric,0.0
+2,reddit,Cline,stars_github,0.0,min_max_within_source_metric,0.0
+2,reddit,Codex,stars_github,0.0,min_max_within_source_metric,0.0
+2,reddit,Cursor,stars_github,0.0,min_max_within_source_metric,0.0
+2,reddit,Devin,stars_github,0.0,min_max_within_source_metric,0.0
+2,reddit,GitHub Copilot,stars_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Aider,cantidad_interacciones,0.5,min_max_within_source_metric,0.077801
+2,stackoverflow,Antigravity,cantidad_interacciones,0.6666666666666666,min_max_within_source_metric,0.138313
+2,stackoverflow,Claude Code,cantidad_interacciones,1.588235294117647,min_max_within_source_metric,0.472907
+2,stackoverflow,Cline,cantidad_interacciones,0.7872340425531915,min_max_within_source_metric,0.182087
+2,stackoverflow,Codex,cantidad_interacciones,0.782608695652174,min_max_within_source_metric,0.180408
+2,stackoverflow,Cursor,cantidad_interacciones,0.8557504873294347,min_max_within_source_metric,0.206963
+2,stackoverflow,Devin,cantidad_interacciones,0.7619047619047619,min_max_within_source_metric,0.172891
+2,stackoverflow,GitHub Copilot,cantidad_interacciones,3.04,min_max_within_source_metric,1.0
+2,stackoverflow,OpenCode,cantidad_interacciones,0.2857142857142857,min_max_within_source_metric,0.0
+2,stackoverflow,Windsurf,cantidad_interacciones,0.75,min_max_within_source_metric,0.168568
+2,stackoverflow,Aider,cantidad_menciones,2.0714285714285716,min_max_within_source_metric,0.425443
+2,stackoverflow,Antigravity,cantidad_menciones,2.2666666666666666,min_max_within_source_metric,0.570803
+2,stackoverflow,Claude Code,cantidad_menciones,2.843137254901961,min_max_within_source_metric,1.0
+2,stackoverflow,Cline,cantidad_menciones,2.1702127659574466,min_max_within_source_metric,0.498991
+2,stackoverflow,Codex,cantidad_menciones,1.9891304347826086,min_max_within_source_metric,0.36417
+2,stackoverflow,Cursor,cantidad_menciones,1.9746588693957114,min_max_within_source_metric,0.353396
+2,stackoverflow,Devin,cantidad_menciones,2.5714285714285716,min_max_within_source_metric,0.797706
+2,stackoverflow,GitHub Copilot,cantidad_menciones,2.258947368421053,min_max_within_source_metric,0.565056
+2,stackoverflow,OpenCode,cantidad_menciones,2.0,min_max_within_source_metric,0.372263
+2,stackoverflow,Windsurf,cantidad_menciones,1.5,min_max_within_source_metric,0.0
+2,stackoverflow,Aider,forks_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Antigravity,forks_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Claude Code,forks_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Cline,forks_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Codex,forks_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Cursor,forks_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Devin,forks_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,GitHub Copilot,forks_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,OpenCode,forks_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Windsurf,forks_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Aider,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Antigravity,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Claude Code,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Cline,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Codex,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Cursor,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Devin,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,GitHub Copilot,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,OpenCode,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Windsurf,issues_abiertos,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Aider,releases,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Antigravity,releases,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Claude Code,releases,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Cline,releases,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Codex,releases,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Cursor,releases,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Devin,releases,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,GitHub Copilot,releases,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,OpenCode,releases,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Windsurf,releases,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Aider,stars_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Antigravity,stars_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Claude Code,stars_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Cline,stars_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Codex,stars_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Cursor,stars_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Devin,stars_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,GitHub Copilot,stars_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,OpenCode,stars_github,0.0,min_max_within_source_metric,0.0
+2,stackoverflow,Windsurf,stars_github,0.0,min_max_within_source_metric,0.0

@@ -7,6 +7,8 @@ services:
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
       POSTGRES_DB: ${DB_NAME:-observatorio_ia}
+      TZ: America/Guayaquil
+      PGTZ: America/Guayaquil
     ports:
       - "127.0.0.1:5433:5432"
     volumes:
@@ -36,6 +38,7 @@ services:
       DB_NAME: ${DB_NAME:-observatorio_ia}
       DB_HOST: postgres
       DB_PORT: "5432"
+      TZ: America/Guayaquil
       CORS_ORIGINS: ${CORS_ORIGINS:-https://biai.labtorres.me}
       SWAGGER_ENABLED: ${SWAGGER_ENABLED:-false}
     depends_on:
@@ -90,6 +93,7 @@ services:
       DB_NAME: ${DB_NAME:-observatorio_ia}
       DB_HOST: postgres
       DB_PORT: "5432"
+      TZ: America/Guayaquil
     volumes:
       - ./etl/data:/app/data
       - ./etl/logs:/app/logs
@@ -112,6 +116,7 @@ services:
       DB_NAME: ${DB_NAME:-observatorio_ia}
       DB_HOST: postgres
       DB_PORT: "5432"
+      TZ: America/Guayaquil
       GITHUB_TOKEN: ${GITHUB_TOKEN:-}
     volumes:
       - ./etl/data:/app/data
