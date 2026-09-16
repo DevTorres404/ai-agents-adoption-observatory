@@ -88,3 +88,6 @@ TESIS.tex
 ESTADO_ACTUAL_PROYECTO.tex
 cuestionario_preguntas.md
 planteamiento_problema.md
+
+# Logs generados en runtime (no deben trackearse)
+etl/logs/
