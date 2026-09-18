@@ -1,5 +1,9 @@
 # ETL principal y micro ETL de GitHub
 
+> Compatibilidad: la operación recomendada ahora usa cuatro ETL independientes.
+> Consultar [ETL por fuente](SOURCE_ETLS.md) para rangos, migración y trazabilidad.
+> `main` conserva solo AIDev, Google Trends y Hacker News; Stack Overflow está retirado.
+
 El ETL queda dividido en dos procesos batch independientes:
 
 | Servicio Compose | Ejecutable Python | Alcance |

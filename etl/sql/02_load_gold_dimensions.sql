@@ -69,11 +69,14 @@ SELECT DISTINCT
     END AS nombre_dia,
     (EXTRACT(ISODOW FROM s.fecha_evento)::INT IN (6, 7)) AS es_fin_semana
 FROM (SELECT * FROM staging.stg_actividad_agente_ia
-        WHERE COALESCE(fuente, '') NOT IN ('fuente_propia', 'encuesta')
+        WHERE fuente = ANY(string_to_array(COALESCE(NULLIF(current_setting('etl.active_sources', true), ''), 'catalogo,github,google_trends,hackernews'), ','))
           AND CASE COALESCE(NULLIF(current_setting('etl.pipeline', true), ''), 'all')
             WHEN 'github' THEN fuente = 'github'
             WHEN 'main' THEN COALESCE(fuente, '') <> 'github'
             WHEN 'all' THEN TRUE
+            WHEN 'catalogo' THEN fuente = 'catalogo'
+            WHEN 'google_trends' THEN fuente = 'google_trends'
+            WHEN 'hackernews' THEN fuente = 'hackernews'
             ELSE FALSE
         END) s
 WHERE s.fecha_evento IS NOT NULL
@@ -100,11 +103,14 @@ WITH agentes_distintos AS (
         COALESCE(NULLIF(BTRIM(s.nombre_agente), ''), 'No especificado') AS nombre_agente,
         COALESCE(NULLIF(BTRIM(s.categoria), ''), 'No especificado') AS categoria_agente
     FROM (SELECT * FROM staging.stg_actividad_agente_ia
-        WHERE COALESCE(fuente, '') NOT IN ('fuente_propia', 'encuesta')
+        WHERE fuente = ANY(string_to_array(COALESCE(NULLIF(current_setting('etl.active_sources', true), ''), 'catalogo,github,google_trends,hackernews'), ','))
           AND CASE COALESCE(NULLIF(current_setting('etl.pipeline', true), ''), 'all')
             WHEN 'github' THEN fuente = 'github'
             WHEN 'main' THEN COALESCE(fuente, '') <> 'github'
             WHEN 'all' THEN TRUE
+            WHEN 'catalogo' THEN fuente = 'catalogo'
+            WHEN 'google_trends' THEN fuente = 'google_trends'
+            WHEN 'hackernews' THEN fuente = 'hackernews'
             ELSE FALSE
         END) s
     WHERE s.nombre_agente IS NOT NULL
@@ -129,67 +135,63 @@ SELECT
     nombre_agente,
     CASE nombre_agente
         WHEN 'Codex' THEN 'Modelo fundacional de codigo'
-        WHEN 'GitHub Copilot' THEN 'Equipos GitHub/Microsoft'
-        WHEN 'Cursor' THEN 'Usuarios de VS Code, desarrollo general'
-        WHEN 'Windsurf' THEN 'Codebases grandes, enterprise'
+        WHEN 'GitHub Copilot Coding Agent' THEN 'Equipos GitHub/Microsoft'
+        WHEN 'Cursor Agent' THEN 'Usuarios de VS Code, desarrollo general'
+        WHEN 'Windsurf Cascade' THEN 'Codebases grandes, enterprise'
         WHEN 'Devin' THEN 'Ingenieria de software autonoma'
         WHEN 'OpenCode' THEN 'Desarrollo en terminal agnostico'
-        WHEN 'Aider' THEN 'Desarrolladores terminal-first'
         WHEN 'Claude Code' THEN 'Tareas de razonamiento complejo'
         WHEN 'Cline' THEN 'Usuarios de VS Code agnosticos al modelo'
-        WHEN 'Antigravity' THEN 'Estado del arte / IDE integrado'
+        WHEN 'Google Antigravity' THEN 'Estado del arte / IDE integrado'
         ELSE 'No especificado'
     END AS categoria_agente,
     CASE nombre_agente
         WHEN 'Codex' THEN 'API / Modelo'
-        WHEN 'GitHub Copilot' THEN 'Ecosistema nativo'
-        WHEN 'Cursor' THEN 'IDE dedicado'
-        WHEN 'Windsurf' THEN 'IDE dedicado'
+        WHEN 'GitHub Copilot Coding Agent' THEN 'Ecosistema nativo'
+        WHEN 'Cursor Agent' THEN 'IDE dedicado'
+        WHEN 'Windsurf Cascade' THEN 'IDE dedicado'
         WHEN 'Devin' THEN 'Agente autonomo'
         WHEN 'OpenCode' THEN 'Primero en terminal'
-        WHEN 'Aider' THEN 'Primero en terminal'
         WHEN 'Claude Code' THEN 'Primero en terminal'
         WHEN 'Cline' THEN 'Extension BYOK'
-        WHEN 'Antigravity' THEN 'IDE y Agente'
+        WHEN 'Google Antigravity' THEN 'IDE y Agente'
         ELSE 'No especificado'
     END AS tipo_agente,
     CASE nombre_agente
         WHEN 'Codex' THEN 'OpenAI'
-        WHEN 'GitHub Copilot' THEN 'Microsoft / GitHub'
-        WHEN 'Cursor' THEN 'Anysphere'
-        WHEN 'Windsurf' THEN 'Codeium'
+        WHEN 'GitHub Copilot Coding Agent' THEN 'Microsoft / GitHub'
+        WHEN 'Cursor Agent' THEN 'Anysphere'
+        WHEN 'Windsurf Cascade' THEN 'Codeium'
         WHEN 'Devin' THEN 'Cognition'
         WHEN 'OpenCode' THEN 'OpenCode'
-        WHEN 'Aider' THEN 'Open Source'
         WHEN 'Claude Code' THEN 'Anthropic'
         WHEN 'Cline' THEN 'Open Source'
-        WHEN 'Antigravity' THEN 'Google Deepmind'
+        WHEN 'Google Antigravity' THEN 'Google Deepmind'
+        WHEN 'Google Jules' THEN 'Google'
         ELSE 'No especificado'
     END AS proveedor,
     CASE nombre_agente
         WHEN 'Codex' THEN 'Pionero en autocompletado LLM'
-        WHEN 'GitHub Copilot' THEN 'Copilot Workspaces, integracion profunda con GitHub'
-        WHEN 'Cursor' THEN 'Razonamiento en codebase multi-repo'
-        WHEN 'Windsurf' THEN 'Carga automatica de contexto (Cascade)'
+        WHEN 'GitHub Copilot Coding Agent' THEN 'Copilot Workspaces, integracion profunda con GitHub'
+        WHEN 'Cursor Agent' THEN 'Razonamiento en codebase multi-repo'
+        WHEN 'Windsurf Cascade' THEN 'Carga automatica de contexto (Cascade)'
         WHEN 'Devin' THEN 'Agente 100% autonomo cloud'
         WHEN 'OpenCode' THEN 'Orquestador agnostico de terminal'
-        WHEN 'Aider' THEN 'Agnostico al editor, Git nativo'
         WHEN 'Claude Code' THEN 'Profundidad de razonamiento multi-paso'
         WHEN 'Cline' THEN 'Open source, agnostico al modelo'
-        WHEN 'Antigravity' THEN 'Memoria a largo plazo e integracion total'
+        WHEN 'Google Antigravity' THEN 'Memoria a largo plazo e integracion total'
         ELSE 'No especificado'
     END AS caracteristica_clave,
     CASE nombre_agente
         WHEN 'Codex' THEN 'Deprecado / API'
-        WHEN 'GitHub Copilot' THEN 'Suscripcion por usuario'
-        WHEN 'Cursor' THEN 'Gratis + de pago'
-        WHEN 'Windsurf' THEN 'Gratis + de pago'
+        WHEN 'GitHub Copilot Coding Agent' THEN 'Suscripcion por usuario'
+        WHEN 'Cursor Agent' THEN 'Gratis + de pago'
+        WHEN 'Windsurf Cascade' THEN 'Gratis + de pago'
         WHEN 'Devin' THEN 'Enterprise'
         WHEN 'OpenCode' THEN 'Gratis (Open Source)'
-        WHEN 'Aider' THEN 'Gratis (BYOK)'
         WHEN 'Claude Code' THEN 'Segun uso'
         WHEN 'Cline' THEN 'Gratis (BYOK)'
-        WHEN 'Antigravity' THEN 'Preview / Beta'
+        WHEN 'Google Antigravity' THEN 'Preview / Beta'
         ELSE 'No especificado'
     END AS modelo_precios,
     CASE
@@ -217,11 +219,14 @@ WITH fuentes_distintas AS (
         COALESCE(NULLIF(BTRIM(s.fuente), ''), 'No especificado') AS nombre_fuente,
         COALESCE(NULLIF(BTRIM(s.tipo_fuente), ''), 'No especificado') AS tipo_fuente
     FROM (SELECT * FROM staging.stg_actividad_agente_ia
-        WHERE COALESCE(fuente, '') NOT IN ('fuente_propia', 'encuesta')
+        WHERE fuente = ANY(string_to_array(COALESCE(NULLIF(current_setting('etl.active_sources', true), ''), 'catalogo,github,google_trends,hackernews'), ','))
           AND CASE COALESCE(NULLIF(current_setting('etl.pipeline', true), ''), 'all')
             WHEN 'github' THEN fuente = 'github'
             WHEN 'main' THEN COALESCE(fuente, '') <> 'github'
             WHEN 'all' THEN TRUE
+            WHEN 'catalogo' THEN fuente = 'catalogo'
+            WHEN 'google_trends' THEN fuente = 'google_trends'
+            WHEN 'hackernews' THEN fuente = 'hackernews'
             ELSE FALSE
         END) s
     WHERE s.fuente IS NOT NULL
@@ -255,11 +260,14 @@ WITH plataformas_consolidadas AS (
         COALESCE(NULLIF(BTRIM(s.dim_tipo_plataforma), ''), 'No determinado') AS tipo_plataforma,
         COALESCE(NULLIF(BTRIM(s.dim_ecosistema), ''), 'No determinado') AS ecosistema
     FROM (SELECT * FROM staging.stg_actividad_agente_ia
-        WHERE COALESCE(fuente, '') NOT IN ('fuente_propia', 'encuesta')
+        WHERE fuente = ANY(string_to_array(COALESCE(NULLIF(current_setting('etl.active_sources', true), ''), 'catalogo,github,google_trends,hackernews'), ','))
           AND CASE COALESCE(NULLIF(current_setting('etl.pipeline', true), ''), 'all')
             WHEN 'github' THEN fuente = 'github'
             WHEN 'main' THEN COALESCE(fuente, '') <> 'github'
             WHEN 'all' THEN TRUE
+            WHEN 'catalogo' THEN fuente = 'catalogo'
+            WHEN 'google_trends' THEN fuente = 'google_trends'
+            WHEN 'hackernews' THEN fuente = 'hackernews'
             ELSE FALSE
         END) s
     WHERE s.dim_nombre_plataforma IS NOT NULL
@@ -298,11 +306,14 @@ WITH tecnologias_consolidadas AS (
         COALESCE(NULLIF(BTRIM(s.dim_dominio_tecnologico), ''), 'No determinado') AS dominio_tecnologico,
         COALESCE(NULLIF(BTRIM(s.dim_tipo_senal), ''), 'Observación digital') AS tipo_senal
     FROM (SELECT * FROM staging.stg_actividad_agente_ia
-        WHERE COALESCE(fuente, '') NOT IN ('fuente_propia', 'encuesta')
+        WHERE fuente = ANY(string_to_array(COALESCE(NULLIF(current_setting('etl.active_sources', true), ''), 'catalogo,github,google_trends,hackernews'), ','))
           AND CASE COALESCE(NULLIF(current_setting('etl.pipeline', true), ''), 'all')
             WHEN 'github' THEN fuente = 'github'
             WHEN 'main' THEN COALESCE(fuente, '') <> 'github'
             WHEN 'all' THEN TRUE
+            WHEN 'catalogo' THEN fuente = 'catalogo'
+            WHEN 'google_trends' THEN fuente = 'google_trends'
+            WHEN 'hackernews' THEN fuente = 'hackernews'
             ELSE FALSE
         END) s
     WHERE s.dim_nombre_tecnologia IS NOT NULL
@@ -345,11 +356,14 @@ WITH comunidades_consolidadas AS (
         COALESCE(NULLIF(BTRIM(s.dim_region_comunidad), ''), 'No especificado') AS region,
         COALESCE(NULLIF(BTRIM(s.dim_nombre_plataforma), ''), 'No determinada') AS plataforma_comunidad
     FROM (SELECT * FROM staging.stg_actividad_agente_ia
-        WHERE COALESCE(fuente, '') NOT IN ('fuente_propia', 'encuesta')
+        WHERE fuente = ANY(string_to_array(COALESCE(NULLIF(current_setting('etl.active_sources', true), ''), 'catalogo,github,google_trends,hackernews'), ','))
           AND CASE COALESCE(NULLIF(current_setting('etl.pipeline', true), ''), 'all')
             WHEN 'github' THEN fuente = 'github'
             WHEN 'main' THEN COALESCE(fuente, '') <> 'github'
             WHEN 'all' THEN TRUE
+            WHEN 'catalogo' THEN fuente = 'catalogo'
+            WHEN 'google_trends' THEN fuente = 'google_trends'
+            WHEN 'hackernews' THEN fuente = 'hackernews'
             ELSE FALSE
         END) s
     WHERE s.dim_nombre_comunidad IS NOT NULL

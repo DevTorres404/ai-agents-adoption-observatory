@@ -15,11 +15,8 @@ from src.utils import pipeline_scope
 from src.utils.extraction_evidence import EvidenceRun, log_source_execution
 
 
-EXTRACTORS = [
-    "extract_github_repos", "extract_hackernews", "extract_devto", "extract_reddit",
-    "extract_trends", "extract_aidedev_catalog",
-    "extract_stackoverflow", "extract_arxiv", "extract_gnews",
-]
+EXTRACTORS = ["extract_github_repos", "extract_trends", "extract_aidedev_catalog", "extract_hackernews"]
+
 
 
 @pytest.mark.parametrize("profile", ["main", "github", "all"])
@@ -28,13 +25,10 @@ def test_extraction_calls_only_owned_sources(monkeypatch, profile):
     for name in EXTRACTORS:
         extractors[name] = MagicMock(return_value=None)
         monkeypatch.setattr(runner, name, extractors[name])
-    fallback = MagicMock()
-    monkeypatch.setattr(runner, "extract_and_validate_catalog", fallback)
     runner.run_extraction_phase(42, "2026-09-01", "2026-09-16", pipeline=profile)
     for name, extractor in extractors.items():
         expected = profile == "all" or (name == "extract_github_repos") == (profile == "github")
         assert extractor.call_count == int(expected)
-    fallback.assert_not_called()
     if profile != "main":
         assert extractors["extract_github_repos"].call_args.kwargs == {
             "pages": 10, "per_page": 100, "run_id": 42,
@@ -47,7 +41,7 @@ def test_main_default_never_extracts_github(monkeypatch):
         monkeypatch.setattr(runner, name, MagicMock(return_value=None))
     runner.run_extraction_phase(42)
     runner.extract_github_repos.assert_not_called()
-    runner.extract_hackernews.assert_called_once_with(run_id=42)
+    runner.extract_trends.assert_called_once_with(run_id=42, start_date=None, end_date=None)
 
 
 @pytest.mark.parametrize("profile", ["main", "github", "all"])
@@ -64,15 +58,15 @@ def test_retired_survey_is_never_extracted(monkeypatch, profile):
 def test_loader_scopes_history_and_manifest(tmp_path, monkeypatch):
     monkeypatch.setattr(raw, "RAW_DIR", tmp_path)
     files = {}
-    for source in ("github", "devto", "catalogo"):
+    for source in ("github", "hackernews", "catalogo"):
         directory = tmp_path / source
         directory.mkdir()
         files[source] = directory / "snapshot.json"
         files[source].write_text('[{"id": 1}]')
     assert raw.select_raw_files("github") == [files["github"]]
-    assert set(raw.select_raw_files("main")) == {files["devto"], files["catalogo"]}
+    assert set(raw.select_raw_files("main")) == {files["hackernews"], files["catalogo"]}
     assert raw.select_raw_files("github", []) == []
-    assert raw.select_raw_files("main", [files["devto"], files["devto"]]) == [files["devto"]]
+    assert raw.select_raw_files("main", [files["hackernews"], files["hackernews"]]) == [files["hackernews"]]
     with pytest.raises(ValueError, match="does not belong"):
         raw.select_raw_files("main", [files["github"]])
     with pytest.raises(ValueError, match="outside"):
@@ -85,7 +79,7 @@ def test_loader_scopes_history_and_manifest(tmp_path, monkeypatch):
 def orchestrator(monkeypatch, tmp_path):
     events = []
     publications = []
-    monkeypatch.setattr(runner, "start_pipeline_audit", lambda: 42)
+    monkeypatch.setattr(runner, "start_pipeline_audit", lambda *a, **k: 42)
     end = MagicMock()
     monkeypatch.setattr(runner, "end_pipeline_audit", end)
 
@@ -117,7 +111,7 @@ def orchestrator(monkeypatch, tmp_path):
 @pytest.mark.parametrize("profile", ["main", "github"])
 def test_full_etl_passes_scope_and_only_current_raw_manifest(monkeypatch, orchestrator, profile):
     events, publications, mocks, end = orchestrator
-    source = "github" if profile == "github" else "devto"
+    source = "github" if profile == "github" else "hackernews"
 
     def extract(run_id, **kwargs):
         assert kwargs["pipeline"] == profile
@@ -274,4 +268,4 @@ def test_gold_sets_scope_before_running_shared_sql(monkeypatch):
     assert cursor.execute.call_args_list[0].args == (
         "SELECT set_config('etl.pipeline', %s, true)", ("github",),
     )
-    assert any("WHERE (fuente = 'github')" in str(call.args[0]) for call in cursor.execute.call_args_list)
+    assert any("WHERE (fuente IN ('github'))" in str(call.args[0]) for call in cursor.execute.call_args_list)

@@ -83,7 +83,8 @@ class RawLoaderApprovalTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             raw_dir = Path(tmpdir) / "raw"
             raw_dir.mkdir()
-            (raw_dir / "test.json").write_text("{}", encoding="utf-8")
+            (raw_dir / "catalogo").mkdir()
+            (raw_dir / "catalogo" / "test.json").write_text("{}", encoding="utf-8")
 
             engine = MagicMock()
             engine.connect.return_value = mock_conn
@@ -117,7 +118,8 @@ class RawLoaderApprovalTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             raw_dir = Path(tmpdir) / "raw"
             raw_dir.mkdir()
-            (raw_dir / "test.json").write_text("{}", encoding="utf-8")
+            (raw_dir / "catalogo").mkdir()
+            (raw_dir / "catalogo" / "test.json").write_text("{}", encoding="utf-8")
 
             engine = MagicMock()
             engine.connect.return_value = mock_conn
@@ -166,7 +168,8 @@ class RawLoaderAtomicityTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             raw_dir = Path(tmpdir) / "raw"
             raw_dir.mkdir()
-            (raw_dir / "test.json").write_text("{}", encoding="utf-8")
+            (raw_dir / "catalogo").mkdir()
+            (raw_dir / "catalogo" / "test.json").write_text("{}", encoding="utf-8")
 
             engine = MagicMock()
             engine.connect.return_value = mock_conn
@@ -199,7 +202,8 @@ class RawLoaderAtomicityTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             raw_dir = Path(tmpdir) / "raw"
             raw_dir.mkdir()
-            (raw_dir / "test.json").write_text("{}", encoding="utf-8")
+            (raw_dir / "catalogo").mkdir()
+            (raw_dir / "catalogo" / "test.json").write_text("{}", encoding="utf-8")
 
             engine = MagicMock()
             engine.connect.return_value = mock_conn
@@ -252,7 +256,8 @@ class RawLoaderRunIdContractTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             raw_dir = Path(tmpdir) / "raw"
             raw_dir.mkdir()
-            (raw_dir / "test.json").write_text("{}", encoding="utf-8")
+            (raw_dir / "catalogo").mkdir()
+            (raw_dir / "catalogo" / "test.json").write_text("{}", encoding="utf-8")
 
             engine = MagicMock()
             engine.connect.return_value = mock_conn

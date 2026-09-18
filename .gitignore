@@ -56,6 +56,7 @@ __pycache__/
 backup_*
 
 # Evidencias pesadas
+etl/docs/*/evidencias/
 etl/docs/evidencias/
 
 .atl/
@@ -63,6 +64,7 @@ etl/docs/evidencias/
 node_modules/
 
 # Datos locales (Archivos pesados generados)
+*.parquet
 etl/data/raw/**/*.json
 etl/data/raw/**/*.parquet
 etl/data/staging/*.csv
@@ -88,6 +90,11 @@ TESIS.tex
 ESTADO_ACTUAL_PROYECTO.tex
 cuestionario_preguntas.md
 planteamiento_problema.md
+TESIS-DOCUMENTOS/
+skills-lock.json
+comandos_produccion.md
+.claude/
+agent/
 
 # Logs generados en runtime (no deben trackearse)
 etl/logs/

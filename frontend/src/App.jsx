@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ShieldCheck, AlertCircle, CalendarClock, CopyCheck, Info, Activity, Database } from 'lucide-react';
 import { fetchKpiData } from './services/api';
+import { formatSourceLabel } from './utils/labels';
 import GlobalFilters from './components/GlobalFilters';
 import Sidebar from './components/Sidebar';
 import TendenciasDashboard from './components/TendenciasDashboard';
@@ -46,20 +47,6 @@ const PAGE_META = {
   }
 };
 
-const SOURCE_LABELS = {
-  arxiv: 'arXiv',
-  catalogo: 'Catálogo',
-  devto: 'Dev.to',
-  github: 'GitHub',
-  gnews: 'Google News',
-  google_trends: 'Google Trends',
-  hackernews: 'Hacker News',
-  reddit: 'Reddit',
-  stackoverflow: 'Stack Overflow'
-};
-
-const formatSourceLabel = source => SOURCE_LABELS[source] || source || 'Sin fuente';
-
 function SkeletonCards() {
   return (
     <div className="grid-cards">
@@ -96,6 +83,7 @@ function App() {
   const [refreshing, setRefreshing] = useState(false);
   const [apiErrors, setApiErrors] = useState([]);
   const [filters, setFilters] = useState({});
+  const [communityOnly, setCommunityOnly] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('dashboard-theme') || 'light';
@@ -254,13 +242,14 @@ function App() {
             onApplyFilters={handleApplyFilters}
             onClearFilters={handleClearFilters}
             onViewDataset={handleViewDataset}
+            refreshing={refreshing}
           />
         )}
 
         {mainApiError && <ErrorBanner message={mainApiError} />}
 
         {loading && data && (
-          <div style={{ opacity: 0.5, pointerEvents: 'none', position: 'relative' }}>
+          <div style={{ opacity: 0.5, pointerEvents: 'none', position: 'relative' }} role="status" aria-live="polite">
             <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10 }}>
               <div className="spinner" />
             </div>
@@ -320,7 +309,7 @@ function App() {
 
         <ErrorBoundary name="Tendencias tab">
         {data && activeTab === 'tendencias' && (
-          <TendenciasDashboard data={data} filters={filters} />
+          <TendenciasDashboard data={data} filters={filters} communityOnly={communityOnly} onToggleCommunity={setCommunityOnly} />
         )}
         </ErrorBoundary>
 

@@ -1,11 +1,11 @@
-import datetime
 import json
-from pathlib import Path
+from contextlib import contextmanager
 import requests
+from src.utils.aidedev_query import dataset_connection, prepare_catalog, iter_catalog
 
-import pandas as pd
 
 from src.utils.error_log import log_error
+from src.utils.extraction_window import resolve_window, require_annual_window
 from src.utils.extraction_evidence import log_source_execution, raw_output_path
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR, ROOT_DIR
@@ -16,12 +16,14 @@ SOURCE_DIR = ROOT_DIR / "data" / "manual" / "aidedev_ai_coding"
 PR_FILE = SOURCE_DIR / "all_pull_request.parquet"
 REPO_FILE = SOURCE_DIR / "all_repository.parquet"
 USER_FILE = SOURCE_DIR / "all_user.parquet"
-DATA_TABLE_FILE = SOURCE_DIR / "data_table.md"
+
 
 SOURCE_START_DATE = "2023-01-01"
 SOURCE_END_DATE = "2026-12-31"
 
+
 ZENODO_BASE_URL = "https://zenodo.org/api/records/16919272/files/{}/content"
+
 
 def _download_file(filename, destination):
     url = ZENODO_BASE_URL.format(filename)
@@ -39,12 +41,21 @@ def _download_file(filename, destination):
             destination.unlink() # Borrar archivo corrupto
         raise Exception(f"Error descargando {filename}: {e}")
 
+
 def _require_files():
+    # A consolidated snapshot must not silently fall back to an older Zenodo
+    # release or omit its supplemental tables when a local file goes missing.
+    manifest_path = PR_FILE.parent / "dataset_manifest.json"
+    if manifest_path.is_file():
+        expected = _input_files().values()
+        missing = [str(path) for path in expected if not path.is_file()]
+        if missing:
+            raise FileNotFoundError("Incomplete consolidated AIDev snapshot: " + ", ".join(missing))
+        return
     files_to_check = {
         "all_pull_request.parquet": PR_FILE,
         "all_repository.parquet": REPO_FILE,
-        "all_user.parquet": USER_FILE,
-        "data_table.md": DATA_TABLE_FILE
+        "all_user.parquet": USER_FILE
     }
     for filename, path in files_to_check.items():
         if not path.exists():
@@ -52,150 +63,89 @@ def _require_files():
             _download_file(filename, path)
 
 
-def _safe_text(value):
-    if pd.isna(value):
-        return ""
-    return str(value)
-
-
-def build_aidedev_catalog(max_pr_rows=None):
-    """
-    Builds an analytical catalog from the AIDev Parquet dataset.
-    The raw Parquet files remain untouched in data/manual/aidedev_ai_coding.
-    """
-    _require_files()
-    global_logger.info("Leyendo AIDev Dataset: AI Coding desde Parquet...")
-
-    pr_columns = [
-        "id",
-        "title",
-        "body",
-        "agent",
-        "user_id",
-        "user",
-        "state",
-        "created_at",
-        "closed_at",
-        "merged_at",
-        "repo_id",
-        "repo_url",
-        "html_url",
-    ]
-    repo_columns = ["id", "url", "license", "full_name", "language", "forks", "stars"]
-    user_columns = ["id", "login", "followers", "following", "created_at"]
-
-    pull_requests = pd.read_parquet(PR_FILE, columns=pr_columns)
-    if max_pr_rows:
-        pull_requests = pull_requests.head(max_pr_rows)
-
-    repositories = pd.read_parquet(REPO_FILE, columns=repo_columns)
-    users = pd.read_parquet(USER_FILE, columns=user_columns)
-
-    pull_requests["created_at"] = pd.to_datetime(pull_requests["created_at"], errors="coerce", utc=True)
-    pull_requests["merged_at"] = pd.to_datetime(pull_requests["merged_at"], errors="coerce", utc=True)
-    start_date = pd.Timestamp(SOURCE_START_DATE, tz="UTC")
-    end_date = pd.Timestamp(SOURCE_END_DATE, tz="UTC")
-    pull_requests = pull_requests[
-        (pull_requests["created_at"] >= start_date)
-        & (pull_requests["created_at"] <= end_date)
-    ]
-    valid_agents = ["Codex", "GitHub Copilot", "Cursor", "Windsurf", "Devin", "OpenCode", "Aider", "Claude Code", "Cline", "Antigravity"]
-    pull_requests = pull_requests[pull_requests["agent"].isin(valid_agents)]
-    pull_requests["is_merged"] = pull_requests["merged_at"].notna().astype(int)
-
-    grouped = (
-        pull_requests
-        .groupby(["agent", "repo_id", "repo_url"], dropna=False)
-        .agg(
-            pull_requests_count=("id", "count"),
-            merged_pull_requests=("is_merged", "sum"),
-            unique_contributors=("user_id", "nunique"),
-            first_activity=("created_at", "min"),
-            last_activity=("created_at", "max"),
-            sample_pr_title=("title", "first"),
-            sample_pr_url=("html_url", "first"),
-        )
-        .reset_index()
-    )
-
-    repositories = repositories.rename(columns={"id": "repo_id", "url": "repo_api_url"})
-    enriched = grouped.merge(repositories, on="repo_id", how="left")
-    total_users = int(users["id"].count()) if "id" in users.columns else int(len(users))
-
-    records = []
-    for _, row in enriched.iterrows():
-        pull_requests_count = int(row.get("pull_requests_count") or 0)
-        merged_pull_requests = int(row.get("merged_pull_requests") or 0)
-        merge_rate = round(merged_pull_requests / pull_requests_count, 4) if pull_requests_count else 0.0
-        first_activity = row.get("first_activity")
-        last_activity = row.get("last_activity")
-
-        records.append({
-            "id": f"{_safe_text(row.get('agent'))}:{_safe_text(row.get('repo_id'))}",
-            "agent": _safe_text(row.get("agent")),
-            "repo_id": None if pd.isna(row.get("repo_id")) else int(row.get("repo_id")),
-            "repo_url": _safe_text(row.get("repo_url")),
-            "repo_api_url": _safe_text(row.get("repo_api_url")),
-            "full_name": _safe_text(row.get("full_name")),
-            "language": _safe_text(row.get("language")),
-            "license": _safe_text(row.get("license")),
-            "stars": 0 if pd.isna(row.get("stars")) else int(row.get("stars")),
-            "forks": 0 if pd.isna(row.get("forks")) else int(row.get("forks")),
-            "pull_requests_count": pull_requests_count,
-            "merged_pull_requests": merged_pull_requests,
-            "merge_rate": merge_rate,
-            "unique_contributors": int(row.get("unique_contributors") or 0),
-            "first_activity": None if pd.isna(first_activity) else first_activity.isoformat(),
-            "last_activity": None if pd.isna(last_activity) else last_activity.isoformat(),
-            "sample_pr_title": _safe_text(row.get("sample_pr_title")),
-            "sample_pr_url": _safe_text(row.get("sample_pr_url")),
-            "dataset": "AIDev Dataset: AI Coding",
-            "total_users_dataset": total_users,
-        })
-
-    records = sorted(records, key=lambda item: item["pull_requests_count"], reverse=True)
-    return records, {
-        "pull_request_rows_read": int(len(pull_requests)),
-        "repository_rows_read": int(len(repositories)),
-        "user_rows_read": int(len(users)),
-        "records_generated": int(len(records)),
+def _input_files():
+    return {
+        "prs": PR_FILE, "repos": REPO_FILE, "users": USER_FILE,
+        "reviews": PR_FILE.parent / "pr_reviews.parquet",
+        "tasks": PR_FILE.parent / "pr_task_type.parquet",
     }
 
 
-def extract_aidedev_catalog(run_id=None):
-    global_logger.info("Iniciando extraccion estructurada AIDev Dataset: AI Coding...")
+@contextmanager
+def _catalog(max_pr_rows=None, start_date=None, end_date=None, annual=False):
+    window = resolve_window(start_date, end_date, default_start=SOURCE_START_DATE, default_end=SOURCE_END_DATE)
+    if annual:
+        require_annual_window(window)
+    _require_files()
+    # Labels observed in the consolidated snapshot: OpenAI_Codex, Copilot,
+    # Claude_Code, Cursor, Google_Jules and Devin. Every dataset label must map
+    # to an official name or ``valid_agents`` silently drops its PR rows.
+    agent_mapping = {
+        "OpenAI_Codex": "Codex", "Copilot": "GitHub Copilot Coding Agent",
+        "Claude_Code": "Claude Code", "Google_Jules": "Google Jules",
+        "Cursor": "Cursor Agent",
+    }
+    valid_agents = ["Codex", "GitHub Copilot Coding Agent", "Cursor Agent", "Windsurf Cascade", "Devin", "OpenCode", "Claude Code", "Cline", "Google Antigravity", "Google Jules"]
+    with dataset_connection(PR_FILE.parent / ".work") as con:
+        stats = prepare_catalog(con, _input_files(), agent_mapping, valid_agents,
+                                window.start.isoformat(), window.end.isoformat(), max_pr_rows, annual=annual)
+        yield iter_catalog(con, stats["unique_users"]), stats
+
+
+def build_aidedev_catalog(max_pr_rows=None, start_date=None, end_date=None, annual=False):
+    """Compatibility helper for small consumers; production streams instead."""
+    with _catalog(max_pr_rows, start_date, end_date, annual=annual) as (records, stats):
+        return list(records), stats
+
+
+def extract_aidedev_catalog(run_id=None, start_date=None, end_date=None):
+    """Project Parquet columns, aggregate on disk, publish JSON atomically."""
+    global_logger.info("Iniciando AIDev desde Parquet con memoria acotada...")
+    window = resolve_window(start_date, end_date, default_start=SOURCE_START_DATE, default_end=SOURCE_END_DATE)
+    temporary = None
     try:
-        records, stats = build_aidedev_catalog()
+        with _catalog(start_date=window.start, end_date=window.end, annual=True) as (records, stats):
+            out_path = raw_output_path("catalogo", prefix="aidedev", run_id=run_id, raw_dir=RAW_DIR)
+            temporary = out_path.with_suffix(".json.tmp")
+            metadata = {
+                "source": "catalogo", "dataset": "AIDev Dataset: AI Coding",
+                "input_files": [str(p) for p in _input_files().values() if p.is_file()],
+                "stats": stats, "date_range_start": window.start.isoformat(),
+                "date_range_end": window.end.isoformat(),
+                "grain": "agent_repository_year",
+                "date_basis": "PR creation year (UTC); other metrics are snapshot attributes",
+                "task_confidence_scale": "Original annotation scale; not an adoption index",
+                "extracted_at": to_ec_naive(now_local()).isoformat(),
+            }
+            manifest_path = PR_FILE.parent / "dataset_manifest.json"
+            if manifest_path.is_file():
+                metadata["dataset_manifest"] = json.loads(manifest_path.read_text(encoding="utf-8"))
+            with temporary.open("w", encoding="utf-8") as handle:
+                handle.write('{"metadata":')
+                json.dump(metadata, handle, ensure_ascii=False, allow_nan=False)
+                handle.write(',"items":[\n')
+                count = 0
+                for record in records:
+                    if count:
+                        handle.write(",")
+                    json.dump(record, handle, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
+                    handle.write("\n")
+                    count += 1
+                handle.write("]}")
+            if count != stats["records_generated"]:
+                raise RuntimeError("AIDev catalog count does not match aggregation")
+            temporary.replace(out_path)
+        return log_source_execution("catalogo", "success" if count else "empty", count,
+                                    None, str(SOURCE_DIR), out_path,
+                                    notes="AIDev projected Parquet aggregation", run_id=run_id)
     except Exception as exc:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
         log_error("aidedev", type(exc).__name__, str(exc), "Extractor abortado", run_id=run_id)
         global_logger.error(f"Fallo en extractor AIDev: {exc}")
         return log_source_execution("catalogo", "failed", 0, None, str(SOURCE_DIR), notes=str(exc), run_id=run_id)
 
-    out_path = raw_output_path("catalogo", prefix="aidedev", run_id=run_id, raw_dir=RAW_DIR)
-
-    payload = {
-        "metadata": {
-            "source": "catalogo",
-            "dataset": "AIDev Dataset: AI Coding",
-            "input_files": [
-                str(PR_FILE.relative_to(ROOT_DIR)).replace("\\", "/"),
-                str(REPO_FILE.relative_to(ROOT_DIR)).replace("\\", "/"),
-                str(USER_FILE.relative_to(ROOT_DIR)).replace("\\", "/"),
-            ],
-            "stats": stats,
-            "date_range_start": SOURCE_START_DATE,
-            "date_range_end": SOURCE_END_DATE,
-            "extracted_at": to_ec_naive(now_local()).isoformat(),
-        },
-        "items": records,
-    }
-
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
-
-    global_logger.info(f"AIDev catalog generado: {len(records)} registros en {out_path.name}")
-    return log_source_execution("catalogo", "success" if records else "empty", len(records), None, str(SOURCE_DIR), out_path, notes="AIDev Dataset: AI Coding", run_id=run_id)
-
 
 if __name__ == "__main__":
-    extract_aidedev_catalog()
+    result = extract_aidedev_catalog()
+    raise SystemExit(0 if result.status.value in {"success", "empty"} else 1)

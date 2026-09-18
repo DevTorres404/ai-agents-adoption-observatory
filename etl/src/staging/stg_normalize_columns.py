@@ -83,6 +83,9 @@ def normalize_dataframe(df, file_meta):
             contributors = pd.to_numeric(first_existing(df, ["unique_contributors"], 0), errors="coerce").fillna(0)
 
             stg_df["id_origen_registro"] = agent.astype(str) + ":" + repo.astype(str)
+            if "activity_year" in df.columns:
+                annual = df["activity_year"].notna()
+                stg_df.loc[annual, "id_origen_registro"] = df.loc[annual, "id"].astype(str)
             stg_df["plataforma"] = "aidedev_ai_coding"
             stg_df["titulo"] = agent.astype(str) + " - " + repo.astype(str)
             stg_df["texto"] = (
@@ -91,6 +94,16 @@ def normalize_dataframe(df, file_meta):
                 + "; pull_requests=" + pr_count.astype(int).astype(str)
                 + "; merged_pull_requests=" + merged_count.astype(int).astype(str)
             )
+            # Preserve supplemental evidence without treating reviews/tasks as PRs
+            # or interpreting annotation confidence as an adoption index.
+            for metric in ("review_count", "human_review_count", "bot_review_count",
+                           "reviewed_pull_requests", "task_classified_pull_requests",
+                           "known_contributors"):
+                if metric in df.columns:
+                    values = pd.to_numeric(df[metric], errors="coerce").fillna(0).astype(int)
+                    stg_df["texto"] += "; " + metric + "=" + values.astype(str)
+            if "task_type_counts" in df.columns:
+                stg_df["texto"] += "; task_type_counts=" + df["task_type_counts"].astype(str)
             stg_df["url"] = first_existing(df, ["sample_pr_url", "repo_url"], "")
             stg_df["fecha_evento_raw"] = first_non_null(df, ["last_activity", "first_activity"], None)
             stg_df["cantidad_menciones"] = pr_count.astype(int)

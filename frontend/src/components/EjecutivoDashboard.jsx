@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
 import {
-  ScatterChart, Scatter, XAxis, YAxis, ZAxis, CartesianGrid,
-  Tooltip as RechartsTooltip, ReferenceLine, ResponsiveContainer,
-  BarChart, Bar, Cell, Label
+  XAxis, YAxis, CartesianGrid,
+  Tooltip as RechartsTooltip, ResponsiveContainer,
+  BarChart, Bar, Cell
 } from 'recharts';
 import { TrendingUp, TrendingDown, Zap, Award, Target, BarChart2, Star } from 'lucide-react';
+import CompetitivePositioning from './CompetitivePositioning';
 import { CategoryAxisTick, CHART_PALETTE } from './charts/Charts';
 
 // ─── helpers ────────────────────────────────────────────────────────────────
@@ -88,17 +89,6 @@ function buildNarrative({ leader, runner, leaderGap, momGrowth, emergent, sorted
   return parts.join(' ');
 }
 
-// ─── Quadrant helper ────────────────────────────────────────────────────────
-
-function quadrantMeta(adopcion, popularidad, medAdop, medPop) {
-  const high_a = adopcion >= medAdop;
-  const high_p = popularidad >= medPop;
-  if (high_a && high_p) return { label: 'Líderes', color: 'var(--success)' };
-  if (!high_a && high_p) return { label: 'Retadores', color: 'var(--primary)' };
-  if (high_a && !high_p) return { label: 'Especializados', color: 'var(--warning)' };
-  return { label: 'Emergentes', color: 'var(--accent)' };
-}
-
 // ─── ExecKPICard ─────────────────────────────────────────────────────────────
 
 function ExecKPICard({ title, value, subtext, icon: Icon, color, trend }) {
@@ -120,135 +110,6 @@ function ExecKPICard({ title, value, subtext, icon: Icon, color, trend }) {
       )}
       {subtext && trend === undefined && <div className="exec-kpi-subtext">{subtext}</div>}
       {subtext && trend !== undefined && trend === null && <div className="exec-kpi-subtext">{subtext}</div>}
-    </div>
-  );
-}
-
-// ─── Quadrant scatter tooltip ────────────────────────────────────────────────
-
-const QuadrantTooltip = ({ active, payload }) => {
-  if (!active || !payload?.length) return null;
-  const d = payload[0].payload;
-  return (
-    <div className="recharts-default-tooltip">
-      <p className="recharts-tooltip-label" style={{ fontWeight: 700 }}>{d.nombre_agente}</p>
-      <p className="recharts-tooltip-item">Adopción: <span className="tooltip-value">{fmtCompact(d.adopcion)}</span></p>
-      <p className="recharts-tooltip-item">Popularidad: <span className="tooltip-value">{fmtCompact(d.popularidad)}</span></p>
-      <p className="recharts-tooltip-item">Categoría: <span className="tooltip-value">{d.categoria_agente || '—'}</span></p>
-      <p className="recharts-tooltip-item" style={{ color: d._q?.color, fontWeight: 600 }}>
-        {d._q?.label ?? '—'}
-      </p>
-    </div>
-  );
-};
-
-// ─── Quadrant scatter chart ──────────────────────────────────────────────────
-
-function QuadrantScatter({ data }) {
-  const validData = (data || [])
-    .map(item => ({
-      ...item,
-      adopcion: Math.max(1, toNum(item.adopcion)),
-      popularidad: Math.max(1, toNum(item.popularidad)),
-      total_observaciones: toNum(item.total_observaciones)
-    }))
-    .filter(item => item.adopcion > 0 || item.popularidad > 0);
-
-  if (validData.length === 0) {
-    return (
-      <div className="panel chart-panel-lg">
-        <h2>Mapa de Posicionamiento Competitivo</h2>
-        <p className="chart-description">Sin datos disponibles para el período seleccionado.</p>
-      </div>
-    );
-  }
-
-  const midIdx = Math.floor(validData.length / 2);
-  const medAdop = [...validData].sort((a, b) => a.adopcion - b.adopcion)[midIdx]?.adopcion || 0;
-  const medPop = [...validData].sort((a, b) => a.popularidad - b.popularidad)[midIdx]?.popularidad || 0;
-
-  const coloredData = validData.map(item => ({
-    ...item,
-    _q: quadrantMeta(item.adopcion, item.popularidad, medAdop, medPop)
-  }));
-
-  // Show labels for top agents by combined score
-  const labelSet = new Set(
-    [...coloredData]
-      .sort((a, b) => b.adopcion + b.popularidad - (a.adopcion + a.popularidad))
-      .slice(0, 8)
-      .map(d => d.nombre_agente)
-  );
-
-  const CustomDot = (props) => {
-    const { cx, cy, payload } = props;
-    const q = payload._q;
-    const r = Math.max(6, Math.min(18, 6 + toNum(payload.total_observaciones) / 60));
-    const showLabel = labelSet.has(payload.nombre_agente);
-    const name = payload.nombre_agente;
-    const trimmed = name.length > 13 ? name.slice(0, 12) + '…' : name;
-    return (
-      <g>
-        <circle cx={cx} cy={cy} r={r} fill={q.color} fillOpacity={0.7} stroke={q.color} strokeWidth={1.5} />
-        {showLabel && (
-          <text
-            x={cx}
-            y={cy - r - 5}
-            textAnchor="middle"
-            fill="var(--text-primary)"
-            fontSize={10}
-            fontWeight={700}
-            style={{ pointerEvents: 'none' }}
-          >
-            {trimmed}
-          </text>
-        )}
-      </g>
-    );
-  };
-
-  const QUADRANTS = [
-    { label: 'Líderes', color: 'var(--success)', desc: 'Alta adopción y popularidad' },
-    { label: 'Retadores', color: 'var(--primary)', desc: 'Alta popularidad, baja adopción' },
-    { label: 'Especializados', color: 'var(--warning)', desc: 'Alta adopción, menor visibilidad' },
-    { label: 'Emergentes', color: 'var(--accent)', desc: 'Por debajo de las medianas del mercado' },
-  ];
-
-  return (
-    <div className="panel chart-panel-lg exec-quadrant-panel panel-featured">
-      <h2>Mapa de Posicionamiento Competitivo</h2>
-      <p className="chart-description">
-        Cada punto es un agente de IA. Eje X = score de adopción (suma de contribuciones observadas normalizadas por fuente; no es un porcentaje ni una escala fija 0-100). Eje Y = popularidad (visibilidad relativa acumulada: menciones e interacciones normalizadas por fuente). Las líneas marcan la mediana del mercado y el tamaño del punto, el volumen de observaciones.
-      </p>
-      <div className="exec-quadrant-legend">
-        {QUADRANTS.map(q => (
-          <div key={q.label} className="exec-quadrant-legend-item">
-            <span className="exec-quadrant-dot" style={{ background: q.color }} />
-            <strong style={{ color: q.color, fontSize: 12 }}>{q.label}</strong>
-            <span className="exec-quadrant-desc">{q.desc}</span>
-          </div>
-        ))}
-      </div>
-      <div className="chart-body-lg">
-        <ResponsiveContainer>
-          <ScatterChart margin={{ top: 30, right: 30, left: 10, bottom: 30 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--border-primary)" />
-            <XAxis type="number" dataKey="adopcion" name="Adopción" scale="log" domain={['auto', 'auto']} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} tickFormatter={fmtCompact}>
-              <Label value="Adopción (Log) →" offset={-12} position="insideBottom" fill="var(--text-muted)" fontSize={11} />
-            </XAxis>
-            <YAxis type="number" dataKey="popularidad" name="Popularidad" scale="log" domain={['auto', 'auto']} tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} tickFormatter={fmtCompact}>
-              <Label value="Popularidad (Log) →" angle={-90} position="insideLeft" fill="var(--text-muted)" fontSize={11} dy={50} />
-            </YAxis>
-            <ZAxis type="number" dataKey="total_observaciones" range={[40, 280]} />
-            <RechartsTooltip content={<QuadrantTooltip />} />
-            <ReferenceLine x={medAdop} stroke="var(--text-muted)" strokeDasharray="4 4" strokeWidth={1.5}
-              label={{ value: 'Med. Adopción', position: 'insideTopRight', fill: 'var(--text-muted)', fontSize: 9 }} />
-            <ReferenceLine y={medPop} stroke="var(--text-muted)" strokeDasharray="4 4" strokeWidth={1.5}
-              label={{ value: 'Med. Popularidad', position: 'insideBottomLeft', fill: 'var(--text-muted)', fontSize: 9 }} />
-            <Scatter name="Agentes" data={coloredData} shape={<CustomDot />} />
-          </ScatterChart>
-        </ResponsiveContainer>
-      </div>
     </div>
   );
 }
@@ -377,7 +238,7 @@ export default function EjecutivoDashboard({ data }) {
 
       {/* Charts */}
       <div className="exec-charts-grid">
-        <QuadrantScatter data={ranking} />
+        <CompetitivePositioning data={ranking} />
         <TopPopularityChart data={ranking} />
       </div>
     </div>

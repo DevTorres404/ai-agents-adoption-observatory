@@ -7,6 +7,7 @@ from sqlalchemy import text
 from .database import get_db
 from fastapi.responses import JSONResponse
 from typing import List, Optional
+from .scope import SUPPORTED_AGENTS, ACTIVE_SOURCES, SCOPE
 
 router = APIRouter()
 etl_router = APIRouter()
@@ -38,8 +39,18 @@ def build_filter_clause(
         JOIN gold.dim_plataforma p ON f.id_plataforma = p.id_plataforma
         JOIN gold.dim_tecnologia tec ON f.id_tecnologia = tec.id_tecnologia
     """
-    where_clauses = ["1=1"]
-    params = {}
+    # Enforce the active scope even without user filters or with stale URLs.
+    where_clauses = ["a.nombre_agente = ANY(:supported_agents)",
+                     "src.nombre_fuente = ANY(:active_sources)",
+                     """(src.nombre_fuente <> 'catalogo'
+                         OR f.id_origen_registro LIKE '%:year:%'
+                         OR NOT EXISTS (
+                             SELECT 1 FROM gold.fact_actividad_agente_ia annual
+                             JOIN gold.dim_fuente annual_source ON annual.id_fuente=annual_source.id_fuente
+                             WHERE annual_source.nombre_fuente='catalogo'
+                               AND annual.id_origen_registro LIKE '%:year:%'
+                         ))"""]
+    params = {"supported_agents": list(SUPPORTED_AGENTS), "active_sources": list(ACTIVE_SOURCES)}
 
     if exclude_unidentified:
         where_clauses.append("a.nombre_agente NOT IN ('No Identificado', 'Otro Agente IA')")
@@ -52,9 +63,8 @@ def build_filter_clause(
         params["fecha_fin"] = datetime.strptime(fecha_fin, "%Y-%m-%d").date()
     
     if agentes:
-        safe_agentes = [ag.replace("'", "''") for ag in agentes]
-        agentes_str = ','.join([f"'{ag}'" for ag in safe_agentes])
-        where_clauses.append(f"a.nombre_agente IN ({agentes_str})")
+        where_clauses.append("a.nombre_agente = ANY(:agentes)")
+        params["agentes"] = agentes
         
     if categoria:
         where_clauses.append("a.categoria_agente = :categoria")
@@ -257,14 +267,38 @@ async def get_matriz_cobertura(
 @router.get("/popularidad")
 async def get_popularidad(db: AsyncSession = Depends(get_db)):
     try:
-        return await fetch_all(db, "SELECT * FROM gold.vw_kpi_popularidad_open_source ORDER BY total_stars DESC LIMIT 20;")
+        joins, where_sql, params = build_filter_clause()
+        return await fetch_all(db, f"""
+            SELECT a.nombre_agente, src.nombre_fuente, p.nombre_plataforma,
+                   COUNT(*) AS total_observaciones, SUM(f.stars_github) AS total_stars,
+                   SUM(f.forks_github) AS total_forks, SUM(f.issues_abiertos) AS total_issues_abiertos,
+                   SUM(f.releases) AS total_releases, ROUND(AVG(f.score_popularidad),4) AS promedio_score_popularidad,
+                   ROUND(SUM(f.score_actividad),4) AS score_actividad_total
+            {joins} WHERE {where_sql} AND (src.nombre_fuente IN ('github','catalogo')
+                OR p.nombre_plataforma IN ('GitHub','API / SDK'))
+            GROUP BY a.nombre_agente, src.nombre_fuente, p.nombre_plataforma
+            ORDER BY total_stars DESC LIMIT 20
+        """, params)
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": "Error al consultar popularidad", "detail": str(e)})
 
 @router.get("/crecimiento")
 async def get_crecimiento(db: AsyncSession = Depends(get_db)):
     try:
-        return await fetch_all(db, "SELECT * FROM gold.vw_kpi_crecimiento_mensual ORDER BY anio ASC, mes ASC;")
+        joins, where_sql, params = build_filter_clause()
+        return await fetch_all(db, f"""
+            WITH mensual AS (
+                SELECT t.anio,t.mes,t.nombre_mes,COUNT(*) AS total_observaciones,
+                    SUM(f.cantidad_menciones) AS total_menciones,
+                    SUM(f.cantidad_interacciones) AS total_interacciones,
+                    ROUND(SUM(f.score_actividad),4) AS score_actividad_total
+                {joins} WHERE {where_sql} GROUP BY t.anio,t.mes,t.nombre_mes
+            ) SELECT *, LAG(total_observaciones) OVER (ORDER BY anio,mes) AS observaciones_mes_anterior,
+                total_observaciones - COALESCE(LAG(total_observaciones) OVER (ORDER BY anio,mes),0) AS variacion_absoluta,
+                ROUND((total_observaciones-LAG(total_observaciones) OVER (ORDER BY anio,mes))*100.0 /
+                    NULLIF(LAG(total_observaciones) OVER (ORDER BY anio,mes),0),2) AS variacion_porcentual
+            FROM mensual ORDER BY anio,mes
+        """, params)
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": "Error al consultar crecimiento", "detail": str(e)})
 
@@ -368,18 +402,44 @@ async def get_tecnologias(
 @router.get("/filtros_opciones")
 async def get_filtros_opciones(db: AsyncSession = Depends(get_db)):
     try:
-        categorias = await fetch_all(db, "SELECT DISTINCT categoria_agente FROM gold.dim_agente WHERE categoria_agente IS NOT NULL ORDER BY categoria_agente ASC;")
-        fuentes = await fetch_all(db, "SELECT DISTINCT nombre_fuente FROM gold.dim_fuente WHERE nombre_fuente IS NOT NULL ORDER BY nombre_fuente ASC;")
-        plataformas = await fetch_all(db, "SELECT DISTINCT nombre_plataforma FROM gold.dim_plataforma WHERE nombre_plataforma IS NOT NULL ORDER BY nombre_plataforma ASC;")
-        tecnologias = await fetch_all(db, "SELECT DISTINCT nombre_tecnologia FROM gold.dim_tecnologia WHERE nombre_tecnologia IS NOT NULL ORDER BY nombre_tecnologia ASC;")
-        agentes_list = await fetch_all(db, "SELECT DISTINCT nombre_agente FROM gold.dim_agente WHERE nombre_agente NOT IN ('No Identificado', 'Otro Agente IA') ORDER BY nombre_agente ASC;")
+        params = {"agents": list(SUPPORTED_AGENTS), "sources": list(ACTIVE_SOURCES)}
+        
+        categorias = await fetch_all(db, "SELECT DISTINCT categoria_agente FROM gold.dim_agente WHERE nombre_agente = ANY(:agents) AND categoria_agente IS NOT NULL ORDER BY categoria_agente ASC;", {"agents": list(SUPPORTED_AGENTS)})
+        
+        plataformas_query = """
+            SELECT DISTINCT p.nombre_plataforma 
+            FROM gold.fact_actividad_agente_ia f
+            JOIN gold.dim_plataforma p ON f.id_plataforma = p.id_plataforma
+            JOIN gold.dim_agente a ON f.id_agente = a.id_agente
+            JOIN gold.dim_fuente src ON f.id_fuente = src.id_fuente
+            WHERE a.nombre_agente = ANY(:agents)
+              AND src.nombre_fuente = ANY(:sources)
+              AND p.nombre_plataforma IS NOT NULL
+            ORDER BY p.nombre_plataforma ASC;
+        """
+        plataformas = await fetch_all(db, plataformas_query, params)
+        
+        tecnologias_query = """
+            SELECT DISTINCT tec.nombre_tecnologia 
+            FROM gold.fact_actividad_agente_ia f
+            JOIN gold.dim_tecnologia tec ON f.id_tecnologia = tec.id_tecnologia
+            JOIN gold.dim_agente a ON f.id_agente = a.id_agente
+            JOIN gold.dim_fuente src ON f.id_fuente = src.id_fuente
+            WHERE a.nombre_agente = ANY(:agents)
+              AND src.nombre_fuente = ANY(:sources)
+              AND tec.nombre_tecnologia IS NOT NULL
+            ORDER BY tec.nombre_tecnologia ASC;
+        """
+        tecnologias = await fetch_all(db, tecnologias_query, params)
         
         return {
             "categorias": [c["categoria_agente"] for c in categorias],
-            "fuentes": [f["nombre_fuente"] for f in fuentes],
+            "fuentes": sorted(ACTIVE_SOURCES),
             "plataformas": [p["nombre_plataforma"] for p in plataformas],
             "tecnologias": [t["nombre_tecnologia"] for t in tecnologias],
-            "agentes": [a["nombre_agente"] for a in agentes_list]
+            "agentes": sorted(SUPPORTED_AGENTS),
+            "scope_version": SCOPE["version"],
+            "total_agentes": len(SUPPORTED_AGENTS)
         }
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": "Error al consultar opciones de filtros", "detail": str(e)})

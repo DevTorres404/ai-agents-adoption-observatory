@@ -169,7 +169,7 @@ def extract_github_repos(queries=None, pages=10, per_page=100, run_id=None, star
         raise ValueError("GitHub start_date must not be after end_date")
     if queries is None:
         queries = [
-            "Codex", "GitHub Copilot", "Cursor", "Windsurf", "Devin", "OpenCode", "Aider", "Claude Code", "Cline", "Antigravity"
+            "Codex", "GitHub Copilot Coding Agent", "Cursor Agent", "Windsurf Cascade", "Devin", "OpenCode", "Claude Code", "Cline", "Google Antigravity", "Google Jules"
         ]
     pages = max(1, min(int(pages), MAX_PAGES_PER_PARTITION))
     per_page = max(1, min(int(per_page), 100))

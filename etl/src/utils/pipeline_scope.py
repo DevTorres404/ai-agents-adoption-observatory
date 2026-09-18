@@ -1,13 +1,14 @@
-"""Source boundaries shared by the two ETLs and explicit global maintenance."""
+"""Source boundaries shared by independent workers and explicit maintenance."""
 from contextlib import contextmanager
 
 from sqlalchemy import text
 
 from src.utils.db import db_connector
 from src.utils.logger import global_logger
+from src.utils.observatory_scope import ACTIVE_SOURCES, INACTIVE_SOURCES
 
-PIPELINES = ("main", "github", "all")
-RETIRED_SOURCES = frozenset({"fuente_propia", "encuesta"})
+PIPELINES = ("main", "all", *sorted(ACTIVE_SOURCES))
+RETIRED_SOURCES = INACTIVE_SOURCES
 # Both workers share Staging/Gold dimensions and legacy evidence pointers.
 PROCESSING_LOCK_ID = 719260916
 
@@ -20,9 +21,9 @@ def validate_pipeline(pipeline):
 
 def includes_source(pipeline, source):
     validate_pipeline(pipeline)
-    if source in RETIRED_SOURCES:
+    if source not in ACTIVE_SOURCES:
         return False
-    return pipeline == "all" or (source == "github") == (pipeline == "github")
+    return pipeline == "all" or (pipeline == "main" and source != "github") or pipeline == source
 
 
 def source_predicate(pipeline, column="f.fuente"):
@@ -30,11 +31,9 @@ def source_predicate(pipeline, column="f.fuente"):
     validate_pipeline(pipeline)
     if column not in {"f.fuente", "s.fuente", "fuente"}:
         raise ValueError("Unsupported source column")
-    if pipeline == "all":
-        return f"COALESCE({column}, '') NOT IN ('fuente_propia', 'encuesta')"
-    if pipeline == "github":
-        return f"{column} = 'github'"
-    return f"COALESCE({column}, '') NOT IN ('github', 'fuente_propia', 'encuesta')"
+    owned = sorted(source for source in ACTIVE_SOURCES if includes_source(pipeline, source))
+    literals = ", ".join("'" + source.replace("'", "''") + "'" for source in owned)
+    return f"{column} IN ({literals})"
 
 
 @contextmanager

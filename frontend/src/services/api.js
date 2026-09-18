@@ -160,9 +160,7 @@ export async function fetchQualityDedup(filters = {}) {
 }
 
 export async function fetchFilterOptions() {
-  return apiCache.fetch('filterOptions', () =>
-    fetchEndpoint('/filtros_opciones', '')
-  );
+  return fetchEndpoint('/filtros_opciones', `?t=${Date.now()}`);
 }
 
 export async function fetchGovernanceFreshness(runId) {

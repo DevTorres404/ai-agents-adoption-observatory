@@ -1,4 +1,6 @@
 import argparse
+import json
+import sys
 import datetime
 import os
 import time
@@ -8,7 +10,9 @@ from sqlalchemy import text
 from src.utils.db import db_connector
 from src.utils.logger import global_logger
 from src.utils.error_log import log_error
-from src.utils.pipeline_scope import PIPELINES, processing_lock, source_predicate, validate_pipeline
+from src.utils.pipeline_scope import PIPELINES, includes_source, processing_lock, source_predicate, validate_pipeline
+from src.utils.observatory_scope import ACTIVE_SOURCES, SUPPORTED_AGENTS, SCOPE
+from src.utils.extraction_window import resolve_window, require_annual_window
 from src.utils.time_utils import today_local
 from src.utils.extraction_evidence import (
     EvidenceRun,
@@ -20,15 +24,9 @@ from src.utils.extraction_evidence import (
 )
 
 from src.extractors.github import extract_github_repos
-from src.extractors.hackernews import extract_hackernews
-from src.extractors.devto import extract_devto
-from src.extractors.reddit import extract_reddit
 from src.extractors.google_trends import extract_trends
-from src.extractors.file_catalog import extract_and_validate_catalog
 from src.extractors.aidedev import extract_aidedev_catalog
-from src.extractors.stackoverflow import extract_stackoverflow
-from src.extractors.arxiv import extract_arxiv
-from src.extractors.gnews import extract_gnews
+from src.extractors.hackernews import extract_hackernews
 from src.loaders.load_raw_to_db import run_loader
 from src.staging.stg_build_unified import run_staging_pipeline
 from src.quality.quality_metrics import run_quality_framework, resolve_data_run_id, quality_publication_status
@@ -42,7 +40,7 @@ def timed_phase(name, run_id):
     finally:
         global_logger.info(f"ETL timing run_id={run_id} phase={name} duration_seconds={time.perf_counter() - started:.3f}")
 
-def start_pipeline_audit():
+def start_pipeline_audit(run_config=None):
     """Inserta registro inicial en audit.pipeline_runs y devuelve el run_id"""
     if not db_connector.engine:
         raise RuntimeError("Pipeline audit requires a database connection")
@@ -51,15 +49,15 @@ def start_pipeline_audit():
             # Fail before expensive extraction if an existing volume was not migrated.
             conn.execute(text("SELECT data_run_id FROM audit.quality_summary LIMIT 0"))
             query = text("""
-                INSERT INTO audit.pipeline_runs (status) 
-                VALUES ('running') 
+                INSERT INTO audit.pipeline_runs (status, run_config)
+                VALUES ('running', CAST(:config AS JSONB))
                 RETURNING run_id
             """)
-            run_id = conn.execute(query).scalar()
+            run_id = conn.execute(query, {"config": json.dumps(run_config or {})}).scalar()
             return run_id
     except Exception as e:
         global_logger.error(f"Fallo al registrar inicio de auditoría: {e}")
-        raise RuntimeError("Audit preflight failed; verify DB connectivity and apply sql/10_quality_governance.sql") from e
+        raise RuntimeError("Audit preflight failed; verify DB connectivity and apply sql/10_quality_governance.sql and sql/13_source_run_config.sql") from e
 
 def end_pipeline_audit(run_id, status="completed", error_msg=None):
     """Cierra el run con conteos actuales, sin reutilizar resúmenes históricos."""
@@ -135,73 +133,26 @@ def _record_extractor_exception(source, exc, run_id):
         run_id=run_id,
     )
 
-def run_extraction_phase(run_id, github_start_date=None, github_end_date=None, pipeline="main"):
+def run_extraction_phase(run_id, github_start_date=None, github_end_date=None, pipeline="main",
+                         start_date=None, end_date=None):
+    """Dispatch only active, owned sources. No unbounded fallback datasets."""
     validate_pipeline(pipeline)
-    global_logger.info("=== FASE 1: EXTRACCIÓN MÚLTIPLE ===")
-    
-    # 1. GitHub API
-    if pipeline in {"github", "all"}:
-        try:
-            extract_github_repos(pages=10, per_page=100, run_id=run_id,
-                                 start_date=github_start_date, end_date=github_end_date)
-        except Exception as e:
-            _record_extractor_exception("github", e, run_id)
-    if pipeline == "github":
-        return
+    extractors = {
+        "github": (extract_github_repos, {"pages": 10, "per_page": 100,
+                   "start_date": github_start_date or start_date,
+                   "end_date": github_end_date or end_date}),
+        "catalogo": (extract_aidedev_catalog, {"start_date": start_date, "end_date": end_date}),
+        "google_trends": (extract_trends, {"start_date": start_date, "end_date": end_date}),
+        "hackernews": (extract_hackernews, {
+                          "start_date": start_date, "end_date": end_date}),
+    }
+    for source, (extractor, kwargs) in extractors.items():
+        if includes_source(pipeline, source):
+            try:
+                extractor(run_id=run_id, **kwargs)
+            except Exception as exc:
+                _record_extractor_exception(source, exc, run_id)
 
-    # 2. HackerNews (BS4)
-    try:
-        extract_hackernews(run_id=run_id)
-    except Exception as e:
-        _record_extractor_exception("hackernews", e, run_id)
-
-    # 3. DevTo (BS4)
-    try:
-        extract_devto(max_records=2000, run_id=run_id)
-    except Exception as e:
-        _record_extractor_exception("devto", e, run_id)
-        
-    # 4. Reddit (Playwright)
-    try:
-        extract_reddit(max_records=1000, run_id=run_id)
-    except Exception as e:
-        _record_extractor_exception("reddit", e, run_id)
-        
-    # 5. Google Trends (pytrends)
-    try:
-        extract_trends(run_id=run_id)
-    except Exception as e:
-        _record_extractor_exception("google_trends", e, run_id)
-
-    # 6. Catálogo estructurado AIDev (con respaldo manual)
-    try:
-        catalog_result = extract_aidedev_catalog(run_id=run_id)
-        if catalog_result and catalog_result.status is ExtractionStatus.FAILED:
-            extract_and_validate_catalog(run_id=run_id)
-    except Exception as e:
-        _record_extractor_exception("aidedev", e, run_id)
-        try:
-            extract_and_validate_catalog(run_id=run_id)
-        except Exception as fallback_error:
-            _record_extractor_exception("file_catalog", fallback_error, run_id)
-
-    # 7. StackOverflow
-    try:
-        extract_stackoverflow(max_per_agent=500, run_id=run_id)
-    except Exception as e:
-        _record_extractor_exception("stackoverflow", e, run_id)
-
-    # 8. arXiv
-    try:
-        extract_arxiv(max_per_agent=1000, run_id=run_id)
-    except Exception as e:
-        _record_extractor_exception("arxiv", e, run_id)
-
-    # 9. Google News
-    try:
-        extract_gnews(run_id=run_id)
-    except Exception as e:
-        _record_extractor_exception("gnews", e, run_id)
 
 def run_gold_phase(run_id, rebuild=False, pipeline="all"):
     predicate = source_predicate(pipeline, "fuente")
@@ -227,6 +178,8 @@ def run_gold_phase(run_id, rebuild=False, pipeline="all"):
         cursor = raw_conn.cursor()
         # Transaction-local scope read by the shared, directly executable SQL.
         cursor.execute("SELECT set_config('etl.pipeline', %s, true)", (pipeline,))
+        cursor.execute("SELECT set_config('etl.active_sources', %s, true)", (','.join(sorted(source for source in ACTIVE_SOURCES if includes_source(pipeline, source))),))
+        cursor.execute("SELECT set_config('etl.supported_agents', %s, true)", (','.join(SUPPORTED_AGENTS),))
         for migration_path in migration_paths:
             global_logger.info(f"Ejecutando {migration_path}...")
             with open(migration_path, 'r', encoding='utf-8') as migration_file:
@@ -355,22 +308,48 @@ def main(argv=None, fixed_pipeline=None):
         default="incremental",
         help="Use rebuild explicitly to discard and reconstruct all Gold rows.",
     )
+    parser.add_argument("--start-date", type=datetime.date.fromisoformat)
+    parser.add_argument("--end-date", type=datetime.date.fromisoformat)
+    parser.add_argument("--from-year", type=int)
+    parser.add_argument("--to-year", type=int)
+    argv = list(sys.argv[1:] if argv is None else argv)
     args = parser.parse_args(argv)
+    explicit_window = any(value is not None for value in
+                          (args.start_date, args.end_date, args.from_year, args.to_year))
+    if explicit_window and args.phase not in {"all", "extract"}:
+        parser.error("Los rangos se aplican a all/extract; process reutiliza los datos Raw existentes")
+    if explicit_window and args.github_since:
+        parser.error("No combine --github-since con los nuevos argumentos de rango")
+    if explicit_window and any(arg == "--date" or arg.startswith("--date=") for arg in argv):
+        parser.error("No combine --date con los nuevos argumentos de rango")
+    try:
+        window = resolve_window(args.start_date, args.end_date, args.from_year, args.to_year,
+                                default_start=args.github_since, default_end=args.date)
+        if includes_source(args.pipeline, "catalogo") and args.phase in {"all", "extract"}:
+            require_annual_window(window)
+    except ValueError as exc:
+        parser.error(str(exc))
     if fixed_pipeline and args.pipeline != fixed_pipeline:
         parser.error(f"Este ejecutable solo permite --pipeline {fixed_pipeline}")
     if args.pipeline != "all" and (args.staging_mode == "rebuild" or args.gold_mode == "rebuild"):
         parser.error("rebuild requiere --pipeline all para no borrar datos del otro ETL")
     if args.data_run_id is not None and (args.phase not in {"quality", "process"} or args.data_run_id <= 0):
         parser.error("--data-run-id debe ser positivo y usarse con quality/process")
-    if args.github_since and (args.pipeline == "main" or args.phase not in {"all", "extract"} or args.github_since > args.date):
+    if args.github_since and (args.pipeline not in {"github", "all"} or args.phase not in {"all", "extract"} or args.github_since > args.date):
         parser.error("--github-since requiere pipeline github/all, fase all/extract y una fecha no posterior a --date")
     
     global_logger.info(f">>> INICIANDO PIPELINE {args.pipeline} (Fecha Objetivo: {args.date}) <<<")
     data_run_id = None
-    run_id = start_pipeline_audit()
+    run_config = {
+        "pipeline": args.pipeline, "sources": sorted(s for s in ACTIVE_SOURCES if includes_source(args.pipeline, s)),
+        "phase": args.phase, "scope_version": SCOPE["version"],
+        "window": window.as_dict() if args.phase in {"all", "extract"} else None,
+        "data_run_id": args.data_run_id,
+    }
+    run_id = start_pipeline_audit(run_config)
     datasets = None
     includes_extraction = args.phase in ["all", "extract"]
-    evidence_run = EvidenceRun(run_id or new_local_run_id(), pipeline=args.pipeline) if includes_extraction else None
+    evidence_run = EvidenceRun(run_id or new_local_run_id(), pipeline=args.pipeline, run_config=run_config) if includes_extraction else None
     evidence_scope = evidence_context(evidence_run) if evidence_run else nullcontext()
 
     with evidence_scope:
@@ -378,8 +357,7 @@ def main(argv=None, fixed_pipeline=None):
             if includes_extraction:
                 with timed_phase("extract", run_id):
                     run_extraction_phase(run_id,
-                        github_start_date=args.github_since.isoformat() if args.github_since else None,
-                        github_end_date=args.date.isoformat(), pipeline=args.pipeline)
+                        start_date=window.start.isoformat(), end_date=window.end.isoformat(), pipeline=args.pipeline)
                 if derive_pipeline_status(evidence_run.results) == ExtractionStatus.FAILED.value:
                     raise RuntimeError("Extraction failed; no downstream phases were executed")
 

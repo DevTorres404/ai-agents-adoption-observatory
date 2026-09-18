@@ -4,7 +4,7 @@
 ![Arquitectura](https://img.shields.io/badge/Arquitectura-Medallion-green)
 ![Stack](https://img.shields.io/badge/Stack-FastAPI%20%7C%20React%20%7C%20PostgreSQL-lightgrey)
 
-Plataforma de **Inteligencia de Negocios** que mide, consolida y visualiza el nivel de adopción de agentes de IA en el ecosistema de desarrollo de software. Integra 10 fuentes de datos heterogéneas mediante una pipeline ETL con arquitectura **Medallion** (Bronze → Silver → Gold) y expone un dashboard interactivo con KPIs de analítica y calidad.
+Plataforma de **Inteligencia de Negocios** que mide, consolida y visualiza el nivel de adopción de agentes de IA en el ecosistema de desarrollo de software. Integra cuatro fuentes activas mediante ETL independientes por fuente con arquitectura **Medallion** (Bronze → Silver → Gold) y expone un dashboard interactivo con KPIs de analítica y calidad.
 
 ---
 
@@ -12,7 +12,7 @@ Plataforma de **Inteligencia de Negocios** que mide, consolida y visualiza el ni
 
 | Capa | Tecnología | Descripción |
 |------|-----------|-------------|
-| **Extracción** | Python (APIs, scrapers, RSS) | 9 fuentes: GitHub, HackerNews, Dev.to, Reddit, Google Trends, AIDev Dataset, StackOverflow, arXiv, Google News |
+| **Extracción** | Python (APIs, scrapers, RSS) | 4 fuentes: GitHub, Hacker News, Google Trends y AIDev Dataset |
 | **Bronze (Raw)** | PostgreSQL | Archivos JSON crudos en `raw.raw_files` / `raw.raw_records` — evidencia inmutable de cada carga |
 | **Silver (Staging)** | PostgreSQL | Tabla `stg_actividad_agente_ia` — deduplicación estricta, reconstruible desde Raw |
 | **Quality (E3)** | Python + PostgreSQL | Framework de validación: completitud, duplicados, nulos críticos, formato. KPIs en esquema `audit` |
@@ -60,17 +60,16 @@ Evidencia del contrato:
 
 ## Fuentes de Datos
 
-| Fuente | Método | Notas |
-|--------|--------|-------|
-| **GitHub** | REST API | Genera Raw y evidencia HTTP |
-| **HackerNews** | Scraping (BeautifulSoup) | Genera Raw y evidencia HTTP |
-| **Dev.to** | API pública | Filtro: `agent term OR (AI term AND software-development term)` |
-| **Reddit** | Scraping (Playwright) | Búsquedas múltiples relevantes |
-| **Google Trends** | pytrends | Rate limit 429 registrado como fallo documentado |
-| **AIDev Dataset** | Parquet → JSON | Descarga automática desde Zenodo (Record 16919272) |
-| **StackOverflow** | StackExchange API | Búsqueda por agente |
-| **arXiv** | arXiv API | Rate limits respetados (3s entre consultas) |
-| **Google News** | RSS | Búsqueda por agente |
+| Fuente activa | Método | Servicio independiente |
+|---|---|---|
+| **GitHub** | REST API; rango de creación de repositorios | `etl-github` |
+| **Hacker News** | Algolia Search; ventanas históricas | `etl-hackernews` |
+| **Google Trends** | Consulta de interés relativo por período | `etl-google-trends` |
+| **AIDev Dataset** | Parquet → agregados por agente/repositorio/año | `etl-aidedev` |
+
+Stack Overflow está retirado del ETL activo. Los históricos de fuentes retiradas
+se conservan para auditoría, sin incorporarlos a nuevas corridas.
+Ver [ejecución por fuente, períodos y trazabilidad](etl/docs/SOURCE_ETLS.md).
 
 ---
 
@@ -113,37 +112,32 @@ Esto despliega:
 
 Accedé al dashboard en: **[http://localhost:8080](http://localhost:8080)**
 
-El ETL principal excluye GitHub. GitHub tiene un job independiente para que su
-extracción no retrase las demás fuentes; su ejecución se realiza por CLI.
+Cada fuente dispone de un ETL independiente operado por CLI. El servicio `etl`
+agrupado se mantiene por compatibilidad y excluye GitHub.
 
 ### Ejecución manual del pipeline
 
-```bash
-docker compose build etl etl-github
-docker compose run --rm etl         # Todas las fuentes excepto GitHub
-docker compose run --rm etl-github  # Solo GitHub; puede correr en otra terminal
+```powershell
+docker compose build etl-aidedev etl-github etl-google-trends etl-hackernews
+docker compose run --rm etl-hackernews --from-year 2024 --to-year 2025
 ```
 
-Ver [aislamiento, fases y recuperación del micro ETL](etl/docs/MICRO_ETL_GITHUB.md).
+En bases existentes aplicar primero `etl/sql/13_source_run_config.sql`.
+Ver [migración, los cuatro comandos y límites temporales](etl/docs/SOURCE_ETLS.md).
 
 ### Ejecución por fase individual
 
 ```bash
 cd etl && python -m src.extractors.github
 cd etl && python -m src.extractors.hackernews
-cd etl && python -m src.extractors.devto
-cd etl && python -m src.extractors.reddit
 cd etl && python -m src.extractors.google_trends
 cd etl && python -m src.extractors.aidedev
-cd etl && python -m src.extractors.stackoverflow
-cd etl && python -m src.extractors.arxiv
-cd etl && python -m src.extractors.gnews
 cd etl && python -m src.loaders.load_raw_to_db
 cd etl && python -m src.staging.stg_build_unified
 cd etl && python -m src.quality.quality_metrics
 ```
 
-> **Nota — AIDev Dataset:** Si los archivos Parquet no se encuentran en `etl/data/manual/aidedev_ai_coding/`, el extractor se conecta automáticamente a la API de Zenodo, los descarga y los ubica en la carpeta correspondiente. No se requiere intervención manual.
+> **Nota — AIDev Dataset:** El ETL usa los cinco Parquet consolidados en `etl/data/manual/aidedev_ai_coding/`, incluidos `pr_reviews.parquet` y `pr_task_type.parquet`. `dataset_manifest.json` documenta conteos, huellas SHA-256 y conservación de IDs históricos. Una instalación básica sin manifiesto conserva la descarga de los tres archivos originales de Zenodo (16919272); un snapshot consolidado incompleto falla explícitamente para no mezclar versiones. Detalles en [Integración de Parquet AIDev](etl/docs/AIDEV_PARQUET_INTEGRATION.md).
 
 ---
 

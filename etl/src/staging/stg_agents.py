@@ -7,9 +7,9 @@ import re
 # =============================================================
 AGENTES_ESTANDAR = {
     # 1. Cursor
-    'cursor agent': 'Cursor',
-    'cursor ai': 'Cursor',
-    'cursor': 'Cursor',
+    'cursor agent': 'Cursor Agent',
+    'cursor ai': 'Cursor Agent',
+    'cursor': 'Cursor Agent',
 
     # 2. Claude Code
     'claude code': 'Claude Code',
@@ -20,36 +20,34 @@ AGENTES_ESTANDAR = {
     'codex': 'Codex',
 
     # 4. GitHub Copilot
-    'copilot coding agent': 'GitHub Copilot',
-    'github copilot': 'GitHub Copilot',
-    'copilot': 'GitHub Copilot',
+    'copilot coding agent': 'GitHub Copilot Coding Agent',
+    'github copilot': 'GitHub Copilot Coding Agent',
+    'copilot': 'GitHub Copilot Coding Agent',
 
     # 5. Cline
     'cline agent': 'Cline',
     'cline': 'Cline',
 
     # 6. Windsurf
-    'windsurf cascade': 'Windsurf',
-    'windsurf ai': 'Windsurf',
-    'windsurf': 'Windsurf',
-    'cascade': 'Windsurf',
+    'windsurf cascade': 'Windsurf Cascade',
+    'windsurf ai': 'Windsurf Cascade',
+    'windsurf': 'Windsurf Cascade',
+    'cascade': 'Windsurf Cascade',
 
-    # 7. Aider
-    'aider chat': 'Aider',
-    'aider ai': 'Aider',
-    'aider': 'Aider',
-
-    # 8. Devin
+    # 7. Devin
     'devin ai': 'Devin',
     'devin': 'Devin',
 
-    # 9. OpenCode
+    # 8. OpenCode
     'opencode ai': 'OpenCode',
     'opencode': 'OpenCode',
 
-    # 10. Antigravity
-    'antigravity ai': 'Antigravity',
-    'antigravity': 'Antigravity'
+    # 9. Antigravity
+    'antigravity ai': 'Google Antigravity',
+    'antigravity': 'Google Antigravity',
+
+    # 10. Google Jules (Google_Jules en AIDev)
+    'google jules': 'Google Jules'
 }
 
 # Precompilar patrones para rendimiento masivo

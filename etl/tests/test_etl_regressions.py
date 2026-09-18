@@ -31,13 +31,14 @@ def raw_database(tmp_path, monkeypatch):
     directory.mkdir()
     monkeypatch.setattr(raw, "RAW_DIR", directory)
     monkeypatch.setattr(raw, "export_full_raw_inventory", lambda **kwargs: None)
+    (directory / "catalogo").mkdir()
     yield engine, directory
     engine.dispose()
 
 
 def test_raw_real_sqlalchemy_transaction_and_batched_inserts(raw_database):
     engine, directory = raw_database
-    (directory / "sample.json").write_text(json.dumps([{"id": n} for n in range(2501)]))
+    (directory / "catalogo" / "sample.json").write_text(json.dumps([{"id": n} for n in range(2501)]))
     record_calls = []
     @event.listens_for(engine, "before_cursor_execute")
     def record(conn, cursor, statement, parameters, context, executemany):
@@ -53,7 +54,7 @@ def test_raw_real_sqlalchemy_transaction_and_batched_inserts(raw_database):
 
 def test_raw_rolls_back_and_propagates_failure_with_run_id(raw_database):
     engine, directory = raw_database
-    (directory / "sample.json").write_text('[{"id": 1}]')
+    (directory / "catalogo" / "sample.json").write_text('[{"id": 1}]')
     def fail(conn, cursor, statement, parameters, context, executemany):
         if "INSERT INTO raw.raw_records" in statement:
             raise RuntimeError("simulated record failure")
@@ -69,7 +70,7 @@ def test_raw_rolls_back_and_propagates_failure_with_run_id(raw_database):
 
 def test_invalid_json_is_not_committed_as_empty(raw_database):
     engine, directory = raw_database
-    (directory / "broken.json").write_text('{broken')
+    (directory / "catalogo" / "broken.json").write_text('{broken')
     with pytest.raises(RuntimeError, match="Raw"):
         raw.run_loader(run_id=42)
     with engine.connect() as conn:
@@ -142,7 +143,7 @@ def test_empty_quality_is_not_success():
 
 def test_resolve_latest_loaded_run_and_reject_empty_run(raw_database):
     engine, directory = raw_database
-    (directory / "sample.json").write_text('[{"id": 1}]')
+    (directory / "catalogo" / "sample.json").write_text('[{"id": 1}]')
     raw.run_loader(run_id=7)
     assert quality.resolve_data_run_id() == 7
     assert quality.resolve_data_run_id(7) == 7
@@ -233,14 +234,14 @@ def test_github_invalid_window_fails_before_http():
 
 def test_micro_etls_load_disjoint_sources_and_resolve_owned_runs(raw_database):
     engine, directory = raw_database
-    for source in ("github", "devto"):
+    for source in ("github", "hackernews"):
         (directory / source).mkdir()
         (directory / source / "snapshot.json").write_text(json.dumps([{"id": source}]))
     assert raw.run_loader(run_id=7, pipeline="github")["loaded_files"] == 1
     assert raw.run_loader(run_id=8, pipeline="main")["loaded_files"] == 1
     with engine.connect() as conn:
         assert conn.execute(text("SELECT fuente, run_id FROM raw.raw_files ORDER BY id")).all() == [
-            ("github", 7), ("devto", 8),
+            ("github", 7), ("hackernews", 8),
         ]
     assert quality.resolve_data_run_id(pipeline="github") == 7
     assert quality.resolve_data_run_id(pipeline="main") == 8
@@ -252,7 +253,7 @@ def test_micro_etls_load_disjoint_sources_and_resolve_owned_runs(raw_database):
 
 def test_mixed_legacy_runs_require_explicit_global_maintenance(raw_database):
     _, directory = raw_database
-    for source in ("github", "devto"):
+    for source in ("github", "hackernews"):
         (directory / source).mkdir()
         (directory / source / "snapshot.json").write_text(json.dumps([{"id": source}]))
     raw.run_loader(run_id=7)

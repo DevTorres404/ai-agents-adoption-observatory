@@ -126,11 +126,14 @@ SELECT
     s.url,
     s.is_imputed_date
 FROM (SELECT * FROM staging.stg_actividad_agente_ia
-        WHERE COALESCE(fuente, '') NOT IN ('fuente_propia', 'encuesta')
+        WHERE fuente = ANY(string_to_array(COALESCE(NULLIF(current_setting('etl.active_sources', true), ''), 'catalogo,github,google_trends,hackernews'), ','))
           AND CASE COALESCE(NULLIF(current_setting('etl.pipeline', true), ''), 'all')
             WHEN 'github' THEN fuente = 'github'
             WHEN 'main' THEN COALESCE(fuente, '') <> 'github'
             WHEN 'all' THEN TRUE
+            WHEN 'catalogo' THEN fuente = 'catalogo'
+            WHEN 'google_trends' THEN fuente = 'google_trends'
+            WHEN 'hackernews' THEN fuente = 'hackernews'
             ELSE FALSE
         END) s
 INNER JOIN gold.dim_tiempo dt

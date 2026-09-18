@@ -128,5 +128,72 @@ services:
     profiles:
       - etl-github
 
+  etl-aidedev:
+    build:
+      context: ./etl
+      dockerfile: Dockerfile.etl
+    container_name: observatorio_etl_catalogo
+    entrypoint: ["python", "-m", "src.scripts.run_catalogo_pipeline"]
+    environment:
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: ${DB_NAME:-observatorio_ia}
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      TZ: America/Guayaquil
+    volumes:
+      - ./etl/data:/app/data
+      - ./etl/logs/catalogo:/app/logs
+      - ./etl/docs/catalogo:/app/docs
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - etl-aidedev
+  etl-google-trends:
+    build:
+      context: ./etl
+      dockerfile: Dockerfile.etl
+    container_name: observatorio_etl_google_trends
+    entrypoint: ["python", "-m", "src.scripts.run_google_trends_pipeline"]
+    environment:
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: ${DB_NAME:-observatorio_ia}
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      TZ: America/Guayaquil
+    volumes:
+      - ./etl/data:/app/data
+      - ./etl/logs/google_trends:/app/logs
+      - ./etl/docs/google_trends:/app/docs
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - etl-google-trends
+  etl-hackernews:
+    build:
+      context: ./etl
+      dockerfile: Dockerfile.etl
+    container_name: observatorio_etl_hackernews
+    entrypoint: ["python", "-m", "src.scripts.run_hackernews_pipeline"]
+    environment:
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: ${DB_NAME:-observatorio_ia}
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      TZ: America/Guayaquil
+    volumes:
+      - ./etl/data:/app/data
+      - ./etl/logs/hackernews:/app/logs
+      - ./etl/docs/hackernews:/app/docs
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles:
+      - etl-hackernews
+
 volumes:
   postgres_data:

@@ -9,6 +9,7 @@ import {
   X
 } from 'lucide-react';
 import { fetchFilterOptions } from '../services/api';
+import { formatSourceLabel } from '../utils/labels';
 
 const EMPTY_OPTIONS = {
   categorias: [],
@@ -33,7 +34,8 @@ function countFilters(filters) {
   );
 }
 
-const GlobalFilters = ({ currentFilters, onApplyFilters, onClearFilters, onViewDataset }) => {
+
+const GlobalFilters = ({ currentFilters, onApplyFilters, onClearFilters, onViewDataset, refreshing }) => {
   const [localFilters, setLocalFilters] = useState(currentFilters);
   const [options, setOptions] = useState(EMPTY_OPTIONS);
   const [optionsState, setOptionsState] = useState('loading');
@@ -46,14 +48,24 @@ const GlobalFilters = ({ currentFilters, onApplyFilters, onClearFilters, onViewD
     fetchFilterOptions()
       .then(data => {
         if (!mounted) return;
-        setOptions({ ...EMPTY_OPTIONS, ...data });
+        const merged = { ...EMPTY_OPTIONS, ...data };
+        setOptions(merged);
         setOptionsState('ready');
+        // Sanitize: remove any selected agents that no longer exist in the valid list.
+        setLocalFilters(prev => {
+          const validSet = new Set(merged.agentes);
+          const cleanAgentes = (prev.agentes || []).filter(a => validSet.has(a));
+          if (cleanAgentes.length === (prev.agentes || []).length) return prev;
+          const next = { ...prev, agentes: cleanAgentes };
+          onApplyFilters(compactFilters(next));
+          return compactFilters(next);
+        });
       })
       .catch(() => {
         if (mounted) setOptionsState('error');
       });
     return () => { mounted = false; };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setLocalFilters(currentFilters);
@@ -74,15 +86,6 @@ const GlobalFilters = ({ currentFilters, onApplyFilters, onClearFilters, onViewD
     localFilters.fecha_fin &&
     localFilters.fecha_inicio > localFilters.fecha_fin
   );
-  const hasChanges = JSON.stringify(compactFilters(localFilters)) !== JSON.stringify(compactFilters(currentFilters));
-
-  useEffect(() => {
-    if (dateError || !hasChanges) return undefined;
-    const timeoutId = window.setTimeout(() => {
-      onApplyFilters(compactFilters(localFilters));
-    }, 320);
-    return () => window.clearTimeout(timeoutId);
-  }, [dateError, hasChanges, localFilters, onApplyFilters]);
 
   const selectedAgentes = localFilters.agentes || [];
   const activeCount = countFilters(currentFilters);
@@ -92,27 +95,54 @@ const GlobalFilters = ({ currentFilters, onApplyFilters, onClearFilters, onViewD
     return options.agentes.filter(agent => agent.toLocaleLowerCase().includes(query));
   }, [agentSearch, options.agentes]);
 
+  // Aplica el filtro de inmediato (selects, fechas y toggles).
+  // No hay inputs de texto que disparen consultas: la búsqueda de agentes filtra
+  // solo las opciones del desplegable, por lo que no se necesita debounce.
+  const applyFilters = next => {
+    const compact = compactFilters(next);
+    setLocalFilters(compact);
+    onApplyFilters(compact);
+  };
+
   const handleChange = ({ target: { name, value } }) => {
-    setLocalFilters(previous => ({ ...previous, [name]: value }));
+    const next = { ...localFilters, [name]: value };
+    const invalidRange = Boolean(
+      next.fecha_inicio && next.fecha_fin && next.fecha_inicio > next.fecha_fin
+    );
+    if (invalidRange) {
+      // Mantiene el estado local para mostrar el error sin consultar al backend.
+      setLocalFilters(compactFilters(next));
+      return;
+    }
+    applyFilters(next);
   };
 
   const toggleAgente = agente => {
-    setLocalFilters(previous => {
-      const current = previous.agentes || [];
-      return {
-        ...previous,
-        agentes: current.includes(agente)
-          ? current.filter(item => item !== agente)
-          : [...current, agente]
-      };
+    const current = localFilters.agentes || [];
+    applyFilters({
+      ...localFilters,
+      agentes: current.includes(agente)
+        ? current.filter(item => item !== agente)
+        : [...current, agente]
     });
   };
 
   const removeAgente = agente => {
-    setLocalFilters(previous => ({
-      ...previous,
-      agentes: (previous.agentes || []).filter(item => item !== agente)
-    }));
+    applyFilters({
+      ...localFilters,
+      agentes: (localFilters.agentes || []).filter(item => item !== agente)
+    });
+  };
+
+  const removeSelectFilter = name => {
+    applyFilters({ ...localFilters, [name]: '' });
+  };
+
+  const removePeriod = () => {
+    const rest = { ...localFilters };
+    delete rest.fecha_inicio;
+    delete rest.fecha_fin;
+    applyFilters(rest);
   };
 
   const clearAll = () => {
@@ -122,15 +152,70 @@ const GlobalFilters = ({ currentFilters, onApplyFilters, onClearFilters, onViewD
     onClearFilters();
   };
 
-  const renderSelect = (name, label, values, allLabel) => (
+  const activeChips = [];
+  if (localFilters.fecha_inicio || localFilters.fecha_fin) {
+    activeChips.push({
+      key: 'periodo',
+      prefix: 'Periodo',
+      text: `${localFilters.fecha_inicio || '…'} → ${localFilters.fecha_fin || '…'}`,
+      onRemove: removePeriod,
+      aria: 'Quitar filtro de periodo'
+    });
+  }
+  if (localFilters.fuente) {
+    activeChips.push({
+      key: 'fuente',
+      prefix: 'Fuente',
+      text: formatSourceLabel(localFilters.fuente),
+      onRemove: () => removeSelectFilter('fuente'),
+      aria: 'Quitar filtro de fuente'
+    });
+  }
+  if (localFilters.plataforma) {
+    activeChips.push({
+      key: 'plataforma',
+      prefix: 'Plataforma',
+      text: localFilters.plataforma,
+      onRemove: () => removeSelectFilter('plataforma'),
+      aria: 'Quitar filtro de plataforma'
+    });
+  }
+  if (localFilters.tecnologia) {
+    activeChips.push({
+      key: 'tecnologia',
+      prefix: 'Tecnología',
+      text: localFilters.tecnologia,
+      onRemove: () => removeSelectFilter('tecnologia'),
+      aria: 'Quitar filtro de tecnología'
+    });
+  }
+  if (localFilters.categoria) {
+    activeChips.push({
+      key: 'categoria',
+      prefix: 'Categoría',
+      text: localFilters.categoria,
+      onRemove: () => removeSelectFilter('categoria'),
+      aria: 'Quitar filtro de categoría'
+    });
+  }
+
+  const hasActiveChips = activeChips.length > 0 || selectedAgentes.length > 0;
+
+  const renderSelect = (name, label, values, allLabel, optionLabel = value => value) => (
     <div className="filter-group compact-filter-group">
       <label htmlFor={`filter-${name}`}>{label}</label>
       <select id={`filter-${name}`} name={name} value={localFilters[name] || ''} onChange={handleChange}>
         <option value="">{allLabel}</option>
-        {values.map(value => <option key={value} value={value}>{value}</option>)}
+        {values.map(value => <option key={value} value={value}>{optionLabel(value)}</option>)}
       </select>
     </div>
   );
+
+  const statusLabel = refreshing
+    ? 'Aplicando…'
+    : activeCount
+      ? `${activeCount} activo${activeCount === 1 ? '' : 's'}`
+      : 'Sin filtros activos';
 
   return (
     <section className="panel filters-panel filters-panel-compact" aria-label="Filtros globales">
@@ -139,7 +224,7 @@ const GlobalFilters = ({ currentFilters, onApplyFilters, onClearFilters, onViewD
           <span className="filters-icon"><SlidersHorizontal size={18} /></span>
           <div>
             <strong>Filtros</strong>
-            <span>{activeCount ? `${activeCount} activo${activeCount === 1 ? '' : 's'}` : 'Actualización automática'}</span>
+            <span>{statusLabel}</span>
           </div>
         </div>
         <button className="dataset-button" type="button" onClick={onViewDataset}>
@@ -199,7 +284,7 @@ const GlobalFilters = ({ currentFilters, onApplyFilters, onClearFilters, onViewD
                 <div className="agent-options-summary">
                   <span>{filteredAgents.length} resultados</span>
                   {selectedAgentes.length > 0 && (
-                    <button onClick={() => setLocalFilters(previous => ({ ...previous, agentes: [] }))}>Quitar selección</button>
+                    <button onClick={() => applyFilters({ ...localFilters, agentes: [] })}>Quitar selección</button>
                   )}
                 </div>
                 <div className="agent-options-list">
@@ -213,35 +298,44 @@ const GlobalFilters = ({ currentFilters, onApplyFilters, onClearFilters, onViewD
                       </label>
                     );
                   })}
+                  {filteredAgents.length === 0 && (
+                    <p className="empty-agent-results">Sin agentes que coincidan con la búsqueda.</p>
+                  )}
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        {renderSelect('fuente', 'Fuente', options.fuentes, 'Todas las fuentes')}
+        {renderSelect('categoria', 'Categoría', options.categorias, 'Todas las categorías')}
+        {renderSelect('fuente', 'Fuente', options.fuentes, 'Todas las fuentes', formatSourceLabel)}
         {renderSelect('plataforma', 'Plataforma', options.plataformas, 'Todas las plataformas')}
         {renderSelect('tecnologia', 'Tecnología', options.tecnologias, 'Todas las tecnologías')}
 
-        <button className="reset-filters-button" type="button" onClick={clearAll} disabled={activeCount === 0 && !hasChanges}>
+        <button className="reset-filters-button" type="button" onClick={clearAll} disabled={activeCount === 0}>
           <RotateCcw size={16} /> Restablecer
         </button>
       </div>
 
       {dateError && <p className="filter-error compact-filter-error">La fecha inicial debe ser anterior a la fecha final.</p>}
 
-      {(selectedAgentes.length > 0 || optionsState !== 'ready') && (
+      {(hasActiveChips || optionsState !== 'ready') && (
         <div className="filters-compact-meta">
-          {selectedAgentes.length > 0 && (
-            <div className="multi-select-tags">
-              {selectedAgentes.map(agente => (
-                <span key={agente} className="multi-select-tag">
-                  {agente}
-                  <button onClick={() => removeAgente(agente)} aria-label={`Quitar ${agente}`}><X size={13} /></button>
-                </span>
-              ))}
-            </div>
-          )}
+          <div className="multi-select-tags" aria-label="Filtros activos">
+            {activeChips.map(chip => (
+              <span key={chip.key} className="multi-select-tag">
+                {chip.prefix && <span className="filter-chip-label">{chip.prefix}: </span>}
+                {chip.text}
+                <button type="button" onClick={chip.onRemove} aria-label={chip.aria}><X size={13} /></button>
+              </span>
+            ))}
+            {selectedAgentes.map(agente => (
+              <span key={agente} className="multi-select-tag">
+                {agente}
+                <button onClick={() => removeAgente(agente)} aria-label={`Quitar ${agente}`}><X size={13} /></button>
+              </span>
+            ))}
+          </div>
           {optionsState !== 'ready' && (
             <span className={`filter-data-status ${optionsState}`}>
               <span className="status-indicator" />

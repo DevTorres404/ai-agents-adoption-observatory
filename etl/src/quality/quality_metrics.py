@@ -187,7 +187,7 @@ def resolve_data_run_id(data_run_id=None, pipeline="all"):
             """), {"selected": selected}).scalar()
             if foreign_records:
                 if pipeline == "all":
-                    raise ValueError("Raw run contains a retired source; apply sql/12_remove_own_survey.sql first")
+                    raise ValueError("Raw run contains inactive sources; preserve it and audit its original evidence, or extract a new source-scoped run")
                 raise ValueError("Mixed historical Raw run; use --pipeline all for quality/process")
     if selected is None:
         raise ValueError("No loaded Raw data for the requested run; use --data-run-id with an existing loaded run")

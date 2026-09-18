@@ -23,22 +23,11 @@ import {
 } from 'recharts';
 import { KPICard } from './KPI';
 import { fetchCommunityTrend } from '../services/api';
+import { SOURCE_LABELS } from '../utils/labels';
 
 const MONTH_ABBR = {
   1: 'ene.', 2: 'feb.', 3: 'mar.', 4: 'abr.', 5: 'may.', 6: 'jun.',
   7: 'jul.', 8: 'ago.', 9: 'sep.', 10: 'oct.', 11: 'nov.', 12: 'dic.'
-};
-
-const SOURCE_LABELS = {
-  catalogo: 'AIDev / catálogo',
-  github: 'GitHub',
-  reddit: 'Reddit',
-  devto: 'Dev.to',
-  hackernews: 'Hacker News',
-  google_trends: 'Google Trends',
-  stackoverflow: 'Stack Overflow',
-  gnews: 'Google News',
-  arxiv: 'arXiv'
 };
 
 const METRICS = {
@@ -131,7 +120,7 @@ function AdoptionTrendChart({ data, communityOnly, onToggleCommunity, loadingCom
             <button className={scaleMode === 'linear' ? 'active' : ''} onClick={() => setScaleMode('linear')}>Lineal</button>
             <button className={scaleMode === 'log' ? 'active' : ''} onClick={() => setScaleMode('log')}>Logarítmica</button>
           </div>
-          <button className={`community-toggle ${communityOnly ? 'active' : ''}`} onClick={onToggleCommunity}>
+          <button className={`community-toggle ${communityOnly ? 'active' : ''}`} onClick={onToggleCommunity} aria-pressed={communityOnly}>
             {loadingCommunity ? 'Calculando…' : 'Solo comunidad'}
           </button>
         </div>
@@ -352,8 +341,7 @@ function InsightPanels({ tendencia, fuentes, ranking }) {
   );
 }
 
-export default function TendenciasDashboard({ data, filters }) {
-  const [communityOnly, setCommunityOnly] = useState(false);
+export default function TendenciasDashboard({ data, filters, communityOnly, onToggleCommunity }) {
   const [communityTrend, setCommunityTrend] = useState([]);
   const [loadingCommunity, setLoadingCommunity] = useState(false);
 
@@ -376,6 +364,11 @@ export default function TendenciasDashboard({ data, filters }) {
   const lastGrowthIndex = sortedGrowth.length > 1 && toNumber(sortedGrowth.at(-1)?.mes) === currentDate.getMonth() + 1 && currentDate.getDate() < 25 ? sortedGrowth.length - 2 : sortedGrowth.length - 1;
   const latestGrowth = sortedGrowth[lastGrowthIndex];
   const growthValue = toNumber(latestGrowth?.variacion_porcentual);
+  // /crecimiento es una vista global del DW: no aplica filtros (fecha, fuente, etc.).
+  // Se advierte en el subtexto para no dar a entender que responde a los filtros activos.
+  const hasActiveFilters = Object.values(filters || {}).some(value =>
+    Array.isArray(value) ? value.length > 0 : value !== '' && value != null
+  );
   const executionDate = data.qualitySummary?.execution_date;
   const updateDate = executionDate ? new Date(executionDate.endsWith('Z') ? executionDate : `${executionDate}Z`) : currentDate;
   const updateLabel = updateDate.toLocaleDateString('es-EC', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'America/Guayaquil' }).replace('.', '');
@@ -386,12 +379,12 @@ export default function TendenciasDashboard({ data, filters }) {
         <KPICard title="Observaciones totales" value={formatNumber(totalObservations, 0)} subtext="Registros del periodo en todas las fuentes" icon={Database} color="var(--primary)" sparklineData={data.tendencia} sparklineDataKey="total_observaciones" />
         <KPICard title="Score de adopción" value={formatNumber(adoptionScore, 2)} subtext="Suma sobre todos los agentes (score normalizado por fuente; no es un porcentaje)" icon={Activity} color="var(--primary)" sparklineData={data.tendencia} sparklineDataKey="suma_adopcion" />
         <KPICard title="Agentes analizados" value={(data.ranking || []).length} subtext="Agentes con actividad identificada en las fuentes" icon={Users} color="var(--primary)" />
-        <KPICard title="Crecimiento mensual" value={`${growthValue >= 0 ? '+' : ''}${formatNumber(growthValue)} %`} subtext={latestGrowth ? `${formatMonth(latestGrowth)} · último mes completo` : 'Sin comparación'} icon={TrendingUp} color={growthValue >= 0 ? 'var(--success)' : 'var(--danger)'} />
+        <KPICard title="Crecimiento mensual" value={`${growthValue >= 0 ? '+' : ''}${formatNumber(growthValue)} %`} subtext={latestGrowth ? `${formatMonth(latestGrowth)} · último mes completo${hasActiveFilters ? ' · serie global, sin filtrar' : ''}` : 'Sin comparación'} icon={TrendingUp} color={growthValue >= 0 ? 'var(--success)' : 'var(--danger)'} />
         <KPICard title="Última actualización" value={updateLabel} subtext="Carga validada del DW" icon={CalendarClock} color="var(--primary)" />
       </div>
 
       <div className="trend-main-grid">
-        <AdoptionTrendChart data={tendency} communityOnly={communityOnly} onToggleCommunity={() => setCommunityOnly(previous => !previous)} loadingCommunity={loadingCommunity} />
+        <AdoptionTrendChart data={tendency} communityOnly={communityOnly} onToggleCommunity={onToggleCommunity} loadingCommunity={loadingCommunity} />
         <SourceContributionChart data={data.participacion || []} communityOnly={communityOnly} />
       </div>
 

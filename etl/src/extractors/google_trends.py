@@ -5,6 +5,7 @@ import time
 from pytrends.request import TrendReq
 
 from src.utils.error_log import log_error
+from src.utils.extraction_window import resolve_window
 from src.utils.extraction_evidence import aggregate_status, log_source_execution, raw_output_path
 from src.utils.logger import global_logger
 from src.utils.paths import RAW_DIR
@@ -15,13 +16,14 @@ SOURCE_START_DATE = "2023-01-01"
 SOURCE_END_DATE = "2026-12-31"
 
 
-def extract_trends(run_id=None, sleeper=time.sleep):
+def extract_trends(run_id=None, sleeper=time.sleep, start_date=None, end_date=None):
     """Extrae interes en el tiempo desde Google Trends con manejo explicito de rate limit."""
+    window = resolve_window(start_date, end_date, default_start=SOURCE_START_DATE, default_end=SOURCE_END_DATE)
     global_logger.info("Iniciando extraccion de Google Trends (pytrends)...")
     # Google Trends permite máximo 5 keywords por consulta.
     all_agents = [
-        "OpenAI Codex", "GitHub Copilot", "Cursor AI", "Windsurf AI", "Devin AI", 
-        "OpenCode", "Aider AI", "Claude Code", "Cline agent", "Antigravity"
+        "Codex", "GitHub Copilot Coding Agent", "Cursor Agent", "Windsurf Cascade", "Devin", 
+        "OpenCode", "Claude Code", "Cline", "Google Antigravity", "Google Jules"
     ]
     
     url = "https://trends.google.com/trends/explore"
@@ -37,7 +39,7 @@ def extract_trends(run_id=None, sleeper=time.sleep):
         for index, kw_list in enumerate(chunks):
             chunk_records_before = len(records)
             try:
-                pytrend.build_payload(kw_list, cat=0, timeframe=f"{SOURCE_START_DATE} {SOURCE_END_DATE}", geo="")
+                pytrend.build_payload(kw_list, cat=0, timeframe=f"{window.start} {window.end}", geo="")
                 df = pytrend.interest_over_time()
 
                 if not df.empty:
@@ -103,8 +105,8 @@ def extract_trends(run_id=None, sleeper=time.sleep):
                 "metadata": {
                     "source": "google_trends",
                     "keywords": all_agents,
-                    "date_range_start": SOURCE_START_DATE,
-                    "date_range_end": SOURCE_END_DATE,
+                    "date_range_start": window.start.isoformat(),
+                    "date_range_end": window.end.isoformat(),
                     "records_extracted": len(records),
                     "status": status.value,
                     "extracted_at": extracted_at,

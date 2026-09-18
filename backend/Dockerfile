@@ -11,6 +11,8 @@ COPY backend/__init__.py ./backend/
 COPY backend/main.py ./backend/
 COPY backend/database.py ./backend/
 COPY backend/routes.py ./backend/
+COPY backend/scope.py ./backend/
+COPY etl/config/observatory_scope.json ./backend/
 
 RUN chown -R fastapi:fastapi /app
 
